@@ -1,0 +1,52 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Alterar</div>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group col">
+        <label>Responsável:</label>
+        <ng-select
+          id="idResponsavel"
+          name="idResponsavel"
+          [items]="usuarios"
+          bindLabel="nome"
+          bindValue="idUsuario"
+          loadingText="buscando..."
+          [hideSelected]="true"
+          formControlName="idResponsavel">
+        </ng-select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col">
+        <label>Comprador:</label>
+        <ng-select
+          id="nomeComprador"
+          name="nomeComprador"
+          [items]="usuarios"
+          bindLabel="nome"
+          bindValue="nome"
+          loadingText="buscando..."
+          [hideSelected]="true"
+          formControlName="nomeComprador">
+        </ng-select>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="cancelar()">
+    <i class="fas fa-ban"></i> Cancelar
+  </button>
+  <button type="button" class="btn btn-primary" (click)="alterarResponsavel()">
+    <i class="fas fa-save"></i> Salvar
+  </button>
+</div>

@@ -1,0 +1,272 @@
+<smk-funcionalidade
+  *ngIf="configuracoesIntegracao"
+  [titulo]="'Configurar Módulos / ' + configuracoesIntegracao?.razaoSocial + ' /'"
+  tituloComplementar="Integrações">
+
+  <ng-container acoes-barra>
+    <button
+      class="salvar btn btn-primary"
+      ngbTooltip="Salvar"
+      container="body"
+      (click)="salvar()">
+      <i class="fas fa-save"></i>
+    </button>
+  </ng-container>
+
+  <smk-card-funcionalidade class="mb-4" titulo="Tipo Integração" paddingBottom="0.5rem">
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="form-group col-sm-5 col-md-4 col-xxl-2">
+          <ng-select
+            name="tipoIntegracao"
+            formControlName="tipoIntegracao">
+            <ng-option *ngIf="!isSmarkets" [value]="tipoIntegracao.ERP">ERP</ng-option>
+            <ng-option [value]="tipoIntegracao.API">API</ng-option>
+            <ng-option [value]="tipoIntegracao.SAP">SAP</ng-option>
+          </ng-select>
+        </div>
+      </div>
+      <ng-container
+        *ngIf="form.controls.tipoIntegracao.value && form.controls.tipoIntegracao.value != tipoIntegracao.SAP">
+        <div class="form-group form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="permiteReenvioPedido"
+            formControlName="permiteReenvioPedido" />
+          <label class="form-check-label" for="permiteReenvioPedido">
+            Permite Reenvio de Pedido.
+          </label>
+        </div>
+        <div class="form-group form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="permiteReenvioRequisicao"
+            formControlName="permiteReenvioRequisicao" />
+          <label class="form-check-label" for="permiteReenvioRequisicao">
+            Permite Reenvio de Requisição.
+          </label>
+        </div>
+        <div class="form-group form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="permiteReenvioRegularizacao"
+            formControlName="permiteReenvioRegularizacao" />
+          <label class="form-check-label" for="permiteReenvioRegularizacao">
+            Permite Reenvio de Regularização.
+          </label>
+        </div>
+      </ng-container>
+    </form>
+  </smk-card-funcionalidade>
+
+  <smk-card-funcionalidade *ngIf="form.controls.tipoIntegracao.value == tipoIntegracao.API" titulo="API"
+    paddingBottom="0.5rem">
+    <form [formGroup]="form">
+      <div class="form-group col-3 px-0">
+        <label for="fluxoAprovacaoInternaPedido">
+          Fluxo de Aprovação Interna.
+        </label>
+        <ng-select
+          name="fluxoAprovacaoInternaPedido"
+          formControlName="fluxoAprovacaoInternaPedido">
+          <ng-option [value]="fluxoAprovacaoInternaPedido['Antes da Integracao']">Antes da Integracao</ng-option>
+          <ng-option [value]="fluxoAprovacaoInternaPedido['Depois da Integracao']">Depois da Integracao</ng-option>
+        </ng-select>
+      </div>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarAprovacaoPedidoAutomaticaSAPERP"
+          formControlName="habilitarAprovacaoPedidoAutomaticaSAPERP" />
+        <label class="form-check-label" for="habilitarAprovacaoPedidoAutomaticaSAPERP">
+          Aprovar Pedido Automaticamente.
+        </label>
+      </div>
+      <div class="form-group required col-3 px-0">
+        <label for="valorLimiteAprovacaoAutomaticaPedido">
+          Valor Limite
+        </label>
+        <input
+          type="number"
+          class="form-control"
+          id="valorLimiteAprovacaoAutomaticaPedido"
+          formControlName="valorLimiteAprovacaoAutomaticaPedido" />
+      </div>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="utilizaSolicitacaoCompra"
+          formControlName="utilizaSolicitacaoCompra" />
+        <label class="form-check-label" for="utilizaSolicitacaoCompra">
+          Habilitar Integração nas Solicitações de Compra com SAP.
+        </label>
+      </div>
+    </form>
+  </smk-card-funcionalidade>
+
+  <smk-card-funcionalidade *ngIf="form.controls.tipoIntegracao.value == tipoIntegracao.ERP" titulo="ERP"
+    paddingBottom="0.5rem">
+    <form [formGroup]="form">
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarAprovacaoAutomaticaRequisicao"
+          formControlName="habilitarAprovacaoAutomaticaRequisicao" />
+        <label class="form-check-label" for="habilitarAprovacaoAutomaticaRequisicao">
+          Aprovar Requisição Automaticamente.
+        </label>
+      </div>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarAprovacaoAutomaticaPedido"
+          formControlName="habilitarAprovacaoAutomaticaPedido" />
+        <label class="form-check-label" for="habilitarAprovacaoAutomaticaPedido">
+          Aprovar Pedido Automaticamente.
+        </label>
+      </div>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarIntegracaoSistemaChamado"
+          formControlName="habilitarIntegracaoSistemaChamado" />
+        <label class="form-check-label" for="habilitarIntegracaoSistemaChamado">
+          Habilitar integração com o sistema de chamados.
+        </label>
+      </div>
+    </form>
+  </smk-card-funcionalidade>
+
+  <smk-card-funcionalidade *ngIf="form.controls.tipoIntegracao.value == tipoIntegracao.SAP" titulo="SAP"
+    paddingBottom="0.5rem">
+    <form [formGroup]="form">
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="utilizaSolicitacaoCompra"
+          formControlName="utilizaSolicitacaoCompra" />
+        <label class="form-check-label" for="utilizaSolicitacaoCompra">
+          Habilitar Integração nas Solicitações de Compra com SAP.
+        </label>
+      </div>
+      <div class="form-group form-check ml-4">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="bloquearRequisicaoPedido"
+          formControlName="bloquearRequisicaoPedido" />
+        <label class="form-check-label" for="bloquearRequisicaoPedido">
+          Bloquear Requisição e Pedidos no Carrinho (Perfil Requisitante).
+        </label>
+      </div>
+      <div class="form-group form-check ml-4">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="permiteAlterarValorReferencia"
+          formControlName="permiteAlterarValorReferencia" />
+        <label class="form-check-label" for="permiteAlterarValorReferencia">
+          Permite Alterar Valor Referência.
+        </label>
+      </div>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="parametrosIntegracaoSapHabilitado"
+          formControlName="parametrosIntegracaoSapHabilitado" />
+        <label class="form-check-label" for="parametrosIntegracaoSapHabilitado">
+          Habilitar Parâmetros de Integração com SAP.
+        </label>
+      </div>
+      <label
+        class="sub-title ml-4">
+        Pedido
+      </label>
+      <div class="form-group form-check ml-4">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="exibirFlagSapEm"
+          formControlName="exibirFlagSapEm" />
+        <label class="form-check-label" for="exibirFlagSapEm">
+          Exibir flag EM - Entrada de Mercadoria ao gerar pedido.
+        </label>
+      </div>
+      <div class="form-group form-check ml-4">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="exibirFlagSapEmNaoAvaliada"
+          formControlName="exibirFlagSapEmNaoAvaliada" />
+        <label class="form-check-label" for="exibirFlagSapEmNaoAvaliada">
+          Exibir flag EM n/avaliada - Entrada de Mercadoria não avaliada ao gerar pedido.
+        </label>
+      </div>
+      <div class="form-group form-check ml-4">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="exibirFlagSapEntrFaturas"
+          formControlName="exibirFlagSapEntrFaturas" />
+        <label class="form-check-label" for="exibirFlagSapEntrFaturas">
+          Exibir flag Entr.faturas - Entrada de faturas ao gerar pedido.
+        </label>
+      </div>
+      <div class="form-group form-check ml-4">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="exibirFlagSapRevFatEm"
+          formControlName="exibirFlagSapRevFatEm" />
+        <label class="form-check-label" for="exibirFlagSapRevFatEm">
+          Exibir flag Rev.FatEM - Revisão de Faturas baseada na Entrada de Mercadorias ao gerar pedido.
+        </label>
+      </div>
+      <label
+        class="sub-title ml-4">
+        Produto
+      </label>
+      <div class="form-group form-check ml-4">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="origemMaterialObrigatorio"
+          formControlName="origemMaterialObrigatorio" />
+        <label class="form-check-label" for="origemMaterialObrigatorio">
+          Origem do Material obrigatório no cadastro do produto e ao gerar pedido.
+        </label>
+      </div>
+      <div class="form-group form-check ml-4">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="utilizacaoMaterialObrigatorio"
+          formControlName="utilizacaoMaterialObrigatorio" />
+        <label class="form-check-label" for="utilizacaoMaterialObrigatorio">
+          Utilização do Material obrigatório no cadastro do produto e ao gerar pedido.
+        </label>
+      </div>
+      <div class="form-group form-check ml-4">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="categoriaMaterialObrigatorio"
+          formControlName="categoriaMaterialObrigatorio" />
+        <label class="form-check-label" for="categoriaMaterialObrigatorio">
+          Categoria do Material obrigatório no cadastro do produto e ao gerar pedido.
+        </label>
+      </div>
+    </form>
+  </smk-card-funcionalidade>
+
+</smk-funcionalidade>

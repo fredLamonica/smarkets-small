@@ -1,0 +1,54 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">{{ tipoPedido?.idTipoPedido ? 'Alterar ' : 'Incluir ' }} Tipo de
+    Pedido</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="form-group required col-lg-6">
+        <label>Código:</label>
+        <input type="text" class="form-control" formControlName="codigoTipoPedido"
+          [class.invalid]="form.controls.codigoTipoPedido.invalid && form.controls.codigoTipoPedido.dirty">
+        <span class="invalid"
+          *ngIf="(form.controls.codigoTipoPedido.invalid && form.controls.codigoTipoPedido.dirty) || integrarApiPedidos">
+          Preenchimento obrigatório
+        </span>
+      </div>
+      <div class="form-group required col-lg-6">
+        <label>Sigla:</label>
+        <input type="text" class="form-control" formControlName="siglaTipoPedido"
+          [class.invalid]="form.controls.siglaTipoPedido.invalid && form.controls.siglaTipoPedido.dirty">
+        <span class="invalid" *ngIf="form.controls.siglaTipoPedido.invalid && form.controls.siglaTipoPedido.dirty">
+          Preenchimento obrigatório
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group required col-lg-12">
+        <label>Nome do Tipo de Pedido:</label>
+        <input type="text" class="form-control" formControlName="nomeTipoPedido"
+          [class.invalid]="form.controls.nomeTipoPedido.invalid && form.controls.nomeTipoPedido.dirty">
+        <span class="invalid" *ngIf="form.controls.nomeTipoPedido.invalid && form.controls.nomeTipoPedido.dirty">
+          Preenchimento obrigatório
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-lg-12">
+        <label>Tipos de Requisição:</label>
+        <ng-select [items]="tiposRequisicao$ | async" bindLabel="nome" [loading]="loadingTipoRequisicao"
+          [loadingText]="'buscando...'" formControlName="tiposRequisicao" (open)="openTiposRequisicao()"
+          [multiple]="true" [compareWith]="compareTipoRequisicaoFn">
+        </ng-select>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary"><i class="fas fa-ban"></i>
+    Cancelar</button>
+  <button type="button" (click)="salvar()" class="btn btn-primary"><i class="fas fa-save"></i> Salvar</button>
+</div>

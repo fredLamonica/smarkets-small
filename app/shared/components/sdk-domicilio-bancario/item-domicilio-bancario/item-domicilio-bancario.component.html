@@ -1,0 +1,39 @@
+<div class="item-domicilio px-4" (click)="itemClicked()">
+  <div class="content">
+    <div class="col-5 crop-text-2">
+      <a
+        class="descricao-domicilio"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ domicilio?.banco?.descricao }}"
+        >{{ domicilio?.banco?.descricao }}</a
+      >
+    </div>
+
+    <div class="col-1 crop-text-2">
+      <a
+        class="descricao-domicilio"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ domicilio?.agencia }}"
+        >{{ domicilio?.agencia }}</a
+      >
+    </div>
+
+    <div class="col-2 crop-text-2">
+      <a
+        class="descricao-domicilio"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ domicilio?.contaCorrente }}"
+        >{{ domicilio?.contaCorrente }}</a
+      >
+    </div>
+
+    <div class="col-1 d-flex justify-content-end">
+      <span class="mouse-hover" (click)="solicitarExclusao()">
+        <i class="far fa-trash-alt text-danger"></i>
+      </span>
+    </div>
+  </div>
+</div>

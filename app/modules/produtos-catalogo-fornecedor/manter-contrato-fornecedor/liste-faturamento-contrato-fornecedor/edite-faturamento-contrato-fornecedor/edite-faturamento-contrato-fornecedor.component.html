@@ -1,0 +1,47 @@
+<smk-modal
+ [botaoSalvarHabilitado]="true"
+ [botaoAtualizarHabilitado]="getPermiteAtualizacao"
+ titulo="Alterar Estado em catálogo"
+ fecharLabel="Cancelar"
+ (fechar)="cancelar()"
+ (salvar)="salvar()"
+ (atualizar)="atualizar()"
+ atualizarLabel=" Editar"
+>
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="form-group col-lg-4 ">
+        <label for="nomeEstado">Estado</label>
+        <input
+          id="nomeEstado"
+          class="form-control"
+          type="text"
+          formControlName="nomeEstado"
+          readonly>
+      </div>
+      <div class="form-group col-lg-8 ">
+        <label for="uf">UF</label>
+        <input
+          id="uf"
+          class="form-control"
+          type="text"
+          formControlName="uf"
+          readonly>
+      </div>
+      <div class="form-group col-lg-3 ">
+        <label for="valorMinimoPedido">Valor Mínimo Pedido</label>
+        <input *ngIf="exibeValorMinimo" id="valorMinimoPedido" class="form-control" type="text" formControlName="valorMinimoPedido">
+        <div *ngIf="!exibeValorMinimo">
+          <span class="form-control" readonly > {{getValorMinimo}}  <i class="fas fa-sync"></i> {{ getValorMinimoAprovacao}} </span>
+        </div>
+      </div>
+      <div class="form-group col-lg-5 ">
+        <label for="situacaoFaturamento">Situação</label>
+        <ng-select *ngIf="exibeSituacao" labelForId="situacaoFaturamento" bindValue="index" bindLabel="name" clearAllText="Limpar" [items]="opcoesSituacaoCatalogoFaturamento" formControlName="situacaoFaturamento" [hideSelected]="true"></ng-select>
+        <div *ngIf="!exibeSituacao">
+          <span class="form-control" readonly > {{getSituacaoFaturamento}}  <i class="fas fa-sync"></i> {{getSituacaoFaturamentoAprovacao}} </span>
+        </div>
+      </div>
+    </div>
+  </form>
+</smk-modal>

@@ -1,0 +1,72 @@
+<div class="card card-tab-content">
+  <div class="card-header">
+    <a (click)="inserir()" class="btn btn-icon p-0">
+      <i class="fas fa-plus-circle text-primary"></i>
+      <p class="d-inline-block mb-0 ml-2 align-top">Inserir novo tipo de requisição</p>
+    </a>
+  </div>
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+        <div class="col-md-1">
+          <label class="font-weight-bold">ID:</label>
+        </div>
+        <div class="col-md-3">
+          <label class="font-weight-bold">Nome do Tipo de Requisição:</label>
+        </div>
+        <div class="col-md-2">
+          <label class="font-weight-bold">Sigla:</label>
+        </div>
+        <div class="col-md-3">
+          <label class="font-weight-bold">Tipo de Documento (Código ERP):</label>
+        </div>
+        <div class="col-md-3">
+          <label class="font-weight-bold">Ações:</label>
+        </div>
+      </div>
+  
+      <div class="bg-white border-bottom row py-4" *ngIf="!tiposRequisicao?.length; else hasValue">
+        <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+      </div>
+  
+      <!-- begin-list no-content mt-5-->
+      <ng-template #hasValue>
+        <div class="bg-white border-bottom row py-4" *ngFor="let tipoRequisicao of tiposRequisicao; let i = index;">
+          <!-- begin-fields-->
+          <div class="col-md-1 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">ID:</label>
+            <p class="mb-3 mb-md-0"> {{ tipoRequisicao.idTipoRequisicao }} </p>
+          </div>
+          <div class="col-md-3 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Nome do Tipo de Requisição:</label>
+            <p class="mb-3 mb-md-0"> {{ tipoRequisicao.nome }} </p>
+          </div>
+          <div class="col-md-2 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Sigla:</label>
+            <p class="mb-3 mb-md-0"> {{ tipoRequisicao.sigla }} </p>
+          </div>
+          <div class="col-md-3 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Tipo de Documento (Código ERP):</label>
+            <p class="mb-3 mb-md-0"> {{ tipoRequisicao.tipoDocumento }} </p>
+          </div>
+          <div class="col-md-3 d-flex justify-content-between align-self-center">
+            <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Auditoria"
+              (click)="onAuditoriaClick(tipoRequisicao.idTipoRequisicao)">
+              <i class="fas fa-history"></i>
+            </button>
+            <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Editar"
+              (click)="editarItem(tipoRequisicao)">
+              <i class="far fa-edit"></i>
+            </button>
+            <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Excluir"
+              (click)="onExcluirClick(tipoRequisicao.idTipoRequisicao)">
+              <i class="far fa-trash-alt text-danger"></i>
+            </button>
+          </div>
+          <!-- end-list -->
+        </div>
+      </ng-template>
+      <!-- end-list -->
+    </div>
+  </div>
+</div>

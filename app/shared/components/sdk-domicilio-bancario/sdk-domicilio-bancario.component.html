@@ -1,0 +1,120 @@
+<ng-container *ngIf="showFornecedor; else showComprador">
+  <div class="container mb-4">
+    <div class="row d-flex justify-content-end">
+      <sdk-button
+        [label]="'Incluir informações Bancárias'"
+        [type]="'primary'"
+        [icon]="'fas fa-2x fa-plus'"
+        (buttonClick)="manterDomicilio()"
+      ></sdk-button>
+    </div>
+  </div>
+
+  <div class="d-flex">
+    <div class="bg-white border-bottom py-4 w-100" *ngIf="domicilios?.length === 0; else hasValue">
+      <div class="no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+    </div>
+
+    <ng-template #hasValue>
+      <sdk-list-view class="w-100" [items]="domicilios">
+        <ng-template sdkListViewItem let-item>
+          <item-domicilio-bancario
+            [domicilio]="item"
+            (atualizarDomicilios)="obterDomicilios()"
+            (itemClickedEvent)="manterDomicilio($event)"
+          ></item-domicilio-bancario>
+        </ng-template>
+      </sdk-list-view>
+    </ng-template>
+  </div>
+</ng-container>
+
+<ng-template #showComprador>
+  <div class="pr-4 mb-4">
+    <div class="row d-flex justify-content-end">
+      <sdk-rectangle-button
+        [label]="'Incluir inf. bancárias'"
+        [leftIconClass]="'fas fa-plus'"
+        [leftIconColor]="'#FFFFFF'"
+        (buttonClick)="manterDomicilio()"
+      >
+      </sdk-rectangle-button>
+    </div>
+  </div>
+
+  <div class="d-flex flex-column">
+    <div class="bg-white border-bottom py-4 w-100" *ngIf="domicilios?.length === 0; else hasValue">
+      <div class="no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+    </div>
+
+    <ng-template #hasValue>
+      <div class="header">
+        <p>Banco</p>
+        <p>Agência</p>
+        <p>Conta</p>
+        <p>Ações</p>
+      </div>
+      <sdk-list-view class="w-100" [items]="domicilios">
+        <ng-template sdkListViewItem let-item>
+          <sdk-item-card
+            class="style-card-bank-domicile"
+            [showStatusBar]="false"
+            [iconClass]="'fas fa-university'"
+            [borderColor]="'#B8CAD1'"
+            [borderColorHover]="'#52bde9'"
+            [borderStyle]="'solid'"
+            [borderWidth]="'1px'"
+            [iconSpotColor]="'#52BDE9'"
+            [iconSpotColorHover]="'#27ADE4'"
+            [repositionOnHover]="true"
+            (click)="itemClicked(item)"
+          >
+            <div class="d-flex justify-content-around align-items-center w-100">
+              <div class="col-4">
+                <a
+                  class="descricao-domicilio"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="{{ item?.banco?.descricao }}"
+                  >{{ item?.banco?.descricao }}</a
+                >
+              </div>
+
+              <div class="col-2">
+                <a
+                  class="descricao-domicilio"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="{{ item?.agencia }}"
+                  >{{ item?.agencia }}</a
+                >
+              </div>
+
+              <div class="col-2">
+                <a
+                  class="descricao-domicilio"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="{{ item?.contaCorrente }}"
+                  >{{ item?.contaCorrente }}</a
+                >
+              </div>
+
+              <div class="d-flex justify-content-end col-1">
+                <span
+                  class="icon-custom w-100"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Excluir"
+                  (click)="solicitarExclusao(item)"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </span>
+              </div>
+            </div>
+          </sdk-item-card>
+        </ng-template>
+      </sdk-list-view>
+    </ng-template>
+  </div>
+</ng-template>

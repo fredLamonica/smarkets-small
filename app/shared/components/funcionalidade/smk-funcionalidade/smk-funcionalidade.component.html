@@ -1,0 +1,13 @@
+<div class="funcionalidade" [ngClass]="class">
+  <smk-barra-acoes-funcionalidade class="mb-4" [rotaVoltar]="rotaVoltar">
+    <ng-content select="[acoes-barra]"></ng-content>
+  </smk-barra-acoes-funcionalidade>
+  <div class="px-4">
+    <smk-titulo-funcionalidade [titulo]="titulo" [tituloComplementar]="tituloComplementar">
+      <ng-content select="[titulo-customizado]"></ng-content>
+    </smk-titulo-funcionalidade>
+    <div class="py-4">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

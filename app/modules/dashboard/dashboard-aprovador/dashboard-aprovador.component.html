@@ -1,0 +1,22 @@
+<div class="row mt-5">
+  <div class="col">
+    <div class="card">
+      <div class="card-header">
+        Últimos pedidos
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+            <custom-table classes="table-striped" [settings]="settings" [source]="pedidos"></custom-table>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="row justify-content-between">
+          <div class="col-lg-6 text-secondary">Atualizado em {{atualizadoEm | date: "dd/MM/yyyy HH:mm"}}</div>
+          <div class="col-lg-6"><button class="btn btn-outline-primary float-right" [routerLink]="['/pedidos']"> Ver todos </button></div>
+        </div>        
+      </div>
+    </div>
+  </div>
+</div>

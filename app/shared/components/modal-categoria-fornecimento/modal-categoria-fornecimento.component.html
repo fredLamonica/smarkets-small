@@ -1,0 +1,41 @@
+<sdk-modal
+  title="EDITAR CATEGORIAS"
+  [show-footer]="true"
+  [title-button-confirm]="'Salvar'"
+  [title-button-cancel]="'Cancelar'"
+  (on-confirm)="atualizarCategorias()"
+>
+  <div class="row py-3 filtro">
+    <div class="col-12 d-flex justify-content-between align-self-center">
+      <sdk-dynamic-filter
+        *ngFor="let filter of opcoesFiltro"
+        [dynamicFilter]="filter"
+        [clearFilterOnBlur]="false"
+        (onFilter)="aplicarFiltro($event)"
+        class="col-lg-{{ filter.filterColumnSize + 1 }} col-xl-{{ filter.filterColumnSize }}"
+      >
+      </sdk-dynamic-filter>
+
+      <sdk-tag-read-only
+        *ngIf="categoriaOutrasSelecionada()"
+        class="col-7"
+        [title]="'Categorias Sugeridas:'"
+        [subTitle]="outrasCategorias()"
+      ></sdk-tag-read-only>
+    </div>
+  </div>
+
+  <div class="pt-3">
+    <sdk-nuvem
+      (pagedEvent)="paginar($event)"
+      (tagClickedEvent)="categoriaClicked($event)"
+      [tags]="categorias"
+      [label]="'descricao'"
+      [key]="'idCategoriaFornecimento'"
+      [pageSize]="itensPorPagina"
+      [pageIndex]="pagina"
+      [totalPages]="totalPaginas"
+    >
+    </sdk-nuvem>
+  </div>
+</sdk-modal>

@@ -1,0 +1,205 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Produto</div>
+  <button type="button" class="close" aria-label="Close" (click)="fechar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body mt-4">
+  <div class="row" *ngIf="!isLoading">
+    <div class="col-6 images-container">
+      <div class="col d-flex pr-1"
+        *ngIf="
+        !catalogoItem?.contratoCatalogoItem?.produto?.imagens?.length &&
+          !catalogoItem?.produto?.imagens?.length;
+        else existeImagem
+      ">
+        <div class="col list-images-container overflow-y-scroll">
+          <ul>
+            <li class="list-images">
+              <img
+                class="list-img-size"
+                src="./../../../../assets/img/produtos/default.png" />
+            </li>
+          </ul>
+        </div>
+        <div class="col">
+          <div class="selected-image-container">
+            <img class="selected-img-size"
+              src="./../../../../assets/img/produtos/default.png" />
+          </div>
+        </div>
+      </div>
+      <ng-template #existeImagem>
+        <div class="col d-flex pr-1">
+          <div class="col list-images-container overflow-y-scroll"
+            *ngIf="!catalogoItem?.produto?.imagens?.length">
+            <ul>
+              <li
+                class="list-images"
+                *ngFor="let image of catalogoItem?.contratoCatalogoItem?.produto?.imagens">
+                <img
+                  class="list-img-size"
+                  [alt]="catalogoItem?.contratoCatalogoItem?.produto?.descricao"
+                  [src]="image.url"
+                  (click)="selectImage(image.url)" />
+              </li>
+            </ul>
+          </div>
+          <div class="col list-images-container overflow-y-scroll" *ngIf="catalogoItem?.produto?.imagens?.length">
+            <ul>
+              <li
+                class="list-images"
+                *ngFor="let image of catalogoItem?.produto?.imagens">
+                <img
+                  class="list-img-size"
+                  [src]="image.url"
+                  [alt]="idContratoCatalogoItem ? catalogoItem?.contratoCatalogoItem?.produto?.descricao : catalogoItem?.produto?.descricao | uppercase"
+                  (click)="selectImage(image.url)" />
+              </li>
+            </ul>
+          </div>
+          <div class="col">
+            <div class=" selected-image-container">
+              <img class="selected-img-size"
+                [src]="urlImgSelected" />
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    <div class="col-6 data-container">
+      <div class="col-12">
+        <div class="row mb-3">
+          <div class="col-12">
+            <h5 class="font-weight-bold text-indigo-light descricao text-uppercase">
+              {{
+              idContratoCatalogoItem
+              ? catalogoItem?.contratoCatalogoItem?.produto?.descricao
+              : catalogoItem?.produto?.descricao
+              }}
+            </h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="row mb-3">
+              <div class="col">
+                <label class="mb-0 mr-lg-1 font-weight-bold">Descricao Detalhada:</label>
+                <span class="text-uppercase">
+                  {{
+                  idContratoCatalogoItem
+                  ? catalogoItem?.contratoCatalogoItem?.produto?.descricaoDetalhada
+                  ? catalogoItem?.contratoCatalogoItem?.produto?.descricaoDetalhada
+                  : '--'
+                  : catalogoItem?.produto?.descricaoDetalhada
+                  ? catalogoItem?.produto?.descricaoDetalhada
+                  : '--'
+                  }}
+                </span>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label class="mb-0 mr-lg-1 font-weight-bold">Categoria: </label>
+                <span class="text-uppercase">
+                  {{
+                  idContratoCatalogoItem
+                  ? catalogoItem?.contratoCatalogoItem?.produto?.categoria?.nome
+                  : catalogoItem?.produto?.categoria?.nome
+                  }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3" *ngIf="idContratoCatalogoItem && !fornecedor">
+          <div class="col-12 mb-3">
+            <label class="mr-lg-1 font-weight-bold">Fornecedor:</label>
+            <span>
+              {{ catalogoItem?.contratoCatalogoItem?.fornecedor.cnpj }}
+            </span>
+          </div>
+          <div class="col-12" *ngIf="!fornecedor">
+            <div class="row">
+              <div class="col">
+                <label class="mr-lg-1 font-weight-bold">Razão Social: </label>
+                <span class="text-uppercase">
+                  {{ catalogoItem?.contratoCatalogoItem?.fornecedor.razaoSocial }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-6" *ngIf="!ocultarUnidadeMedida">
+            <label class="mr-lg-1 font-weight-bold">Un. de Medida: </label>
+            <span>
+              {{
+              idContratoCatalogoItem
+              ? catalogoItem?.contratoCatalogoItem?.produto?.unidadeMedida?.sigla
+              : catalogoItem?.produto?.unidadeMedida?.sigla
+              }}
+            </span>
+          </div>
+          <div class="col-6" *ngIf="!ocultarNcm">
+            <label class="mr-lg-1 font-weight-bold">Cód. NCM: </label>
+            <span>
+              {{
+              idContratoCatalogoItem
+              ? catalogoItem?.contratoCatalogoItem?.produto?.codigoNcm
+              ? catalogoItem?.contratoCatalogoItem?.produto?.codigoNcm
+              : '--'
+              : catalogoItem?.produto?.codigoNcm
+              ? catalogoItem?.produto?.codigoNcm
+              : '--'
+              }}
+            </span>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-6" *ngIf="!ocultarIdProduto">
+            <label class="mr-lg-1 font-weight-bold">ID Produto: </label>
+            <span>
+              {{
+              idContratoCatalogoItem
+              ? catalogoItem?.contratoCatalogoItem?.produto?.idProduto
+              ? catalogoItem?.contratoCatalogoItem?.produto?.idProduto
+              : '--'
+              : catalogoItem?.produto?.idProduto
+              ? catalogoItem?.produto?.idProduto
+              : '--'
+              }}
+            </span>
+          </div>
+          <div class="col-6" *ngIf="idContratoCatalogoItem">
+            <label class="mr-lg-1 font-weight-bold">ID Catálogo: </label>
+            <span>
+              {{
+              catalogoItem?.contratoCatalogoItem?.idContratoCatalogo
+              ? catalogoItem?.contratoCatalogoItem?.idContratoCatalogo
+              : '--'
+              }}
+            </span>
+          </div>
+        </div>
+        <div class="row mb-3" *ngIf="!ocultarContaContabil">
+          <div class="col-12">
+            <label class="mr-lg-1 font-weight-bold">Conta Contábil: </label>
+            <span>
+              {{contasContabeis}}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <ng-container *ngIf="!isLoading && !fornecedor">
+    <button type="button" class="btn btn-outline-secondary" (click)="fechar()">Fechar</button>
+    <button *ngIf="!ocultarBtnAdicionarCarrinho" type="button" class="btn btn-outline-primary"
+      (click)="adicionarCarrinho()"> <i class="fas fa-shopping-cart"></i>
+      Adicionar ao Carrinho
+    </button>
+  </ng-container>
+</div>

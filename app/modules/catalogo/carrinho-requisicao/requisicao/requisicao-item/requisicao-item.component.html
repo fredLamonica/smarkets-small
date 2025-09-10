@@ -1,0 +1,197 @@
+<div class="bg-white row py-4 align-items-center">
+
+  <div class="align-self-start d-flex  mb-3 ml-3 mb-lg-0">
+    <input
+      id="requisicaoItem{{index}}"
+      type="checkbox"
+      name="requisicaoItem{{index}}"
+      [(ngModel)]="requisicaoItem.selecionado"
+      (change)="atualizaSelecionados(requisicaoItem)"
+      placeholder="selecionarRequisicao" />
+  </div>
+
+  <div class="col-md-2 align-self-center d-flex justify-content-center mb-3 mb-lg-0">
+    <img class="img-fluid" style="max-height: 175px;"
+      [src]="requisicaoItem.produto?.imagens?.length ? requisicaoItem.produto?.imagens[0]?.url : './../../../../assets/img/produtos/default.png'"
+      alt="{{ requisicaoItem.produto?.descricao }}">
+  </div>
+
+  <div class="col-md-7 align-self-center">
+    <div class="row-10-col align-items-center mb-2">
+      <h5 class="col-12 d-block d-lg-none text-primary font-weight-bold text-center">
+        {{ requisicaoItem.produto?.descricao }}
+      </h5>
+      <div class="col-12 d-block d-md-none d-flex justify-content-around">
+        <button
+          id="btn{{index}}"
+          name="btn{{index}}"
+          (click)="solicitarRemoverItem()"
+          class="btn btn-icon text-danger pr-0"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Remover">
+          <i class="far fa-trash-alt"></i>
+        </button>
+        <button
+          name="insericomentarioBtn{{index}}"
+          id="inserircomentariobtn{{index}}"
+          class="btn btn-icon text-primary pr-0"
+          (click)="inserirComentario(content)"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Observação">
+          <i class="far fa-comment-dots"></i>
+        </button>
+      </div>
+      <div class="form-group col-lg-5 col-xl-3">
+        <label>Marca:</label>
+        <ng-select
+          name="marca{{index}}"
+          id="marca{{index}}"
+          class="font-weight-bold"
+          [hideSelected]="true"
+          [loadingText]="textoNgSelectLoading"
+          [clearAllText]="textoNgSelectLimpar"
+          [(ngModel)]="requisicaoItem.idMarca"
+          (change)="alterarItem()"
+          placeholder="Sem preferência">
+          <ng-option *ngFor="let marca of marcas" [value]="marca.idMarca">{{marca.nome}}</ng-option>
+        </ng-select>
+      </div>
+      <h5 class="d-none d-lg-block col-lg-5 col-xl-6 text-primary font-weight-bold text-center text-lg-left">
+        {{ requisicaoItem.produto?.descricao }}
+      </h5>
+    </div>
+    <div class="row-10-col">
+      <div class="custom-control custom-checkbox ml-3 mb-3">
+        <input
+          id="entregaProgramada{{index}}"
+          type="checkbox"
+          class="custom-control-input"
+          (change)="alterarItem(true)"
+          [(ngModel)]="requisicaoItem.entregaProgramada">
+        <label
+          class="custom-control-label"
+          for="entregaProgramada{{index}}">
+          Definir programação de entrega
+        </label>
+      </div>
+    </div>
+    <div *ngIf="!requisicaoItem.entregaProgramada" class="row-10-col align-requisicaoItems-center">
+      <div class="form-group required col-lg-5 col-xl-3">
+        <label for="dataEntrega"> Data de Entrega: </label>
+        <input
+          name="data{{index}}"
+          id="data{{index}}"
+          type="date"
+          class="form-control font-weight-bold"
+          [(ngModel)]="requisicaoItem.dataEntrega"
+          [min]="requisicaoItem.minDataEntrega"
+          (change)="alterarItem()">
+      </div>
+      <div class="form-group required col-12 col-lg-5 col-xl-3">
+        <label>Valor de referência:</label>
+        <input
+          name="inputValor"
+          class="form-control font-weight-bold text-center"
+          [textMask]="{mask: maskValor, guide: false}"
+          type="text"
+          [ngModel]="valor"
+          (ngModelChange)="onModelChange($event)"
+          (change)="alterarItem()">
+      </div>
+      <div class="form-group required col-lg-5 col-xl-2">
+        <label>Quantidade:</label>
+        <input-number class="form-control-sm col-1"
+          [class.invalid]="!requisicaoItem.quantidade || requisicaoItem.quantidade > max || requisicaoItem.quantidade < min"
+          [(ngModel)]="requisicaoItem.quantidade"
+          [min]="min"
+          [max]="max"
+          [allowDecimal]="requisicaoItem.produto?.unidadeMedida?.permiteQuantidadeFracionada"
+          (change)="alterarItem()">
+        </input-number>
+      </div>
+      <div class="form-group col-12 col-lg-5 col-xl-2">
+        <label>Valor total:</label>
+        <h5 class="text-indigo-light font-weight-bold mt-2">
+          {{ (requisicaoItem.valorReferencia * requisicaoItem.quantidade) |
+          currency:(requisicaoItem.moeda|moedaCodigo):'symbol':'1.2':(requisicaoItem.moeda|moedaLocale)
+          }}
+        </h5>
+      </div>
+    </div>
+    <app-manter-entregas-programadas
+      *ngIf="requisicaoItem.entregaProgramada"
+      [config]="configEntregaProgramada(
+        index,
+        origemProgramacaoDeEntrega.requisicao,
+        requisicaoItem.idRequisicaoItem,
+        requisicaoItem.minDataEntrega,
+        min,
+        max,
+        min,
+        { mask: maskValor, guide: false },
+        empresaSolicitanteHabilitadaParaIntegracaoErp,
+        requisicaoItem.produto?.unidadeMedida?.permiteQuantidadeFracionada,
+        requisicaoItem.valorReferencia
+      )"
+      (entregasLoad)="atualizeProgramacaoDeEntregas($event)"
+      (entregasChange)="atualizeProgramacaoDeEntregas($event)">
+    </app-manter-entregas-programadas>
+  </div>
+
+  <div class="col-md-2 d-none d-md-block">
+    <button
+      id="btn{{index}}"
+      name="btn{{index}}"
+      (click)="solicitarRemoverItem()"
+      class="btn btn-icon text-danger"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Remover">
+      <i class="far fa-trash-alt"></i>
+    </button>
+    <button
+      name="insericomentarioBtn{{index}}"
+      id="inserircomentariobtn{{index}}"
+      class="btn btn-icon text-primary"
+      (click)="inserirComentario(content)"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Observação">
+      <i class="far fa-comment-dots"></i>
+    </button>
+  </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">Incluir comentário</div>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formComentario">
+      <div class="row">
+        <div class="form-group col">
+          <label for="observacao">Observação</label>
+          <textarea
+            class="form-control"
+            id="observacao"
+            formControlName="observacao"
+            row="3">
+          </textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="d('Cross click')">Voltar</button>
+    <button type="button" class="btn btn-outline-primary" (click)="salvarComentario()">Salvar</button>
+  </div>
+</ng-template>

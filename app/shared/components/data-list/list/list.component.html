@@ -1,0 +1,76 @@
+<div class="smk-list">
+  <smk-component-container
+    [componentSelector]="componentSelector"
+    [compromisedConsistency]="compromisedConsistency"
+    [loading]="loading">
+    <ng-container *ngIf="_items?.length > 0; else emptyTmp">
+      <div *ngIf="config?.allSelector && config?.multiSelection" class="form-check select-all">
+        <input
+          [id]="id"
+          class="select-all-check form-check-input"
+          type="checkbox"
+          [(ngModel)]="allSelected"
+          (change)="allSelectorChange(false)">
+        <label
+          [for]="id"
+          class="select-all-label form-check-label d-flex ml-1"
+          [title]="config?.allSelectorText"
+          [class.selected]="allSelected">
+          <span class="text-truncate">{{ config?.allSelectorText }}</span>
+        </label>
+      </div>
+      <ul
+        class="list-container list-unstyled m-0">
+        <li
+          *ngFor="let item of _items; index as i"
+          class="list-item"
+          [class.parent-unselectable]="item.parent && !config?.parentIsSelectable"
+          [ngClass]=" {
+            selected: item.selected,
+            parent: item.parent,
+            child: !item.parent && this.config?.parentKey && config?.parentValue
+          }">
+          <div [class.form-check]="isSelectable(item)">
+            <input
+              *ngIf="isSelectable(item)"
+              [id]="id + '-' + i"
+              class="list-item-check form-check-input"
+              type="checkbox"
+              (change)="toggle(i, false)"
+              [checked]="item.selected">
+            <label
+              [for]="id + '-' + i"
+              class="list-item-label-container d-flex mb-0"
+              [class.justify-content-between]="config?.justifiedLabel"
+              (click)="toggle(i, true)"
+              [ngClass]="{ 'form-check-label ml-1': isSelectable(item) }">
+              <span class="list-item-label text-truncate">
+                <ng-container
+                  *ngTemplateOutlet="customLabelTmp ? customLabelTmp : defaultLabelTmp; context: { item: item }">
+                </ng-container>
+              </span>
+              <span *ngIf="config?.bindQuantityLabel" class="list-item-quantity-label">
+                <ng-container
+                  *ngTemplateOutlet="customQuantityLabelTmp ? customQuantityLabelTmp : defaultQuantityLabelTmp; context: { item: item }">
+                </ng-container>
+              </span>
+            </label>
+          </div>
+        </li>
+      </ul>
+    </ng-container>
+  </smk-component-container>
+</div>
+<ng-template #defaultLabelTmp let-item="item">
+  <span
+    [class.text-uppercase]="config?.textUppercase"
+    [title]="config?.textUppercase ? (item[config?.bindLabel] | uppercase) : item[config?.bindLabel]">
+    {{ item[config?.bindLabel] }}
+  </span>
+</ng-template>
+<ng-template #defaultQuantityLabelTmp let-item="item">
+  ({{ item[config?.bindQuantityLabel] ? item[config?.bindQuantityLabel] : 0 }})
+</ng-template>
+<ng-template #emptyTmp>
+  <span class="list-empty-state-text" [title]="config?.emptyStateText">{{ config?.emptyStateText }}</span>
+</ng-template>

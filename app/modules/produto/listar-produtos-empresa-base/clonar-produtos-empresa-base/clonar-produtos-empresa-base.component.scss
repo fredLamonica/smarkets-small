@@ -1,0 +1,74 @@
+.modal-body {
+  padding: 15px 0 15px 35px;
+
+  label {
+    font-weight: bold;
+    margin-bottom: 7px;
+    color: #296075;
+  }
+
+  .form-group {
+    .field {
+      color: #417185;
+    }
+
+    .form-control {
+      border-radius: 8px !important;
+      border: 1px solid #cfdce0 !important;
+
+      &:disabled {
+        background-color: #cfdce0;
+      }
+    }
+  }
+
+  ::ng-deep {
+    ng-select {
+      .ng-select-container {
+        border-radius: 8px !important;
+      }
+
+      &:not(.invalid) {
+        .ng-select-container {
+          border: 1px solid #cfdce0 !important;
+        }
+      }
+    }
+
+    .ng-value-label {
+      color: #417185;
+    }
+
+    .ng-option-label {
+      color: #417185;
+    }
+  }
+
+  .btn-remover {
+    color: #417185;
+    background-color: #d4effa;
+    border-radius: 50%;
+    height: 33px;
+    width: 36px;
+    min-width: 36px;
+    text-align: center;
+    box-shadow: none;
+
+    &.disabled {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.modal-footer {
+  padding: 10px 20px 15px 20px;
+
+  button {
+    width: 120px;
+    border-radius: 8px;
+
+    &:first-of-type {
+      margin-right: 15px;
+    }
+  }
+}

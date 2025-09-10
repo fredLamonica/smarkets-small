@@ -1,0 +1,60 @@
+.modal-content {
+    border: none;
+    border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px);
+}
+
+.modal-header {
+    border-bottom: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: $new-ux-smarkets-gray;
+    border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
+    padding: 1rem 1rem 0.5rem;
+
+    .close {
+        opacity: 1;
+        outline: none;
+        color: $danger;
+        &:hover, &:active, &:focus {
+            color: $danger;
+            opacity: 1 !important;
+        }
+        i {
+            color: $danger;
+        }
+    }
+}
+
+.modal-body {
+    border: 1px solid transparent;
+    padding: 0.5rem 1rem;
+    color: $new-ux-smarkets-gray;
+    border: 1px solid transparent;
+}
+
+.modal-footer {
+    .btn {
+        &:not(:last-child) {
+            margin-right: .25rem;
+        }
+        &:not(:first-child) {
+            margin-left: .25rem;
+        }
+    }
+    border-top: none;
+    padding: 0.5rem 1rem 1rem 1rem;
+}
+
+.modal-xl > .modal-dialog {
+    @include media-breakpoint-up(sm) { max-width: 540px !important; width: 540px !important; }
+    @include media-breakpoint-up(md) { max-width: 720px !important; width: 720px !important; }
+    @include media-breakpoint-up(lg) { max-width: 960px !important; width: 960px !important; }
+    @include media-breakpoint-up(xl) { max-width: 1275px !important; width: 1275px !important; }
+}
+
+.modal-dialog {
+    &.modal-xl {
+        max-width: 1200px !important;
+        width: 1200px !important;
+    }
+}

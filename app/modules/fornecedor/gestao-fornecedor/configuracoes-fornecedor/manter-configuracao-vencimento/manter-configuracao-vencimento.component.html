@@ -1,0 +1,25 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    Configuração de Notificação de Prazo
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="form-group required col">
+      <label>Dias a vencer:</label>
+      <input-number [(ngModel)]="configuracaoVencimento.prazo"> </input-number>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+      <i class="fas fa-ban"></i> Cancelar
+    </button>
+    <button type="button" id="btnSalvar" (click)="salvar()" class="btn btn-primary">
+      <i class="fas fa-save"></i> Salvar
+    </button>
+  </div>
+</div>

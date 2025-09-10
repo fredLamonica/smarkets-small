@@ -1,0 +1,73 @@
+<sdk-modal title="Incluir Documento">
+  <form [formGroup]="form">
+    <div class="row form-group" *ngIf="isBuyer">
+      <div class="col-md-8 pr-2">
+        <label class="required-field" for="documento">Cnpj</label>
+        <input
+          class="form-control"
+          [class.invalid]="form.controls.documento?.invalid && form.controls.documento?.dirty"
+          [textMask]="{
+            mask: maskCnpj,
+            guide: false
+          }"
+          type="text"
+          name="documento"
+          formControlName="documento"
+        />
+        <div *ngIf="form.controls.documento.invalid && form.controls.documento.dirty">
+          <div *ngIf="form.controls.documento.errors.required">
+            <span class="invalid">Preenchimento obrigatório</span>
+          </div>
+          <div *ngIf="form.controls.documento.errors.invalidCpf">
+            <span class="invalid">CNPJ inválido</span>
+          </div>
+
+          <div *ngIf="form.controls.documento.errors.invalidCnpj">
+            <span class="invalid">CNPJ inválido</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mt-3 pt-1 pl-3">
+        <sdk-rectangle-button
+          label="Validar"
+          type="secondary"
+          (click)="searchCompany()"
+        ></sdk-rectangle-button>
+      </div>
+    </div>
+    <div class="form-group required" *ngIf="!isBuyer">
+      <label for="documento"> Documento </label>
+      <div class="d-flex">
+        <input
+          class="form-control col-md-8 mr-4"
+          [class.invalid]="form.controls.documento?.invalid && form.controls.documento?.dirty"
+          [textMask]="{
+            mask: form.controls.documento.value?.length < 15 ? maskCpf : maskCnpj,
+            guide: false
+          }"
+          type="text"
+          name="documento"
+          formControlName="documento"
+        />
+        <input
+          type="button"
+          class="btn btn-primary col-md-3"
+          (click)="searchCompany()"
+          value="Buscar"
+        />
+      </div>
+      <div *ngIf="form.controls.documento.invalid && form.controls.documento.dirty">
+        <div *ngIf="form.controls.documento.errors.required">
+          <span class="invalid">Preenchimento obrigatório</span>
+        </div>
+        <div *ngIf="form.controls.documento.errors.invalidCpf">
+          <span class="invalid">CPF inválido</span>
+        </div>
+
+        <div *ngIf="form.controls.documento.errors.invalidCnpj">
+          <span class="invalid">CNPJ inválido</span>
+        </div>
+      </div>
+    </div>
+  </form>
+</sdk-modal>

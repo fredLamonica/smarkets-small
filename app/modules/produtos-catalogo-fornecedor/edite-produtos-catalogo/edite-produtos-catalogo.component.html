@@ -1,0 +1,112 @@
+<smk-modal
+ [botaoSalvarHabilitado]="true"
+ [botaoAtualizarHabilitado]="getPermiteAtualizacao"
+ titulo="Alterar item em catálogo"
+ fecharLabel="Cancelar"
+ (fechar)="cancelar()"
+ (salvar)="salvar()"
+ (atualizar)="atualizar()"
+ atualizarLabel=" Editar"
+>
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="form-group col-lg-4 ">
+        <label for="idContratoCatalogoItem">ID ITEM</label>
+        <input
+          [title]="form.controls['idContratoCatalogoItem'].value"
+          id="idContratoCatalogoItem"
+          class="form-control"
+          type="text"
+          formControlName="idContratoCatalogoItem"
+          readonly>
+      </div>
+      <div class="form-group col-lg-8 ">
+        <label for="descricao">Descrição Produto</label>
+        <input
+          [title]="form.controls['descricao'].value"
+          id="descricao"
+          class="form-control"
+          type="text"
+          formControlName="descricao"
+          readonly>
+      </div>
+      <div class="form-group col-lg-4 ">
+        <label for="valor">Valor</label>
+        <input *ngIf="exibeValor"
+          [title]="form.controls['valor'].value"
+          id="valor"
+          class="form-control"
+          type="text"
+          formControlName="valor">
+        <div *ngIf="!exibeValor">
+          <span class="form-control" readonly > {{ getValor }}  <i class="fas fa-sync"></i> {{ getValorAprovacao }} </span>
+        </div>
+      </div>
+      <div class="form-group col-lg-4 ">
+        <label for="frete">Frete</label>
+        <ng-select *ngIf="exibeFrete"
+          name="frete"
+          formControlName="frete"
+          >
+          <ng-option [value]="tipoFrete.Cif">CIF</ng-option>
+          <ng-option [value]="tipoFrete.Fob">FOB</ng-option>
+          <ng-option [value]="tipoFrete['FOB Dirigido']">FOB Dirigido</ng-option>
+          <ng-option [value]="tipoFrete['FOB Redespacho']">FOB Redespacho</ng-option>
+        </ng-select>
+        <div *ngIf="!exibeFrete">
+          <span class="form-control" readonly > {{getFrete}}  <i class="fas fa-sync"></i> {{getFreteAprovacao}} </span>
+        </div>
+      </div>
+      <div class="form-group col-lg-4 ">
+        <label for="loteMinimo">Quantidade Mínima</label>
+         <input *ngIf="exibeLoteMinimo"
+          [title]="form.controls['loteMinimo'].value"
+          id="loteMinimo"
+          class="form-control"
+          type="text"
+          formControlName="loteMinimo">
+          <div *ngIf="!exibeLoteMinimo">
+          <span class="form-control" readonly > {{getLoteMinimo}}  <i class="fas fa-sync"></i> {{getLoteMinimoAprovacao}} </span>
+        </div>
+      </div>
+      <div class="form-group col-lg-5 ">
+        <label for="situacaoContratoCatalogoItem">Situação Item</label>
+        <ng-select *ngIf="exibeSituacao"
+          labelForId="situacaoContratoCatalogoItem"
+          bindValue="index"
+          bindLabel="name"
+          clearAllText="Limpar"
+          [items]="opcoesSituacaoCatalogoItem"
+          formControlName="situacaoContratoCatalogoItem"
+          [hideSelected]="true">
+        </ng-select>
+        <div *ngIf="!exibeSituacao">
+          <span class="form-control" readonly > {{getSituacao}}  <i class="fas fa-sync"></i> {{getSituacaoAprovacao}} </span>
+        </div>
+      </div>
+      <div class="form-group col-lg-3">
+        <label for="moeda">Moeda</label>
+        <ng-select
+          name="moeda"
+          formControlName="moeda">
+          <ng-option [value]="moeda.Real">Real</ng-option>
+        </ng-select>
+      </div>
+      <div class="form-group col-lg-4 ">
+        <label for="garantia"> Garantia </label>
+        <ng-select name="garantia" formControlName="garantia" *ngIf="exibeGarantia">
+          <ng-option [value]="garantia['1 ano']">1 ano</ng-option>
+          <ng-option [value]="garantia['2 anos']">2 anos</ng-option>
+          <ng-option [value]="garantia['3 anos']">3 anos</ng-option>
+          <ng-option [value]="garantia['4 anos']">4 anos</ng-option>
+          <ng-option [value]="garantia['5 anos']">5 anos</ng-option>
+          <ng-option [value]="garantia['10 anos']">10 anos</ng-option>
+          <ng-option [value]="garantia['Vitalícia']">Vitalícia</ng-option>
+        </ng-select>
+        <div *ngIf="!exibeGarantia">
+          <span class="form-control" readonly > {{getGarantia }}  <i class="fas fa-sync"></i> {{getGarantiaAprovacao}} </span>
+        </div>
+      </div>
+    </div>
+  </form>
+</smk-modal>

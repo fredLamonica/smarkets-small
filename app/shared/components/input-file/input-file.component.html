@@ -1,0 +1,4 @@
+<div class="custom-file">
+  <input type="file" [accept]="accept ? accept : ''" class="custom-file-input" id="customFile" [multiple]="multiple" (change)="selecionarArquivo($event)">
+  <label class="custom-file-label" for="customFile">Selecionar {{multiple ? 'arquivos' : 'arquivo' }}</label>
+</div>

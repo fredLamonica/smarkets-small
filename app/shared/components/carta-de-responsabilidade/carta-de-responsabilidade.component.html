@@ -1,0 +1,36 @@
+<div class="container mb-4">
+  <div class="row d-flex justify-content-end">
+    <sdk-button
+      [label]="'Incluir Carta de Responsabilidade'"
+      [type]="'primary'"
+      [icon]="'fas fa-2x fa-plus'"
+      (buttonClick)="abrirModalDeEnvioDeCartaDeResponsabilidadeFornecedor()"
+    ></sdk-button>
+  </div>
+</div>
+
+<div class="d-flex">
+  <div *ngIf="load; else hasValue" class="spinner spinner-secondary position-spinner"></div>
+
+  <ng-template #hasValue>
+    <sdk-list-view
+      *ngIf="historicoDeCartasDeResponsabilidade.length > 0"
+      class="w-100"
+      [items]="historicoDeCartasDeResponsabilidade"
+    >
+      <ng-template sdkListViewItem let-item>
+        <app-item-carta-responsabilidade
+          [carta]="item"
+          (event)="abrirModalDeEdicao($event)"
+        ></app-item-carta-responsabilidade>
+      </ng-template>
+    </sdk-list-view>
+
+    <div
+      class="bg-white border-bottom py-4 w-100"
+      *ngIf="historicoDeCartasDeResponsabilidade?.length === 0"
+    >
+      <div class="no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+    </div>
+  </ng-template>
+</div>

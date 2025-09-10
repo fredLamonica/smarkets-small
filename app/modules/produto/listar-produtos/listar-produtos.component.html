@@ -1,0 +1,130 @@
+<ul class="nav bg-gray">
+  <li class="nav-item">
+    <a class="nav-link" role="button" [routerLink]="[ 'novo' ]"><i class="fas fa-plus"></i> Incluir</a>
+  </li>
+  <li class="nav-item">
+    <a
+      class="nav-link"
+      role="button"
+      [class.disabled]="selecionados?.length != 1"
+      [routerLink]="selecionados?.length == 1 ? [selecionados[0]?.idProduto] : null"><i
+        class="fas fa-pencil-alt"></i> Editar
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" [class.disabled]="!selecionados?.length" (click)="solicitarExclusao()"><i
+        class="fas fa-trash-alt"></i>
+      Excluir</a>
+  </li>
+  <li class="nav-item" >
+    <a class="nav-link" role="button" [class.disabled]="!selecionados?.length"
+      (click)="alterarSituacao(SituacaoProduto.Ativo)"><i class="fas fa-check"></i>
+      Ativar</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" [class.disabled]="!selecionados?.length"
+      (click)="alterarSituacao(SituacaoProduto.Inativo)"><i class="fas fa-ban"></i>
+      Desativar</a>
+  </li>
+  <li class="nav-item dropdown" *ngIf="isSmarkets">
+    <a class="nav-link" role="button" [class.disabled]="!permiteEnviarIA" ><i class="fas fa-robot"></i> Enviar I.A </a>
+    <ul class="submenu" *ngIf="permiteEnviarIA">
+        <li role="button" (click)="priorizarEnvioIA(tipoIA.DescricaoDetalhada)">
+          <tr>
+            <td><i class="fas fa-edit"></i></td>
+            <td><a>Descrição Detalhada</a></td>
+          </tr>
+        </li>
+        <li role="button" (click)="priorizarEnvioIA(tipoIA.Precificacao)">
+          <tr>
+            <td class="padding-icon"><i class="fas fa-dollar-sign"></i></td>
+            <td><a>Precificação</a></td>
+          </tr>
+        </li>
+	  </ul>
+  </li>
+</ul>
+<header>
+  <h1 class="title">Produtos</h1>
+</header>
+<div class="container-fluid no-bounds">
+  <div class="form-row" [formGroup]="form">
+    <div class="form-group col col-8">
+      <input-busca
+          placeholder="Buscar por código, descrição, requisitante, entre outras informações..."
+          (buscar)="buscar($event)"
+          (campoVazio)="buscar('')"
+          [disabled]="buscaAvancada"
+          ></input-busca>
+    </div>
+    <div class="col-lg-3">
+        <button
+          class="btn btn-primary"
+          *ngIf="!buscaAvancada; else esconderBuscaAvancada"
+          (click)="exibirBuscaAvancada(true)">
+          <i class="fas fa-search-plus"></i> Busca Avançada
+        </button>
+        <ng-template #esconderBuscaAvancada>
+          <button class="btn btn-outline-primary" (click)="exibirBuscaAvancada(false)">
+            <i class="fas fa-search-minus"></i> Busca Avançada
+          </button>
+        </ng-template>
+    </div>
+  </div>
+
+ <div class="alinhamento" *ngIf="buscaAvancada">
+      <form [formGroup]="form">
+        <div class="row">
+          <div class="form-group col-4">
+            <label> Descrição </label>
+            <input
+              class="form-control"
+              type="text"
+              formControlName="termo"
+              placeholder="Descrição"
+               />
+          </div>
+          <div class="form-group col-4">
+            <label> Código </label>
+            <input
+              class="form-control"
+              type="text"
+              formControlName="codigo"
+              placeholder="Código"
+               />
+          </div>
+          <div class="form-group col-4" *ngIf="isSmarkets">
+            <label> Status I.A</label>
+            <ng-select
+                labelForId="situacaoIA"
+                bindValue="index"
+                bindLabel="name"
+                formControlName="situacaoIA"
+                [items]="opcoesSituacaoIA"
+                [searchFn]="situacoesSearchFn"
+                >
+              </ng-select>
+          </div>
+        </div>
+      </form>
+      <div class="row mb-3">
+        <div class="col">
+          <button class="btn btn-outline-primary float-right" (click)="filtroAvancado()" >
+            <i class="fas fa-search"></i> Buscar
+          </button>
+        </div>
+      </div>
+ </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <custom-table classes="table-striped" [settings]="settings" [source]="produtos" (select)="selecao($event)"
+            (sort)="ordenar($event)"></custom-table>
+          <pager [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="registrosPorPagina"
+            (pagination)="paginacao($event)"></pager>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

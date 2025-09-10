@@ -1,0 +1,65 @@
+<div class="card card-tab-content">
+  <div class="card-header">
+    <a (click)="inserir()" class="btn btn-icon d-flex align-items-center text-primary p-0">
+      <i class="fas fa-plus-circle"></i>
+      <p class="d-inline-block mb-0 ml-2"> Inserir nova regra
+    </a>
+  </div>
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+        <div class="col-md-3 align-self-center pr-md-0">
+          <ng-select class="font-weight-bold" bindLabel="nome" [placeholder]="'CATEGORIAS:'" [hideSelected]="true"
+            [items]="categorias" name="categoriaFitro" (change)="filtrarPorCategoria($event)">
+          </ng-select>
+        </div>
+        <div class="col-md-3 align-self-center pr-md-0">
+          <p class="font-weight-bold mb-0">Tipos de Requisição.:</p>
+        </div>
+        <div class="col-md-3 align-self-center pr-md-0">
+          <p class="font-weight-bold mb-0">SLA:</p>
+        </div>
+        <div class="col-md-3 align-self-center">
+          <p class="font-weight-bold mb-0">Ações:</p>
+        </div>
+      </div>
+  
+      <div class="bg-white border-bottom row py-4" *ngIf="!matrizResponsabilidade?.length; else hasValue">
+        <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+      </div>
+      <ng-template #hasValue>
+        <div *ngFor="let matriz of matrizResponsabilidade; let i = index;" class="bg-white border-bottom row py-2">
+          <div class="col-md-3 align-self-center pr-md-0">
+            <label for="" class="font-weight-bold d-block d-md-none">Categorias:</label>
+            <p class="mb-3 mb-md-0" *ngFor="let categoria of matriz.categoriasProduto">{{categoria.nome}}</p>
+          </div>
+          <div class="col-md-3 align-self-center pr-md-0">
+            <label for="" class="font-weight-bold d-block d-md-none">Tipos de Requisição:</label>
+            <p class="mb-3 mb-md-0" *ngFor="let tipoRequisicao of matriz.tiposRequisicao">{{tipoRequisicao?.nome}}</p>
+          </div>
+          <div class="col-md-3 align-self-center pr-md-0">
+            <label for="" class="font-weight-bold d-block d-md-none">SLA:</label>
+            <ng-container *ngFor="let slaItem of matriz.slaItens">
+              <p class="font-weight-bold mb-3 mb-md-0">{{slaItem.classificacao.descricao}}</p>
+              <p class="mb-3 mb-md-0">{{slaItem.tempo}} {{UnidadeMedidaTempo[slaItem.unidadeMedidaTempo]}}(s)</p>
+            </ng-container>
+          </div>
+          <div class="col-md-3 d-flex justify-content-between align-self-center">
+            <a (click)="auditar(i)" class="btn btn-icon float-right" data-toggle="tooltip" data-placement="bottom"
+              title="Auditoria">
+              <i class="fas fa-history"></i>
+            </a>
+            <a (click)="editar(i)" class="btn btn-icon float-right" data-toggle="tooltip" data-placement="bottom"
+              title="Editar">
+              <i class="far fa-edit"></i>
+            </a>
+            <a (click)="deletar(i)" class="btn btn-icon float-right" data-toggle="tooltip" data-placement="bottom"
+              title="Excluir">
+              <i class="far fa-trash-alt"></i>
+            </a>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

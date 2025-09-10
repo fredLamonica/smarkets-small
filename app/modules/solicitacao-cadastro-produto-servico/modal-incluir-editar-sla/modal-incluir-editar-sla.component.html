@@ -1,0 +1,66 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">INCLUIR NOVO SLA</div>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body dados">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group col-lg-6">
+        <label><b>Tipo</b></label>
+      </div>
+    </div>
+
+    <div class="form-row tipo">
+      <div class="form-group col-lg-6">
+        &nbsp;&nbsp;&nbsp;&nbsp;<label>{{tipoSLA}}</label>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-4">
+        <label for="classificacao" class="required"> Classificação </label>
+        <ng-select
+          required
+          [clearable]="false"
+          formControlName="classificacao"
+          [items]="opcoesTipoTipoClassificacaoSla"
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ enumTipoClassificacaoSla[item] }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            {{ enumTipoClassificacaoSla[item] }}
+          </ng-template>
+        </ng-select>
+      </div>
+
+      <div class="form-group col-lg-4">
+        <label for="descricao" class="required"> Tempo </label>
+        <input-number required [min]="1" [max]="999999999" [allowDecimal]="false" formControlName="tempo">
+        </input-number>
+      </div>
+
+      <div class="form-group col-4">
+        <label for="tipo-cadastro" class="required"> Unidade </label>
+        <ng-select
+          required
+          [clearable]="false"
+          formControlName="unidadeMedidaTempo"
+          [items]="opcoesUnidadeTempoSla" >
+          <ng-template ng-label-tmp let-item="item">
+            {{ enumUnidadeTempoSla[item] }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            {{ enumUnidadeTempoSla[item] }}
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="button-cancelar" (click)="close()">Cancelar</button>
+  <button type="button" class="button-salvar" (click)="save()">Salvar</button>
+</div>

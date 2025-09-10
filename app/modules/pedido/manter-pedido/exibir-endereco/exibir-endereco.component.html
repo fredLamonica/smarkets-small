@@ -1,0 +1,29 @@
+<div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">Endereço de Entrega</div>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <i class="fas fa-times"></i>
+    </button>
+</div>
+<div class="modal-body">
+    <p>
+        <span class="font-weight-bold">Logradouro:</span> {{endereco?.logradouro}} 
+        <span class="ml-4">
+            <span class="font-weight-bold">Número:</span> {{endereco?.numero}}
+        </span>
+        <span class="ml-4">
+            <span class="font-weight-bold">CEP:</span> {{endereco?.cep}}
+        </span>
+    </p>
+    <p>
+        <span class="font-weight-bold">Bairro:</span> {{endereco?.bairro}}
+        <span class="ml-4">
+            <span class="font-weight-bold">Cidade:</span> {{endereco?.cidade?.nome}}
+        </span>
+        <span class="ml-4">
+            <span class="font-weight-bold">Estado:</span> {{endereco?.cidade?.estado?.nome}}
+        </span>
+    </p>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="activeModal.dismiss('Cross click')"><i class="fas fa-times"></i> Fechar</button>
+</div>

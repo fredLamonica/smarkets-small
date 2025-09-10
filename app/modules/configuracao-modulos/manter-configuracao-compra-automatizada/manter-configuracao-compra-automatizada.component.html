@@ -1,0 +1,186 @@
+<smk-funcionalidade [titulo]="titulo" [tituloComplementar]="secaoAtual" *ngIf="configuracaoModuloCompraAutomatizada">
+  <ng-container acoes-barra>
+    <button
+      class="btn btn-primary"
+      ngbTooltip="Salvar"
+      container="body"
+      (click)="salvar()">
+      <i class="fas fa-save"></i>
+    </button>
+  </ng-container>
+
+  <smk-card-funcionalidade titulo="Catálogo">
+
+    <div
+      class="d-flex flex-column justify-content-between align-items-center align-items-sm-start">
+      <form [formGroup]="form" class="col-12 pl-0 pr-0">
+        <div class="form-group form-check">
+          <input type="checkbox" class="form-check-input" id="compraAutomatizadaCatalogoHabilitada"
+            formControlName="compraAutomatizadaCatalogoHabilitada">
+          <label class="form-check-label" for="compraAutomatizadaCatalogoHabilitada">Habilitar Compra Automatizada
+            para Catálogo</label>
+        </div>
+        <ng-container *ngIf="form.controls.compraAutomatizadaCatalogoHabilitada.value">
+          <div class="form-group col-3 ml-4">
+            <label for="precoCatalogo">Preço</label>
+            <ng-select
+              name="precoCatalogo"
+              formControlName="precoCatalogo">
+              <ng-option [value]="criterioEscolha.Menor">Menor</ng-option>
+              <ng-option [value]="criterioEscolha.Maior">Maior</ng-option>
+            </ng-select>
+          </div>
+          <div class="form-group col-3  ml-4">
+            <label for="prazoEntregaCatalogo">Prazo de Entrega</label>
+            <ng-select
+              name="prazoEntregaCatalogo"
+              formControlName="prazoEntregaCatalogo">
+              <ng-option [value]="criterioEscolha.Menor">Menor</ng-option>
+              <ng-option [value]="criterioEscolha.Maior">Maior</ng-option>
+            </ng-select>
+          </div>
+          <div class="form-group col-3  ml-4">
+            <label for="freteCatalogo">Frete</label>
+            <ng-select
+              name="freteCatalogo"
+              formControlName="freteCatalogo">
+              <ng-option [value]="tipoFrete.Cif">CIF</ng-option>
+              <ng-option [value]="tipoFrete.Fob">FOB</ng-option>
+            </ng-select>
+          </div>
+          <div class="form-group col-3 ml-4 required">
+            <label for="valorLimiteGeracaoCarrinho ">Valor Limite</label>
+            <input
+              class="form-control"
+              [textMask]="{mask: maskValor, guide: false}"
+              type="text" name="valorLimiteGeracaoCarrinho"
+              formControlName="valorLimiteGeracaoCarrinho">
+          </div>
+        </ng-container>
+        <div class="form-group form-check">
+          <input type="checkbox" class="form-check-input" id="pedidoAutomaticoHabilitado"
+            formControlName="pedidoAutomaticoHabilitado">
+          <label class="form-check-label" for="pedidoAutomaticoHabilitado">Pedido Automático</label>
+        </div>
+      </form>
+    </div>
+
+  </smk-card-funcionalidade>
+  <smk-card-funcionalidade titulo="Cotação" class="mt-4">
+    <div
+      class="d-flex flex-column justify-content-between align-items-center align-items-sm-start">
+      <form [formGroup]="form" class="pl-0 pr-0 col-12">
+        <div class="form-group form-check">
+          <input type="checkbox" class="form-check-input" id="compraAutomatizadaCotacaoHabilitada"
+            formControlName="compraAutomatizadaCotacaoHabilitada">
+          <label class="form-check-label" for="compraAutomatizadaCotacaoHabilitada">Habilitar Compra Automatizada
+            para Cotação</label>
+        </div>
+        <ng-container *ngIf="form.controls.compraAutomatizadaCotacaoHabilitada.value">
+          <div class="form-group col-6  ml-4">
+            <div class="row">
+              <label class="col-12 required ">Período da Cotação</label>
+              <div class="col-5">
+                <input formControlName="periodoCotacao" [textMask]="{mask: maskNumero, guide: false}"
+                  class="form-control" id="periodoCotacao" type="text" />
+              </div>
+
+              <div class="col-2 pt-2 text-center ">
+                <span>em:</span>
+              </div>
+              <div class="col-5">
+                <ng-select
+                  name="unidadeMedidaPeriodoCotacao"
+                  formControlName="unidadeMedidaPeriodoCotacao">
+                  <ng-option [value]="unidadeMedidaTempo.Hora">Hora(s)</ng-option>
+                  <ng-option [value]="unidadeMedidaTempo.Dia">Dia(s)</ng-option>
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-6  ml-4">
+            <div class="row">
+              <label class="col-12 required ">Período da Primeira Rodada</label>
+              <div class="col-5">
+                <input formControlName="periodoPrimeiraRodada" [textMask]="{mask: maskNumero, guide: false}"
+                  class="form-control" id="periodoPrimeiraRodada"
+                  type="text" />
+              </div>
+              <div class="col-2 pt-2 text-center">
+
+                <span>em:</span>
+              </div>
+              <div class="col-5">
+                <ng-select
+                  name="unidadeMedidaPeriodoPrimeiraRodada"
+                  formControlName="unidadeMedidaPeriodoPrimeiraRodada">
+                  <ng-option [value]="unidadeMedidaTempo.Hora">Hora(s)</ng-option>
+                  <ng-option [value]="unidadeMedidaTempo.Dia">Dia(s)</ng-option>
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group required col-3  ml-4">
+            <label for="freteCotacao">Frete</label>
+            <ng-select
+              name="freteCotacao"
+              formControlName="freteCotacao">
+              <ng-option [value]="tipoFrete.Cif">CIF</ng-option>
+              <ng-option [value]="tipoFrete.Fob">FOB</ng-option>
+            </ng-select>
+          </div>
+          <div class="form-group required col-3  ml-4">
+            <label for="idCondicaoPagamentoCotacao">Condição de Pagamento</label>
+            <ng-select
+              [items]="condicoesPagamento"
+              bindLabel="descricao"
+              bindValue="idCondicaoPagamento"
+              [loadingText]="'buscando...'"
+              formControlName="idCondicaoPagamentoCotacao">
+            </ng-select>
+          </div>
+          <div class="form-group form-check col-6  ml-2 pl-5">
+            <input type="checkbox" class="form-check-input" id="limiteItensCotacaoHabilitado"
+              formControlName="limiteItensCotacaoHabilitado">
+            <label class="form-check-label" for="limiteItensCotacaoHabilitado">Habilitar Limite de Itens na
+              Cotação</label>
+          </div>
+          <div class="form-group col-3 ml-4 required">
+            <label for="limiteItensCotacao ">Quantidade Limite</label>
+            <input
+              class="form-control"
+              [textMask]="{mask: maskNumero, guide: false}"
+              type="text" name="limiteItensCotacao"
+              formControlName="limiteItensCotacao">
+          </div>
+          <div class="form-group col-6  ml-4">
+            <label for="termoConcordancia">Termo de Concordância</label>
+            <textarea name="termoConcordancia" class="form-control" formControlName="termoConcordancia"></textarea>
+          </div>
+          <div class="form-group form-check col-6  ml-2 pl-5">
+            <input type="checkbox" class="form-check-input" id="textoPadraoHabilitadoCotacoes"
+              formControlName="textoPadraoHabilitadoCotacoes">
+            <label class="form-check-label" for="textoPadraoHabilitadoCotacoes">Habilitar texto como padrão
+              para todas as cotações</label>
+          </div>
+          <div class="form-group ml-4 col-6">
+            <label class="">Anexar</label>
+            <app-manter-anexos
+              [anexos]="form.controls.anexos.value"
+              [extensoesPermitidas]="configuracaoAnexo.extensoesPermitidas"
+              [quantidadeMaxima]="configuracaoAnexo.quantidadeMaxima"
+              [readOnly]="false"
+              [podeBaixar]="podeBaixar"
+              (anexarArquivos)="selecionarArquivo($event)"
+              (excluirAnexo)="removerArquivo($event)">
+            </app-manter-anexos>
+
+          </div>
+
+
+        </ng-container>
+      </form>
+    </div>
+  </smk-card-funcionalidade>
+
+</smk-funcionalidade>

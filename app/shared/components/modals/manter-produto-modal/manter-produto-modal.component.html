@@ -1,0 +1,189 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">{{ idProduto?'Alterar':'Incluir' }} Produto</div>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form" *ngIf="form">
+    <div class="form-row">
+      <div class="form-group col-lg-3">
+        <label for="codigo"> Código </label>
+        <input class="form-control" type="text" name="codigo" formControlName="codigo">
+      </div>
+      <div class="form-group required col-lg-3">
+        <label for="codigoUnico"> Código único </label>
+        <i
+          class="fas fa-info-circle ml-1"
+          data-toggle="tooltip"
+          data-placement="right"
+          ngbTooltip="O maior valor é {{ maiorCodigoUnico }}
+                    ">
+        </i>
+        <input
+          class="form-control"
+          type="text"
+          name="codigoUnico"
+          formControlName="codigoUnico"
+          [textMask]="{ mask: maskCodigoUnico, guide: false }">
+      </div>
+      <span>
+        <div class="gerar-codigo-unico form-check mt-4 pt-2 ml-2 mb-3">
+          <input
+            id="gerarCodigoUnicoAutomatico"
+            type="checkbox"
+            class="gerar-codigo-unico-check form-check-input"
+            formControlName="gerarCodigoUnicoAutomatico">
+          <label for="gerarCodigoUnicoAutomatico" class="gerar-codigo-unico-label form-check-label">
+            Gerar código único automaticamente
+          </label>
+        </div>
+      </span>
+      <div class="form-group required col-lg-12">
+        <label for="idCategoriaProduto"> Categoria de produto </label>
+        <input-tree value-property="nome" key-property="idCategoriaProduto" children-property="filhos"
+          [source]="categoriasProduto$ | async" [loading]="this.categoriasProdutoLoading"
+          [class.invalid]="form.controls.idCategoriaProduto.invalid && form.controls.idCategoriaProduto.dirty"
+          name="idCategoriaProduto" formControlName="idCategoriaProduto"
+          (empty-tree)="naoExistemCategoriasDisponiveis($event)"></input-tree>
+        <span class="invalid"
+          *ngIf="form.controls.idCategoriaProduto.invalid && form.controls.idCategoriaProduto.dirty">
+          Preenchimento obrigatório </span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-lg-3" [class.required]="codigoNcmObrigatorio">
+        <label for="codigoNcm"> Código de controle NCM </label>
+        <input class="form-control" type="text" name="codigoNcm" formControlName="codigoNcm"
+          [class.invalid]="form.controls.codigoNcm.invalid && form.controls.codigoNcm.dirty">
+        <span class="invalid" *ngIf="form.controls.codigoNcm.invalid && form.controls.codigoNcm.dirty">
+          Preenchimento obrigatório </span>
+      </div>
+      <div class="form-group required col-md-6 col-lg-3">
+        <label for="idUnidadeMedida"> Unidade de medida </label>
+        <ng-select class="full-width" [items]="unidadesMedida$ | async" bindValue="idUnidadeMedida"
+          [loading]="unidadesMedidaLoading" loadingText="buscando..." formControlName="idUnidadeMedida"
+          [class.invalid]="form.controls.idUnidadeMedida.invalid && form.controls.idUnidadeMedida.dirty">
+          <ng-template ng-label-tmp let-item="item">
+            <span>{{ item.descricao + ' - ' + item.sigla }}</span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+            <span>{{ item.descricao + ' - ' + item.sigla }}</span>
+          </ng-template>
+        </ng-select>
+        <span class="invalid" *ngIf="form.controls.idUnidadeMedida.invalid && form.controls.idUnidadeMedida.dirty">
+          Preenchimento obrigatório </span>
+      </div>
+      <div class="form-group col-md-6 col-lg-3">
+        <label for="valorReferencia"> Valor de referência </label>
+        <input-number [class.invalid]="form.controls.valorReferencia.invalid && form.controls.valorReferencia.dirty"
+          formControlName="valorReferencia" [min]="0.001" [max]="999999999.9999" [allowDecimal]="true">
+        </input-number>
+        <span class="invalid"
+          *ngIf="form.controls.valorReferencia.invalid && form.controls.valorReferencia.errors.min && form.controls.valorReferencia.dirty">
+          O valor de referência deve ser maior que zero
+        </span>
+        <span class="invalid"
+          *ngIf="form.controls.valorReferencia.invalid && form.controls.valorReferencia.errors.max && form.controls.valorReferencia.dirty">
+          O valor de referência deve ser no máximo <br> R$ 999.999.999,99.
+        </span>
+      </div>
+      <div class="form-group required col-md-6 col-lg-3">
+        <label for="moeda"> Moeda </label>
+        <ng-select name="moeda" id="moeda" formControlName="moeda"
+          [class.invalid]="form.controls.moeda.invalid && form.controls.moeda.dirty">
+          <ng-option [value]="Moeda.Real">Real</ng-option>
+        </ng-select>
+        <span class="invalid" *ngIf="form.controls.moeda.invalid && form.controls.moeda.dirty">
+          Preenchimento obrigatório </span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group required col">
+        <label for="descricao"> Descrição </label>
+        <input class="form-control" [class.invalid]="form.controls.descricao.invalid && form.controls.descricao.dirty"
+          type="text" name="descricao" formControlName="descricao">
+        <span class="invalid" *ngIf="form.controls.descricao.invalid && form.controls.descricao.dirty">
+          Preenchimento obrigatório </span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col">
+        <label for="descricaoDetalhada"> Descrição detalhada </label>
+        <textarea class="form-control" rows="3" name="descricaoDetalhada"
+          formControlName="descricaoDetalhada"></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-12">
+        <label> Imagens: </label>
+        <input-file [multiple]="true" accept=".png,.jpeg,.jpg" (select)="incluirImagens($event)"></input-file>
+      </div>
+      <div class="form-group col-12" *ngIf="form?.controls?.imagens?.value?.length">
+        <galeria-arquivos size="sm" [exibir-nome]="true" [arquivos]="form.controls.imagens.value"
+          (excluir)="excluirImagens($event)"></galeria-arquivos>
+      </div>
+    </div>
+    <div class="form-row" *ngIf="parametrosIntegracaoSapHabilitado">
+      <div class="divisor col-12">
+        <div class="title">Parametros de Integração - SAP</div>
+      </div>
+      <div class="form-group col-lg-4" [class.required]="origemMaterialObrigatorio">
+        <label for="idOrigemMaterial"> Origem do Material </label>
+        <ng-select class="full-width" [items]="origensMaterial$ | async" bindValue="idOrigemMaterial"
+          [loading]="origensMaterialLoading" loadingText="buscando..." formControlName="idOrigemMaterial"
+          (open)="openOrigemMaterial()"
+          *ngIf="form.controls.idOrigemMaterial.enabled"
+          [class.invalid]="form.controls.idOrigemMaterial.invalid && form.controls.idOrigemMaterial.dirty">
+          <ng-template ng-label-tmp let-item="item">
+            <span>{{ item.codigo + ' - ' + item.descricao }}</span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+            <span>{{ item.codigo + ' - ' + item.descricao }}</span>
+          </ng-template>
+        </ng-select>
+        <span class="invalid" *ngIf="form.controls.idOrigemMaterial.invalid && form.controls.idOrigemMaterial.dirty">
+          Preenchimento obrigatório </span>
+      </div>
+      <div class="form-group col-lg-4" [class.required]="utilizacaoMaterialObrigatorio">
+        <label for="idUtilizacaoMaterial"> Utilização do Material </label>
+        <ng-select class="full-width" [items]="utilizacaoMateriais$ | async" bindValue="idUtilizacaoMaterial"
+          [loading]="utilizacaoMateriaisLoading" loadingText="buscando..." formControlName="idUtilizacaoMaterial"
+          (open)="openUtilizacaoMaterial()" *ngIf="form.controls.idUtilizacaoMaterial.enabled"
+          [class.invalid]="form.controls.idUtilizacaoMaterial.invalid && form.controls.idUtilizacaoMaterial.dirty">
+          <ng-template ng-label-tmp let-item="item">
+            <span>{{ item.codigo + ' - ' + item.descricao }}</span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+            <span>{{ item.codigo + ' - ' + item.descricao }}</span>
+          </ng-template>
+        </ng-select>
+        <span class="invalid"
+          *ngIf="form.controls.idUtilizacaoMaterial.invalid && form.controls.idUtilizacaoMaterial.dirty">
+          Preenchimento obrigatório </span>
+      </div>
+      <div class="form-group col-lg-4" [class.required]="categoriaMaterialObrigatorio">
+        <label for="idCategoriaMaterial"> Categoria do Material </label>
+        <ng-select class="full-width" [items]="categoriasMaterial$ | async" bindValue="idCategoriaMaterial"
+          [loading]="categoriasMaterialLoading" loadingText="buscando..." formControlName="idCategoriaMaterial"
+          (open)="openCategoriaMaterial()"
+          *ngIf="form.controls.idCategoriaMaterial.enabled"
+          [class.invalid]="form.controls.idCategoriaMaterial.invalid && form.controls.idCategoriaMaterial.dirty">
+          <ng-template ng-label-tmp let-item="item">
+            <span>{{ item.codigo + ' - ' + item.descricao }}</span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+            <span>{{ item.codigo + ' - ' + item.descricao }}</span>
+          </ng-template>
+        </ng-select>
+        <span class="invalid"
+          *ngIf="form.controls.idCategoriaMaterial.invalid && form.controls.idCategoriaMaterial.dirty">
+          Preenchimento obrigatório </span>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="fechar()"><i class="fas fa-ban"></i> Fechar</button>
+  <button type="button" class="btn btn-primary" (click)="salvar()"><i class="fas fa-save"></i> Salvar</button>
+</div>

@@ -1,0 +1,38 @@
+$cor-base: #616161;
+
+.ativo {
+  color: #98be6d;
+}
+
+.novo {
+  color: #6d8ca8;
+}
+
+.em-analise {
+  color: #00bbf3;
+}
+
+.inativo {
+  color: #cfcfcf;
+}
+
+.bloqueado {
+  color: #e74b37;
+}
+
+.pendencia {
+  color: #fab248;
+}
+
+::ng-deep mapa-comparativo-item .tooltip-ultimo-valor-pago {
+  .tooltip-inner {
+    max-width: 250px;
+    width: 250px;
+    color: $cor-base;
+  }
+}
+
+.icone-ultimo-valor-pago {
+  font-size: 14px !important;
+  color: $cor-base !important;
+}

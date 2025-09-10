@@ -1,0 +1,76 @@
+<div class="bg-white border-bottom row py-2 mx-0">
+  <div class="col">
+    <a class="btn btn-icon p-0" [class.disabled]="disabled" (click)="incluir()">
+      <i class="fas fa-plus-circle text-primary"></i>
+      <p class="d-inline-block mb-0 ml-2 align-top">Incluir endereço</p>
+    </a>
+  </div>
+</div>
+<div class="bg-lighter border-bottom row py-2 mx-0 d-none d-md-flex">
+  <div class="col-md-1">
+    <label class="font-weight-bold">UF:</label>
+  </div>
+  <div class="col-md-2">
+    <label class="font-weight-bold">Cidade:</label>
+  </div>
+  <div class="col-md-3">
+    <label class="font-weight-bold">Bairro:</label>
+  </div>
+  <div class="col-md-2">
+    <label class="font-weight-bold">Logradouro:</label>
+  </div>
+  <div class="col-md-1">
+    <label class="font-weight-bold">Tipo:</label>
+  </div>
+  <div class="col-md-2">
+    <label class="font-weight-bold">Ações:</label>
+  </div>
+</div>
+<div class="bg-white border-bottom row py-2 mx-0" *ngIf="!value?.length">
+  <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+</div>
+
+<div class="bg-white border-bottom row py-2 mx-0" *ngFor="let endereco of value; let i = index">
+  <div class="col-md-1 align-self-center">
+    <label for="" class="font-weight-bold d-block d-md-none">UF:</label>
+    <p class="mb-3 mb-lg-0">{{ endereco?.cidade?.estado?.abreviacao }}</p>
+  </div>
+  <div class="col-md-2 col-sm-3 align-self-center">
+    <label for="" class="font-weight-bold d-block d-md-none">Cidade:</label>
+    <p class="mb-3 mb-lg-0">{{ endereco?.cidade?.nome }}</p>
+  </div>
+  <div class="col-md-3 col-sm-3 align-self-center">
+    <label for="" class="font-weight-bold d-block d-md-none">Bairro:</label>
+    <p class="mb-3 mb-lg-0">{{ endereco.bairro }}</p>
+  </div>
+  <div class="col-md-2 col-sm-3 align-self-center">
+    <label for="" class="font-weight-bold d-block d-md-none">Logradouro:</label>
+    <p class="mb-3 mb-lg-0">{{ endereco.logradouro + ', ' + endereco.numero }}</p>
+  </div>
+  <div class="col-md-2 col-sm-3 align-self-center">
+    <label for="" class="font-weight-bold d-block d-md-none">Tipo:</label>
+    <p class="mb-3 mb-lg-0">{{ TipoEndereco[endereco.tipo] }}</p>
+  </div>
+  <div class="col-md-2 d-flex justify-content-around justify-content-lg-between align-self-center">
+    <button
+      class="btn btn-icon"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Editar"
+      (click)="editar(i)"
+    >
+      <i class="far fa-edit"></i>
+    </button>
+    <button
+      *ngIf="TipoEndereco[endereco.tipo] != 'Institucional'"
+      class="btn btn-icon"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Excluir"
+      (click)="solicitarExclusao(i)"
+    >
+      <i class="far fa-trash-alt text-danger"></i>
+    </button>
+  </div>
+</div>
+<!-- #endregion -->

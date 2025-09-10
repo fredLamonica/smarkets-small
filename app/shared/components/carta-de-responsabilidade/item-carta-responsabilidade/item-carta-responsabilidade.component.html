@@ -1,0 +1,47 @@
+<div class="item-carta-responsabilidade" (click)="editarCarta()">
+  <div class="content">
+    <div class="col-3 crop-text-2">
+      <a
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ carta.usuarioRemetente.pessoaFisica.nome }}"
+      >
+        {{ carta.usuarioRemetente.pessoaFisica.nome }}
+      </a>
+    </div>
+    <div class="col-3 crop-text-2">
+      <a
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ carta.dataCriacao | date: 'dd/MM/yyyy' }}"
+      >
+        {{ carta.dataCriacao | date: 'dd/MM/yyyy' }}
+      </a>
+    </div>
+    <div
+      class="col-3 crop-text-2"
+      [ngClass]="{
+        enviada: carta.situacao == 1,
+        aprovada: carta.situacao == 2,
+        recusada: carta.situacao == 3
+      }"
+    >
+      <a
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ situacao.get(carta.situacao) | uppercase }}"
+      >
+        {{ situacao.get(carta.situacao) | uppercase }}
+      </a>
+    </div>
+    <div class="col-3 crop-text-2">
+      <a
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ carta.usuarioDestinatario.pessoaFisica.nome }}"
+      >
+        Para: {{ carta.usuarioDestinatario.pessoaFisica.nome }}
+      </a>
+    </div>
+  </div>
+</div>

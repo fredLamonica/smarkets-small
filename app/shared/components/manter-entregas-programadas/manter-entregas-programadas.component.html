@@ -1,0 +1,186 @@
+<div class="manter-entregas-programadas">
+  <div *ngIf="config.modoModal" class="modal-header">
+    <div class="modal-title">{{ config.tituloModal }}</div>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="fecheModal()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div [class.modal-body]="config.modoModal">
+    <div class="card" *blockUI="blockUIComponentBodyName" [class.mb-0]="config.modoModal">
+      <a
+        *ngIf="!config.modoModal"
+        class="card-header"
+        data-toggle="collapse"
+        href="#conteudoCollapse{{config.index}}"
+        (click)="toggleCollapse()">
+        Programações de Entrega
+      </a>
+      <hr *ngIf="!config.modoModal" class="separador">
+      <div class="card-body" [class.readonly]="config.modoModal">
+        <div
+          *ngIf="!config.modoModal"
+          id="conteudoCollapse{{config.index}}"
+          class="collapse show conteudo-collapse">
+          <div class="form-row" [formGroup]="form">
+            <input type="hidden" formControlName="id">
+            <input type="hidden" formControlName="idItem">
+            <div class="form-group required col-md-6 col-lg-4">
+              <label for="dataEntrega{{config.index}}">Data de Entrega:</label>
+              <input
+                id="dataEntrega{{config.index}}"
+                type="date"
+                class="form-control font-weight-bold"
+                [class.invalid]="form.controls.dataEntrega.dirty && form.controls.dataEntrega.invalid"
+                formControlName="dataEntrega"
+                [min]="config.dataEntregaMinima">
+              <div *ngIf="form.controls.dataEntrega.dirty && form.controls.dataEntrega.invalid">
+                <span class="invalid" *ngIf="form.controls.dataEntrega.errors.required">
+                  Preenchimento obrigatório
+                </span>
+                <span class="invalid" *ngIf="form.controls.dataEntrega.errors.invalid">
+                  {{ form.controls.dataEntrega.errors.invalid.message }}
+                </span>
+                <span class="invalid" *ngIf="form.controls.dataEntrega.errors.min">
+                  {{ form.controls.dataEntrega.errors.min.message }}
+                </span>
+              </div>
+            </div>
+            <div *ngIf="config.origem === origemProgramacaoDeEntrega.requisicao"
+              class="form-group col-12 col-md-6 col-lg-3"
+              [class.required]="config.empresaComIntegracaoErp">
+              <label for="valor{{config.index}}">Valor de referência:</label>
+              <input
+                id="valor{{config.index}}"
+                class="form-control font-weight-bold text-center"
+                [class.invalid]="form.controls.valor.dirty && form.controls.valor.invalid"
+                [textMask]="config.valorMascara"
+                type="text"
+                formControlName="valor">
+              <div *ngIf="form.controls.valor.dirty && form.controls.valor.invalid">
+                <span class="invalid" *ngIf="form.controls.valor.errors.required">
+                  {{ form.controls.valor.errors.required.message }}
+                </span>
+              </div>
+            </div>
+            <input *ngIf="config.origem === origemProgramacaoDeEntrega.pedido" type="hidden" formControlName="valor">
+            <div class="form-group required col-md-6 col-lg-2">
+              <label for="quantidade{{config.index}}">Quantidade:</label>
+              <input-number
+                id="quantidade{{config.index}}"
+                class="form-control-md quantidade"
+                [invalid]="form.controls.quantidade.dirty && form.controls.quantidade.invalid"
+                formControlName="quantidade"
+                [min]="config.quantidadeMinima"
+                [max]="config.quantidadeMaxima"
+                [allowDecimal]="config.permiteQuantidadeFracionada">
+              </input-number>
+              <div *ngIf="form.controls.quantidade.dirty && form.controls.quantidade.invalid">
+                <span class="invalid" *ngIf="form.controls.quantidade.errors.required">
+                  Preenchimento obrigatório
+                </span>
+                <span class="invalid" *ngIf="form.controls.quantidade.errors.min">
+                  Quantidade mínima é {{ config.quantidadeMinima }}
+                </span>
+                <span class="invalid" *ngIf="form.controls.quantidade.errors.max">
+                  Quantidade máxima é {{ config.quantidadeMaxima }} dias
+                </span>
+              </div>
+            </div>
+            <input type="hidden" formControlName="valorTotal">
+            <div class="form-group pt-1 mt-4 col-md-6 col-lg-2">
+              <button
+                *ngIf="!modoEdicao"
+                role=button
+                class="btn btn-block btn-primary"
+                [class.disabled]="form.invalid"
+                (click)="inclua()">
+                <i class="fas fa-plus"></i> Incluir
+              </button>
+              <button
+                *ngIf="modoEdicao"
+                role=button
+                class="btn btn-block btn-primary"
+                [class.disabled]="form.invalid"
+                (click)="salve()">
+                <i class="fas fa-save"></i> Salvar
+              </button>
+            </div>
+            <div class="form-group pt-1 mt-4 col-md-6 col-lg-1">
+              <button
+                role=button
+                class="btn btn-block btn-outline-danger cancelar-acao"
+                ngbTooltip="Cancelar ação"
+                tooltipClass="tooltip-cancelar-acao"
+                (click)="resetForm()">
+                <i class="far fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+          <hr class="separador">
+        </div>
+        <div *ngIf="!config.modoModal" class="form-row">
+          <div *ngIf="!modoCollapsed" class="form-group col-lg-2">
+            <button
+              role=button
+              class="btn btn-block btn-editar"
+              [class.disabled]="!entregasSelecionadas?.length || entregasSelecionadas?.length > 1 || modoEdicao"
+              (click)="edite()">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+          </div>
+          <div *ngIf="!modoCollapsed" class="form-group col-lg-2">
+            <button
+              role=button
+              class="btn btn-block btn-danger"
+              [class.disabled]="!entregasSelecionadas?.length || modoEdicao"
+              (click)="confirmeExclusao()">
+              <i class="fas fa-trash-alt"></i> Remover
+            </button>
+          </div>
+          <div
+            class="text-right col-lg-4 offset-lg-4"
+            [class.offset-lg-8]="modoCollapsed">
+            <p class="container-quantidade-total">
+              <span
+                ngbTooltip="Quantidade mínima {{config.quantidadeMinimaDoLote}}"
+                tooltipClass="tooltip-quantidade-minima">
+                Quantidade total:
+                <span class="quantidade-total" [class.abaixo-do-lote]="quantidadeTotal < config.quantidadeMinimaDoLote">
+                  {{ quantidadeTotal }}
+                </span>
+              </span>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <custom-table
+              classes="table-striped table-sm"
+              [class.collapse-mode]="modoCollapsed"
+              [settings]="tableSettings"
+              [source]="entregas"
+              (select)="selecao($event)"
+              not-found="Nenhuma entrega foi programada"
+              [class.disabled]="modoEdicao">
+            </custom-table>
+            <pager
+              [page]="pagina"
+              [total-pages]="totalPaginas"
+              [records-per-page]="itensPorPagina"
+              [size]="'sm'"
+              (pagination)="paginacao($event)"
+              [class.disabled]="modoEdicao">
+            </pager>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="config.modoModal" class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="fecheModal()">Fechar</button>
+  </div>
+</div>

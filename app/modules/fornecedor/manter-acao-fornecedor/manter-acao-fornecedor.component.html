@@ -1,0 +1,94 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    {{ titulo }}
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="fechar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div *ngIf="titulo !== 'Inserir Observação'">
+      <div class="row">
+        <div class="required form-group col-sm-12 col-md-12 col-lg-12">
+          <label for="descricao">Ação:</label>
+          <textarea
+            class="form-control"
+            rows="3"
+            name="descricao"
+            formControlName="descricao"
+            [class.disabled]="acao?.dataFinalizacao != null"
+          ></textarea>
+          <span
+            class="invalid"
+            *ngIf="form?.controls.descricao.invalid && form?.controls?.descricao?.dirty"
+          >
+            Preenchimento obrigatório
+          </span>
+        </div>
+        <div class="form-group col-12  {{ classFormEmail }}">
+          <label for="emailDoResponsavel">E-mail do Responsável:</label>
+          <input
+            class="form-control"
+            type="email"
+            name="emailDoResponsavel"
+            formControlName="emailDoResponsavel"
+            [class.disabled]="acao?.dataFinalizacao != null"
+          />
+          <span
+            class="invalid"
+            *ngIf="
+              form.controls.emailDoResponsavel.invalid &&
+              form.controls.emailDoResponsavel.errors.email &&
+              form.controls.emailDoResponsavel.dirty
+            "
+          >
+            Email inválido
+          </span>
+        </div>
+        <div class="required form-group col-12 {{ classFormData }}">
+          <label for="prazoDaAcao">Prazo da Ação:</label>
+          <input
+            class="form-control"
+            type="date"
+            name="prazoDaAcao"
+            formControlName="prazoDaAcao"
+            [class.disabled]="acao?.dataFinalizacao != null"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="titulo === 'Inserir Observação'">
+      <div class="form-group">
+        <label for="observacoes">Observação:</label>
+        <textarea
+          class="form-control"
+          rows="3"
+          name="observacoes"
+          formControlName="observacoes"
+        ></textarea>
+      </div>
+    </div>
+  </form>
+  <app-listar-comentario-plano-acao
+    [acao]="acao"
+    [usuarioLogado]="usuarioLogado"
+    [ladoGestor]="true"
+    *ngIf="acao"
+  ></app-listar-comentario-plano-acao>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="fechar()">
+    <i class="fas fa-times"></i>
+    Fechar
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="salvar()"
+    *ngIf="acao?.dataFinalizacao == null"
+  >
+    <i class="fas fa-save"></i>
+    Salvar
+  </button>
+</div>

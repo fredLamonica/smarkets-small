@@ -1,0 +1,89 @@
+<div id="marketplace-top"></div>
+<div id="header" class="container-fluid no-bounds">
+  <div class="row py-5 py-lg-4">
+    <div class="col">
+     <smk-filtro-superior-contrato-fornecedor
+        [triggerFocusEmpresaFornecedora]="triggerFocusEmpresaFornecedora.asObservable()"
+        (busca)="busca($event)"
+        >
+      </smk-filtro-superior-contrato-fornecedor>
+    </div>
+  </div>
+</div>
+<div class="container-fluid no-bounds">
+  <div class="row">
+    <div class="col tabs-wrapper">
+      <ul class="nav nav-tabs row justify-content-end" id="markeplaceTab" role="tablist">
+        <div class="col-lg-8 col-xl-9 col-xxxl-10 d-flex">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [class.active]="tabAtiva == TipoCatalogoItem.Catalogo"
+              id="catalogo-tab"
+              data-toggle="tab"
+              role="tab"
+              aria-controls="catalogo"
+              aria-selected="false"
+              >
+              <span class="d-none d-xs-none d-sm-block">
+                Produtos em <span class="font-weight-bold">Catálogo</span>
+              </span>
+              <span
+                class="d-block d-xs-block d-sm-none"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Produtos em Catálogo">
+                Catálogo
+              </span>
+            </a>
+          </li>
+          <li class="nav-item ml-auto">
+            <a
+              class="nav-link-icons"
+              [class.active]="tabAtiva == TipoCatalogoItem.Catalogo"
+              id="catalogo-tab"
+              data-toggle="tab"
+              role="tab"
+              aria-selected="false"
+              >
+              <span class="d-none d-xs-none d-sm-block">
+                <i class="fas fa-th-large"></i>
+              </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link-icons"
+              id="catalogo-tab"
+              data-toggle="tab"
+              role="tab"
+              href="#produtos-catalogo-fornecedor"
+              aria-selected="false"
+              (click)="navegueTelaProdutos()">
+              <span class="d-none d-xs-none d-sm-block">
+                <i class="fas fa-tools"></i>
+              </span>
+            </a>
+          </li>
+        </div>
+      </ul>
+    </div>
+  </div>
+  <div class="row tab-content" id="markeplaceTabContent">
+    <div
+      class="col tab-pane fade"
+      [ngClass]="{ 'active show': tabAtiva == TipoCatalogoItem.Catalogo }"
+      id="catalogo"
+      role="tabpanel"
+      aria-labelledby="catalogo-tab">
+      <smk-aba-contrato-fornecedor
+        #abaContratoFornecedor
+        [empresa]="idEmpresa"
+        [filtroSuperior]="filtroSuperior"
+        [ativa]="tabAtiva == TipoCatalogoItem.Catalogo"
+        (triggerFocusEmpresaFornecedora)="triggerFocusEmpresaFornecedora"
+        >
+      </smk-aba-contrato-fornecedor>
+    </div>
+  </div>
+</div>

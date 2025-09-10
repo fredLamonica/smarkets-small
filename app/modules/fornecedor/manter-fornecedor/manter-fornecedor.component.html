@@ -1,0 +1,1094 @@
+<ul class="nav bg-gray">
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="solicitarPersistencia()"><i class="fas fa-save"></i> Salvar</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="cancelar()"><i class="fas fa-ban"></i> Cancelar</a>
+  </li>
+  <li class="nav-item" *ngIf="idFornecedor && !(rede == 'smarkets')">
+    <a class="nav-link" role="button" [routerLink]="['../', 'novo']"><i class="fas fa-plus"></i> Incluir novo</a>
+  </li>
+  <li class="nav-item" *ngIf="!idFornecedor && fornecedor && fornecedor.idTenant !== idTenantAtual">
+    <a class="nav-link" role="button" (click)="solicitarAdicaoRedeLocal()"><i class="fas fa-plus"></i> Adicionar a Meus
+      Fornecedores</a>
+  </li>
+  <li
+    class="nav-item"
+    *ngIf="fornecedor?.idTenant === idTenantAtual && fornecedor?.status == statusFornecedor.Novo">
+    <a
+      class="nav-link"
+      role="button"
+      [class.disabled]="fornecedor.possuiCategoriaFornecimentoInteresse"
+      (click)="convidarFornecedor()"><i class="fas fa-envelope"></i> Convidar
+    </a>
+  </li>
+</ul>
+<header>
+  <h1 class="title" translate>{{ idFornecedor ? 'Editar' : 'Incluir' }} Fornecedor</h1>
+</header>
+
+<div class="custom-nav-tabs">
+  <ul class="nav nav-tabs row bounds" id="fornecedorTab" role="tablist">
+    <li class="nav-item col-lg-3">
+      <a
+        class="nav-link nav-link-block"
+        [class.active]="tabAtiva == 'dados-gerais'"
+        id="dados-gerais-tab"
+        data-toggle="tab"
+        href="#dados-gerais"
+        role="tab"
+        aria-controls="dados-gerais"
+        aria-selected="false"
+        (click)="selectTab('dados-gerais')">Gestão de Fornecedores</a>
+    </li>
+    <li class="nav-item col-lg-3" *ngIf="fornecedor?.idPessoaJuridicaFornecedor">
+      <a
+        class="nav-link nav-link-block"
+        [class.active]="tabAtiva == 'dados-fornecedor'"
+        id="dados-fornecedor-tab"
+        data-toggle="tab"
+        href="#dados-fornecedor"
+        role="tab"
+        aria-controls="dados-fornecedor"
+        aria-selected="false"
+        (click)="selectTab('dados-fornecedor')">Dados do Fornecedor</a>
+    </li>
+    <li
+      class="nav-item col-lg-3"
+      *ngIf="fornecedor?.idPessoaJuridicaFornecedor && flagPermitirExibirUsuarios">
+      <a
+        class="nav-link nav-link-block"
+        [class.active]="tabAtiva == 'usuarios-fornecedor'"
+        id="usuarios-fornecedor-tab"
+        data-toggle="tab"
+        href="#usuarios-fornecedor"
+        role="tab"
+        aria-controls="usuarios-fornecedor"
+        aria-selected="false"
+        (click)="selectTab('usuarios-fornecedor')">Usuários</a>
+    </li>
+  </ul>
+
+  <div class="tab-content bounds" id="fornecedorTabContent">
+    <div
+      class="tab-pane fade"
+      id="dados-gerais"
+      role="tabpanel"
+      aria-labelledby="dados-gerais-tab"
+      [ngClass]="{ 'active show': tabAtiva == 'dados-gerais' }">
+      <div class="card card-tab-content tab-content">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <div class="row bg-white">
+              <div class="col">
+                <!-- #region Gestão de fornecedores -->
+                <!-- <div class="divisor" *permissionsOnly="['Administrador']"> -->
+                <div class="divisor">
+                  <div class="title">Dados Básicos</div>
+                </div>
+                <form [formGroup]="form">
+                  <div class="form-row">
+                    <div
+                      class="form-group required col-lg-5"
+                      *ngIf="!fornecedor && !habilitarInclusao">
+                      <label for="tipoDocumentoFornecedor"> Tipo de Documento </label>
+                      <ng-select
+                        name="tipoDocumentoFornecedor"
+                        [(ngModel)]="tipoDocumentoSelecionado"
+                        [ngModelOptions]="{ standalone: true }"
+                        (change)="onChangeTipoDocumentoFornecedor()">
+                        <ng-option [value]="1">CNPJ</ng-option>
+                        <ng-option [value]="2">CPF</ng-option>
+                      </ng-select>
+                    </div>
+                    <div
+                      class="form-group required col-lg-5"
+                      [class.col-lg-6]="fornecedor || habilitarInclusao">
+                      <label for="cnpj">
+                        {{
+                        tipoDocumentoSelecionado == TipoDocumentoFornecedor.Cpf ? 'CPF' : 'CNPJ'
+                        }}</label>
+                      <input
+                        type="text"
+                        [class.disabled]="
+                          fornecedor ||
+                          habilitarInclusao ||
+                          idFornecedor ||
+                          !tipoDocumentoSelecionado
+                        "
+                        [textMask]="{
+                          mask:
+                            tipoDocumentoSelecionado == TipoDocumentoFornecedor.Cpf
+                              ? maskCpf
+                              : maskCnpj,
+                          guide: false
+                        }"
+                        class="form-control"
+                        name="cnpj"
+                        formControlName="cnpj"
+                        [class.invalid]="form.controls.cnpj.invalid && form.controls.cnpj.dirty" />
+                      <div *ngIf="form.controls.cnpj.invalid && form.controls.cnpj.dirty">
+                        <div *ngIf="form.controls.cnpj.errors.required">
+                          <span class="invalid">Preenchimento obrigatório</span>
+                        </div>
+                        <div *ngIf="form.controls.cnpj.errors.invalidCnpj">
+                          <span class="invalid">CNPJ inválido</span>
+                        </div>
+                        <div *ngIf="form.controls.cnpj.errors.invalidCpf">
+                          <span class="invalid">CPF inválido</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-lg-1" *ngIf="!fornecedor && !habilitarInclusao">
+                      <label> </label>
+                      <button
+                        class="btn btn-primary btn-block mt-lg-1"
+                        (click)="buscarFornecedorCnpj()">
+                        <i class="fas fa-search"></i> Buscar
+                      </button>
+                    </div>
+                    <div
+                      class="form-group required col-md-6 col-lg-3"
+                      *ngIf="idFornecedor && this.fornecedor?.status != StatusFornecedor.Novo">
+                      <label for="status"> Status: </label>
+                      <select
+                        id="status"
+                        class="form-control"
+                        name="status"
+                        formControlName="status">
+                        <option [ngValue]="StatusFornecedor.Ativo">Ativo</option>
+                        <option [ngValue]="StatusFornecedor.AtivoComPendencias">
+                          Ativo com pendências
+                        </option>
+                        <option [ngValue]="StatusFornecedor.EmAnalise">Em análise</option>
+                        <option [ngValue]="StatusFornecedor.Bloqueado">Bloqueado</option>
+                        <option
+                          *ngIf="
+                            fornecedor?.status == StatusFornecedor.Ativo ||
+                            fornecedor?.status == StatusFornecedor.AtivoComPendencias
+                          "
+                          [ngValue]="StatusFornecedor.Inativo">
+                          Inativo
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row" *ngIf="fornecedor || habilitarInclusao || idFornecedor">
+                    <div class="form-group required col-lg-6">
+                      <label for="cnpj">
+                        {{
+                        tipoDocumentoSelecionado == TipoDocumentoFornecedor.Cpf
+                        ? 'Nome Completo'
+                        : 'Razão social'
+                        }}
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        [class.disabled]="!habilitarInclusao || idFornecedor"
+                        name="razaoSocial"
+                        formControlName="razaoSocial"
+                        [class.invalid]="
+                          form.controls.razaoSocial.invalid && form.controls.razaoSocial.dirty
+                        " />
+                      <span
+                        class="invalid"
+                        *ngIf="form.controls.razaoSocial.invalid && form.controls.razaoSocial.dirty">Preenchimento
+                        obrigatório</span>
+                    </div>
+                    <div class="form-group col-lg-6">
+                      <label for="nomeFantasia"> Nome fantasia </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        [class.disabled]="!habilitarInclusao || idFornecedor"
+                        name="nomeFantasia"
+                        formControlName="nomeFantasia" />
+                    </div>
+                  </div>
+
+                  <div
+                    class="form-group required"
+                    *ngIf="fornecedor || habilitarInclusao || idFornecedor">
+                    <label for="categoriasFornecimento"> Categorias de fornecimento</label>
+                    <div class="form-row">
+                      <div class="col-lg-6">
+                        <ng-select
+                          name="categoriasFornecimento"
+                          formControlName="categoriasFornecimento"
+                          [items]="categoriasFornecimento"
+                          bindLabel="descricao"
+                          [multiple]="true"
+                          [class.invalid]="
+                            form.controls.categoriasFornecimento.invalid &&
+                            form.controls.categoriasFornecimento.dirty
+                          ">
+                        </ng-select>
+                        <span
+                          class="invalid"
+                          *ngIf="
+                            form.controls.categoriasFornecimento.invalid &&
+                            form.controls.categoriasFornecimento.dirty
+                          ">
+                          Preenchimento obrigatório
+                        </span>
+                      </div>
+                      <div class="form-group col-lg-2" *ngIf="!habilitarInclusao">
+                        <button
+                          class="btn btn-primary btn-block"
+                          (click)="atualizarCategoriasFornecimento()">
+                          <i class="fas fa-save"></i> Atualizar Categorias
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row form-group">
+                    <div
+                      class="col-lg-6"
+                      *ngIf="
+                        fornecedor?.status == statusFornecedor.Novo &&
+                        fornecedor?.categoriaFornecimentoInteresses.length
+                      ">
+                      <label for="categoriasFornecimento"> Outras categorias de fornecimento</label>
+                      <div class="container-fluid no-bounds">
+                        <div class="bg-lighter border-bottom row py-2 d-none d-md-flex">
+                          <div class="col">
+                            <label class="font-weight-bold">Descrição:</label>
+                          </div>
+                        </div>
+                        <div
+                          class="row border-bottom py-2"
+                          *ngFor="
+                            let categoriaFornecimentoInteresse of fornecedor.categoriaFornecimentoInteresses;
+                            let i = index
+                          ">
+                          <div class="col align-self-center">
+                            <label for="" class="font-weight-bold d-block d-md-none">Descrição:</label>
+                            <p
+                              class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+                              data-toggle="tooltip"
+                              data-placement="bottom"
+                              title="{{ categoriaFornecimentoInteresse.descricao }}">
+                              {{ categoriaFornecimentoInteresse.descricao }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="divisor" *ngIf="habilitarInclusao">
+                    <div class="title">Usuário responsável</div>
+                  </div>
+                  <div class="form-row" *ngIf="habilitarInclusao">
+                    <div
+                      class="form-group required col-lg-5"
+                      [class.col-lg-6]="usuarioNaoExiste || usuario">
+                      <label for="email" translate> Email </label>
+                      <input
+                        class="form-control"
+                        [class.invalid]="
+                          form?.controls?.emailUsuario?.invalid &&
+                          form?.controls?.emailUsuario?.dirty
+                        "
+                        type="text"
+                        name="emailUsuario"
+                        formControlName="emailUsuario"
+                        (keyup.enter)="buscarUsuario()" />
+                      <span
+                        class="invalid"
+                        *ngIf="
+                          form?.controls?.emailUsuario?.invalid &&
+                          form?.controls?.emailUsuario?.dirty
+                        ">
+                        Preenchimento obrigatório
+                      </span>
+                    </div>
+                    <div class="form-group col-lg-1" *ngIf="!usuarioNaoExiste && !usuario">
+                      <label> </label>
+                      <button class="btn btn-primary btn-block mt-lg-1" (click)="buscarUsuario()">
+                        <i class="fas fa-search"></i> Buscar
+                      </button>
+                    </div>
+                    <div class="form-group required col-lg-6" *ngIf="usuarioNaoExiste || usuario">
+                      <label for="nome" translate> Nome </label>
+                      <input
+                        class="form-control"
+                        [class.invalid]="
+                          form?.controls?.nomeUsuario?.invalid && form?.controls?.nomeUsuario?.dirty
+                        "
+                        type="text"
+                        name="nomeUsuario"
+                        formControlName="nomeUsuario" />
+                      <span
+                        class="invalid"
+                        *ngIf="
+                          form?.controls?.nomeUsuario?.invalid && form?.controls?.nomeUsuario?.dirty
+                        ">
+                        Preenchimento obrigatório
+                      </span>
+                    </div>
+                  </div>
+                </form>
+                <!-- #enregion Gestão de fornecedores-->
+
+                <!-- #region Gestão de usuários-->
+                <div class="divisor" *ngIf="fornecedor?.idPessoaJuridicaFornecedor">
+                  <div class="title">Gestão de usuários</div>
+                </div>
+                <div class="form-group" *ngIf="fornecedor?.idPessoaJuridicaFornecedor">
+                  <label for="idUsuarioPrincipal"> Usuário principal </label>
+                  <form [formGroup]="formGestaoUsuario">
+                    <div class="form-row">
+                      <div class="form-group required col-lg-5">
+                        <label for="emailUsuario"> Email </label>
+                        <input
+                          class="form-control"
+                          [class.invalid]="
+                            formGestaoUsuario?.controls?.emailUsuario?.invalid &&
+                            formGestaoUsuario?.controls?.emailUsuario?.dirty
+                          "
+                          type="text"
+                          name="emailUsuario"
+                          formControlName="emailUsuario"
+                          (keyup.enter)="buscarUsuarioFormGestaoUsuario()" />
+                        <span
+                          class="invalid"
+                          *ngIf="
+                            formGestaoUsuario?.controls?.emailUsuario?.invalid &&
+                            formGestaoUsuario?.controls?.emailUsuario?.dirty
+                          ">
+                          Preenchimento obrigatório
+                        </span>
+
+                        <span
+                          class="invalid"
+                          *ngIf="
+                            formGestaoUsuario.controls.idUsuarioPrincipal.invalid &&
+                            formGestaoUsuario.controls.idUsuarioPrincipal.dirty
+                          ">
+                          Preenchimento obrigatório
+                        </span>
+                      </div>
+                      <div
+                        class="form-group required col-lg-5"
+                        *ngIf="habilitarBtnAlterarUsuario || habilitarBtnAtualizarUsuario">
+                        <label for="nomeUsuario" class="required"> Nome </label>
+                        <input
+                          class="form-control"
+                          [class.invalid]="
+                            formGestaoUsuario?.controls?.nomeUsuario?.invalid &&
+                            formGestaoUsuario?.controls?.nomeUsuario?.dirty
+                          "
+                          type="text"
+                          name="nomeUsuario"
+                          formControlName="nomeUsuario" />
+                        <span
+                          class="invalid"
+                          *ngIf="
+                            formGestaoUsuario?.controls?.nomeUsuario?.invalid &&
+                            formGestaoUsuario?.controls?.nomeUsuario?.dirty
+                          ">
+                          Preenchimento obrigatório
+                        </span>
+                      </div>
+                      <div
+                        class="form-group col-lg-1"
+                        *ngIf="!habilitarBtnAlterarUsuario && !habilitarBtnAtualizarUsuario">
+                        <label> </label>
+                        <button
+                          class="btn btn-primary btn-block mt-lg-1"
+                          (click)="buscarUsuarioFormGestaoUsuario()">
+                          <i class="fas fa-search"></i> Buscar
+                        </button>
+                      </div>
+
+                      <div class="form-group col-lg-2" *ngIf="habilitarBtnAlterarUsuario">
+                        <label></label>
+                        <button
+                          class="btn btn-primary btn-block"
+                          (click)="permiteAlterarUsuarioPrincipal()">
+                          <i class="fas fa-edit"></i> Alterar Usuário
+                        </button>
+                      </div>
+
+                      <div
+                        class="form-group col-lg-2"
+                        *ngIf="!habilitarBtnAlterarUsuario && habilitarBtnAtualizarUsuario">
+                        <label></label>
+                        <button
+                          class="btn btn-primary btn-block"
+                          (click)="solicitarAtualizarUsuario()">
+                          <i class="fas fa-save"></i> Atualizar Usuário
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <!-- #enregion Gestão de usuários-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #region Dados ERP -->
+      <!-- <div class="card card-tab-content tab-content"> -->
+      <div class="card" *ngIf="fornecedor">
+        <a
+          class="card-header collapsed"
+          data-toggle="collapse"
+          href="#collapseDadosErp"
+          (click)="exibirDadosErp()">
+          Dados do ERP
+        </a>
+        <div class="card-body pt-0">
+          <div class="collapse" id="collapseDadosErp" *ngIf="permitirExibirDadosErp">
+            <form [formGroup]="form">
+              <div class="container-fluid no-bounds">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="cnpj"> Código ERP </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="codigoFornecedor"
+                      formControlName="codigoFornecedor"
+                      (blur)="alterarCodigoFornecedor()" />
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="categoriasFornecimento"> Grupo de Contas </label>
+                    <ng-select
+                      name="GrupoContas"
+                      formControlName="grupoContas"
+                      [items]="gruposContas"
+                      bindLabel="descricao"
+                      loadingText="buscando..."
+                      [hideSelected]="true"
+                      (change)="alterarFornecedorGrupoContas()">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-lg-4 col-12">
+                    <label for="idTermoPesquisa"> Termo de Pesquisa </label>
+                    <ng-select
+                      [(ngModel)]="termoPesquisaFormulario"
+                      [ngModelOptions]="{ standalone: true }"
+                      [items]="termosPesquisa"
+                      bindLabel="descricao"
+                      loadingText="buscando..."
+                      [hideSelected]="true"></ng-select>
+                  </div>
+                  <div class="form-group mt-1 col-lg-1 col-12">
+                    <label for="idTermoPesquisa"> </label>
+                    <button
+                      role="button"
+                      class="btn btn-block btn-primary"
+                      [class.disabled]="form.invalid"
+                      (click)="incluirTermoPesquisa()">
+                      <i class="fas fa-plus"></i> Incluir
+                    </button>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <div class="row justify-content-start">
+                      <div class="col-md-4 col-xl-3">
+                        <button
+                          role="button"
+                          class="btn btn-block btn-danger"
+                          (click)="solicitarExclusaoTermoPesquisa()">
+                          <i class="fas fa-trash-alt"></i> Remover
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="row justify-content-end">
+                      <div class="col-md-4 col-xl-3">
+                        <button
+                          role="button"
+                          class="btn btn-block btn-success"
+                          (click)="alterarSituacaoTermoPesquisa(Situacao.Ativo)">
+                          <i class="fas fa-check"></i> Ativar
+                        </button>
+                      </div>
+                      <div class="col-md-4 col-xl-3">
+                        <button
+                          role="button"
+                          class="btn btn-block btn-danger"
+                          (click)="alterarSituacaoTermoPesquisa(Situacao.Inativo)">
+                          <i class="fas fa-times"></i> Desativar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <custom-table
+                      classes="table-striped table-sm"
+                      [settings]="settingsTermoPesquisa"
+                      [source]="fornecedorTermosPesquisa"
+                      (select)="selecaoTermoPesquisa($event)"></custom-table>
+                    <pager
+                      [page]="paginaTermoPesquisa"
+                      [total-pages]="totalPaginasTermoPesquisa"
+                      [records-per-page]="itensPorPaginaTermoPesquisa"
+                      (pagination)="paginacaoTermosPesquisa($event)"></pager>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+
+      <!-- region#  ACEITE DE TERMOS DE BOAS PRÁTICAS -->
+      <!-- <div class="card card-tab-content tab-content" *ngIf="fornecedor"> -->
+      <div class="card" *ngIf="fornecedor">
+        <a
+          class="card-header collapsed"
+          data-toggle="collapse"
+          href="#collapseTermoBoasPraticas"
+          (click)="solicitarHistoricoDeAceiteDeTermos()">
+          Aceite de Termos de Boas Práticas
+        </a>
+        <div class="card-body pt-0">
+          <div class="collapse" id="collapseTermoBoasPraticas">
+            <div *ngIf="historicoDeAceitesDeTermos != null">
+              <div class="container-fluid no-bounds">
+                <div class="bg-lighter border-bottom row py-2 d-none d-md-flex">
+                  <div class="col-lg-3">
+                    <label class="font-weight-bold mb-3 mb-lg-0">Data</label>
+                  </div>
+                  <div class="col-lg-6">
+                    <label class="font-weight-bold mb-3 mb-lg-0">Descrição</label>
+                  </div>
+                  <div class="col-lg-3">
+                    <label class="font-weight-bold mb-3 mb-lg-0">Usuário</label>
+                  </div>
+                </div>
+                <div
+                  class="row border-bottom dados-historico"
+                  *ngFor="let historicoDeAceite of historicoDeAceitesDeTermos">
+                  <div class="col-lg-3 align-self-center">
+                    <label class="mb-3 mb-lg-0">{{
+                      formatarData(historicoDeAceite.dataDaAcao)
+                      }}</label>
+                  </div>
+                  <div class="col-lg-6 align-self-center">
+                    <label class="mb-3 mb-lg-0">{{
+                      obterDescricao(historicoDeAceite.aceitouTermo)
+                      }}</label>
+                  </div>
+                  <div class="col-lg-3 align-self-center">
+                    <label class="mb-3 mb-lg-0">{{ historicoDeAceite.nomeDoUsuario }}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="historicoDeAceitesDeTermos == null">
+              <p>Não possui histórico!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+      <!-- #endregion ACEITE DE TERMOS DE BOAS PRÁTICAS-->
+
+      <!-- #region Documentos -->
+      <!-- <div class="card card-tab-content tab-content" *ngIf="fornecedor"> -->
+      <div class="card" *ngIf="fornecedor">
+        <a
+          class="card-header collapsed"
+          data-toggle="collapse"
+          href="#collapseDocumentos"
+          (click)="this.obterDocumentos()">
+          Documentos
+        </a>
+        <div class="card-body pt-0">
+          <div class="collapse" id="collapseDocumentos">
+            <div class="container-fluid no-bounds">
+              <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+                <div class="col-md-5">
+                  <label class="font-weight-bold">Nome do Documento:</label>
+                </div>
+                <div class="col-md-1">
+                  <label class="font-weight-bold">Documento Obrigatório:</label>
+                </div>
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <label class="font-weight-bold">Status:</label>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="font-weight-bold">Data de Validade:</label>
+                    </div>
+                    <div class="col-md-5">
+                      <label class="font-weight-bold">Ações:</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="bg-white border-bottom row py-2"
+                *ngIf="!solicitacaoDocumentosFornecedorArquivos?.length">
+                <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+              </div>
+
+              <div
+                class="bg-white border-bottom row py-2"
+                *ngFor="
+                  let solicitacaoDocumentoFornecedorArquivo of solicitacaoDocumentosFornecedorArquivos;
+                  let i = index
+                ">
+                <div class="col-md-5 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">Nome do Documento:</label>
+                  <p class="mb-5 mb-md-0">
+                    {{
+                    solicitacaoDocumentoFornecedorArquivo?.solicitacaoDocumentoFornecedor
+                    .documentoFornecedor.descricaoDocumento
+                    }}
+                  </p>
+                </div>
+
+                <div class="col-md-1 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">Documento Obrigatório:</label>
+                  <p class="mb-3 mb-md-0">
+                    {{
+                    solicitacaoDocumentoFornecedorArquivo?.solicitacaoDocumentoFornecedor
+                    .documentoFornecedor.documentoObrigatorio
+                    ? 'Sim'
+                    : 'Não'
+                    }}
+                  </p>
+                </div>
+
+                <div class="col-md-6 align-self-center">
+                  <div class="row">
+                    <div class="col-md-3 align-self-center">
+                      <label for="" class="font-weight-bold d-block d-md-none">Status:</label>
+                      <p
+                        class="mb-3 mb-md-0"
+                        [ngStyle]="obterCor(solicitacaoDocumentoFornecedorArquivo)">
+                        {{
+                        StatusSolicitacaoDocumento[
+                        solicitacaoDocumentoFornecedorArquivo
+                        ?.statusSolicitacaoDocumentoFornecedor
+                        ]
+                        }}
+                      </p>
+                    </div>
+
+                    <div class="col-md-4 align-self-center">
+                      <label for="" class="font-weight-bold d-block d-md-none">Data de Validade:</label>
+                      <p class="mb-3 mb-md-0">
+                        {{
+                        solicitacaoDocumentoFornecedorArquivo?.dataVencimento
+                        ? formatarData(solicitacaoDocumentoFornecedorArquivo?.dataVencimento)
+                        : 'DD/MM/AAAA'
+                        }}
+                      </p>
+                    </div>
+
+                    <div class="col-md-5 align-self-center d-flex justify-content-between">
+                      <label for="" class="font-weight-bold d-block d-md-none">Ações:</label>
+                      <button
+                        class="btn btn-icon px-2"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Histórico"
+                        (click)="abrirHistoricoDeArquivo(solicitacaoDocumentoFornecedorArquivo)">
+                        <i class="fas fa-list"></i>
+                      </button>
+                      <button
+                        class="btn btn-icon px-2"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Download"
+                        (click)="baixarArquivo(solicitacaoDocumentoFornecedorArquivo)">
+                        <i class="fas fa-download"></i>
+                      </button>
+                      <button
+                        *ngIf="
+                          !solicitacaoDocumentoFornecedorArquivo?.validacaoArquivo ||
+                          solicitacaoDocumentoFornecedorArquivo?.validacaoArquivo
+                            ?.situacaoValidacaoArquivo != enumSituacaoValidacao.Invalido
+                        "
+                        class="btn btn-icon px-2"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="{{
+                          solicitacaoDocumentoFornecedorArquivo?.validacaoArquivo
+                            ?.situacaoValidacaoArquivo == enumSituacaoValidacao.Valido
+                            ? 'Válido'
+                            : 'Validar'
+                        }}"
+                        (click)="
+                          solicitarAlteracaoValidacao(
+                            solicitacaoDocumentoFornecedorArquivo,
+                            enumSituacaoValidacao.Valido
+                          )
+                        ">
+                        <i
+                          class="far fa-thumbs-up"
+                          [ngClass]="{
+                            'text-success':
+                              solicitacaoDocumentoFornecedorArquivo?.validacaoArquivo
+                                ?.situacaoValidacaoArquivo == enumSituacaoValidacao.Valido
+                          }"></i>
+                      </button>
+                      <button
+                        *ngIf="
+                          !solicitacaoDocumentoFornecedorArquivo?.validacaoArquivo ||
+                          solicitacaoDocumentoFornecedorArquivo?.validacaoArquivo
+                            ?.situacaoValidacaoArquivo != enumSituacaoValidacao.Valido
+                        "
+                        class="btn btn-icon px-2"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="{{
+                          solicitacaoDocumentoFornecedorArquivo?.validacaoArquivo
+                            ?.situacaoValidacaoArquivo == enumSituacaoValidacao.Invalido
+                            ? 'Inválido'
+                            : 'Invalidar'
+                        }}"
+                        (click)="
+                          solicitarAlteracaoValidacao(
+                            solicitacaoDocumentoFornecedorArquivo,
+                            enumSituacaoValidacao.Invalido
+                          )
+                        ">
+                        <i
+                          class="far fa-thumbs-down"
+                          [ngClass]="{
+                            recusado:
+                              solicitacaoDocumentoFornecedorArquivo?.validacaoArquivo
+                                ?.situacaoValidacaoArquivo == enumSituacaoValidacao.Invalido
+                          }"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+      <!-- #endregion Documentos-->
+
+      <!-- #region Questionarios -->
+      <!-- <div class="card card-tab-content tab-content" *ngIf="fornecedor"> -->
+      <div class="card" *ngIf="fornecedor">
+        <a class="card-header collapsed" data-toggle="collapse" href="#collapseQuestionarios">
+          Questionarios
+        </a>
+        <div class="card-body pt-0">
+          <div class="collapse" id="collapseQuestionarios">
+            <listar-resultados-questionario
+              *ngIf="fornecedor != undefined"
+              [idPessoaJuridica]="fornecedor.idPessoaJuridicaFornecedor">
+            </listar-resultados-questionario>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+      <!-- #endregion Questionarios-->
+
+      <!-- #region Pendência Fornecedor -->
+      <!-- <div class="card card-tab-content tab-content" *ngIf="idFornecedor"> -->
+      <div class="card" *ngIf="idFornecedor">
+        <a class="card-header collapsed" data-toggle="collapse" href="#collapsePendenciaFornecedor">
+          Pendências
+        </a>
+        <div class="card-body pt-0">
+          <div class="collapse" id="collapsePendenciaFornecedor">
+            <div>
+              <button class="btn btn-icon py-2" (click)="ativaGerarPendencia()">
+                <i class="fas fa-plus-circle text-primary"></i>
+                <p class="d-inline-block mb-0 ml-2 align-top">Gerar Pendência</p>
+              </button>
+              <listar-pendencia-fornecedor
+                [pendenciasFornecedor]="pendenciasFornecedor"
+                [habilitarPendenciaFornecedor]="habilitarPendenciaFornecedor"
+                [idFornecedor]="idFornecedor">
+              </listar-pendencia-fornecedor>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+      <!-- #endregion Pendência Fornecedor-->
+
+      <!-- #region Visita Técnica -->
+      <!-- <div class="card card-tab-content tab-content" *ngIf="idFornecedor && habilitarVisitaTecnica"> -->
+      <div class="card" *ngIf="idFornecedor && habilitarVisitaTecnica">
+        <a class="card-header collapsed" data-toggle="collapse" href="#collapseVisitasTecnicas">
+          Visita Técnica
+        </a>
+        <div class="card-body pt-0">
+          <div class="collapse" id="collapseVisitasTecnicas">
+            <div>
+              <a
+                class="btn btn-icon d-flex align-items-center text-primary"
+                (click)="realizarAgendamento()">
+                <i class="far fa-calendar-plus"></i>
+                <p class="d-inline-block mb-0 ml-2">Agendar visita técnica</p>
+              </a>
+              <div class="container-fluid no-bounds">
+                <div class="bg-lighter border-bottom row py-2 d-none d-md-flex">
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Data e Hora:</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Status:</label>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="font-weight-bold">Responsável:</label>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="font-weight-bold">Fornecedor Representante:</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Ações:</label>
+                  </div>
+                </div>
+                <div class="bg-white border-bottom row py-4" *ngIf="!visitasTecnicas?.length">
+                  <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+                </div>
+                <div class="row py-2 border-bottom" *ngFor="let visitaTecnica of visitasTecnicas">
+                  <div class="col-md-2 col-sm-2 align-self-center">
+                    <label for="" class="font-weight-bold d-block d-md-none">Data e Hora:</label>
+                    <p
+                      class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+                      data-toggle="tooltip"
+                      data-placement="bottom">
+                      {{ visitaTecnica.data | date: 'dd/MM/yyyy HH:mm' }}
+                    </p>
+                  </div>
+                  <div class="col-md-2 col-sm-2 align-self-center">
+                    <label for="" class="font-weight-bold d-block d-md-none">Status:</label>
+                    <p
+                      class="mb-3 mb-lg-0 line-clamp line-clamp-1"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="{{ SituacaoVisitaTecnica[visitaTecnica.status] }}">
+                      {{ SituacaoVisitaTecnica[visitaTecnica.status] }}
+                    </p>
+                  </div>
+                  <div class="col-md-3 col-sm-3 align-self-center">
+                    <label for="" class="font-weight-bold d-block d-md-none">Responsável:</label>
+                    <p
+                      class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="{{ visitaTecnica.gestorFornecedor.pessoaFisica.nome }}">
+                      {{ visitaTecnica.gestorFornecedor.pessoaFisica.nome }}
+                    </p>
+                  </div>
+                  <div class="col-md-3 col-sm-3 align-self-center">
+                    <label for="" class="font-weight-bold d-block d-md-none">Fornecedor Representante:</label>
+                    <p
+                      class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="{{ visitaTecnica.representante.pessoaFisica.nome }}">
+                      {{ visitaTecnica.representante.pessoaFisica.nome }}
+                    </p>
+                  </div>
+                  <div class="col-md-2 d-flex justify-content-between align-self-center">
+                    <button
+                      class="btn btn-icon"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="{{
+                        visitaTecnica.status == SituacaoVisitaTecnica.Agendado
+                          ? 'Realizar'
+                          : 'Visualizar'
+                      }} Visita"
+                      (click)="realizarVisitaTecnica(visitaTecnica.idVisitaTecnica)">
+                      <i
+                        class="far"
+                        [ngClass]="{
+                          'fa-calendar-check':
+                            visitaTecnica.status == SituacaoVisitaTecnica.Agendado,
+                          'fa-eye': visitaTecnica.status != SituacaoVisitaTecnica.Agendado
+                        }"></i>
+                    </button>
+                    <button
+                      class="btn btn-icon"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="Editar"
+                      *ngIf="visitaTecnica.status == SituacaoVisitaTecnica.Agendado"
+                      (click)="editarVisitaTecnica(visitaTecnica)">
+                      <i class="far fa-edit"></i>
+                    </button>
+                    <button
+                      class="btn btn-icon"
+                      *ngIf="visitaTecnica.status == SituacaoVisitaTecnica.Agendado"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="Excluir"
+                      (click)="solicitarExclusaoVisitaTecnica(visitaTecnica)">
+                      <i class="far fa-trash-alt text-danger"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+      <!-- #endregion Visita Técnica-->
+
+      <!-- #region Planos de Ações -->
+      <!-- <div class="card card-tab-content tab-content" *ngIf="idFornecedor && habilitarPlanoDeAcoes"> -->
+      <div class="card" *ngIf="idFornecedor && habilitarPlanoDeAcoes">
+        <a class="card-header collapsed" data-toggle="collapse" href="#collapsePlanosAcoes">
+          Plano de Ação
+        </a>
+        <div class="card-body pt-0">
+          <div class="collapse" id="collapsePlanosAcoes">
+            <a
+              type="button"
+              class="btn btn-icon d-flex align-items-center text-primary"
+              (click)="abrirModalDePlanoDeAcao()">
+              <i class="fas fa-plus-circle"></i>
+              <span class="d-inline-block mb-0 ml-2"> Incluir novo plano de ação</span>
+            </a>
+            <div class="container-fluid no-bounds">
+              <div class="bg-lighter border-bottom row py-2 d-none d-md-flex">
+                <div class="col-md-4">
+                  <label class="font-weight-bold">Nome do Plano de Ação:</label>
+                </div>
+                <div class="col-md-2">
+                  <label class="font-weight-bold">Status:</label>
+                </div>
+                <div class="col-md-3">
+                  <label class="font-weight-bold">Prazo:</label>
+                </div>
+                <div class="col-md-3">
+                  <label class="font-weight-bold">Ações:</label>
+                </div>
+              </div>
+              <div class="bg-white border-bottom row py-2" *ngIf="!planos?.length">
+                <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+              </div>
+
+              <div
+                class="bg-white border-bottom row py-2"
+                *ngFor="let plano of planos; let i = index">
+                <div class="col-md-4 col-sm-3 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">Nome do Plano de Ação:</label>
+                  <p class="mb-3 mb-lg-0">{{ plano.nome }}</p>
+                </div>
+                <div class="col-md-2 col-sm-3 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">Status:</label>
+                  <p class="mb-3 mb-lg-0">
+                    {{ StatusPlanoAcaoFornecedor[plano?.status?.valueOf()] }}
+                  </p>
+                </div>
+                <div class="col-md-3 col-sm-3 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">Prazo:</label>
+                  <p class="mb-3 mb-lg-0">{{ plano.prazo | date: 'dd/MM/yyyy' }}</p>
+                </div>
+                <div class="col-md-3 d-flex justify-content-between align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">Ações:</label>
+                  <button
+                    class="btn btn-icon"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="Editar"
+                    (click)="abrirModalDePlanoDeAcao(plano)">
+                    <i class="far fa-edit"></i>
+                  </button>
+                </div>
+              </div>
+              <pager
+                size="sm"
+                [page]="pagina"
+                [total-pages]="totalPaginas"
+                [records-per-page]="itensPorPagina"
+                (pagination)="paginacao($event)"></pager>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+      <!-- #endregion Planos de Ações -->
+
+      <!-- region# Histórico Carta de Responsabilidade -->
+      <!-- <div class="card card-tab-content tab-content" *ngIf="fornecedor"> -->
+      <div class="card" *ngIf="fornecedor">
+        <a
+          class="card-header collapsed"
+          data-toggle="collapse"
+          href="#collapseHistoricoCartaResponsabilidade">
+          Carta de Responsabilidade
+        </a>
+        <div class="card-body pt-0">
+          <div class="collapse" id="collapseHistoricoCartaResponsabilidade">
+            <a
+              type="button"
+              class="btn btn-icon d-flex align-items-center text-primary"
+              (click)="abrirModalDeEnvioDeCartaDeResponsabilidadeFornecedor()">
+              <i class="fas fa-plus-circle"></i>
+              <span class="d-inline-block mb-0 ml-2"> Enviar carta de responsabilidade</span>
+            </a>
+            <historico-cartas-responsabilidade
+              *ngIf="fornecedor != undefined"
+              [fornecedor]="fornecedor">
+            </historico-cartas-responsabilidade>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+      <!-- #endregion Histórico Carta de Responsabilidade-->
+    </div>
+
+    <!-- #region Dados Básicos -->
+    <div
+      class="tab-pane fade"
+      id="dados-fornecedor"
+      role="tabpanel"
+      aria-labelledby="dados-fornecedor-tab"
+      [ngClass]="{ 'active show': tabAtiva == 'dados-fornecedor' }">
+      <div class="card card-tab-content tab-content">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <mater-fornecedor-pessoa-juridica
+              #dadosBasicos
+              *ngIf="tabAtiva == 'dados-fornecedor'"
+              [id-pessoa-juridica]="fornecedor?.idPessoaJuridicaFornecedor"
+              [pessoa-juridica]="pessoaJuridica">
+            </mater-fornecedor-pessoa-juridica>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- #endregion Dados Básicos -->
+
+    <!-- #region Usuários -->
+    <div
+      class="tab-pane fade"
+      id="usuarios-fornecedor"
+      role="tabpanel"
+      aria-labelledby="usuarios-fornecedor-tab"
+      [ngClass]="{ 'active show': tabAtiva == 'usuarios-fornecedor' }">
+      <listar-fornecedor-usuario
+        #usuarios
+        *ngIf="tabAtiva == 'usuarios-fornecedor'"
+        [id-pessoa-juridica]="fornecedor?.idPessoaJuridicaFornecedor"
+        [pessoa-juridica]="pessoaJuridica">
+      </listar-fornecedor-usuario>
+    </div>
+    <!-- #endregion Usuários -->
+  </div>
+</div>

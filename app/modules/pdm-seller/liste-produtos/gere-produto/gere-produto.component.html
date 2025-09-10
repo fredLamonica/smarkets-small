@@ -1,0 +1,37 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+      Produto
+  </div>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group required col-2">
+        <label for="idProduto"> IdProduto </label>
+        <input type="text" class="form-control" name="idProduto" formControlName="idProduto" readonly>
+      </div>
+      <div class="form-group required col-10">
+        <label for="descricao"> Descrição </label>
+        <input type="text" class="form-control" name="descricao" formControlName="descricao" readonly>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col">
+        <label for="especificacao"> Especificação</label>
+        <textarea class="form-control textarea_auto"  type="text" name="especificacao" formControlName="especificacao"></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Fechar</button>
+  <button type="button" class="btn btn-outline-primary" (click)="voltarGoogle()">Voltar para I.A</button>
+  <button type="button" class="btn btn-outline-primary" (click)="salvar()">Salvar</button>
+</div>

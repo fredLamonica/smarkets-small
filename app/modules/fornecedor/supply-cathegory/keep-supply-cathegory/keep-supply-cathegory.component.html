@@ -1,0 +1,71 @@
+<ul class="nav bg-gray">
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="salvar()"><i class="fas fa-save"></i> Salvar</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="cancelar()"><i class="fas fa-ban"></i> Cancelar</a>
+  </li>
+  <li class="nav-item" *ngIf="idCategoriaFornecimento">
+    <a class="nav-link" role="button" [routerLink]="['../', 'nova']"
+      ><i class="fas fa-plus"></i> Incluir nova</a
+    >
+  </li>
+</ul>
+<header>
+  <h1 class="title" translate>
+    {{ idCategoriaFornecimento ? 'Alterar' : 'Incluir' }} categoria de fornecimento
+  </h1>
+</header>
+<div class="container-fluid no-bounds">
+  <!-- #region Dados Gerais -->
+  <div class="card">
+    <a class="card-header" data-toggle="collapse" href="#collapsedFormDadosGerais">
+      Dados gerais
+    </a>
+    <div class="card-body">
+      <form class="collapse show" id="collapsedFormDadosGerais" [formGroup]="form">
+        <div class="form-row">
+          <div class="form-group col-lg-4 col-xl-3">
+            <label for="descricao" translate> Código </label>
+            <input class="form-control" type="text" name="codigo" formControlName="codigo" />
+          </div>
+          <div class="form-group required col-lg-8 col-xl-9">
+            <label for="titulo" translate> Descrição </label>
+            <input
+              class="form-control"
+              [class.invalid]="form.controls.descricao.invalid && form.controls.descricao.dirty"
+              type="text"
+              name="descricao"
+              formControlName="descricao"
+            />
+            <span
+              class="invalid"
+              *ngIf="form.controls.descricao.invalid && form.controls.descricao.dirty"
+              >Preenchimento obrigatório</span
+            >
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- #endregion -->
+
+  <div class="card" *ngIf="idCategoriaFornecimento">
+    <a
+      class="card-header collapsed"
+      data-toggle="collapse"
+      href="#collapseCategoriaProduto"
+      (click)="permitirVisualizarCategoriasProduto()"
+    >
+      Categorias de Produto
+    </a>
+    <div class="card-body">
+      <div class="collapse" id="collapseCategoriaProduto">
+        <listar-categoria-fornecimento-categoria-produto
+          [idCategoriaFornecimento]="this.idCategoriaFornecimento"
+          *ngIf="visualizarCategoriasProduto"
+        ></listar-categoria-fornecimento-categoria-produto>
+      </div>
+    </div>
+  </div>
+</div>

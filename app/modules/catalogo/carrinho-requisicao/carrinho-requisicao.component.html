@@ -1,0 +1,62 @@
+<div class="no-content mt-5" *ngIf="!requisicoes || requisicoes?.length == 0" translate>GENERAL.NO_RECORDS_FOUND</div>
+
+<requisicao *ngFor="let requisicao of requisicoes; index as i"
+  [indexPai]="i"
+  [requisicao]="requisicao"
+  (remover)="removerRequisicao($event)"
+  (removerItens)="removerRequisicoes($event)"
+  (item-alterado)="itemAlterado($event)"
+  (atualizar-carrinho)="atualizarResumoCarrinho()"
+  [todasAsEmpresasPossuemIntegracaoErp]="todasAsEmpresasPossuemIntegracaoErp"
+  [centrosDeCusto]="centrosDeCusto"
+  [centrosDeCustoLoading]="centrosDeCustoLoading"
+  [centroDeCustoUnico]="centroDeCustoUnico"
+  [condicoesPagamento]="condicoesPagamento"
+  [condicoesPagamentoLoading]="condicoesPagamentoLoading"
+  [tiposRequisicao]="tiposRequisicao"
+  [tiposRequisicaoLoading]="tiposRequisicaoLoading"
+  [tipoRequisicaoUnico]="tipoRequisicaoUnico"
+  [tipoRequisicaoUnicoLoadedEvent]="tipoRequisicaoUnicoLoaded.asObservable()"
+  [gruposCompradores]="gruposCompradores"
+  [gruposCompradoresLoading]="gruposCompradoresLoading"
+  [grupoCompradoresUnico]="grupoCompradoresUnico"
+  [contasContabeis$]="contasContabeis$"
+  [contasContabeisInput$]="contasContabeisInput$"
+  [contasContabeisLoading]="contasContabeisLoading"
+  [contaContabilUnica]="contaContabilUnica"
+  [departamentos]="departamentos"
+  [departamentoUnico]="departamentoUnico"
+  [departamentosLoading]="departamentosLoading"
+  [textoNgSelectLoading]="textoNgSelectLoading"
+  [textoNgSelectLimpar]="textoNgSelectLimpar"
+  [textoNgSelectPlaceholder]="textoNgSelectPlaceholder">
+</requisicao>
+
+<div class="container-fluid">
+  <div class="bg-white row py-1 justify-content-end" *ngIf="requisicoes && requisicoes?.length > 0">
+    <div class="col-md-2 col-xl-1 align-self-start">
+      <label class="w-100 info-catalogo">Produtos:</label>
+      <h5 class="info-catalogo">
+        {{ totalProdutos(this.requisicoes)}}
+      </h5>
+    </div>
+    <div class="col-md-2 col-xl-2">
+      <label class="w-100 info-catalogo">Valor total:</label>
+      <h4 class="text-indigo-light font-weight-bold info-catalogo">
+        {{ sumValores(requisicoes) | currency:'BRL':'symbol':'1.2':'pt-BR' }}
+      </h4>
+    </div>
+  </div>
+  <div class="bg-white row pb-4 pt-1 justify-content-end" *ngIf="requisicoes && requisicoes?.length > 0">
+    <div class="col-md-3 col-lg-3">
+      <button
+        class="btn btn-primary btn-block"
+        [class.disabled]="itensEstaoSendoSalvos()"
+        (click)="confirmarRequisicao()">
+        <i *ngIf="!itensEstaoSendoSalvos()" class="fas fa-check"></i>
+        <i *ngIf="itensEstaoSendoSalvos()" class="fas fa-cog fa-spin"></i>
+        {{ todasAsEmpresasPossuemIntegracaoErp ? 'ENVIAR REQUISIÇÃO ERP' : 'CONFIRMAR REQUISIÇÃO' }}
+      </button>
+    </div>
+  </div>
+</div>

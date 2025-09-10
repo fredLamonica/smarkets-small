@@ -1,0 +1,18 @@
+<div class="titulo-funcionalidade" [ngClass]="class">
+  <smk-card-funcionalidade paddingTop="16px" paddingBottom="16px">
+    <header
+      class="titulo d-flex flex-column flex-md-row align-items-start align-items-md-center position-static m-0 p-0">
+      <span>
+        <span [class.titulo-com-complemento]="tituloComplementar">{{ titulo }}</span>
+        <span *ngIf="titulo && tituloComplementar">&nbsp;</span>
+        <span *ngIf="tituloComplementar">{{ tituloComplementar }}</span>
+        <span
+          *ngIf="(titulo || tituloComplementar) && tituloCustomizado.hasChildNodes()"
+          class="separador ml-2 mr-3 d-none d-md-inline-block">&nbsp;</span>
+      </span>
+      <span #tituloCustomizado class="d-flex align-items-center">
+        <ng-content></ng-content>
+      </span>
+    </header>
+  </smk-card-funcionalidade>
+</div>

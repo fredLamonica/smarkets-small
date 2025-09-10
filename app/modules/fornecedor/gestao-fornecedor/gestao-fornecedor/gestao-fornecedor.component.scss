@@ -1,0 +1,12 @@
+@import "./../../../../../styles.scss";
+
+#configuracao {
+    height: calc(100vh - 4rem);
+    overflow-y: auto;
+  }
+  
+  @media(min-width:1024px) {
+    #configuracao {
+      height: calc(100vh - #{$navbar-height});
+    }
+  }

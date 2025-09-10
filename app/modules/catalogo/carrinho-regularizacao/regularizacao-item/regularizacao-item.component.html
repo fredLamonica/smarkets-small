@@ -1,0 +1,136 @@
+<div class="bg-white row py-4 align-items-center border-bottom">
+  <div class="align-self-start d-flex  mb-3 ml-3 mb-lg-0">
+    <input
+      id="regularizacaoItem{{index}}"
+      type="checkbox"
+      name="regularizacaoItem{{index}}"
+      [(ngModel)]="regularizacaoItem.selecionado"
+      (change)="atualizaSelecionados(regularizacaoItem)"
+      placeholder="selecionarRegulario" />
+  </div>
+  <div class="col-md-2 align-self-center d-flex justify-content-center mb-3 mb-lg-0">
+    <img class="img-fluid" style="max-height: 175px;"
+      [src]="regularizacaoItem.produto?.imagens?.length ? regularizacaoItem.produto?.imagens[0]?.url : './../../../../assets/img/produtos/default.png'"
+      alt="{{ regularizacaoItem.produto?.descricao }}">
+  </div>
+  <div class="col-md-9 align-self-center">
+    <div class="d-flex align-items-center justify-content-between mb-2">
+      <h5 class="text-primary font-weight-bold text-truncate descricao" [title]="regularizacaoItem.produto?.descricao">
+        {{ regularizacaoItem.produto?.descricao }}
+      </h5>
+      <div>
+        <button
+          id="btn{{index}}"
+          name="btn{{index}}"
+          (click)="solicitarRemoverItem()"
+          class="btn btn-icon text-danger"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Remover">
+          <i class="far fa-trash-alt"></i>
+        </button>
+        <button
+          name="insericomentarioBtn{{index}}"
+          id="inserircomentariobtn{{index}}"
+          class="btn btn-icon text-primary"
+          (click)="abrirObservacoes(modalObservacoes)"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Observações do Item">
+          <i class="far fa-comment-dots"></i>
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group required col-xl-3">
+        <label>Marca:</label>
+        <ng-select
+          name="marca{{index}}"
+          id="marca{{index}}"
+          class="font-weight-bold"
+          [loading]="marcasLoading"
+          [loadingText]="textoNgSelectLoading"
+          [clearAllText]="textoNgSelectLimpar"
+          placeholder="Sem preferência"
+          [hideSelected]="true"
+          [(ngModel)]="regularizacaoItem.idMarca"
+          (change)="alterarItem()">
+          <ng-option *ngFor="let marca of marcas" [value]="marca.idMarca">{{ marca.nome }}</ng-option>
+        </ng-select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group required col-xl-3">
+        <label> Data de Entrega: </label>
+        <input
+          name="data{{index}}"
+          id="data{{index}}"
+          type="date"
+          class="form-control font-weight-bold data-de-entrega"
+          [(ngModel)]="regularizacaoItem.dataEntrega"
+          [min]="regularizacaoItem.minDataEntrega"
+          (change)="alterarItem()">
+      </div>
+      <div class="required form-group col-xl-3">
+        <label>Valor unitário:</label>
+        <input
+          name="inputValor"
+          class="form-control font-weight-bold text-center"
+          [textMask]="{mask: maskValor, guide: false}"
+          type="text"
+          [ngModel]="valor"
+          (ngModelChange)="onModelChange($event)"
+          (change)="alterarItem()">
+      </div>
+      <div class="form-group required col-xl-3">
+        <label>Quantidade:</label>
+        <input-number class="form-control-sm col-1 font-weight-bold quantidade"
+          [class.invalid]="!regularizacaoItem.quantidade || regularizacaoItem.quantidade > max || regularizacaoItem.quantidade < min"
+          [(ngModel)]="regularizacaoItem.quantidade"
+          [min]="min"
+          [max]="max"
+          [allowDecimal]="regularizacaoItem.produto?.unidadeMedida?.permiteQuantidadeFracionada"
+          (change)="alterarItem()">
+        </input-number>
+      </div>
+      <div class="form-group col-xl-3">
+        <label>Valor total:</label>
+        <h5 class="text-indigo-light font-weight-bold mt-1">
+          {{ obtenhaValorTotal() | currency:(moeda|moedaCodigo):'symbol':'1.2':(moeda|moedaLocale)}}
+        </h5>
+      </div>
+    </div>
+  </div>
+  <ng-template #modalObservacoes let-modal>
+    <div class="modal-header">
+      <div class="modal-title text-truncate" [title]="regularizacaoItem.produto?.descricao">
+        {{ regularizacaoItem.produto?.descricao }}
+      </div>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="formObservacoes">
+        <div class="row">
+          <div class="form-group col mb-0">
+            <label for="observacao">Observações</label>
+            <textarea class="form-control" id="observacao" formControlName="observacao" rows="5"></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-primary" (click)="modal.dismiss('Cross click')">
+        <i class="fas fa-ban"></i> Voltar
+      </button>
+      <button type="button" class="btn btn-primary" (click)="modal.close(true)">
+        <i class="fas fa-save"></i> Salvar
+      </button>
+    </div>
+  </ng-template>
+</div>

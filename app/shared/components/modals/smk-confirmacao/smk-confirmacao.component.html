@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <div class="modal-title">
+    {{ titulo }}
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="fechar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body p-3 text-center" [ngClass]="{ 'pt-5 pb-4': classIcone }">
+  <i *ngIf="classIcone" class="icone mb-5" [ngClass]="classIcone + ' ' + temaIcone"></i>
+  <p
+    *ngIf="!html; else htmlTmp"
+    class="conteudo texto"
+    [class.mb-2]="mensagemAdicional"
+    [class.mb-0]="!mensagemAdicional">
+    {{ conteudo }}
+  </p>
+  <p *ngIf="!html && mensagemAdicional" class="mensagem-adicional texto mb-0">{{ mensagemAdicional }}</p>
+  <ng-template #htmlTmp>
+    <div class="texto" [innerHTML]="conteudo"></div>
+  </ng-template>
+</div>
+<div class="modal-footer p-3">
+  <button
+    *ngIf="labelBotaoCancelar !== ''"
+    type="button"
+    class="cancelar btn btn-outline-primary"
+    [ngClass]="temaBotaoCancelar"
+    [class.mr-3]="labelBotaoConfirmar !== ''"
+    [class.w-100]="labelBotaoConfirmar !== ''"
+    (click)="cancelar()">
+    {{ labelBotaoCancelar }}
+  </button>
+  <button
+    *ngIf="labelBotaoConfirmar !== ''"
+    type="button"
+    class="confirmar btn btn-primary"
+    [ngClass]="temaBotaoConfirmar"
+    [class.w-100]="labelBotaoCancelar !== ''"
+    (click)="confirmar()">
+    {{ labelBotaoConfirmar }}
+  </button>
+</div>

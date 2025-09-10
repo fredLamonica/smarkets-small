@@ -1,0 +1,181 @@
+<div class="header">
+  <div class="header-search row">
+    <div class="col-12 align-self-center">
+      <h3 class="mb-0 text-primary font-weight-bold">
+        <span class="font-weight-normal">MAPA COMPARATIVO</span> - COTAÇÃO
+        {{ cotacao?.idCotacao }}
+      </h3>
+    </div>
+  </div>
+  <div class="header-navigation py-4">
+    <div class="bounds row align-items-center">
+      <div class="col-6 col-md-2">
+        <button class="btn btn-primary btn-block" (click)="voltar()">
+          <i class="fas fa-arrow-left"></i> Voltar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="card card-default">
+    <div class="card-header"></div>
+    <div class="card-body">
+      <div class="bg-lighter-dark border-bottom row" *ngIf="cotacao?.anexos?.length">
+        <div class="col-12 col-md-1 align-self-start pt-4">
+          <label class="font-weight-bold">Anexos: </label>
+        </div>
+        <div class="col-12 col-md-11">
+          <galeria-arquivos [arquivos]="cotacao?.anexos" [disabled]="true"> </galeria-arquivos>
+        </div>
+      </div>
+      <div class="bg-lighter border-bottom row py-3">
+        <div class="col-12 col-md-2 pr-0">
+          <label>Cotação:</label>
+          <p class="font-weight-bold">{{ cotacao?.idCotacao }}</p>
+        </div>
+        <div class="col-12 col-md-4 pr-0">
+          <label> Comprador:</label>
+          <p class="font-weight-bold">{{ cotacao?.usuarioResponsavel?.pessoaFisica?.nome }}</p>
+        </div>
+        <div class="col-12 col-md-2">
+          <label>Moeda:</label>
+          <p class="font-weight-bold">{{ Moeda[cotacao?.moeda] }}</p>
+        </div>
+        <div class="col-6 col-md-2 pr-0">
+          <label>Data Inicial:</label>
+          <p class="font-weight-bold">{{ cotacao?.dataInicio | date: 'dd/MM/yyyy' }}</p>
+        </div>
+        <div class="col-6 col-md-2">
+          <label>Data Fim:</label>
+          <p class="font-weight-bold">{{ cotacao?.dataFim | date: 'dd/MM/yyyy' }}</p>
+        </div>
+
+        <div class="col-12 col-md-6 align-self-end" *ngIf="emBalisamento">
+          <div class="custom-control custom-checkbox">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="selectAll"
+              [(ngModel)]="todosSelecionados"
+              (change)="onSelecionarTodos($event)"
+            />
+            <label class="custom-control-label font-weight-bold" for="selectAll"
+              >Selecionar todas as requisições</label
+            >
+          </div>
+        </div>
+        <div class="col-12" [class.col-md-6]="emBalisamento">
+          <label>Descrição:</label>
+          <p class="font-weight-bold mb-0">{{ cotacao?.descricao }}</p>
+        </div>
+      </div>
+
+      <!-- Itens -->
+      <ng-container *ngFor="let item of cotacao?.itens; let i = index">
+        <mapa-comparativo-item
+          [processo]="processo"
+          [item]="item"
+          [cotacao]="cotacao"
+          [index]="i"
+          [rodada-atual]="cotacao?.rodadaAtual"
+          (selecao)="selecionarItem($event, i)"
+          [selecionado]="itemSelecionado(i)"
+          (classificar-vencedor)="classificarVencedor(item, $event)"
+          (classificar-vencedor-pacote)="classificarVencedorPacote(item, $event)"
+          (desclassificar-vencedor)="desclassificarVencedor(item, $event)"
+          (desclassificar-vencedor-pacote)="desclassificarVencedorPacote(item, $event)"
+          (pacote-nao-preenchido)="pacoteNaoPreenchido(item)"
+          [parametrosIntegracaoSapHabilitado]="parametrosIntegracaoSapHabilitado"
+          [ivas]="ivas"
+          (selecaoPropostas)="propostaSelecionada($event)"
+          (abaUltimosPrecos)="abaUltimosPrecos($event)"
+        ></mapa-comparativo-item>
+      </ng-container>
+
+      <div class="bg-white row py-3">
+        <div class="col-12">
+          <div
+            class="row"
+            [ngClass]="{
+              'justify-content-around': emBalisamento,
+              'justify-content-end': !emBalisamento && !encerrada,
+              'justify-content-start': encerrada
+            }"
+          >
+            <div class="col-md-3 mb-2 mb-md-0" *ngIf="primeiraRodada && emAndamento">
+              <button class="btn btn-block btn-primary float-right" (click)="adicionarFornecedor()">
+                Adicionar Fornecedor
+              </button>
+            </div>
+            <div class="col-md-3 mb-2 mb-md-0" *ngIf="emAnalise">
+              <button
+                class="btn btn-block btn-primary float-right"
+                (click)="permitirAlterarProposta()"
+              >
+                Permitir Alteração
+              </button>
+            </div>
+
+            <div class="col-md-3 col-lg-2 mb-2 mb-lg-0" *ngIf="emBalisamento || cancelada">
+              <button
+                class="btn btn-block btn-primary float-right"
+                (click)="gerarRelatorioAnalise()"
+              >
+                Relatório de Análise
+              </button>
+            </div>
+            <div class="col-md-3 col-lg-2 mb-2 mb-lg-0" *ngIf="emBalisamento || encerrada || cancelada">
+              <button class="btn btn-block btn-primary float-right" (click)="gerarMapaCotacao()">
+                Mapa de Cotação
+              </button>
+            </div>
+            <div class="col-md-3 mb-2 mb-lg-0" *ngIf="emAnalise">
+              <button
+                class="btn btn-block btn-primary float-right"
+                (click)="solicitarFinalizarAnalise()"
+              >
+                Finalizar Análise {{ cotacao?.rodadaAtual?.ordem }}ª rodada
+              </button>
+            </div>
+            <div class="col-md-3 col-lg-2 mb-2 mb-lg-0" *ngIf="emBalisamento">
+              <button
+                class="btn btn-block btn-outline-primary float-right"
+                (click)="solicitarCriarNovaRodada()"
+              >
+                Criar Nova Rodada
+              </button>
+            </div>
+            <div class="col-md-3 col-lg-2 mb-2 mb-lg-0" *ngIf="emBalisamento">
+              <button
+                class="btn btn-block btn-primary float-right"
+                (click)="solicitarGerarPedido()"
+              >
+                Gerar Pedido
+              </button>
+            </div>
+            <div
+              class="col-md-3 col-lg-2 mb-2 mb-lg-0"
+              *ngIf="!emAnalise && !emAndamento && !encerrada && !cancelada"
+            >
+              <button
+                class="btn btn-block btn-primary float-right"
+                (click)="solicitarEncerrarCotacao()"
+              >
+                Encerrar Cotação
+              </button>
+            </div>
+            <div class="col-md-4 col-lg-3 mb-2 mb-lg-0" *ngIf="encerrada">
+              <button
+                class="btn btn-block btn-primary float-right"
+                (click)="solicitarRetornarParaAnalise()"
+              >
+                Retornar Cotação para Análise
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div
+  style="position: relative; width: 100%;"
+  #selectMultipleElement
+>
+  <input
+    class="form-control select-input"
+    [ngClass]="{'open': aberto }"
+    (keydown.enter)="handleEnter()"
+    (click)="expanda(true)"
+    [(ngModel)]="descricaoInput"
+    [attr.mask]="apenasNumeros ? '0*' : null"
+  >
+  <span
+    class="select-arrow"
+    [ngClass]="{'open': aberto }"
+    (click)="expanda()"
+  ></span>
+  <span
+    *ngIf="value?.length"
+    class="select-clear"
+    (click)="limpeSelecao()"
+  >
+    ×
+  </span>
+</div>
+

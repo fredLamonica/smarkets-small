@@ -1,0 +1,208 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Dados Gerais do Produto</div>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form" *ngIf="form">
+    <div class="form-row">
+      <div class="col-md-4 align-self-center">
+        <div class="row justify-content-md-center">
+          <div class="col-7">
+            <img class="img-fluid" src="./../../../../../assets/img/produtos/default.png"
+              [alt]="form.controls.nomeProduto.value">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label>ID RC:</label>
+            <input type="text" class="form-control" formControlName="idItemSolicitacaoCompra">
+          </div>
+          <div class="form-group col-md-6">
+            <label>ID ERP:</label>
+            <input type="text" class="form-control" formControlName="codigo">
+          </div>
+          <div class="form-group col">
+            <label>Descrição:</label>
+            <textarea class="form-control" formControlName="descricao" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label>Classificação Contabil:</label>
+        <input type="text" class="form-control" formControlName="codigoClassificacaoContabil">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Fornecedor Fixo:</label>
+        <input type="text" class="form-control" formControlName="fornecedorFixo">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Moeda:</label>
+        <ng-select name="moeda" formControlName="moeda">
+          <ng-option [value]="Moeda.Real">Real</ng-option>
+        </ng-select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label>Código Contrato:</label>
+        <input type="text" class="form-control" formControlName="codigoContrato">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Código Produto:</label>
+        <input type="text" class="form-control" formControlName="codigoProduto">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Nome Produto:</label>
+        <input type="text" class="form-control" formControlName="nomeProduto">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label>Tipo Produto:</label>
+        <input type="text" class="form-control" formControlName="tipoProduto">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Utilização Produto:</label>
+        <input type="text" class="form-control" formControlName="utilizacaoProduto">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Código Origem:</label>
+        <input type="text" class="form-control" formControlName="codigoOrigemProduto">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label>NCM:</label>
+        <input type="text" class="form-control" formControlName="ncm">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Código Depósito:</label>
+        <input type="text" class="form-control" formControlName="codigoDeposito">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Valor Referência:</label>
+        <input type="text" class="form-control" formControlName="valorReferencia">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label>Quantidade Unidade Preço:</label>
+        <input type="text" class="form-control" formControlName="quantidadeUnidadesPreco">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Quantidade:</label>
+        <input type="text" [textMask]="{mask: maskDecimal, guide: false}" class="form-control" formControlName="quantidade">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Sigla Unidade de Medida:</label>
+        <input type="text" class="form-control" formControlName="siglaUnidadeMedida">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label>Categoria:</label>
+        <input type="text" class="form-control" formControlName="nomeCategoria">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Data Remessa:</label>
+        <input type="datetime" class="form-control" formControlName="dataRemessa">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Previsão de Entrega:</label>
+        <input type="datetime" class="form-control" formControlName="previsaoEntregaDias">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col">
+        <label>Razão Social:</label>
+        <input type="text" class="form-control" formControlName="razaoSocial">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label>Código Empresa:</label>
+        <input type="text" class="form-control" formControlName="codigoEmpresa">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Código Filial:</label>
+        <input type="text" class="form-control" formControlName="codigoFilialEmpresa">
+      </div>
+      <div class="form-group col-md-4">
+        <label>CNPJ:</label>
+        <input type="text" class="form-control" formControlName="cnpj">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-3">
+        <label>Ordem:</label>
+        <input type="text" class="form-control" formControlName="ordem">
+      </div>
+      <div class="form-group col-md-3">
+        <label>Elemento Pep:</label>
+        <input type="text" class="form-control" formControlName="elementoPep">
+      </div>
+      <div class="form-group col-md-3">
+        <label>Diagrama Rede:</label>
+        <input type="text" class="form-control" formControlName="diagramaRede">
+      </div>
+      <div class="form-group col-md-3">
+        <label>Código Imobilizado:</label>
+        <input type="text" class="form-control" formControlName="codigoImobilizado">
+      </div>
+    </div>
+    <div class="form-row" *ngIf="isRateioVisible(form?.getRawValue().rateios)">
+      <div class="form-group col">
+        <label>Rateios:</label>
+        <div class="table-responsive">
+          <table id="table" class="table table-new-ux">
+            <thead>
+              <tr>
+                <!-- <th scope="col">ID Rateio:</th> -->
+                <th scope="col" data-toggle="tooltip" data-placement="bottom" title="Código do centro de custo">Cód.
+                  Centro de custo:</th>
+                <th scope="col" data-toggle="tooltip" data-placement="bottom" title="Nome do centro de custo">Centro de
+                  custo:</th>
+                <th scope="col" data-toggle="tooltip" data-placement="bottom" title="Código da conta contábil">Cód.
+                  Conta contábil:</th>
+                <th scope="col" data-toggle="tooltip" data-placement="bottom" title="Nome da conta contábil">Nome conta
+                  contábil:</th>
+                <th scope="col" data-toggle="tooltip" data-placement="bottom" title="Percentual de rateio">Percentual de
+                  rateio:</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let rateio of itemSolicitacaoCompra.rateios; let i = index;">
+                <td>{{ rateio?.codigoCentroCusto }}</td>
+                <td>{{ rateio?.centroCusto }}</td>
+                <td>{{ rateio?.codigoContaContabil }}</td>
+                <td>{{ rateio?.nomeContaContabil }}</td>
+                <td>{{ rateio?.percentualRateio }}%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-12">
+        <label class="pr-2"> Anexar Arquivo: </label>
+        <input-file [multiple]="true"
+          accept=".csv,.tiff,.txt,.pdf,.xlsx,.xls,.pptx,.ppt,.docx,.doc,.odt,.ods,.odp,.png,.jpeg,.jpg"
+          (select)="incluirArquivos($event)"></input-file>
+      </div>
+      <div class="form-group col-12">
+        <galeria-arquivos [arquivos]="form.controls.anexos.value" size="sm" (excluir)="excluirArquivo($event)">
+        </galeria-arquivos>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="fechar()">Fechar</button>
+</div>

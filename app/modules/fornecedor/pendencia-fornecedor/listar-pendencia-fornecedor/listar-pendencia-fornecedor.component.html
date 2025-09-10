@@ -1,0 +1,111 @@
+<div class="bg-lighter border-bottom row py-2 d-none d-md-flex">
+  <div class="col-md-2">
+    <label class="font-weight-bold">Tipo:</label>
+  </div>
+  <div class="col-md-2">
+    <label class="font-weight-bold">Descrição:</label>
+  </div>
+  <div class="col-md-2">
+    <label class="font-weight-bold">Data e Hora:</label>
+  </div>
+  <div class="col-md-2">
+    <label class="font-weight-bold">Responsável:</label>
+  </div>
+  <div class="col-md-2">
+    <label class="font-weight-bold">Status:</label>
+  </div>
+  <div class="col-md-2">
+    <label class="font-weight-bold">Ações:</label>
+  </div>
+</div>
+<div class="bg-white border-bottom row py-4" *ngIf="!pendenciasFornecedor?.length; else hasValue">
+  <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+</div>
+<ng-template #hasValue>
+  <div
+    class="bg-white border-bottom row py-4"
+    *ngFor="let pendenciaFornecedor of pendenciasFornecedor"
+  >
+    <div class="col-md-2 col-sm-2 align-self-center">
+      <label for="" class="font-weight-bold d-block d-md-none">Tipo:</label>
+      <p
+        class="mb-3 mb-lg-0 line-clamp line-clamp-1"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ tiposPendenciaFornecedor[pendenciaFornecedor.tipo] }}"
+      >
+        {{ tiposPendenciaFornecedor[pendenciaFornecedor.tipo] }}
+      </p>
+    </div>
+    <div class="col-md-2 col-sm-2 align-self-center">
+      <label for="" class="font-weight-bold d-block d-md-none">Descrição:</label>
+      <p
+        class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ pendenciaFornecedor.descricao }}"
+      >
+        {{ pendenciaFornecedor.descricao }}
+      </p>
+    </div>
+    <div class="col-md-2 col-sm-2 align-self-center">
+      <label for="" class="font-weight-bold d-block d-md-none">Data e Hora:</label>
+      <p class="mb-3 mb-lg-0 line-clamp line-clamp-2" data-toggle="tooltip" data-placement="bottom">
+        {{ pendenciaFornecedor.dataCadastro | date: 'dd/MM/yyyy HH:mm' }}
+      </p>
+    </div>
+    <div class="col-md-2 col-sm-2 align-self-center">
+      <label for="" class="font-weight-bold d-block d-md-none">Responsável:</label>
+      <p
+        class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ pendenciaFornecedor.usuario.pessoaFisica.nome }}"
+      >
+        {{ pendenciaFornecedor.usuario.pessoaFisica.nome }}
+      </p>
+    </div>
+    <div class="col-md-2 col-sm-2 align-self-center">
+      <label for="" class="font-weight-bold d-block d-md-none">Status:</label>
+      <p
+        class="mb-3 mb-lg-0 line-clamp line-clamp-1"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ statusPendenciaFornecedor[pendenciaFornecedor.status] }}"
+      >
+        {{ statusPendenciaFornecedor[pendenciaFornecedor.status] }}
+      </p>
+    </div>
+    <div class="col-md-2 d-flex justify-content-between align-self-center">
+      <button
+        class="btn btn-icon"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Visualizar Visita"
+        (click)="vizualizarPendenciaFornecedor(pendenciaFornecedor)"
+      >
+        <i class="far fa-eye"></i>
+      </button>
+      <button
+        class="btn btn-icon"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Editar"
+        *ngIf="podeAlterarExcluir(pendenciaFornecedor)"
+        (click)="editarPendenciaFornecedor(pendenciaFornecedor)"
+      >
+        <i class="far fa-edit"></i>
+      </button>
+      <button
+        class="btn btn-icon"
+        *ngIf="podeAlterarExcluir(pendenciaFornecedor)"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Excluir"
+        (click)="solicitarExclusaoPendenciaFornecedor(pendenciaFornecedor)"
+      >
+        <i class="far fa-trash-alt text-danger"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>

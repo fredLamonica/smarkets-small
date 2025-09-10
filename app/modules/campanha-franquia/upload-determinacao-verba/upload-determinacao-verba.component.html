@@ -1,0 +1,74 @@
+<div class="card">
+  <div class="card-body">
+    <div class="col-12 d-flex justify-content-end">
+      <sdk-rectangle-button
+        [label]="'Salvar'"
+        [leftIconClass]="'fas fa-check'"
+        [leftIconColor]="'#FFFFFF'"
+        (buttonClick)="salvar()"
+      >
+      </sdk-rectangle-button>
+    </div>
+
+    <div class="col-12 title-hr pt-0">
+      Planilha de Verba Cooperada Comercial Incremento.
+      <hr />
+      <span style="color: #417185;font-family: Open Sans;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 100%;">Por favor, realizar o upload da  planilha de Verba Cooperada Comercial Incrimento.</span>
+      <br>
+      <span style="color: #01B38F;font-family: Open Sans;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 100%;">Para o modelo não cooperado o valor Franqueado deve ser igual a 0</span>
+    </div>
+    
+      <div class="col-11 d-flex mt-2" style="height: 50vh;padding-left: 0px;">
+          <div class="col-6">
+            <label style="color: #296075;">Documento</label>
+            <div style="border: 1px solid #CFDCE0;border-radius: 8px; width: auto;height: 10%;padding: 4px 10px 0px 10px;">           
+              <p *ngIf="arquivo"  class="text-truncate" style="font-size: 12px;text-decoration: underline;"> 
+                <i class="fas fa-circle mr-2" style="color: #8BC34A;"></i>{{arquivo.nome}}</p>
+            </div>                   
+          </div>
+          <div class="col-1 pt-4" style="margin-left: -2%;">
+            <i
+              class="fas fa-2x fa-circle circle-icon"              
+            ></i>
+            <button
+              class="btn btn-sm btn-icon delete-action"
+              (click)="delectFile()"
+            >
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+          <div class="justify-content-end">
+            <label style="color: #296075;">Arquivo para Upload</label>
+            <sdk-rectangle-button
+            style="position: relative;top: -3%;"
+            [label]="'Novo Arquivo'"
+            (buttonClick)="upload()"
+            ></sdk-rectangle-button>     
+        
+            <input-file
+            class="d-none"
+            accept=".xlsx"
+            (select)="handleFileInput($event, '.xlsx')"
+            id="inputFile"
+            ></input-file>     
+          </div>
+
+        <div class="justify-content-end dwn-modelo ml-4">
+          <label style="color: #296075;">Dowload do Modelo</label>
+          <sdk-rectangle-button
+          style="position: relative;top: -3%;"
+          [label]="'Modelo'"
+          (buttonClick)="downloadModelo()"
+          ></sdk-rectangle-button>   
+        </div>
+  </div>
+</div>
+

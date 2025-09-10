@@ -1,0 +1,66 @@
+@import "src/themes/_smk-base.scss";
+
+$font-color: #212121;
+
+.modal-body {
+  .icone {
+    font-size: 75px;
+
+    &.azul {
+      color: $smk-primary-color;
+    }
+
+    &.vermelho {
+      color: $smk-danger-color;
+    }
+
+    &.verde {
+      color: $smk-success-color;
+    }
+
+    &.laranja {
+      color: $smk-orange-color;
+    }
+  }
+
+  .texto {
+    color: $font-color;
+    font-size: 15px;
+
+    &.conteudo {
+      font-weight: 700;
+    }
+  }
+}
+
+.modal-footer {
+  border-top: $smk-border;
+
+  .cancelar {
+    &.azul {
+      @include smk-button-outline($smk-primary-color, lg);
+    }
+
+    &.vermelho {
+      @include smk-button-outline($smk-danger-color, lg);
+    }
+
+    &.verde {
+      @include smk-button-outline($smk-success-color, lg);
+    }
+  }
+
+  .confirmar {
+    &.azul {
+      @include smk-button($smk-primary-color, lg);
+    }
+
+    &.vermelho {
+      @include smk-button($smk-danger-color, lg);
+    }
+
+    &.verde {
+      @include smk-button($smk-success-color, lg);
+    }
+  }
+}

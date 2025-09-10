@@ -1,0 +1,40 @@
+<div class="area-usuario">
+  <smk-funcionalidade titulo="Área do Usuário">
+    <div class="row">
+      <div
+        *ngFor="let configuracao of configuracoes; last as ultimaConfiguracao"
+        class="col-md-6 col-lg-4 col-xxxl-3"
+        [class.mb-4]="!ultimaConfiguracao">
+        <smk-card-funcionalidade>
+          <div
+            class="card-configuracao d-flex flex-column justify-content-between align-items-center align-items-sm-start">
+            <header class="header mb-4">
+              <div class="d-flex align-items-center">
+                <div class="logo d-flex align-items-center justify-content-center">
+                  <i class="icone" [ngClass]="configuracao.icone"></i>
+                </div>
+                <h5 class="title m-0 ml-3">{{ configuracao.titulo }}</h5>
+              </div>
+            </header>
+            <section>
+              <span class="texto">{{ configuracao.texto }}</span>
+            </section>
+            <hr>
+            <footer class="footer">
+              <a [routerLink]="configuracao.rota" [ngClass]="configuracao.class"
+                *ngIf="configuracao.rota; else realizarAcao">
+                {{configuracao.acaoBotao}}
+              </a>
+              <ng-template #realizarAcao>
+                <a (click)="configuracao.metodoAcao()" [ngClass]="configuracao.class">
+                  {{configuracao.acaoBotao}}
+                </a>
+              </ng-template>
+            </footer>
+          </div>
+        </smk-card-funcionalidade>
+      </div>
+    </div>
+  </smk-funcionalidade>
+</div>
+<iframe class="d-none" id="backoffice" [src]="safeUrl"></iframe>

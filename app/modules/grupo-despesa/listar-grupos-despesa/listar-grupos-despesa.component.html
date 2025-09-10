@@ -1,0 +1,26 @@
+<ul class="nav bg-gray">
+  <li class="nav-item">
+    <a class="nav-link" role="button" [routerLink]="[ 'novo' ]"><i class="fas fa-plus"></i> Incluir</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" [class.disabled]="selecionados?.length != 1" [routerLink]="selecionados?.length ? [selecionados[0].idGrupoDespesa] : null"><i class="fas fa-pencil-alt"></i> Editar</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" [class.disabled]="selecionados?.length != 1" (click)="solicitarExclusao()"><i class="fas fa-trash-alt"></i> Excluir</a>
+  </li>
+</ul>
+<header>
+  <h1 class="title">Grupos de despesa</h1>
+</header>
+<div class="container-fluid no-bounds">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <custom-table classes="table-striped" [settings]="settings" [source]="grupos" (select)="selecao($event)"></custom-table>
+          <pager [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="registrosPorPagina" (pagination)="paginacao($event)"></pager>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

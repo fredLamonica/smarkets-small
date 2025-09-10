@@ -1,0 +1,61 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    Alterar Configuração Página de Fornecedor Interessado</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="form-group required col-12" data-toggle="tooltip" data-placement="top"
+        title="Somente letras minúsculas, '_' e '-'">
+        <label>Link:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text font-weight-bold"
+              id="basic-addon3">https://marketplace.smarkets.com.br/seja-um-fornecedor/</span>
+          </div>
+          <input type="text" class="form-control" formControlName="url"
+            [class.invalid]="form.controls.url.invalid && form.controls.url.dirty">
+        </div>
+        <div *ngIf="form.controls.url.invalid && form.controls.url.dirty">
+          <span class="invalid" *ngIf="form.controls.url.errors.required">
+            Preenchimento obrigatório
+          </span>
+          <span class="invalid" *ngIf="form.controls.url.errors.pattern">
+            Preencher somente com letras minúsculas, números e os caracteres especiais '_' e '-' são permitidos
+          </span>
+        </div>
+
+      </div>
+      <div class="form-group required col-12">
+        <label>Texto customizável da página:</label>
+        <ck-editor formControlName="textoCustomizavel"
+          [class.invalid]="form.controls.textoCustomizavel.invalid && form.controls.textoCustomizavel.dirty">
+        </ck-editor>
+        <span class="invalid" *ngIf="form.controls.textoCustomizavel.invalid && form.controls.textoCustomizavel.dirty">
+          Preenchimento obrigatório
+        </span>
+      </div>
+      <div class="form-group col-12" data-toggle="tooltip" data-placement="top"
+        title="Dimensões recomendadas: 200px altura, 500px largura">
+        <label class="required" for="logo"> Logo </label>
+        <input-file [multiple]="false" accept=".png,.jpeg,.jpg" (select)="imagenSelecionada($event)">
+        </input-file>
+        <small>Tamanho ideal da imagem: 250px X 100px</small>
+        <img [src]="form.value.logo" class="img-thumbnail mt-2" alt="Logo" *ngIf="form.value.logo">
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+    <i class="fas fa-ban"></i>
+    Fechar
+  </button>
+  <button type="button" (click)="salvar()" class="btn btn-primary">
+    <i class="fas fa-save"></i>
+    Salvar
+  </button>
+</div>

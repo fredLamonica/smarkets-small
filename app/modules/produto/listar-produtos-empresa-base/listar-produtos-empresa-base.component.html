@@ -1,0 +1,239 @@
+<sdk-header-default [showShadow]="true" [ngStyle]="{ 'z-index': '102' }" heightValue="64px">
+  <div class="col-md-6 pl-4">
+    <span class="page-title text-large">
+      Gestão de Produtos &nbsp;&nbsp;<i class="fas fa-chevron-right"></i>
+      <span class="subtitle">&nbsp;&nbsp;Produtos {{ empresaBaseEhHolding ? 'da Holding' : 'Smarkets' }}</span>
+    </span>
+  </div>
+</sdk-header-default>
+
+<sdk-header-default topValue="10.3em" [heightAuto]="true">
+  <sdk-input-icon
+    name="id"
+    style="margin: 8px"
+    [placeHolder]="'ID'"
+    [icon]="'fas fa-search'"
+    [inputClass]="'input-icon-right-xs'"
+    [(ngModel)]="filtro.idProduto"
+    (keyup.enter)="getProdutos()"
+    ngDefaultControl>
+  </sdk-input-icon>
+  <sdk-input-icon
+    name="codigo"
+    style="margin: 8px"
+    [placeHolder]="'Código'"
+    [icon]="'fas fa-search'"
+    [inputClass]="'input-icon-right-xs'"
+    [(ngModel)]="filtro.codigo"
+    (keyup.enter)="getProdutos()"
+    ngDefaultControl>
+  </sdk-input-icon>
+  <sdk-input-icon
+    name="descricao"
+    style="margin: 8px"
+    [placeHolder]="'Produto'"
+    [icon]="'fas fa-search'"
+    [inputClass]="'input-icon-right-md'"
+    [(ngModel)]="filtro.descricao"
+    (keyup.enter)="getProdutos()"
+    ngDefaultControl>
+  </sdk-input-icon>
+  <sdk-select
+    name="situacao"
+    style="margin: 8px"
+    [class]="'select-xs'"
+    [placeHolder]="'Situação'"
+    [items]="situacoes"
+    (event)="definaFiltroDeSituacao($event)">
+  </sdk-select>
+  <div class="filtro-adicional" [class.filtro-recolhido]="!filtroExpandido">
+    <sdk-select
+      name="categoria"
+      style="margin: 8px"
+      [class]="'select-md'"
+      [placeHolder]="'Categoria'"
+      [items]="categorias"
+      (event)="definaFiltroDeCategoria($event)">
+    </sdk-select>
+    <sdk-select
+      name="unidadeMedida"
+      style="margin: 8px"
+      [class]="'select-md'"
+      [placeHolder]="'Unidade de Medida'"
+      [items]="unidadesDeMedida"
+      (event)="definaFiltroDeUnidadeDeMedida($event)">
+    </sdk-select>
+  </div>
+  <sdk-rectangle-button
+    class="custom-rectangule-button"
+    style="margin-left: 10px"
+    [leftIconClass]="'fas fa-search'"
+    [leftIconColor]="'#FFFFFF'"
+    [label]="'Buscar'"
+    (buttonClick)="getProdutos()">
+  </sdk-rectangle-button>
+  <div
+    *ngIf="!filtroExpandido"
+    class="expandir-filtro"
+    data-toggle="tooltip"
+    data-placement="right"
+    ngbTooltip="Expandir Filtro"
+    (click)="filtroExpandido = true">
+    <svg width="23.903" height="20" version="1.1" viewBox="0 0 23.903 20" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="m21.152 2h-14.498c-0.66619 0-1.0023 0.80831-0.53031 1.2803l5.7794 5.7803v6.4393c0 0.2447 0.11941 0.4741 0.31991 0.6144l2.5 1.7494c0.49322 0.3453 1.1801-0.0046 1.1801-0.6144v-8.1887l5.7796-5.7803c0.4711-0.47109 0.1372-1.2803-0.5303-1.2803z" />
+      <path
+        d="m9.0825 10.371h-2.1651v-2.1651c0-0.50642-0.41101-0.91743-0.91743-0.91743s-0.91743 0.41101-0.91743 0.91743v2.1651h-2.1651c-0.50642 0-0.91743 0.41101-0.91743 0.91743s0.41101 0.91743 0.91743 0.91743h2.1651v2.1651c0 0.50642 0.41101 0.91743 0.91743 0.91743s0.91743-0.41101 0.91743-0.91743v-2.1651h2.1651c0.50642 0 0.91743-0.41101 0.91743-0.91743s-0.41101-0.91743-0.91743-0.91743z" />
+    </svg>
+  </div>
+  <div *ngIf="filtroExpandido" class="col d-flex justify-content-end pr-0">
+    <div class="d-flex" style="height: 100%">
+      <div
+        class="recolher-filtro"
+        data-toggle="tooltip"
+        data-placement="left"
+        ngbTooltip="Recolher Filtro"
+        (click)="filtroExpandido = false">
+        <i class="fas fa-times"></i>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!filtroExpandido" class="col d-flex justify-content-end pr-0">
+    <div class="d-flex border-left pr-3" style="height: 100%">
+      <div class="pl-3 botao-incluir">
+        <sdk-rectangle-button
+          class="custom-rectangule-button"
+          [ngClass]="{ enabled: temAlgumSelecionado(), disabled: !temAlgumSelecionado() }"
+          [label]="'Incluir aos Meus Produtos'"
+          [leftIconClass]="'fas fa-plus'"
+          [leftIconColor]="'#FFFFFF'"
+          (buttonClick)="clone()">
+        </sdk-rectangle-button>
+      </div>
+    </div>
+  </div>
+</sdk-header-default>
+
+<p
+  class="semListagem d-flex text-truncate w-100"
+  *ngIf="!produtos?.length; else listaProdutos"
+  data-toggle="tooltip"
+  data-placement="bottom"
+  title="Nenhum produto encontrado">
+  <a class="text-center font-weight-bold text-primary">Nenhum produto encontrado</a>
+</p>
+
+<div class="col-12 listagem-produtos-empresa-base">
+  <div class="w-100">
+    <ng-template #listaProdutos>
+      <div class="listagem" [class.filtro-expandido]="filtroExpandido">
+        <div class="row">
+          <div class="col-2 mb-3" *ngIf="!selecaoHabilitada; else selecao">
+            <div class="row">
+              <p class="col-2">
+                <i
+                  (click)="selecaoHabilitada = !selecaoHabilitada"
+                  class="fas fa-bars menu-icon clickable"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  ngbTooltip="{{ selecaoHabilitada ? 'Desabilitar Seleção' : 'Habilitar Seleção' }}"></i>
+              </p>
+              <p class="col-8 pl-5 ml-2">ID</p>
+            </div>
+          </div>
+
+          <ng-template #selecao>
+            <div class="col-2">
+              <div class="row">
+                <div class="col-2">
+                  <div class="row">
+                    <p class="col-12 mb-1 ml-1 px-2">
+                      <i
+                        (click)="habilitarDesabilitarSelecao()"
+                        class="fas fa-bars menu-icon clickable"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        [class.ativo]="selecaoHabilitada"
+                        ngbTooltip="{{ selecaoHabilitada ? 'Desabilitar Seleção' : 'Habilitar Seleção' }}"></i>
+                    </p>
+                    <p class="col-12 mb-0 ml-1 px-2">
+                      <input
+                        type="checkbox"
+                        class="clickable custom-checkbox"
+                        [(ngModel)]="selecionarTodos" />
+                    </p>
+                  </div>
+                </div>
+                <p class="col-1 clickable mb-0">
+                  <sdk-suspense-menu-button [icon]="'fas fa-chevron-down'" title="Opções de Seleção">
+                    <ng-template sdkSuspenseMenu>
+                      <button
+                        class="btn btn-sm btn-icon text-dark"
+                        title="Todos"
+                        (click)="selecionarTodos = true">
+                        <a>Todos</a>
+                      </button>
+                      <button
+                        class="btn btn-sm btn-icon"
+                        title="Nenhum"
+                        (click)="selecionarTodos = false">
+                        <a>Nenhum</a>
+                      </button>
+                      <button
+                        class="btn btn-sm btn-icon"
+                        title="Ativos"
+                        (click)="selecioneOsAtivos()">
+                        <a>Ativos</a>
+                      </button>
+                    </ng-template>
+                  </sdk-suspense-menu-button>
+                </p>
+                <p class="col-4 pl-5 ml-3">ID</p>
+              </div>
+            </div>
+          </ng-template>
+
+          <p class="col-1" [ngClass]="{ 'pl-4 ml-3': selecaoHabilitada, 'pl-1': !selecaoHabilitada }">
+            Código
+          </p>
+          <p class="col-3" [ngClass]="{ 'pl-5 ml-2': selecaoHabilitada, 'pl-4 ml-3': !selecaoHabilitada }">
+            Produto
+          </p>
+          <p class="col-2" [ngClass]="{ 'pl-5 ml-2': selecaoHabilitada, 'pl-4 ml-3': !selecaoHabilitada }">
+            Categoria
+          </p>
+          <p class="col-2 pl-5" [ngClass]="{ 'ml-3': selecaoHabilitada, 'ml-2': !selecaoHabilitada }">
+            Unidade de Medida
+          </p>
+          <p class="col-1 pl-5 ml-4">
+            Situação
+          </p>
+        </div>
+
+        <sdk-list-view [items]="produtos">
+          <ng-template sdkListViewItem let-produto>
+            <app-item-produto-empresa-base
+              [selecaoHabilitada]="selecaoHabilitada"
+              [produto]="produto"
+              [empresaBaseEhHolding]="empresaBaseEhHolding"
+              (checkedItemChanged)="selecioneTodos()">
+            </app-item-produto-empresa-base>
+          </ng-template>
+        </sdk-list-view>
+      </div>
+    </ng-template>
+
+    <div class="row" *ngIf="produtos?.length">
+      <div class="col-12">
+        <div class="paging">
+          <pager
+            [page]="filtro.pagina"
+            [total-pages]="filtro.totalDePaginas"
+            [records-per-page]="filtro.itensPorPagina"
+            (pagination)="pagine($event)">
+          </pager>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

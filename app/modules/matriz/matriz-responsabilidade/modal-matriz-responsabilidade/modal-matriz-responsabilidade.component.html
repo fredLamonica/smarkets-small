@@ -1,0 +1,275 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    {{ matriz?.idMatrizResponsabilidade ? 'Alterar ' : 'Incluir ' }} Matriz de Responsabilidade
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form" *ngIf="form">
+    <div class="row">
+      <div class="form-group required col-12">
+        <label>Categorias:</label>
+        <ng-select
+          bindLabel="nome"
+          [items]="categorias"
+          [hideSelected]="true"
+          formControlName="categoriasProduto"
+          [multiple]="true"
+          (remove)="onCategoriaRemovida($event)"
+          (add)="onCategoriaAdicionada($event)"
+          (clear)="onCategoriasClear()"
+          [class.invalid]="
+            form.controls.categoriasProduto.invalid && form.controls.categoriasProduto.dirty
+          "
+        >
+        </ng-select>
+        <span
+          class="invalid"
+          *ngIf="form.controls.categoriasProduto.invalid && form.controls.categoriasProduto.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+      <div
+        class="form-group col-12"
+        *ngIf="this.usuarioAtual.permissaoAtual.pessoaJuridica.integracaoSapHabilitada"
+      >
+        <label>Grupos de Compradores:</label>
+        <ng-select
+          bindLabel="nomeGrupoCompradores"
+          [items]="gruposCompradores"
+          [hideSelected]="true"
+          formControlName="gruposCompradores"
+          [multiple]="true"
+          (remove)="onGrupoCompradoresRemovido($event)"
+          (add)="onGrupoCompradoresAdicionado($event)"
+          (clear)="onGrupoCompradoresClear()"
+        >
+        </ng-select>
+      </div>
+      <div class="form-group required col-12">
+        <label>Tipos de Requisição:</label>
+        <ng-select
+          bindLabel="nome"
+          [items]="tiposRequisicao"
+          [hideSelected]="true"
+          formControlName="tiposRequisicao"
+          [multiple]="true"
+          [class.invalid]="
+            form.controls.tiposRequisicao.invalid && form.controls.tiposRequisicao.dirty
+          "
+          (remove)="onTipoRequisicaoRemovido($event)"
+          (add)="onTipoRequisicaoAdicionado($event)"
+          (clear)="onTipoRequisicaoClear()"
+        >
+        </ng-select>
+        <span
+          class="invalid"
+          *ngIf="form.controls.tiposRequisicao.invalid && form.controls.tiposRequisicao.dirty"
+        >
+          Preenchimento obrigatório
+        </span>
+      </div>
+      <div class="form-group required col-lg-4">
+        <label>Nº de Propostas (Min.):</label>
+        <input-number
+          formControlName="quantidadeMinimaPropostas"
+          [min]="0"
+          [class.invalid]="
+            form.controls.quantidadeMinimaPropostas.invalid &&
+            form.controls.quantidadeMinimaPropostas.dirty
+          "
+        >
+        </input-number>
+        <div
+          *ngIf="
+            form.controls.quantidadeMinimaPropostas.invalid &&
+            form.controls.quantidadeMinimaPropostas.dirty
+          "
+        >
+          <span class="invalid" *ngIf="form.controls.quantidadeMinimaPropostas.errors.min"
+            >Valor mínimo é 0</span
+          >
+          <span class="invalid" *ngIf="form.controls.quantidadeMinimaPropostas.errors.required"
+            >Preenchimento obrigatório</span
+          >
+        </div>
+      </div>
+      <div class="form-group required col-8">
+        <label class="font-weight-bold">Inserir novo SLA de Atendimento:</label>
+        <ng-select
+          #selectSla
+          name="idSlaItem"
+          [items]="slas"
+          [hideSelected]="true"
+          formControlName="slaItens"
+          [multiple]="true"
+          (remove)="onSlaRemovido($event)"
+          (add)="onSlaAdicionado($event)"
+          (clear)="onSlaClear()"
+          [class.invalid]="form.controls.slaItens.invalid && form.controls.slaItens.dirty"
+        >
+          <ng-template ng-label-tmp let-item="item" let-clear="clear">
+            <span class="ng-value-icon left" (click)="clear(item)">x</span>
+            <span class="ng-value-label"
+              >{{ item.classificacao.descricao }} - {{ item.tempo }}
+              {{ UnidadeMedidaTempo[item.unidadeMedidaTempo] }} (s)</span
+            >
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            {{ item.classificacao.descricao }} - {{ item.tempo }}
+            {{ UnidadeMedidaTempo[item.unidadeMedidaTempo] }} (s)
+          </ng-template>
+        </ng-select>
+        <span
+          class="invalid"
+          *ngIf="form.controls.slaItens.invalid && form.controls.slaItens.dirty"
+        >
+          Preenchimento obrigatório
+        </span>
+      </div>
+    </div>
+  </form>
+  <form [formGroup]="formAlcada" *ngIf="formAlcada">
+    <div class="row">
+      <div class="form-group required col mb-0">
+        <label class="font-weight-bold">Inserir novo Usuário:</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group required col-lg-5">
+        <label>Usuário:</label>
+        <ng-select
+          [hideSelected]="true"
+          formControlName="idUsuario"
+          [items]="usuarios"
+          bindValue="idUsuario"
+          bindLabel="pessoaFisica.nome"
+          [class.invalid]="
+            formAlcada.controls.idUsuario.invalid && formAlcada.controls.idUsuario.dirty
+          "
+        ></ng-select>
+        <span
+          class="invalid"
+          *ngIf="formAlcada.controls.idUsuario.invalid && formAlcada.controls.idUsuario.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+      <div class="form-group required col-lg-3">
+        <label>Alçada (Min.):</label>
+        <input
+          type="text"
+          class="form-control"
+          [textMask]="{ mask: maskValor, guide: false }"
+          type="text"
+          formControlName="alcadaMinima"
+          [class.invalid]="
+            formAlcada.controls.alcadaMinima.invalid && formAlcada.controls.alcadaMinima.dirty
+          "
+        />
+        <div
+          *ngIf="formAlcada.controls.alcadaMinima.invalid && formAlcada.controls.alcadaMinima.dirty"
+        >
+          <span class="invalid" *ngIf="formAlcada.controls.alcadaMinima.errors.min"
+            >Valor mínimo é 0</span
+          >
+          <span class="invalid" *ngIf="formAlcada.controls.alcadaMinima.errors.required"
+            >Preenchimento obrigatório</span
+          >
+        </div>
+      </div>
+      <div class="form-group required col-lg-3">
+        <label>Alçada (Max.):</label>
+        <input
+          type="text"
+          class="form-control"
+          [textMask]="{ mask: maskValor, guide: false }"
+          type="text"
+          formControlName="alcadaMaxima"
+          [class.invalid]="
+            formAlcada.controls.alcadaMaxima.invalid && formAlcada.controls.alcadaMaxima.dirty
+          "
+        />
+        <div
+          *ngIf="formAlcada.controls.alcadaMaxima.invalid && formAlcada.controls.alcadaMaxima.dirty"
+        >
+          <span class="invalid" *ngIf="formAlcada.controls.alcadaMaxima.errors.min"
+            >Valor mínimo é 0</span
+          >
+          <span class="invalid" *ngIf="formAlcada.controls.alcadaMaxima.errors.required"
+            >Preenchimento obrigatório</span
+          >
+        </div>
+      </div>
+      <div class="form-group col-lg-1">
+        <label></label>
+        <button
+          class="btn btn-icon"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Adicionar"
+          (click)="inserirAlcada()"
+        >
+          <i class="fas fa-plus-circle"></i>
+        </button>
+      </div>
+    </div>
+    <div class="row" *ngIf="form && form.controls.alcadas.value.length">
+      <div class="form-group col-12 mb-0">
+        <label>Usuários já inclusos:</label>
+      </div>
+      <ng-container *ngFor="let alcada of form.value.alcadas; let i = index">
+        <div class="form-group required col-lg-5">
+          <input
+            type="text"
+            class="form-control"
+            [value]="alcada.usuario.pessoaFisica.nome"
+            readonly
+          />
+        </div>
+        <div class="form-group col-lg-3">
+          <input
+            type="text"
+            class="form-control"
+            [value]="
+              (alcada.alcadaMinima ? alcada.alcadaMinima : 0)
+                | currency: 'BRL':'symbol':'1.2':'pt-BR'
+            "
+            readonly
+          />
+        </div>
+        <div class="form-group col-lg-3">
+          <input
+            type="text"
+            class="form-control"
+            [value]="
+              (alcada.alcadaMaxima ? alcada.alcadaMaxima : 0)
+                | currency: 'BRL':'symbol':'1.2':'pt-BR'
+            "
+            readonly
+          />
+        </div>
+        <div class="form-group col-lg-1">
+          <button
+            class="btn btn-icon pt-1"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Remover"
+            (click)="removerAlcada(i)"
+          >
+            <i class="far fa-trash-alt text-danger"></i>
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+    <i class="fas fa-ban"></i> Cancelar
+  </button>
+  <button type="button" (click)="salvar()" class="btn btn-primary">
+    <i class="fas fa-save"></i> Salvar
+  </button>
+</div>

@@ -1,0 +1,140 @@
+<div class="infinite-scroll" infinite-scroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
+  [scrollWindow]="false" (scrolled)="onScroll()">
+
+  <div class="header">
+    <div class="header-search row">
+      <div class="col-12 align-self-center">
+        <h3 class="mb-0 text-uppercase text-primary font-weight-bold">Fila de solicitação de cadastro</h3>
+      </div>
+      <div class="col-lg-8">
+        <input-busca label="O que você procura?"
+          placeholder="Buscar por número da solicitação, produto, categoria ou status" (buscar)="buscar($event)">
+        </input-busca>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-nav-tabs">
+    <ul class="nav nav-tabs row bounds" id="acompanhamentoTab" role="tablist">
+      <li class="nav-item col-lg-3">
+        <a class="nav-link nav-link-block" [class.active]="tabAtiva == 'solicitacoesProduto'"
+          id="solicitacoesProduto-tab" data-toggle="tab" href="#solicitacoesProduto" role="tab"
+          aria-controls="solicitacoesProduto" aria-selected="false">Produtos à Cadastrar</a>
+      </li>
+    </ul>
+
+    <div class="tab-content bounds" id="acompanhamentoTabContent">
+      <div class="tab-pane fade" [ngClass]="{ 'active show': tabAtiva == 'solicitacoesProduto' }"
+        id="solicitacoesProduto" role="tabpanel" aria-labelledby="solicitacoesProduto-tab">
+        <div #acompanhamentoSolicitacao *ngIf="tabAtiva == 'solicitacoesProduto'">
+          <div class="card card-tab-content">
+            <div class="card-header">
+              <a
+                (click)="usuarioPodeIncluirSolicitacao() && editarItem()"
+                class="btn btn-icon p-0"
+                [class.disabled]="!usuarioPodeIncluirSolicitacao()">
+                <i class="fas fa-plus-circle text-primary"></i>
+                <p class="d-inline-block mb-0 ml-2 align-top">Inserir nova solicitação de cadastro</p>
+              </a>
+            </div>
+            <div class="card-body">
+              <div class="container-fluid">
+                <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Nº da Solicitação:</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Categoria:</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Produto:</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Empresa:</label>
+                  </div>
+                  <div class="col-md-1">
+                    <label class="font-weight-bold">Status:</label>
+                  </div>
+                  <div class="col-md-3 ">
+                    <label class="font-weight-bold">Ações:</label>
+                  </div>
+                </div>
+
+                <div class="bg-white border-bottom row py-4" *ngIf="!solicitacoesProduto?.length">
+                  <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+                </div>
+
+                <!-- begin-list no-content mt-5-->
+                <div *ngFor="let solicitacaoProduto of solicitacoesProduto; let i = index;">
+                  <!-- begin-fields-->
+                  <div class="bg-white border-bottom row py-4 item-solicitacao"
+                    (click)="editarItem(solicitacaoProduto.idSolicitacaoProduto)">
+                    <div class="col-md-2 col-sm-3 align-self-center">
+                      <label for="" class="font-weight-bold d-block d-md-none">Nº da Solicitação:</label>
+                      <p class="mb-3 mb-lg-0"> {{ solicitacaoProduto.idSolicitacaoProduto }} </p>
+                    </div>
+                    <div class="col-md-2 col-sm-3 align-self-center">
+                      <label for="" class="font-weight-bold d-block d-md-none">Categoria:</label>
+                      <p class="mb-3 mb-lg-0"> {{ solicitacaoProduto.categoriaProduto?.nome }} </p>
+                    </div>
+                    <div class="col-md-2 col-sm-3 align-self-center">
+                      <label for="" class="font-weight-bold d-block d-md-none">Produto:</label>
+                      <p class="mb-3 mb-lg-0"> {{ solicitacaoProduto.descricao }} </p>
+                    </div>
+                    <div class="col-md-2 col-sm-3 align-self-center" data-toggle="tooltip" data-placement="bottom"
+                      title="{{ solicitacaoProduto.empresaSolicitante?.razaoSocial }}">
+                      <label for="" class="font-weight-bold d-block d-md-none">Empresa:</label>
+                      <p class="mb-3 mb-lg-0  text-truncate"> {{ solicitacaoProduto.empresaSolicitante?.razaoSocial }}
+                      </p>
+                    </div>
+                    <div class="col-md-1 col-sm-3 align-self-center">
+                      <label for="" class="font-weight-bold d-block d-md-none">Status:</label>
+                      <p class="mb-3 mb-lg-0 text-truncate"
+                        [class.text-danger]="SituacaoSolicitacaoProduto.Cancelado == solicitacaoProduto.situacao"
+                        data-toggle="tooltip" data-placement="bottom"
+                        title="{{ SituacaoSolicitacaoProduto[solicitacaoProduto.situacao] }}">
+                        {{ SituacaoSolicitacaoProduto[solicitacaoProduto.situacao] }} </p>
+                    </div>
+                    <div class="col-md-3 d-flex justify-content-between align-self-center">
+                      <button click-stop-propagation class="btn btn-icon col-1" data-toggle="tooltip"
+                        data-placement="bottom" title="comentarios" (click)="obterComentarios(i)">
+                        <i class="far fa-comments"></i>
+                      </button>
+                      <button click-stop-propagation class="btn btn-icon col-1" data-toggle="tooltip"
+                        data-placement="bottom" title="Editar"
+                        (click)="editarItem(solicitacaoProduto.idSolicitacaoProduto)">
+                        <i class="far fa-edit"></i>
+                      </button>
+                      <button click-stop-propagation *ngIf="exibeBtnAssumir(i)" class="btn btn-icon col-1"
+                        data-toggle="tooltip" data-placement="bottom" title="Assumir" (click)="onAssumirClick(i)">
+                        <i class="fas fa-user-check"></i>
+                      </button>
+                      <button click-stop-propagation *ngIf="exibeBtnAnalise(i)" class="btn btn-icon col-1"
+                        data-toggle="tooltip" data-placement="bottom" title="Aprovar" (click)="onAprovarClick(i)">
+                        <i class="far fa-check-circle text-primary"></i>
+                      </button>
+                      <button click-stop-propagation *ngIf="exibeBtnAnalise(i)" class="btn btn-icon col-1"
+                        data-toggle="tooltip" data-placement="bottom" title="Reprovar" (click)="onReprovarClick(i)">
+                        <i class="far fa-times-circle text-danger"></i>
+                      </button>
+                      <button click-stop-propagation *ngIf="exibeBtnCancelar(i)" class="btn btn-icon col-1"
+                        data-toggle="tooltip" data-placement="bottom" title="Cancelar" (click)="onCancelarClick(i)">
+                        <i class="far fa-trash-alt text-danger"></i>
+                      </button>
+                      <button click-stop-propagation class="btn btn-icon" data-toggle="tooltip" data-placement="bottom"
+                        title="Auditoria" (click)="auditar(solicitacaoProduto.idSolicitacaoProduto)">
+                        <i class="fa fa-history"></i>
+                      </button>
+                    </div>
+                    <!-- end-fields -->
+                  </div>
+                </div>
+                <!-- end-list -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

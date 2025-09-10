@@ -1,0 +1,89 @@
+<div class="validacao-de-conta">
+  <div class="titulo mb-2"> {{ titulo }} </div>
+  <div class="sub-titulo"> {{ subTitulo }} </div>
+  <form class="mt-4 mb-4" name="form" [formGroup]="form" novalidate>
+    <smk-card-funcionalidade border="none">
+      <div
+        class="container-codigo form-group d-flex flex-column align-items-center"
+        [class.email]="metodo === MetodoValidacaoDeConta.codigoEmail"
+        [class.pin]="metodo === MetodoValidacaoDeConta.codigoPin"
+        [class.codigo-recuperacao]="metodo === MetodoValidacaoDeConta.codigoRecuperacao">
+        <div>
+          <ng-container [ngSwitch]="metodo">
+            <input
+              *ngSwitchCase="MetodoValidacaoDeConta.codigoRecuperacao"
+              #codigo
+              type="text"
+              class="codigo form-control"
+              formControlName="codigo"
+              maxlength="8"
+              (keyup.enter)="form.valid && continue()" />
+            <input
+              *ngSwitchDefault
+              #codigo
+              type="text"
+              class="codigo form-control"
+              formControlName="codigo"
+              maxlength="6"
+              [textMask]="{ mask: configMascaraSomenteNumeros, guide: false }"
+              (keyup.enter)="form.valid && continue()" />
+          </ng-container>
+        </div>
+        <div
+          *ngIf="(form.get('codigo').dirty || form.get('codigo').touched) && form.get('codigo').invalid && form.get('codigo').errors.required"
+          class="error-message">
+          Campo obrigatório
+        </div>
+        <div
+          *ngIf="(form.get('codigo').dirty || form.get('codigo').touched) && form.get('codigo').invalid && form.get('codigo').errors.minlength"
+          class="error-message">
+          {{ 'O código deve ter ' + form.get('codigo').errors.minlength.requiredLength + ' caracteres'}}
+        </div>
+      </div>
+    </smk-card-funcionalidade>
+  </form>
+  <div class="acoes">
+    <button
+      class="continuar btn btn-primary btn-block py-2"
+      type="button"
+      [class.disabled]="form.invalid"
+      (click)="continue()">
+      Continue
+    </button>
+    <button
+      *ngIf="metodo === MetodoValidacaoDeConta.codigoEmail"
+      class="reenviar btn btn-outline-primary btn-block"
+      type="button"
+      (click)="reenviarEmailComCodigo()">
+      Reenviar código
+    </button>
+    <button
+      *ngIf="metodo === MetodoValidacaoDeConta.codigoPin"
+      class="codigo-recuperacao btn btn-outline-primary btn-block"
+      type="button"
+      (click)="alteraMetodoDeValidacao(MetodoValidacaoDeConta.codigoRecuperacao)">
+      Utilizar código de recuperação
+    </button>
+    <button
+      *ngIf="metodo === MetodoValidacaoDeConta.codigoRecuperacao"
+      class="codigo-pin btn btn-outline-primary btn-block"
+      type="button"
+      (click)="alteraMetodoDeValidacao(MetodoValidacaoDeConta.codigoPin)">
+      Utilizar código de autenticação
+    </button>
+    <button
+      *ngIf="usuarioUtilizaMfa"
+      class="outro-metodo btn btn-outline-primary btn-block"
+      type="button"
+      (click)="alteraMetodoDeValidacao(metodo === MetodoValidacaoDeConta.codigoEmail ? MetodoValidacaoDeConta.codigoPin : MetodoValidacaoDeConta.codigoEmail)">
+      Confirmar por outro método
+    </button>
+    <button
+      *ngIf="!novoEmail"
+      class="sem-acesso btn btn-outline-primary btn-block"
+      type="button"
+      (click)="semAcessoAoMetodoDeAutenticacao()">
+      Não tenho acesso ao método de autenticação
+    </button>
+  </div>
+</div>

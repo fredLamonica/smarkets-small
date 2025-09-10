@@ -1,0 +1,64 @@
+@import '../../../../styles.scss';
+
+:host {
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  width: 100%;
+}
+
+:host > div {
+  min-height: calc(100vh - #{$navbar-height});
+  /*min-height: -webkit-calc(100vh - #{$navbar-height});
+  min-height: -moz-calc(100vh - #{$navbar-height});*/
+  flex: 1;
+}
+
+.tc-1 {
+  background-color: white;
+  box-shadow: 0px 3px 6px #00000029;
+  -webkit-box-shadow: 0px 3px 6px #00000029;
+  z-index: 3;
+
+  &::ng-deep > div {
+    width: 100%;
+  }
+}
+.tc-2 {
+  background-color: #f0f0f0;
+  box-shadow: 2px -2px 7px #00000029;
+  -webkit-box-shadow: 2px -2px 7px #00000029;
+  z-index: 2;
+
+  &::ng-deep > div {
+    width: 100%;
+  }
+}
+.tc-3 {
+  background-color: #f8f8f8;
+  z-index: 1;
+
+  &::ng-deep > div {
+    width: 100%;
+  }
+}
+// Region Scroll Y
+.scroll-y {
+  height: 860px;
+  overflow-y: auto;
+  padding: auto;
+  // padding-right: 0.5rem !important;
+
+  scroll-behavior: auto !important;
+}
+
+::-webkit-scrollbar {
+  width: 0.5em !important;
+  scroll-behavior: auto !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey !important;
+  border-radius: 10px !important;
+}
+// END Region Scroll Y

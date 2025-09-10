@@ -1,0 +1,11 @@
+<div [formGroup]="form" [ngClass]="class" class="d-flex form-group">
+  <i *ngIf="iconIsVisible" class="fas fa-calendar-alt"></i>
+  <input
+    #input
+    [placeholder]="placeHolder"
+    type="text"
+    (focus)="setInputDate()"
+    (blur)="emitEvent()"
+    formControlName="valueInput"
+  />
+</div>

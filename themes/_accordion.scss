@@ -1,0 +1,118 @@
+.dropdown {
+  .dropdown-nav-menu {
+    ngb-accordion {
+      .card {
+        margin-bottom: 0;
+        box-shadow: none;
+
+        .card-header {
+          border: none;
+          padding: 0;
+
+          &:hover {
+            background: rgba(0,0,0,.05);
+          }
+
+          h5 {
+            button {
+              padding: 0.75rem 2.5rem 0.75rem 1rem;
+
+              color: $new-ux-smarkets-gray;
+              font-weight: bold;
+              font-size: 14px;
+              width: 100%;
+              height: 100%;
+              text-align: left;
+              
+              text-decoration: none;
+
+              &:hover, &:active {
+                text-decoration: none;
+                transform: none;
+              }
+
+              &:after {
+                float: right;
+                @include fa-icon;
+                @extend .fas;
+                font-size: 15px;
+                font-weight: 900;
+                content: fa-content($fa-var-chevron-up);
+                position: absolute;
+                right: 14px;
+                top: 16px;
+                color: $new-ux-smarkets-blue-light;
+              }
+
+              &.collapsed {
+                &:after {
+                  float: right;
+                  @include fa-icon;
+                  @extend .fas;
+                  font-size: 15px;
+                  font-weight: 900;
+                  content: fa-content($fa-var-chevron-down);
+                }
+              }
+            }
+          }
+         
+          i {
+            color: $new-ux-smarkets-gray;
+            margin-right: 15px;
+            font-size: 24px;
+            vertical-align: middle;
+            text-align: center;
+            min-width: 30px;
+            margin-right: 1.4rem;
+            font-size: 24px;
+          }
+        }
+
+        .card-body {
+          padding: 0;
+          a {
+            color: $new-ux-smarkets-gray;
+            font-size: 14px;
+            padding: 0.5rem 2rem 0.5rem 2.5rem;;
+            display: block;
+
+            &.disabled {
+              opacity: 1;
+            }
+                
+            i {
+              margin-right: 15px;
+              font-size: 14px;
+              vertical-align: middle;
+              text-align: center;
+              margin-right: .5rem;
+              font-size: 16px;
+            }
+                
+            &:hover {
+              background: rgba(0,0,0,.05);
+            }
+          }
+          
+          .itens {
+            padding-bottom: 0.5rem;
+          }
+
+          .sub-itens {
+            a {
+              color: $new-ux-smarkets-gray;
+              font-size: 14px;
+              padding: 0.5rem 2.5rem 0.5rem 2.5rem;
+              display: block;
+  
+              &:hover {
+                background: rgba(0,0,0,.05);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

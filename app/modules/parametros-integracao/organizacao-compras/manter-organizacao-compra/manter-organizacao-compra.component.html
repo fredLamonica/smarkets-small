@@ -1,0 +1,48 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">{{ organizacaoCompra?.idOrganizacaoCompra ? 'Alterar ' : 'Inserir ' }}
+    Organização de compra</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="form-group required col-lg-3">
+        <label>Código:</label>
+        <input type="text" class="form-control text-uppercase" formControlName="codigoOrganizacaoCompra"
+          [class.invalid]="form.controls.codigoOrganizacaoCompra.invalid && form.controls.codigoOrganizacaoCompra.dirty">
+        <div *ngIf="form.controls.codigoOrganizacaoCompra.invalid && form.controls.codigoOrganizacaoCompra.dirty">
+          <span class="invalid" *ngIf="form.controls.codigoOrganizacaoCompra.errors.maxlength">
+            Tamanho máximo 10 caracteres
+          </span>
+        </div>
+      </div>
+      <div class="form-group required col-lg-9">
+        <label>Descrição:</label>
+        <input type="text"  id="descricao" class="form-control" formControlName="descricaoOrganizacaoCompra"
+          [class.invalid]="form.controls.descricaoOrganizacaoCompra.invalid && form.controls.descricaoOrganizacaoCompra.dirty">
+        <div *ngIf="form.controls.descricaoOrganizacaoCompra.invalid && form.controls.descricaoOrganizacaoCompra.dirty">
+          <span class="invalid" *ngIf="form.controls.descricaoOrganizacaoCompra.errors.invalid">
+            Preenchimento obrigatório
+          </span>
+          <span class="invalid" *ngIf="form.controls.descricaoOrganizacaoCompra.errors.maxlength">
+            Tamanho máximo 200 caracteres
+          </span>
+        </div>
+      </div>
+      <div class="form-group col-12">
+        <div class="custom-control custom-checkbox" >
+          <input type="checkbox" class="custom-control-input" 
+          (change)="onDefaultChange($event)" id="default" [checked]="form?.controls?.codigoDefault?.value">
+          <label class="custom-control-label" for="default"> Definir como padrão </label>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary"><i class="fas fa-ban"></i>
+    Cancelar</button>
+  <button type="button" (click)="salvar()" class="btn btn-primary"><i class="fas fa-save"></i> Salvar</button>
+</div>

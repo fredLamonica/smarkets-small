@@ -1,0 +1,21 @@
+<div class="item-cnae px-4">
+  <div class="content">
+    <div class="col-10">
+      <a
+        class="font-weight-bold"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ cnae.identificador }} - {{ cnae.descricao }}"
+        >{{ cnae.identificador }} - {{ cnae.descricao }}</a
+      >
+    </div>
+
+    <div class="col-2 d-flex justify-content-end">
+      <div class="col-1 p-btn-timeline">
+        <span class="mouse-hover" (click)="excluirCnae(cnae)">
+          <i class="far fa-trash-alt text-danger"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

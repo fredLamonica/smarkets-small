@@ -1,0 +1,83 @@
+<div class="tab-content container-fluid">
+  <div class="form-row">
+    <form [formGroup]="form" class="form-group col-lg-2">
+      <label><strong>Periodo:</strong> </label>
+      <ng-select [items]="opcoesPeriodo" bindValue="index" bindLabel="name" formControlName="periodo"> </ng-select>
+    </form>
+    <div class="form-group col-lg-2">
+      <div class="row">
+        <div class="col-md-12">
+          <label for="filtrar"> </label>
+          <button class="btn btn-outline-primary btn-block mt-1 button-background none-box-shadow" (click)="obterIndicadores()"><i class="fas fa-filter"></i> Filtrar</button>
+        </div>
+      </div>
+    </div>
+    <form [formGroup]="form" class="form-group col-lg-2">
+      <label><strong>Relatório por periodo:</strong> </label>
+      <ng-select [items]="opcoesRelatorio" bindValue="index" bindLabel="name" formControlName="relatorio"> </ng-select>
+    </form>
+    <div class="form-group col-lg-2">
+      <div class="row">
+        <div class="col-md-12">
+          <label for="filtrar"> </label>
+          <button class="btn btn-outline-primary btn-block mt-1 button-background none-box-shadow" (click)="obtenhaRelatorios()"><i class="fas fa-download"></i> Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row padding-left">
+    <div class="card-title-pers larg-gmv">
+      <div class="card-center">
+        <h4 class="text-left card-title text-uppercase font-weight-bold">GMV</h4>
+      </div>
+    </div>
+    <div class="card-title-pers larg-user-forn">
+      <div class="card-center">
+        <h4 class="text-left card-title text-uppercase font-weight-bold">Usuários e Fornecedores</h4>
+      </div>
+    </div>
+  </div>
+  <div class="row pt-3">
+    <div class="col-6">
+      <smk-dashboard-gmv-fast [IndicadorGmvFast]="IndicadorGmvFast" [IsLoading]="isLoadingGmv"></smk-dashboard-gmv-fast>
+    </div>
+    <div class="col-3">
+      <smk-dashboard-usuario-fast [IndicadorUsuarioFast]="IndicadorUsuarioFast"  [IsLoading]="isLoadingUser" ></smk-dashboard-usuario-fast>
+    </div>
+    <div class="col-3">
+      <smk-dashboard-fornecedor-fast [IndicadorFornecedorFast]="IndicadorFornecedorFast" [IsLoading]="isLoadingForn"></smk-dashboard-fornecedor-fast>
+    </div>
+  </div>
+  <div class="form-row padding-left">
+    <div class="card-title-pers larg-trans">
+      <div class="card-center">
+        <h4 class="text-left card-title text-uppercase font-weight-bold">Transações</h4>
+      </div>
+    </div>
+    <form [formGroup]="form" class="form-group col-lg-4">
+      <label><strong>Cliente:</strong> </label>
+      <ng-select
+        [items]="Comprador"
+        bindValue="idTenant"
+        bindLabel="razaoSocial"
+        formControlName="cliente"
+        (change)="obtenhaCategoriasSkU()">
+      </ng-select>
+    </form>
+    <div class="form-group col">
+      <div class="row">
+        <div class="col-md-12">
+          <label for="filtrar"> </label>
+          <button class="btn btn-outline-primary btn-block mt-1 button-background none-box-shadow" (click)="obtenhaRelatorioCategorias()"><i class="fas fa-download"></i> Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <smk-dashboard-transaction-fast
+    [IndicadorCategoriasDto]="IndicadorCategoriaDto"
+    [IndicadorTransacoesSkuFast]="IndicadorTransacoesSkuFast"
+    [IsLoading]="isLoadingTrans"
+    [IsLoadingCategoria]="isLoadingTransCateg"
+  >
+  </smk-dashboard-transaction-fast>
+</div>

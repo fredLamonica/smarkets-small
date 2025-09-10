@@ -1,0 +1,67 @@
+<div [ngClass]="class" class="select-style">
+  <ng-select
+    [placeholder]="placeHolder"
+    [multiple]="IsMultiple"
+    [items]="items"
+    [closeOnSelect]="!IsMultiple"
+    [(ngModel)]="selected"
+    (ngModelChange)="showSelection()"
+  >
+    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+      <!-- multiselect area -->
+      <div *ngIf="index == 0 && IsMultiple" style="margin-bottom: 10px">Selecione 1 ou mais</div>
+      <ng-option
+        *ngIf="IsMultiple"
+        [ngClass]="{
+          'option-selected-text': item$.selected
+        }"
+      >
+        <input
+          id="item-{{ index }}"
+          type="checkbox"
+          [ngModel]="item$.selected"
+          value="{{ item.label }}"
+        />
+        {{ item.label }}
+      </ng-option>
+      <!-- simpleselect area -->
+      <ng-option
+        *ngIf="!IsMultiple"
+        [ngClass]="{
+          'option-selected-text': item$.selected,
+          'option-select-text': !item$.selected
+        }"
+      >
+        <!-- No selected -->
+        <span *ngIf="!item$.selected">
+          <i
+            class="fas fa-2x fa-circle back-checked-circle"
+            [ngStyle]="{ color: item.color ? item.color : '#588394' }"
+          ></i>
+          <i
+            class="fas fa-lg fa-circle checked-circle"
+            [ngStyle]="{ color: item.color ? item.color : 'white' }"
+          ></i>
+          <span style="position: relative; left: -0.5rem">
+            {{ item.label }}
+          </span>
+        </span>
+
+        <!-- selected -->
+        <span *ngIf="item$.selected">
+          <i
+            class="fas fa-2x fa-circle back-checked-circle"
+            [ngStyle]="{ color: item.color ? item.color : '#27ade4' }"
+          ></i>
+          <i
+            class="fas fa-lg fa-circle checked-circle"
+            [ngStyle]="{ color: item.color ? item.color : 'white' }"
+          ></i>
+          <span style="position: relative; left: -0.5rem">
+            {{ item.label }}
+          </span>
+        </span>
+      </ng-option>
+    </ng-template>
+  </ng-select>
+</div>

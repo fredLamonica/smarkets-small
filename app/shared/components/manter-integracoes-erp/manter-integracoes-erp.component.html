@@ -1,0 +1,74 @@
+<div *ngIf="[tipoIntegracaoProduto, tipoIntegracaoCondicaoPagamento].includes(tipoIntegracaoErp)" class="row mb-3">
+  <div class="col-md-4 col-lg-2">
+    <button
+      role=button
+      class="btn btn-block btn-primary"
+      (click)="abrirInclusaoDeIntegracoesErp()">
+      <i class="fas fa-plus"></i> Incluir
+    </button>
+  </div>
+  <div class="col-md-4 col-lg-2">
+    <button
+      role=button
+      class="btn btn-block btn-secondary"
+      [class.disabled]="!integracoesErpSelecionadas?.length || integracoesErpSelecionadas?.length > 1"
+      (click)="abrirEdicaoDaIntegracaoErp()">
+      <i class="far fa-edit"></i> Editar
+    </button>
+  </div>
+  <div class="col-md-4 col-lg-2">
+    <button
+      role=button
+      class="btn btn-block btn-danger"
+      [class.disabled]="!integracoesErpSelecionadas?.length"
+      (click)="abrirExclusaoDeIntegracoesErp()">
+      <i class="fas fa-trash-alt"></i> Remover
+    </button>
+  </div>
+</div>
+<div *ngIf="tipoIntegracaoErp === tipoIntegracaoFornecedor" class="container mb-4">
+  <div class="row d-flex justify-content-end">
+    <sdk-button
+      [label]="'Incluir'"
+      [icon]="'fa fa-2x fa-plus'"
+      (buttonClick)="abrirInclusaoDeIntegracoesErp()"
+      type="primary"
+      class="mr-4">
+    </sdk-button>
+    <sdk-button
+      [label]="'Editar'"
+      [icon]="'far fa-2x fa-edit'"
+      type="secondary"
+      (buttonClick)="abrirEdicaoDaIntegracaoErp()"
+      class="mr-4"
+      [disabled]="!integracoesErpSelecionadas?.length || integracoesErpSelecionadas?.length > 1">
+    </sdk-button>
+    <sdk-button
+      [label]="'Excluir'"
+      [icon]="'fa fa-2x fa-trash-alt'"
+      type="danger"
+      (buttonClick)="abrirExclusaoDeIntegracoesErp()"
+      class="mr-4"
+      [disabled]="!integracoesErpSelecionadas?.length">
+    </sdk-button>
+  </div>
+</div>
+<div [class.card]="tipoIntegracaoErp === tipoIntegracaoFornecedor">
+  <div [class.card-body]="tipoIntegracaoErp === tipoIntegracaoFornecedor">
+    <div class="row">
+      <div class="col">
+        <custom-table
+          classes="table-striped table-sm"
+          [settings]="tableSettings"
+          [source]="integracoesErp"
+          (select)="populeIntegracoesErpSelecionadas($event)">
+        </custom-table>
+        <pager
+          [page]="pagina"
+          [total-pages]="totalPaginas"
+          [records-per-page]="itensPorPagina"
+          (pagination)="onChangePaginacao($event)"></pager>
+      </div>
+    </div>
+  </div>
+</div>

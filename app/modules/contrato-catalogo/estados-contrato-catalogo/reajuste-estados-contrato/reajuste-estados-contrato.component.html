@@ -1,0 +1,75 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    Reajuste solicitado pelo fornecedor
+  </div>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="form-group col-lg-4 ">
+        <label for="nomeEstado">Estado</label>
+        <input
+          id="nomeEstado"
+          class="form-control"
+          type="text"
+          formControlName="nomeEstado"
+          readonly>
+      </div>
+      <div class="form-group col-lg-8 ">
+        <label for="uf">UF</label>
+        <input
+          id="uf"
+          class="form-control"
+          type="text"
+          formControlName="uf"
+          readonly>
+      </div>
+      <div class="form-group col-lg-3 ">
+        <label for="valorMinimoPedido">Valor Mínimo Pedido</label>
+        <input *ngIf="getValorMinimo()"
+          id="valorMinimoPedido"
+          class="form-control"
+          type="text"
+          formControlName="valorMinimoPedido"
+          readonly>
+        <div *ngIf="!getValorMinimo()">
+          <span class="form-control" readonly > {{formatCurrency(contratoCatalogoEstado.valorMinimoPedido) }}  <i class="fas fa-sync"></i> {{ formatCurrency(contratoCatalogoEstado.aprovacaoContratoCatalogoEstado?.valorMinimoPedido)}} </span>
+        </div>
+      </div>
+      <div class="form-group col-lg-4 ">
+        <label for="PrazoEntrega">Prazo de Entrega (Em dias)</label>
+        <input *ngIf="getPrazoEntrega()"
+          id="PrazoEntrega"
+          class="form-control"
+          type="text"
+          formControlName="PrazoEntrega"
+          readonly>
+        <div *ngIf="!getPrazoEntrega()">
+          <span class="form-control" readonly > {{contratoCatalogoEstado.prazoEntregaDias}}  <i class="fas fa-sync"></i> {{contratoCatalogoEstado.aprovacaoContratoCatalogoEstado?.prazoEntrega}} </span>
+        </div>
+      </div>
+      <div class="form-group col-lg-5 ">
+        <label for="situacaoContratoCatalogoItem"> Situação Estado </label>
+        <input *ngIf="getSituacao()"
+          class="form-control"
+          [value]="getSituacaoEstadoNome(contratoCatalogoEstado.situacao)"
+          readonly/>
+        <div *ngIf="!getSituacao()">
+          <span class="form-control" readonly > {{getSituacaoEstadoNome(contratoCatalogoEstado.situacao)}}  <i class="fas fa-sync"></i> {{getSituacaoEstadoNome(contratoCatalogoEstado.aprovacaoContratoCatalogoEstado?.situacaoEstado)}} </span>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="cancelar()">Cancelar</button>
+  <button type="button" class="btn btn-danger" (click)="recuse()"><i class="fas fa-times"></i> Recusar</button>
+  <button type="button" class="btn btn-primary" (click)="aprove()"> <i class="fas fa-check"></i> Aprovar</button>
+</div>

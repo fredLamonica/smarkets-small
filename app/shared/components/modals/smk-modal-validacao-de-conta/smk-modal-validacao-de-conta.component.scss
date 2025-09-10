@@ -1,0 +1,16 @@
+@import "src/themes/_smk-base.scss";
+
+$font-color: #212121;
+
+.modal-body {
+  color: $font-color;
+  font-size: 15px;
+}
+
+.modal-footer {
+  border-top: $smk-border;
+
+  .cancelar {
+    @include smk-button-outline($smk-primary-color, lg);
+  }
+}

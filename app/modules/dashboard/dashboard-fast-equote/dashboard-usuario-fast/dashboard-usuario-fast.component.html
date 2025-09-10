@@ -1,0 +1,30 @@
+<div class="col-pers">
+  <div class="card none-box-shadow">
+    <div class="card-body-user">
+      <div class="col-12 px-0 text-center">
+        <div class="col d-flex justify-content-center" *ngIf="IsLoading; else hasIndicadoresUserNovos">
+          <div class="spinner spinner-secondary"></div>
+        </div>
+        <ng-template #hasIndicadoresUserNovos>
+          <H1 class="align">{{ IndicadorUsuarioFast?.totalNovosUsuarios }}</H1>
+        </ng-template>
+        <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0">Novos Usuários</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-pers">
+  <div class="card none-box-shadow">
+    <div class="card-body-user">
+      <div class="col-12 px-0 text-center">
+        <div class="col d-flex justify-content-center" *ngIf="IsLoading; else hasIndicadoresUserTotal">
+          <div class="spinner spinner-secondary"></div>
+        </div>
+        <ng-template #hasIndicadoresUserTotal>
+          <H1 class="align">{{ IndicadorUsuarioFast?.totalUsuarios }}</H1>
+        </ng-template>
+        <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0">Total Usuários</span>
+      </div>
+    </div>
+  </div>
+</div>

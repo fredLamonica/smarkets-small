@@ -1,0 +1,183 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Editar item da requisição</div>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group col-lg-6">
+        <label for="produto"> Produto </label>
+        <input
+          class="form-control"
+          type="text"
+          name="produto"
+          [value]="requisicaoItem.produto.descricao"
+          disabled="true">
+      </div>
+      <div class="form-group col-lg-6">
+        <label> SLA de Atendimento </label>
+        <input
+          class="form-control"
+          type="text"
+          name="slaAtendimento"
+          [value]="requisicaoItem?.slaItem?.classificacao?.descricao + ' - SLA ' + requisicaoItem?.slaItem?.tempo + UnidadeMedidaTempo[requisicaoItem?.slaItem?.unidadeMedidaTempo] + '(s)'"
+          disabled="true">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group required col">
+        <label>Endereço:</label>
+        <ng-select
+          name="enderecoEntrega"
+          id="enderecoEntrega"
+          [items]="enderecos"
+          bindValue="idEndereco"
+          formControlName="idEnderecoEntrega"
+          placeholder="Selecionar endereço">
+          <ng-template ng-label-tmp let-item="item">
+            {{ item?.logradouro }}, {{ item?.numero }} - {{ item?.bairro }},
+            {{ item?.cidade?.nome }} -
+            {{ item?.cidade?.estado?.abreviacao }}, {{ item?.cep }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            {{ TipoEndereco[item?.tipo] }}<br />
+            <div>
+              <small>Logradouro: {{ item?.logradouro }}</small><br />
+            </div>
+            <div>
+              <small>Bairro: {{ item?.bairro }}</small>
+              <small style="margin-left: 10px;">Número: {{ item?.numero }}</small>
+            </div>
+            <div>
+              <small>Cidade: {{ item?.cidade?.nome }} - Estado:
+                {{ item?.cidade?.estado?.abreviacao }}</small>
+            </div>
+            <div>
+              <small>CEP:
+                {{ item?.cep }}</small>
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-lg-6">
+        <label for="idMarca"> Marca </label>
+        <ng-select
+          name="idMarca"
+          formControlName="idMarca"
+          loadingText="buscando...">
+          <ng-option [value]="marca.idMarca" *ngFor="let marca of marcas">{{ marca.nome }}</ng-option>
+        </ng-select>
+      </div>
+      <div class="form-group required col-lg-6">
+        <label>Centro Custo:</label>
+        <ng-select
+          id="idCentroCusto"
+          name="idCentroCusto"
+          [items]="centrosCusto"
+          bindLabel="descricao"
+          bindValue="idCentroCusto"
+          loadingText="buscando..."
+          [hideSelected]="true"
+          formControlName="idCentroCusto">
+        </ng-select>
+        <span class="invalid"
+          *ngIf="form.controls.idCentroCusto.invalid && form.controls.idCentroCusto.dirty">Preenchimento
+          obrigatório</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-lg-6">
+        <label>Cond. de Pagamento:</label>
+        <ng-select
+          id="idCondicaoPagamento"
+          name="idCondicaoPagamento"
+          loadingText="buscando..."
+          [hideSelected]="true"
+          formControlName="idCondicaoPagamento">
+          <ng-option *ngFor="let condicaoPagamento of condicoesPagamento"
+            [value]="condicaoPagamento.idCondicaoPagamento">
+            {{condicaoPagamento.descricao}}
+          </ng-option>
+        </ng-select>
+        <span class="invalid"
+          *ngIf="form.controls.idCondicaoPagamento.invalid && form.controls.idCondicaoPagamento.dirty">Preenchimento
+          obrigatório</span>
+      </div>
+    </div>
+    <div *ngIf="!requisicaoItem.entregaProgramada; else entregasProgramadas" class="form-row">
+
+      <div class="form-group required col-lg-6">
+        <label for="dataEntrega"> Data de Entrega: </label>
+        <input
+          name="dataEntrega"
+          id="dataEntrega"
+          type="date"
+          class="form-control"
+          formControlName="dataEntrega"
+          [min]="requisicaoItem.minDataEntrega">
+      </div>
+      <div class="form-group col-lg-4">
+        <label for="valor"> Valor de Referência </label>
+        <input
+          class="form-control"
+          [textMask]="{mask: maskValor, guide: false}"
+          type="text" name="valorReferencia"
+          formControlName="valorReferencia"
+          [class.invalid]="form.controls.valorReferencia.invalid && form.controls.valorReferencia.dirty"
+          (keyup)="onValorQuantidadeChanged()">
+      </div>
+      <div class="form-group required col-lg-4">
+        <label for="quantidade"> Quantidade </label>
+        <!--<input class="form-control" type="number" name="quantidade" [min]="0" formControlName="quantidade"
+            [class.invalid]="form.controls.quantidade.invalid && form.controls.quantidade.dirty">-->
+        <input-number
+          [class.invalid]="form.controls.quantidade.invalid && form.controls.quantidade.dirty"
+          formControlName="quantidade"
+          [min]="1"
+          [max]="999999999"
+          (change)="onValorQuantidadeChanged()">
+        </input-number>
+        <span
+          class="invalid"
+          *ngIf="form.controls.quantidade.invalid && (form.controls.quantidade.errors.required || form.controls.quantidade.errors.min) &&
+                form.controls.quantidade.dirty">
+          Preenchimento obrigatório e o valor deve ser maior que zero
+        </span>
+        <span
+          class="invalid"
+          *ngIf="form.controls.quantidade.invalid && form.controls.quantidade.errors.max && form.controls.quantidade.dirty">
+          O valor deve ser no máximo 1.000.000.000
+        </span>
+      </div>
+      <div class="form-group col-lg-4">
+        <label for="valorTotal"> Valor Total </label>
+        <input
+          type="text"
+          disabled="true"
+          [value]="valorTotal"
+          [textMask]="{mask: maskValor, guide: false}"
+          class="form-control" />
+      </div>
+    </div>
+    <ng-template #entregasProgramadas>
+      <app-manter-entregas-programadas
+        *ngIf="requisicaoItem.entregaProgramada"
+        [config]="configEntregaProgramada()"
+        (entregasChange)="atualizeProgramacaoDeEntregas($event)">
+      </app-manter-entregas-programadas>
+    </ng-template>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="fechar()">Fechar</button>
+  <button type="button" class="btn btn-outline-primary" (click)="salvar()" *ngIf="isEdicaoHabilitada()">
+    Salvar
+  </button>
+  <button type="button" class="btn btn-outline-primary" (click)="enviarItemAprovacao()" *ngIf="!isEdicaoHabilitada()">
+    Enviar para Aprovação
+  </button>
+</div>

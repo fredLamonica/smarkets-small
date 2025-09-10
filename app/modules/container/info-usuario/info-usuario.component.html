@@ -1,0 +1,92 @@
+<div class="user nav-item dropdown">
+  <a
+    class="nav-link dropdown-toggle"
+    data-toggle="dropdown"
+    href="#"
+    role="button"
+    aria-haspopup="true"
+    aria-expanded="false"
+    (click)="listarPermissoes()">
+    <i class="fas fa-user-cog"></i>
+  </a>
+  <div class="badge-nav"><i class="fas fa-chevron-up"></i></div>
+  <div class="dropdown-menu dropdown-nav-menu dropdown-menu-right cursor-default">
+    <div class="row">
+      <div class="col-2  mt-0">
+        <div class="info-usuario  mt-0 pt-0 ">
+          <i class=" far fa-user info-usuario-icon"></i>
+        </div>
+      </div>
+      <div class="col mt-0">
+        <p
+          class="font-weight-bold text-truncate  align-self-end mb-0"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="{{ usuario?.pessoaFisica?.nome }}">
+          {{ usuario?.pessoaFisica?.nome }}
+        </p>
+        <p
+          class=""
+          data-toggle=" tooltip"
+          data-placement="bottom"
+          title="{{ PerfilUsuario[usuario?.permissaoAtual?.perfil] }}">
+          {{ PerfilUsuario[usuario?.permissaoAtual?.perfil] }}
+        </p>
+      </div>
+
+      <div class="col-8 mt-3">
+        <button
+          class="configurar-perfil btn btn-outline-primary btn-block"
+          type="button"
+          title="Configurar Perfil"
+          (click)="configurarPerfil()">
+          Configurar perfil
+        </button>
+      </div>
+      <div class="col pl-0 mt-3">
+        <button class="sair btn btn-outline-danger btn-block" type="button" title="Sair" (click)="signOut()">
+          <i class="fas fa-sign-out-alt mr-1"></i>
+          Sair
+        </button>
+      </div>
+    </div>
+
+    <div class="permissoes row">
+      <div
+        class="permissao col-12 mt-3 py-2"
+        role="button"
+        *ngFor="let permissao of permissoes"
+        [class.active]="usuario?.permissaoAtual?.idTenant == permissao?.idTenant"
+        (click)="trocarPermissao(permissao)">
+        <p
+          class="font-weight-bold text-truncate text-uppercase text-right mb-0"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="{{
+            permissao?.pessoaJuridica?.nomeFantasia
+              ? permissao?.pessoaJuridica?.nomeFantasia
+              : permissao?.pessoaJuridica?.razaoSocial
+          }}">
+          {{
+          permissao?.pessoaJuridica?.nomeFantasia
+          ? permissao?.pessoaJuridica?.nomeFantasia
+          : permissao?.pessoaJuridica?.razaoSocial
+          }}
+        </p>
+        <p
+          class="text-right mb-0"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="{{ permissao?.pessoaJuridica?.cnpj }}">
+          {{ permissao?.pessoaJuridica?.cnpj }}
+        </p>
+        <p
+          class="text-right mb-0"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="{{ PerfilUsuario[permissao?.perfil] }}">
+          {{ getProfileEnum(permissao) }}
+        </p>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,17 @@
+<div class="row justify-content-center">
+  <div class="col">
+    <div class="chart" *ngIf="labels && data" [style.height]="height">
+      <canvas
+        baseChart
+        [data]="data"
+        [labels]="labels"
+        [options]="areaChartOptions"
+        [chartType]="type"
+        [colors]="cores"
+        [legend]="legenda"
+        [datasets]="datasets"
+      >
+      </canvas>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,233 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Associar a um Produto Existente</div>
+  <button type="button" class="close" aria-label="Close" (click)="fechar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body" *ngIf="requisicao">
+  <div class="row align-items-center mb-2">
+    <div class="col-12">
+      <div
+        class="bg-white border-bottom row py-2"
+        *ngFor="let requisicaoItem of requisicao?.itens; let requisicaoItemIndex = index"
+      >
+        <div class="col-md-2 align-self-center mb-3 mb-lg-0">
+          <img
+            class="img-fluid"
+            [src]="
+              requisicaoItem?.produto?.imagens?.length
+                ? requisicaoItem?.produto?.imagens[0]?.url
+                : './../../../../assets/img/produtos/default.png'
+            "
+            alt="{{ requisicaoItem?.produto?.descricao }}"
+          />
+        </div>
+        <div class="col-md-10 align-self-center">
+          <div class="row align-items-center mb-2">
+            <h5 class="col-xl-10 text-primary font-weight-bold">
+              {{ requisicaoItem.produto?.descricao }}
+            </h5>
+            <div class="col-6 col-xl-1" *ngIf="requisicaoItem.idRequisicaoItem">
+              <button
+                id="btn{{ requisicaoItemIndex }}"
+                name="btn{{ requisicaoItemIndex }}"
+                (click)="excluirItemRequisicao(requisicaoItemIndex)"
+                class="btn btn-icon text-danger float-right pr-0"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Remover"
+              >
+                <i class="far fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="row align-items-center">
+            <div class="form-group col-lg-4">
+              <label>Marca:</label>
+              <ng-select
+                class="font-weight-bold full-width"
+                [items]="marcas$ | async"
+                bindLabel="nome"
+                bindValue="idMarca"
+                [loading]="marcasLoading"
+                [loadingText]="'buscando...'"
+                placeholder="Sem preferência"
+                [(ngModel)]="requisicaoItem.idMarca"
+                [disabled]="itemDesabilitado(requisicaoItem)"
+                (open)="openMarcas()"
+              >
+              </ng-select>
+            </div>
+
+            <div class="form-group required col-lg-8">
+              <label>Endereço:</label>
+              <ng-select
+                class="font-weight-bold full-width"
+                [items]="enderecos$ | async"
+                bindValue="idEndereco"
+                [loading]="enderecosLoading"
+                [loadingText]="'buscando...'"
+                [(ngModel)]="requisicaoItem.idEnderecoEntrega"
+                placeholder="Selecionar endereço"
+                [disabled]="true"
+              >
+                <ng-template ng-label-tmp let-item="item">
+                  {{ item?.logradouro }}, {{ item?.numero }} - {{ item?.bairro }},
+                  {{ item?.cidade?.nome }} - {{ item?.cidade?.estado?.abreviacao }}, {{ item?.cep }}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                  {{ TipoEndereco[item?.tipo] }}<br />
+                  <div>
+                    <small>Logradouro: {{ item?.logradouro }}</small
+                    ><br />
+                  </div>
+                  <div>
+                    <small>Bairro: {{ item?.bairro }}</small>
+                    <small style="margin-left: 10px">Número: {{ item?.numero }}</small>
+                  </div>
+                  <div>
+                    <small
+                      >Cidade: {{ item?.cidade?.nome }} - Estado:
+                      {{ item?.cidade?.estado?.abreviacao }}</small
+                    >
+                  </div>
+                  <div>
+                    <small>CEP: {{ item?.cep }}</small>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </div>
+
+            <div class="form-group required col-lg-4">
+              <label>Centro de Custo:</label>
+              <ng-select
+                class="font-weight-bold full-width"
+                [items]="centrosCusto$ | async"
+                bindLabel="descricao"
+                bindValue="idCentroCusto"
+                [loading]="centrosCustoLoading"
+                [loadingText]="'buscando...'"
+                [(ngModel)]="requisicaoItem.idCentroCusto"
+                [disabled]="itemDesabilitado(requisicaoItem)"
+              >
+              </ng-select>
+            </div>
+
+            <div class="form-group required col-lg-4">
+              <label>Tipo de requisição:</label>
+              <ng-select
+                class="font-weight-bold full-width"
+                [items]="tiposRequisicao$ | async"
+                bindLabel="nome"
+                bindValue="idTipoRequisicao"
+                [loading]="tiposRequisicaoLoading"
+                [loadingText]="'buscando...'"
+                [ngModel]="requisicaoItem.idTipoRequisicao"
+                (ngModelChange)="onChangeTipoRequisicao($event, requisicaoItemIndex)"
+                [disabled]="itemDesabilitado(requisicaoItem)"
+              >
+              </ng-select>
+            </div>
+
+            <div class="form-group required col-lg-4">
+              <label>Classificação:</label>
+              <ng-select
+                class="font-weight-bold full-width"
+                [items]="slaItens"
+                bindValue="idSlaItem"
+                [(ngModel)]="requisicaoItem.idSlaItem"
+                [disabled]="itemDesabilitadoClassificacao(requisicaoItem)"
+                [disabled]="!requisicaoItem.idTipoRequisicao"
+              >
+                <ng-template ng-label-tmp let-item="item">
+                  {{ item?.classificacao?.descricao }} - SLA {{ item?.tempo }}
+                  {{ UnidadeMedidaTempo[item?.unidadeMedidaTempo] }}(s)
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                  {{ item?.classificacao?.descricao }} - SLA {{ item?.tempo }}
+                  {{ UnidadeMedidaTempo[item?.unidadeMedidaTempo] }}(s)
+                </ng-template>
+              </ng-select>
+            </div>
+
+            <div class="form-group required col-lg-4">
+              <label for="dataEntrega"> Data de Entrega: </label>
+              <input
+                name="data{{ requisicaoItemIndex }}"
+                id="data{{ requisicaoItemIndex }}"
+                type="date"
+                class="form-control font-weight-bold"
+                [(ngModel)]="requisicaoItem.dataEntrega"
+                [min]="requisicaoItem.minDataEntrega"
+                [disabled]="itemDesabilitado(requisicaoItem)"
+              />
+            </div>
+
+            <div class="form-group col-lg-4">
+              <label>Cond. de Pagamento:</label>
+              <ng-select
+                class="font-weight-bold full-width"
+                [items]="condicoesPagamento$ | async"
+                bindLabel="descricao"
+                bindValue="idCondicaoPagamento"
+                [loading]="condicoesPagamentoLoading"
+                [loadingText]="'buscando...'"
+                [(ngModel)]="requisicaoItem.idCondicaoPagamento"
+                [disabled]="itemDesabilitado(requisicaoItem)"
+              >
+              </ng-select>
+            </div>
+
+            <div class="form-group required col-lg-4">
+              <label for="moeda">Moeda:</label>
+              <select-moeda [(moeda)]="requisicaoItem.moeda" read-only="true"></select-moeda>
+            </div>
+
+            <div class="form-group col-lg-4">
+              <label>Quantidade:</label>
+              <input-number
+                class="font-weight-bold"
+                [(ngModel)]="requisicaoItem.quantidade"
+                [min]="0"
+                [max]="max"
+                [disabled]="itemDesabilitado(requisicaoItem)"
+                [allowDecimal]="requisicaoItem?.produto?.unidadeMedida?.permiteQuantidadeFracionada"
+                (ngModelChange)="OnQuantidadeChange($event, requisicaoItemIndex)"
+              >
+              </input-number>
+            </div>
+
+            <div class="form-group col-lg-4">
+              <label>Valor de referência:</label>
+              <input-number
+                class="font-weight-bold"
+                [(ngModel)]="requisicaoItem.valorReferencia"
+                [min]="min(requisicaoItem)"
+                [max]="max(requisicaoItem)"
+                [allowDecimal]="true"
+                [disabled]="itemDesabilitado(requisicaoItem)"
+                (ngModelChange)="onModelChange($event, requisicaoItemIndex)"
+              >
+              </input-number>
+            </div>
+
+            <div class="form-group col-6 col-lg-4">
+              <label>Valor total:</label>
+              <h5 class="text-indigo-light font-weight-bold mt-2">
+                {{
+                  requisicaoItem?.valorReferencia * requisicaoItem?.quantidade
+                    | customCurrency: requisicaoItem.moeda:null:'symbol'
+                }}
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer px-0">
+  <button type="button" class="btn btn-outline-secondary" (click)="fechar()">Voltar</button>
+  <button type="button" class="btn btn-outline-primary m-2" (click)="confirmar()">Salvar</button>
+</div>

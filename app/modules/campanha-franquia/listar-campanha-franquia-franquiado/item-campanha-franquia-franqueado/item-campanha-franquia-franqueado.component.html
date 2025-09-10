@@ -1,0 +1,62 @@
+<div class="col-12 item-campanha-franquia-franqueado">
+  <div class="row">
+    <sdk-item-card
+      (clickEmitter)="cardClicked()"
+      [iconClass]="'fas fa-bullhorn'"
+      [showStatusBar]="false"
+      [hasMarginBottom]="true"
+      [borderColor]="'none'"
+      [borderWidth]="'1px'"
+      [ngClass]="getClass()"
+    >
+      <div class="d-flex w-100 justify-content-around align-items-center">
+        <div class="col-1 pl-4">
+          <a>{{ franchiseCampaign.idCampanhaFranquia }}</a>
+        </div>
+
+        <div class="col-3 pl-4 crop-text-2">
+          <a data-toggle="tooltip" data-placement="bottom" title="{{ franchiseCampaign.titulo }}">{{
+            franchiseCampaign.titulo
+          }}</a>
+        </div>
+
+        <div class="col-2 pl-4 crop-text-2">
+          <a
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ franchiseCampaign.dataInicio | date: 'dd/MM/yyyy' }}"
+            >{{ franchiseCampaign.dataInicio | date: 'dd/MM/yyyy' }}</a
+          >
+        </div>
+
+        <div class="col-2 pl-4 crop-text-2">
+          <a
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ franchiseCampaign.dataFim | date: 'dd/MM/yyyy' }}"
+            >{{ franchiseCampaign.dataFim | date: 'dd/MM/yyyy' }}</a
+          >
+        </div>
+
+        <div class="col-2 pl-4 crop-text-2">
+          <a
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ franchiseCampaign.dataLimiteAceite | date: 'dd/MM/yyyy' }}"
+            >{{ franchiseCampaign.dataLimiteAceite | date: 'dd/MM/yyyy' }}</a
+          >
+        </div>
+
+        <div class="col-2 pl-4">
+          <a
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ franchiseCampaign.status }}"
+            class="status-text"
+            >{{ franchiseCampaign.status }}</a
+          >
+        </div>    
+      </div>
+    </sdk-item-card>
+  </div>
+</div>

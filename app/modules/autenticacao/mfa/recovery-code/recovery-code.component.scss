@@ -1,0 +1,13 @@
+.mfa-recovery-code {
+  .title {
+    font-size: 18px;
+  }
+
+  .recovery-code {
+    max-width: 166px;
+
+    .recovery-code-input {
+      text-align: center;
+    }
+  }
+}

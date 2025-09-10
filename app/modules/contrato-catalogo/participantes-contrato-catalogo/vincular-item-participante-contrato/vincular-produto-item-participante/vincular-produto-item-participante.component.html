@@ -1,0 +1,51 @@
+  <div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">Selecionar produto</div>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <form class="col-12" [formGroup]="form">
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="descricao" translate> Produto </label>
+            <input class="form-control" type="text" name="descricao" formControlName="descricao" />
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="col-md-4 col-xl-2">
+            <button role="button" class="btn btn-block btn-primary" (click)="buscar()">
+              <i class="fas fa-search"></i> Pesquisar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+            <custom-table
+              classes="table-striped table-sm"
+              [settings]="settings"
+              [source]="itens"
+              (select)="selecao($event)"
+              (sort)="ordenar($event)"
+            ></custom-table>
+            <pager
+              size="sm"
+              [page]="pagina"
+              [total-pages]="totalPaginas"
+              [records-per-page]="registrosPorPagina"
+              (pagination)="paginacao($event)"
+            ></pager>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Fechar</button>
+    <button type="button" class="btn btn-outline-primary"   [disabled]="!selecionado" (click)="adicionar()"> Adicionar </button>
+  </div>

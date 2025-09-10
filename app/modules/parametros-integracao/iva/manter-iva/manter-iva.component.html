@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">{{ iva?.idIva ? 'Alterar ' : 'Inserir' }} Iva</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="form-group required col-lg-3">
+        <label>Código (sigla ERP):</label>
+        <input type="text" class="form-control" formControlName="codigoIva"
+          [class.invalid]="form.controls.codigoIva.invalid && form.controls.codigoIva.dirty">
+        <div *ngIf="form.controls.codigoIva.invalid && form.controls.codigoIva.dirty">
+          <span class="invalid" *ngIf="form.controls.codigoIva.errors.invalid">
+            Preenchimento obrigatório
+          </span>
+          <span class="invalid" *ngIf="form.controls.codigoIva.errors.maxlength">
+            Tamanho máximo 10 caracteres
+          </span>
+        </div>
+      </div>
+      <div class="form-group required col-lg-9">
+        <label>Descrição:</label>
+        <input type="text" class="form-control" formControlName="descricaoIva"
+          [class.invalid]="form.controls.descricaoIva.invalid && form.controls.descricaoIva.dirty">
+        <div *ngIf="form.controls.descricaoIva.invalid && form.controls.descricaoIva.dirty">
+          <span class="invalid" *ngIf="form.controls.descricaoIva.errors.invalid">
+            Preenchimento obrigatório
+          </span>
+          <span class="invalid" *ngIf="form.controls.descricaoIva.errors.maxlength">
+            Tamanho máximo 200 caracteres
+          </span>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary"><i class="fas fa-ban"></i>
+    Cancelar</button>
+  <button type="button" (click)="salvar()" class="btn btn-primary"><i class="fas fa-save"></i> Salvar</button>
+</div>

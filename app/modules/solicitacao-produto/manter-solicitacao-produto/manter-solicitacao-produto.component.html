@@ -1,0 +1,228 @@
+<div id="solicitacaoProcesso">
+  <div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">Solicite novo cadastro</div>
+    <button type="button" class="close" aria-label="Close" (click)="fechar()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="form-group col-lg-6">
+          <label for="codigo"> Código </label>
+          <input class="form-control" type="text" name="codigo" formControlName="codigo">
+        </div>
+        <div class="form-group required col-lg-6">
+          <label for="idCategoriaProduto"> Categoria do Produto </label>
+          <input-tree
+            value-property="nome"
+            key-property="idCategoriaProduto"
+            children-property="filhos"
+            [source]="categorias"
+            [class.invalid]="form.controls.idCategoriaProduto.invalid && form.controls.idCategoriaProduto.dirty"
+            name="idCategoriaProduto"
+            formControlName="idCategoriaProduto"
+            (empty-tree)="naoExistemCategoriasDisponiveis($event)"
+            [is-disabled]="(!this.usuarioSolicitante && !this.usuarioGestor && !this.usuarioCadastrador) || this.bloquearFormulario">
+          </input-tree>
+          <span class="invalid"
+            *ngIf="form.controls.idCategoriaProduto.invalid && form.controls.idCategoriaProduto.dirty">
+            Preenchimento obrigatório </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group required col-lg-6">
+          <label for="tipoProduto"> Tipo de Produto </label>
+          <select
+            id="tipoProduto"
+            class="form-control"
+            [class.invalid]="form.controls.tipoProduto.invalid && form.controls.tipoProduto.dirty"
+            name="tipoProduto"
+            formControlName="tipoProduto">
+            <option [ngValue]="null"></option>
+            <option [ngValue]="TipoProduto.Produto">Produto</option>
+            <option [ngValue]="TipoProduto.Servico">Serviço</option>
+          </select>
+          <span class="invalid" *ngIf="form.controls.tipoProduto.invalid && form.controls.tipoProduto.dirty">
+            Preenchimento obrigatório </span>
+        </div>
+        <div class="form-group required col-lg-6">
+          <label for="idUnidadeMedida"> Unidade de medida </label>
+          <ng-select
+            name="idUnidadeMedida"
+            formControlName="idUnidadeMedida">
+            <ng-option *ngFor="let unidade of unidadesMedida;" [value]="unidade.idUnidadeMedida">{{unidade.descricao}} -
+              {{unidade.sigla}}</ng-option>
+          </ng-select>
+          <span class="invalid" *ngIf="form.controls.idUnidadeMedida.invalid && form.controls.idUnidadeMedida.dirty">
+            Preenchimento obrigatório </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-6">
+          <label for="contasContabeis" name="contasContabeis"> Contas Contábeis </label>
+          <ng-select
+            [multiple]="true"
+            placeholder="Selecionar Contas"
+            formControlName="contasContabeis">
+            <ng-option *ngFor="let conta of contasContabeis;" [value]="conta.idContaContabil">
+              {{conta.idContaContabil}} - {{conta.descricao}}
+            </ng-option>
+          </ng-select>
+        </div>
+        <div class="form-group col-lg-6">
+          <label for="contaSugerida"> Sugestão de Contas Contábeis </label>
+          <input class="form-control" type="text" name="contaSugerida" formControlName="contaSugerida">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-6">
+          <label for="marcas" name="marcas"> Marcas </label>
+          <ng-select
+            [multiple]="true"
+            placeholder="Selecionar marcas"
+            formControlName="marcas"
+            class="custom">
+            <ng-option *ngFor="let marca of marcas;" [value]="marca.idMarca">
+              {{marca.idMarca}} - {{marca.nome}}
+            </ng-option>
+          </ng-select>
+        </div>
+        <div class="form-group col-lg-6">
+          <label for="marcaSugerida"> Sugestão de Marcas </label>
+          <input class="form-control" type="text" name="marcaSugerida" formControlName="marcaSugerida">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group required col-lg-12">
+          <label for="descricao"> Descrição Simplificada </label>
+          <input
+            class="form-control"
+            [class.invalid]="form.controls.descricao.invalid && form.controls.descricao.dirty"
+            type="text"
+            name="descricao"
+            formControlName="descricao"
+            maxlength="40">
+          <span class="invalid" *ngIf="form.controls.descricao.invalid && form.controls.descricao.dirty">
+            Preenchimento obrigatório </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-12">
+          <label for="descricaoCompleta"> Descrição Completa </label>
+          <textarea
+            class="form-control"
+            rows="3"
+            name="descricaoCompleta"
+            formControlName="descricaoCompleta"
+            maxlength="1400"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-3">
+          <label for="codigoNcm"> Código de Controle NCM </label>
+          <input class="form-control" type="text" name="codigoNcm" formControlName="codigoNcm">
+        </div>
+        <div class="form-group form-group required col-lg-3">
+          <label for="moeda"> Moeda </label>
+          <ng-select
+            name="moeda"
+            id="moeda"
+            formControlName="moeda"
+            [class.invalid]="form.controls.moeda.invalid && form.controls.moeda.dirty">
+            <ng-option [value]="Moeda.Real">Real</ng-option>
+          </ng-select>
+          <span class="invalid" *ngIf="form.controls.moeda.invalid && form.controls.moeda.dirty">
+            Preenchimento obrigatório </span>
+        </div>
+        <div class="form-group col-lg-3">
+          <label for="valorReferencia"> Valor de Referência </label>
+          <input class="form-control"
+            [class.invalid]="form.controls.valorReferencia.invalid && form.controls.valorReferencia.dirty"
+            [textMask]="{mask: maskValor, guide: false}" type="text" name="valorReferencia" [min]="0"
+            [max]="999999999.9999" formControlName="valorReferencia">
+          <span class="invalid" *ngIf="form.controls.valorReferencia.invalid && form.controls.valorReferencia.dirty">
+            Preenchimento obrigatório </span>
+          <span class="invalid"
+            *ngIf="form.controls.valorReferencia.invalid && form.controls.valorReferencia.errors.min && form.controls.valorReferencia.dirty">
+            O valor de referência deve ser maior que zero
+          </span>
+          <span class="invalid"
+            *ngIf="form.controls.valorReferencia.invalid && form.controls.valorReferencia.errors.max && form.controls.valorReferencia.dirty">
+            O valor de referência deve ser no máximo <br> R$ 999.999.999.999,99.
+          </span>
+        </div>
+        <div class="form-group col-lg-3">
+          <label for="consumoMedio"> Consumo Médio </label>
+          <input class="form-control"
+            [class.invalid]="form.controls.consumoMedio.invalid && form.controls.consumoMedio.dirty"
+            [textMask]="{mask: maskValor, guide: false}"
+            type="text"
+            name="consumoMedio"
+            [min]="0"
+            [max]="999999999.9999"
+            formControlName="consumoMedio">
+          <span class="invalid" *ngIf="form.controls.consumoMedio.invalid && form.controls.consumoMedio.dirty">
+            Preenchimento obrigatório </span>
+          <span class="invalid"
+            *ngIf="form.controls.consumoMedio.invalid && form.controls.consumoMedio.errors.min && form.controls.consumoMedio.dirty">
+            O consumo médio deve ser maior que zero
+          </span>
+          <span class="invalid"
+            *ngIf="form.controls.consumoMedio.invalid && form.controls.consumoMedio.errors.max && form.controls.consumoMedio.dirty">
+            O consumo médio deve ser no máximo <br> R$ 999.999.999.999,99.
+          </span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-lg-12">
+          <label>Imagens do Produto</label>
+          <input-file [multiple]="true" accept=".png,.jpeg,.jpg" (select)="imagensSelecionadas($event)"></input-file>
+          <small>Preferência para imagens em alta definição e com fundo transparente (arquivo.PNG).</small>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-2" *ngFor="let imagem of form.controls.imagens.value; let i = index;">
+          <img class="d-block img-fluid img-thumbnail" style="max-height: 150px;" [src]="imagem.url"
+            alt="{{ imagem.nome }}">
+          <button class="btn btn-danger position-absolute"
+            style="top: 0; left: 0; margin-left: 1.5rem; margin-top: 0.5rem;" (click)="removerImagem(i)"><i
+              class="fas fa-trash-alt"></i></button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-12">
+          <label for="referenciaExterna"> Link do Produto Existente em Outros Sistemas de Comércio Eletrônico </label>
+          <input class="form-control" type="text" name="referenciaExterna" formControlName="referenciaExterna">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-12" *ngIf="isInsert()">
+          <label for="comentario"> Comentário </label>
+          <textarea class="form-control" rows="3" name="comentario" formControlName="comentario"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group required col-lg-6">
+          <label for="idSlaSolicitacao"> SLA </label>
+          <ng-select
+            name="idSlaSolicitacao"
+            formControlName="idSlaSolicitacao">
+            <ng-option *ngFor="let sla of listaDeSlas;" [value]="sla.idSlaSolicitacao">
+              {{sla.descricaoTempo}}
+            </ng-option>
+          </ng-select>
+          <span class="invalid" *ngIf="form.controls.idSlaSolicitacao.invalid && form.controls.idSlaSolicitacao.dirty">
+            Preenchimento obrigatório </span>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="fechar()">Fechar</button>
+    <button type="button" class="btn btn-outline-primary" *ngIf="exibeBtnEnviar()"
+      (click)="salvar()">{{isInsert() ? 'Enviar' : 'Atualizar'}} Solicitação</button>
+  </div>
+</div>

@@ -1,0 +1,436 @@
+<div class="header">
+  <div class="header-search row">
+    <div class="col-12 align-self-center">
+      <h3 class="mb-0 text-uppercase text-primary font-weight-bold">
+        {{ this.form.controls.idQuestionarioGestaoFornecedor?.value ? 'Editar' : 'Novo' }}
+        Questionário
+      </h3>
+    </div>
+  </div>
+</div>
+
+<div class="custom-nav-tabs">
+  <ul class="nav nav-tabs row bounds" id="configuracaoTab" role="tablist">
+    <li class="nav-item col-lg-3">
+      <a
+        class="nav-link nav-link-block text-truncate"
+        [class.active]="tabAtiva == 'questionario-gestao-fornecedor'"
+        id="questionarioGestaoFornecedor-tab"
+        data-toggle="tab"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Questionário de Gestão de Fornecedor"
+        (click)="selectTab('questionario-gestao-fornecedor')"
+        role="button"
+        aria-controls="questionarioGestaoFornecedor"
+        aria-selected="false"
+        >Dados Básicos</a
+      >
+    </li>
+    <li class="nav-item col-lg-3">
+      <a
+        class="nav-link nav-link-block text-truncate"
+        [class.active]="tabAtiva == 'categorias-questoes-gestao-fornecedor'"
+        id="categoriasQuestoesGestaoFornecedor-tab"
+        data-toggle="tab"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Categorias Questões de Gestão de Fornecedor"
+        (click)="selectTab('categorias-questoes-gestao-fornecedor')"
+        role="button"
+        aria-controls="categoriasQuestoesGestaoFornecedor"
+        aria-selected="false"
+        >Categorias</a
+      >
+    </li>
+    <li class="nav-item col-lg-3">
+      <a
+        class="nav-link nav-link-block text-truncate"
+        [class.active]="tabAtiva == 'questoes-gestao-fornecedor'"
+        id="questoesGestaoFornecedor-tab"
+        data-toggle="tab"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Questões de Gestão de Fornecedor"
+        (click)="selectTab('questoes-gestao-fornecedor')"
+        role="button"
+        aria-controls="questoesGestaoFornecedor"
+        aria-selected="false"
+        >Questões</a
+      >
+    </li>
+  </ul>
+</div>
+
+<div class="tab-content bounds line" id="questionarioTabContent">
+  <div
+    class="tab-pane fade"
+    [ngClass]="{ 'active show': tabAtiva == 'questionario-gestao-fornecedor' }"
+    id="questionarioGestaoFornecedor"
+    role="tabpanel"
+    aria-labelledby="questionarioGestaoFornecedor-tab"
+  >
+    <div class="card card-tab-content">
+      <div class="card-header"></div>
+      <div class="card-body">
+        <div class="container-fluid">
+          <div class="row bg-white pt-4">
+            <div class="col">
+              <form [formGroup]="form">
+                <div class="form-row">
+                  <div class="form-group required col-md-6">
+                    <label for="cnpj"> Nome do Questionário: </label>
+                    <div class="input-group extended-button">
+                      <input class="form-control" type="text" name="nome" formControlName="nome" />
+                    </div>
+                  </div>
+                  <div class="form-group required col-md-3">
+                    <label for="cnpj"> Data Início: </label>
+                    <div class="input-group extended-button">
+                      <input
+                        class="form-control"
+                        type="datetime-local"
+                        name="dataInicio"
+                        formControlName="dataInicio"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group required col-md-3">
+                    <label for="cnpj"> Data Fim: </label>
+                    <div class="input-group extended-button">
+                      <input
+                        class="form-control"
+                        type="datetime-local"
+                        name="dataFim"
+                        formControlName="dataFim"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group required col">
+                    <label>Introdução:</label>
+                    <textarea
+                      name="introducao"
+                      formControlName="introducao"
+                      [rows]="3"
+                      class="form-control"
+                      [class.invalid]="
+                        form.controls.introducao.invalid && form.controls.introducao.dirty
+                      "
+                    >
+                    </textarea>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group required col-lg-12">
+                    <label>Categorias:</label>
+                    <ng-select
+                      name="categoriasFornecimento"
+                      formControlName="categoriasFornecimento"
+                      [items]="categorias"
+                      bindLabel="descricao"
+                      [multiple]="true"
+                      [class.invalid]="
+                        form.controls.categoriasFornecimento.invalid &&
+                        form.controls.categoriasFornecimento.dirty
+                      "
+                    >
+                      <ng-template *ngIf="categorias?.length" ng-header-tmp>
+                        <div>
+                          <button class="btn btn-link" (click)="toggleUsoTodasCategorias()">
+                            {{ !form.controls.usaTodasCategorias.value ? 'Selecionar' : 'Remover' }}
+                            todas
+                          </button>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+                    <i class="fas fa-ban"></i> Cancelar
+                  </button>
+                  <button type="button" id="btnSalvar" (click)="salvar()" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Salvar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="card"
+      *ngIf="this.form.value.idQuestionarioGestaoFornecedor"
+      (click)="exibirCriteriosAvaliacao()"
+    >
+      <a class="card-header collapsed" data-toggle="collapse" href="#collapseCategoriaProduto">
+        Critérios de Avaliação
+      </a>
+      <div class="card-body">
+        <div class="collapse" id="collapseCategoriaProduto">
+          <listar-questionario-fornecedor-criterio-avaliacao
+            *ngIf="permitirExibirCriteriosAvaliacao"
+            [idQuestionarioGestaoFornecedor]="this.form.value.idQuestionarioGestaoFornecedor"
+          ></listar-questionario-fornecedor-criterio-avaliacao>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="tab-pane fade"
+    [ngClass]="{ 'active show': tabAtiva == 'questoes-gestao-fornecedor' }"
+    id="questoesGestaoFornecedor"
+    role="tabpanel"
+    aria-labelledby="questoesGestaoFornecedor-tab"
+  >
+    <div class="card card-tab-content">
+      <div class="card-header">
+        <a
+          class="btn btn-icon d-flex align-items-center text-primary p-0"
+          (click)="incluirQuestao(form.controls.idQuestionarioGestaoFornecedor.value)"
+        >
+          <i class="fas fa-plus-circle"></i>
+          <p class="d-inline-block mb-0 ml-2">Incluir nova questão</p>
+        </a>
+      </div>
+      <div class="card-body">
+        <div class="container-fluid">
+          <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+            <div class="col-md-2">
+              <label class="font-weight-bold">Categoria:</label>
+            </div>
+            <div class="col-md-6">
+              <label class="font-weight-bold">Questão:</label>
+            </div>
+            <div class="col-md-1">
+              <label class="font-weight-bold">Peso:</label>
+            </div>
+            <div class="col-md-3">
+              <label class="font-weight-bold">Ações:</label>
+            </div>
+          </div>
+          <div
+            class="bg-white border-bottom row py-4"
+            *ngIf="!form.controls.questoes.value?.length"
+          >
+            <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+          </div>
+
+          <div
+            class="bg-white border-bottom row py-4"
+            *ngFor="let qgf of form.controls.questoes.value"
+          >
+            <div class="col-md-2 col-sm-2 align-self-center">
+              <label for="" class="font-weight-bold d-block d-md-none">Categoria:</label>
+              <p
+                class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ qgf.categoriaQuestao?.descricao }}"
+              >
+                {{ qgf.categoriaQuestao?.descricao }}
+              </p>
+            </div>
+            <div class="col-md-6 col-sm-6 align-self-center">
+              <label for="" class="font-weight-bold d-block d-md-none">Questão:</label>
+              <p
+                class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ qgf.descricao }}"
+              >
+                {{ qgf.descricao }}
+              </p>
+            </div>
+            <div class="col-md-1 col-sm-1 align-self-center">
+              <label for="" class="font-weight-bold d-block d-md-none">Peso:</label>
+              <p
+                class="mb-3 mb-lg-0 line-clamp line-clamp-1"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ qgf.peso }}"
+              >
+                {{ qgf.peso }}
+              </p>
+            </div>
+            <div class="col-md-3 d-flex justify-content-between align-self-center">
+              <button
+                class="btn btn-icon"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Auditoria"
+                (click)="onAuditoriaClick(qgf.idQuestaoGestaoFornecedor)"
+              >
+                <i class="fas fa-history"></i>
+              </button>
+              <button
+                class="btn btn-icon"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Editar"
+                (click)="editar(qgf)"
+              >
+                <i class="far fa-edit"></i>
+              </button>
+              <button
+                class="btn btn-icon"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Excluir"
+                (click)="solicitarExclusao(qgf)"
+              >
+                <i class="far fa-trash-alt text-danger"></i>
+              </button>
+            </div>
+          </div>
+          <div class="bg-white border-bottom row">
+            <div class="col">
+              <div class="modal-footer">
+                <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+                  <i class="fas fa-ban"></i> Cancelar
+                </button>
+                <button type="button" id="btnSalvar" (click)="salvar()" class="btn btn-primary">
+                  <i class="fas fa-save"></i> Salvar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="tab-pane fade"
+    [ngClass]="{ 'active show': tabAtiva == 'categorias-questoes-gestao-fornecedor' }"
+    id="categoriasQuestoesGestaoFornecedor"
+    role="tabpanel"
+    aria-labelledby="categoriasQuestoesGestaoFornecedor-tab"
+  >
+    <div class="card card-tab-content">
+      <div class="card-header">
+        <a
+          class="btn btn-icon d-flex align-items-center text-primary p-0"
+          (click)="incluirCategoria()"
+        >
+          <i class="fas fa-plus-circle"></i>
+          <p class="d-inline-block mb-0 ml-2">Incluir nova categoria</p>
+        </a>
+      </div>
+      <div class="card-body">
+        <div class="container-fluid">
+          <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+            <div class="col-md-1">
+              <label class="font-weight-bold">ID:</label>
+            </div>
+            <div class="col-md-4">
+              <label class="font-weight-bold">Descrição:</label>
+            </div>
+            <div class="col-md-4">
+              <label class="font-weight-bold">Nota Explicativa:</label>
+            </div>
+            <div class="col-md-1">
+              <label class="font-weight-bold">Peso:</label>
+            </div>
+            <div class="col-md-2">
+              <label class="font-weight-bold">Ações:</label>
+            </div>
+          </div>
+          <div
+            class="bg-white border-bottom row py-4"
+            *ngIf="!form.getRawValue().categoriasQuestao?.length"
+          >
+            <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+          </div>
+
+          <div
+            class="bg-white border-bottom row py-4"
+            *ngFor="let categoria of form.getRawValue().categoriasQuestao"
+          >
+            <div class="col-md-1 col-sm-1 align-self-center">
+              <label for="" class="font-weight-bold d-block d-md-none">ID:</label>
+              <p
+                class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ categoria.idCategoriaQuestao >= 0 ? categoria.idCategoriaQuestao : '' }}"
+              >
+                {{ categoria.idCategoriaQuestao >= 0 ? categoria.idCategoriaQuestao : '' }}
+              </p>
+            </div>
+
+            <div class="col-md-4 col-sm-4 align-self-center">
+              <label for="" class="font-weight-bold d-block d-md-none">Descrição:</label>
+              <p
+                class="mb-3 mb-lg-0 line-clamp line-clamp-1"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ categoria.descricao }}"
+              >
+                {{ categoria.descricao }}
+              </p>
+            </div>
+            <div class="col-md-4 col-sm-4 align-self-center">
+              <label for="" class="font-weight-bold d-block d-md-none">Nota Explicativa:</label>
+              <p
+                class="mb-3 mb-lg-0 line-clamp line-clamp-1"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ categoria.notaExplicativa }}"
+              >
+                {{ categoria.notaExplicativa }}
+              </p>
+            </div>
+            <div class="col-md-1 col-sm-1 align-self-center">
+              <label for="" class="font-weight-bold d-block d-md-none">Peso:</label>
+              <p
+                class="mb-3 mb-lg-0 line-clamp line-clamp-1"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ categoria.peso }}"
+              >
+                {{ categoria.peso }}
+              </p>
+            </div>
+            <div class="col-md-2 d-flex justify-content-between align-self-center">
+              <button
+                class="btn btn-icon"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Editar"
+                (click)="editarCategoria(categoria)"
+              >
+                <i class="far fa-edit"></i>
+              </button>
+              <button
+                class="btn btn-icon"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Excluir"
+                (click)="solicitarExluirCategoriaQuestao(categoria.idCategoriaQuestao)"
+              >
+                <i class="far fa-trash-alt text-danger"></i>
+              </button>
+            </div>
+          </div>
+          <div class="bg-white border-bottom row">
+            <div class="col">
+              <div class="modal-footer">
+                <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+                  <i class="fas fa-ban"></i> Cancelar
+                </button>
+                <button type="button" id="btnSalvar" (click)="salvar()" class="btn btn-primary">
+                  <i class="fas fa-save"></i> Salvar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

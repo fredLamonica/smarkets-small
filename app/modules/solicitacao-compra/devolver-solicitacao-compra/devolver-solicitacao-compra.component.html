@@ -1,0 +1,59 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">{{ titulo }}</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <!--
+  <button  class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Desativar">
+   <i class="fas fa-toggle-on text-success"></i>
+  </button>
+  <button  class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Desativar">
+    <i class="fas fa-toggle-off text-success"></i>
+   </button> -->
+
+  <div *ngFor="let item of itensSolicitacaoCompra">
+    <p>{{ item.descricao }}</p>
+  </div>
+
+  <p>
+    <b>Observação: </b>ao marcar o checkbox, o sistema enviará um e-mail para o solicitante com o
+    conteúdo da justificativa.
+  </p>
+  <form [formGroup]="form">
+    <div class="form-check form-group">
+      <input
+        type="checkbox"
+        class="form-check-input"
+        id="enviarEmail"
+        formControlName="enviarEmail"
+      />
+      <label class="form-check-label" for="enviarEmail"
+        >Enviar justificativa para o requisitante.</label
+      >
+    </div>
+
+    <div class="form-group required">
+      <label>Justificativa:</label>
+      <textarea
+        class="form-control"
+        rows="3"
+        formControlName="justificativa"
+        [class.invalid]="form.controls.justificativa.invalid && form.controls.justificativa.dirty"
+      ></textarea>
+      <span
+        class="invalid"
+        *ngIf="form.controls.justificativa.invalid && form.controls.justificativa.dirty"
+      >
+        Preenchimento obrigatório
+      </span>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="cancelar()">
+    {{ cancelarLabel }}
+  </button>
+  <button type="button" class="btn btn-primary" (click)="confirmar()">{{ confirmarLabel }}</button>
+</div>

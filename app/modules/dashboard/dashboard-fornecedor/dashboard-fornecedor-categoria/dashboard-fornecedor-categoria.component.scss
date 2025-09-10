@@ -1,0 +1,11 @@
+:host {
+  width: 100%;
+}
+
+::ng-deep sdk-progressbar:nth-child(even) {
+  div.progress {
+    div {
+      background-color: #81cbe2;
+    }
+  }
+}

@@ -1,0 +1,160 @@
+<div class="item-documento">
+  <div class="icon">
+    <div
+      *ngIf="
+        documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Invalido
+      "
+    >
+      <i
+        [ngClass]="{
+          recusado:
+            documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Invalido
+        }"
+        class="fas fa-times-circle"
+      ></i>
+    </div>
+    <div
+      *ngIf="documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Valido"
+    >
+      <i
+        [ngClass]="{
+          'fas fa-times-circle vencido':
+            documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Valido &&
+            docVencido,
+          'fas fa-check-circle avencer':
+            documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Valido &&
+            docAVencer,
+          'fas fa-check-circle ativo':
+            documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Valido
+        }"
+      ></i>
+    </div>
+    <div *ngIf="documento?.arquivo && !documento?.validacaoArquivo">
+      <i
+        class="fas fa-check-circle hoverActive"
+        (click)="solicitarAlteracaoValidacao(documento, enumSituacaoValidacao.Valido)"
+      ></i>
+    </div>
+    <div *ngIf="documento?.arquivo && !documento?.validacaoArquivo">
+      <i
+        class="fas fa-times-circle hoverRecusado"
+        (click)="solicitarAlteracaoValidacao(documento, enumSituacaoValidacao.Invalido)"
+      ></i>
+    </div>
+  </div>
+  <div class="content">
+    <div class="col-4">
+      <strong class="descricao-documento">{{
+        documento.documentoFornecedor.descricaoDocumento
+      }}</strong>
+    </div>
+    <div class="col-4">
+      <strong
+        [ngClass]="{
+          ativo:
+            documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Valido &&
+            !docVencido,
+          recusado:
+            documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Invalido,
+          vencido:
+            documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Valido &&
+            docVencido,
+          avencer:
+            documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Valido &&
+            docAVencer,
+          novo: documento?.arquivo && !documento?.validacaoArquivo,
+          'nao-enviado': !documento?.arquivo
+        }"
+        >{{ labelSituacao }}</strong
+      >
+
+      <div
+        *ngIf="
+          documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Valido &&
+          docVencido
+        "
+      >
+        Desde do dia
+        <strong class="vencido">{{ documento.dataVencimento | date: 'dd/MM/yyyy' }}</strong> ({{
+          dias
+        }}
+        <span *ngIf="dias > 1">dias</span> <span *ngIf="dias <= 0 || dias == 1">dia</span>)
+      </div>
+
+      <div
+        *ngIf="
+          documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Valido &&
+          docAVencer
+        "
+      >
+        No dia
+        <strong class="avencer">{{ documento.dataVencimento | date: 'dd/MM/yyyy' }}</strong> ({{
+          dias
+        }}
+        <span *ngIf="dias > 1">dias</span> <span *ngIf="dias == 1">dia</span>)
+      </div>
+
+      <div
+        *ngIf="
+          documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Valido &&
+          !docVencido &&
+          !docAVencer
+        "
+      >
+        <a *ngIf="documento.dataVencimento"
+          >Com vigência até
+          <strong class="ativo">{{ documento.dataVencimento | date: 'dd/MM/yyyy' }}</strong></a
+        >
+        <a *ngIf="!documento.dataVencimento">Sem vigência</a>
+      </div>
+
+      <div
+        *ngIf="
+          documento?.validacaoArquivo?.situacaoValidacaoArquivo == enumSituacaoValidacao.Invalido
+        "
+        class="crop-text-2"
+      >
+        <a
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="{{ this.documento?.validacaoArquivo?.motivoRecusa }}"
+        >
+          {{ this.documento?.validacaoArquivo?.motivoRecusa | noContent }}
+        </a>
+      </div>
+
+      <div *ngIf="documento?.arquivo && !documento?.validacaoArquivo">
+        <a *ngIf="documento.dataVencimento"
+          >Com vigência até
+          <strong class="novo">{{ documento.dataVencimento | date: 'dd/MM/yyyy' }}</strong></a
+        >
+        <a *ngIf="!documento.dataVencimento">Sem vigência</a>
+      </div>
+    </div>
+    <div class="col-1">
+      <strong>{{
+        documento.documentoFornecedor.documentoObrigatorio ? 'Obrigatório' : 'Opcional'
+      }}</strong>
+    </div>
+    <div class="col-2 d-flex justify-content-around">
+      <div class="col-1">
+        <span class="mouse-hover w-100">
+          <i
+            *ngIf="documento?.arquivo && !documento?.validacaoArquivo"
+            class="fas fa-lg fa-calendar-day"
+            (click)="showModalEditarDataDeVigencia(documento)"
+          ></i>
+        </span>
+      </div>
+      <div class="col-1">
+        <span class="mouse-hover w-100">
+          <i
+            *ngIf="documento?.arquivo"
+            class="fas fa-lg fa-download"
+            (click)="baixarArquivo(documento)"
+          ></i>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

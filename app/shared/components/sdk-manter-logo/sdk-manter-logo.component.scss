@@ -1,0 +1,30 @@
+.upload-area {
+    border-style: dashed;
+    border-width: 2px;
+    border-color: #27ADE4;
+    border-radius: 5px;
+    justify-content: center;
+}
+
+.rectangle {
+    max-width: 40%;
+    background: #ECECEC;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 8rem;
+    min-width: 22rem;
+}
+
+.image {
+    max-width: 70%;
+    max-height: 80%;
+}
+
+.description-text {
+    color: #296075;
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}

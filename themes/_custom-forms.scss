@@ -1,0 +1,240 @@
+//Selecao de arquivos
+.custom-file {
+  .custom-file-label {
+    &:after {
+      content: "Buscar" !important;
+      background-color: #24acb9 !important;
+      color: $white;
+      padding-left: 22px;
+      padding-right: 22px;
+    }
+  }
+}
+
+galeria-arquivos {
+  .arquivo {
+    border-radius: 10px;
+    padding: 10px 14px;
+    background-color: $smarkets-light;
+
+    .icone {
+      font-size: 45px;
+    }
+  }
+}
+
+//custom-checkbox
+.custom-checkbox {
+  &.disabled {
+    opacity: 0.65;
+    pointer-events: none;
+    background-color: unset;
+  }
+
+  &.custom-checkbox-right {
+    padding-right: 1.5rem;
+    padding-left: 0;
+
+    .custom-control-label {
+      &:before {
+        left: unset;
+        right: -1.5rem;
+      }
+      &:after {
+        left: unset;
+        right: -1.5rem;
+      }
+    }
+  }
+}
+
+//custom-checkbox in table
+.table {
+  th,
+  td {
+    .custom-checkbox,
+    .custom-radio {
+      label {
+        position: absolute;
+        pointer-events: none;
+      }
+    }
+
+    .custom-radio {
+      .custom-control-label {
+        &::after {
+          background-size: 60% 60%;
+        }
+      }
+    }
+  }
+  thead th {
+    .custom-checkbox {
+      label {
+        position: absolute;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+//tree componente
+.tree-node-leaf {
+  margin-left: -0.65rem;
+}
+
+.toggle-children-wrapper {
+  color: $primary;
+  &.toggle-children-wrapper-expanded {
+    .toggle-children {
+      &:after {
+        @include fa-icon;
+        @extend .fas;
+        font-weight: 900;
+        content: fa-content($fa-var-minus-square);
+        font-size: 1.25rem;
+      }
+    }
+  }
+  &.toggle-children-wrapper-collapsed {
+    .toggle-children {
+      &:after {
+        @include fa-icon;
+        @extend .fas;
+        font-weight: 900;
+        content: fa-content($fa-var-plus-square);
+        font-size: 1.25rem;
+      }
+    }
+  }
+  .toggle-children {
+    background-image: none;
+    transform: none;
+    -webkit-transform: none;
+    height: auto;
+    width: auto;
+  }
+}
+
+//ng select
+ng-select {
+  &.invalid {
+    .ng-select-container {
+      border-color: transparentize($danger, 0.3);
+      box-shadow:
+        $input-box-shadow,
+        0 0 0 $input-btn-focus-width transparentize($danger, 0.9);
+    }
+  }
+  .ng-select-container {
+    // height: calc(2.25rem + 2px) !important;
+    min-height: calc(2.25rem + 2px) !important;
+  }
+}
+
+//custom-radio
+.form-group {
+  .custom-radio {
+    // vertical-align: middle;
+    // vertical-align: -moz-middle-with-baseline;
+    // vertical-align: -webkit-baseline-middle
+    .custom-control-input:checked ~ .custom-control-label {
+      &::before {
+        background-color: $new-ux-smarkets-gray !important;
+      }
+      &::after {
+        background-image: none;
+      }
+    }
+  }
+}
+
+input-date {
+  .input-group {
+    border-radius: $input-border-radius;
+    border: $input-border-width solid $input-border-color;
+
+    input {
+      height: calc($input-height - 2px);
+      padding: $input-padding-y $input-padding-x;
+      border: none;
+
+      &.form-control:focus {
+        box-shadow: none;
+        background-color: $white;
+      }
+    }
+    .input-group-append {
+      button {
+        background-color: $white;
+        border: none !important;
+        min-width: unset;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+        i {
+          color: $input-color;
+        }
+        &:hover {
+          transform: none;
+          background-color: $smarkets-lighter;
+        }
+        &:focus,
+        &:active {
+          box-shadow: none;
+        }
+      }
+    }
+
+    ngb-datepicker {
+      top: calc(2.25rem + 2px) !important;
+
+      .ngb-dp-arrow-btn {
+        min-width: auto;
+      }
+    }
+  }
+
+  &.with-shadow {
+    .input-group {
+      border: none;
+      -webkit-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25) !important;
+      -moz-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25) !important;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25) !important;
+    }
+  }
+}
+
+//smarkets-checkbox
+.smarkets-checkbox {
+  position: relative;
+  display: block;
+  padding-left: 1.5rem;
+}
+
+.smarkets-checkbox-input {
+  background-color: $gray-300;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  position: absolute;
+  margin-top: 0.3rem;
+  margin-left: -1.5rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.smarkets-checkbox-input:checked {
+  background-color: $new-ux-smarkets-blue;
+  background-image: $custom-checkbox-indicator-icon-checked;
+  background-repeat: no-repeat;
+  background-size: 50% 50%;
+  width: 1rem;
+  height: 1rem;
+  background-position: center;
+}
+
+.smarkets-checkbox-label {
+  margin-bottom: 0;
+}

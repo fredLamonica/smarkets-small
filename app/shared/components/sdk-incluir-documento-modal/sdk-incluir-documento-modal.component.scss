@@ -1,0 +1,38 @@
+::ng-deep sdk-incluir-documento-modal div.row {
+  input.form-control {
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 8px !important;
+    border: 1px solid #cfdce0 !important;
+    .ng-placeholder {
+      color: #588394 !important;
+      font-weight: bold;
+    }
+  }
+}
+
+.required-field::after {
+  display: inline-block;
+  font-family: 'Font Awesome 5 Free';
+  content: '\f06a';
+  font-size: 1rem;
+  margin-left: 0.3rem;
+  color: #e74b37;
+}
+
+sdk-rectangle-button ::ng-deep {
+  width: auto;
+
+  button {
+    font-family: Open Sans !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    color: #ffffff !important;
+    background: #588394 !important;
+    border: none !important;
+
+    &:hover {
+      background-color: #114e66 !important;
+      color: #ffffff;
+    }
+  }
+}

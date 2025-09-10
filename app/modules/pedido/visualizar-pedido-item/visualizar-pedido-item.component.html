@@ -1,0 +1,161 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Item do Pedido</div>
+  <button type="button" class="close" aria-label="Close" (click)="fechar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col">
+      <div *ngIf="!pedidoItem?.produto?.imagens?.length; else existeImagem">
+        <img src="./../../../../assets/img/produtos/default.png" />
+      </div>
+      <ng-template #existeImagem>
+        <ngb-carousel [interval]="10000000">
+          <ng-template ngbSlide *ngFor="let image of pedidoItem?.produto?.imagens">
+            <div class="row justify-content-center px-5 py-2">
+              <img
+                [src]="image.url"
+                style="max-height: 250px"
+                alt="{{ pedidoItem?.produto?.descricao }}" />
+            </div>
+          </ng-template>
+        </ngb-carousel>
+      </ng-template>
+    </div>
+    <div class="col">
+      <div class="row">
+        <div class="col">
+          <label class="mb-0 mr-lg-1">Pedido: </label>
+          <h5 class="font-weight-bold text-indigo-light">
+            {{
+            pedidoItem?.produto?.descricaoDetalhada
+            ? pedidoItem?.produto?.descricaoDetalhada
+            : pedidoItem?.produto?.descricao
+            ? pedidoItem?.produto?.descricao
+            : '--'
+            }}
+          </h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="row">
+            <div class="col">
+              <label class="mb-0 mr-lg-1">Marca: </label>
+              <p class="font-weight-bold">
+                {{ pedidoItem?.marca?.nome ? pedidoItem?.marca?.nome : 'Sem preferência' }}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label class="mb-0 mr-lg-1">Quantidade: </label>
+              <p class="font-weight-bold">
+                {{
+                pedidoItem.produto?.unidadeMedida?.permiteQuantidadeFracionada
+                ? (pedidoItem?.quantidade | number: '1.0-10':'pt-BR')
+                : pedidoItem?.quantidade
+                }}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label class="mb-0 mr-lg-1">Data de Entrega: </label>
+              <p class="font-weight-bold">{{obtenhaDataDeEntrega()}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label class="mb-0 mr-lg-1">Centro de Custo: </label>
+              <p class="font-weight-bold">{{ pedidoItem?.centroCusto?.descricao }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label class="mb-0 mr-lg-1">IVA: </label>
+              <p class="font-weight-bold">
+                {{ pedidoItem?.iva?.descricaoIva ? pedidoItem?.iva?.descricaoIva : '--' }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row">
+            <div class="col">
+              <label class="mb-0 mr-lg-1">Unidade de Medida: </label>
+              <p class="font-weight-bold">{{ pedidoItem?.produto?.unidadeMedida?.sigla }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label class="mb-0 mr-lg-1">Valor Unitário:</label>
+              <p class="font-weight-bold">
+                {{ pedidoItem?.valor | customCurrency: pedidoItem?.moeda:'1.2-4':'symbol' }}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label class="mb-0 mr-lg-1">Data de Entrega Prevista: </label>
+              <p class="font-weight-bold">{{pedidoItem.dataEntregaPrevista | date: 'dd/MM/yyyy'}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label class="mb-0 mr-lg-1">Total: </label>
+              <h5 class="font-weight-bold text-indigo-light">
+                {{ pedidoItem?.valorTotal | customCurrency: pedidoItem?.moeda:null:'symbol' }}
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label class="mb-0 mr-lg-1">Endereço de Entrega: </label>
+          <p class="font-weight-bold">
+            {{ endereco?.logradouro }}, {{ endereco?.numero }} - {{ endereco?.bairro }},
+            {{ endereco?.cidade?.nome }}, {{ endereco?.cidade?.estado?.nome }} - {{ endereco?.cep }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" *ngIf="pedidoItem?.sapEm != null">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" [checked]="pedidoItem?.sapEm" />
+        <label class="custom-control-label font-weight-bold">EM</label>
+      </div>
+    </div>
+    <div class="col" *ngIf="pedidoItem?.sapEmNaoAvaliada != null">
+      <div class="custom-control custom-checkbox">
+        <input
+          type="checkbox"
+          class="custom-control-input"
+          [checked]="pedidoItem?.sapEmNaoAvaliada" />
+        <label class="custom-control-label font-weight-bold">EM não avaliada</label>
+      </div>
+    </div>
+    <div class="col" *ngIf="pedidoItem?.sapEntrFaturas != null">
+      <div class="custom-control custom-checkbox">
+        <input
+          type="checkbox"
+          class="custom-control-input"
+          [checked]="pedidoItem?.sapEntrFaturas" />
+        <label class="custom-control-label font-weight-bold">Entr. Fatura</label>
+      </div>
+    </div>
+    <div class="col" *ngIf="pedidoItem?.sapRevFatEm != null">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" [checked]="pedidoItem?.sapRevFatEm" />
+        <label class="custom-control-label font-weight-bold">Rev. FatEm</label>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="fechar()">Fechar</button>
+</div>

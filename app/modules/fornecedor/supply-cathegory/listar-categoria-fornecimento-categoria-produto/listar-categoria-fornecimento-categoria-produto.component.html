@@ -1,0 +1,85 @@
+<div class="form-row" [formGroup]="form">
+  <div class="form-group required col-lg-4 col-12">
+    <label for="idCondicaoPagamento"> Categoria de Produto </label>
+    <ng-select
+      [items]="categoriasProduto"
+      bindLabel="nome"
+      bindValue="idCategoriaProduto"
+      [hideSelected]="true"
+      name="idCategoriaProduto"
+      formControlName="idCategoriaProduto"
+    ></ng-select>
+    <span
+      class="invalid"
+      *ngIf="form.controls.idCategoriaProduto.invalid && form.controls.idCategoriaProduto.dirty"
+      >Preenchimento obrigatório</span
+    >
+  </div>
+  <div class="form-group mt-1 col-lg-1 col-12">
+    <label for="idCategoriaProduto"> </label>
+    <button
+      role="button"
+      class="btn btn-block btn-primary"
+      [class.disabled]="form.invalid"
+      (click)="incluir()"
+    >
+      <i class="fas fa-plus"></i> Incluir
+    </button>
+  </div>
+</div>
+<div class="row mb-3">
+  <div class="col-md-6">
+    <div class="row justify-content-start">
+      <div class="col-md-4 col-xl-3">
+        <button
+          role="button"
+          class="btn btn-block btn-danger"
+          [class.disabled]="!selecionadas?.length"
+          (click)="solicitarExclusao()"
+        >
+          <i class="fas fa-trash-alt"></i> Remover
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="row justify-content-end">
+      <div class="col-md-4 col-xl-3">
+        <button
+          role="button"
+          class="btn btn-block btn-success"
+          [class.disabled]="!selecionadas?.length"
+          (click)="alterarSituacao(Situacao.Ativo)"
+        >
+          <i class="fas fa-check"></i> Ativar
+        </button>
+      </div>
+      <div class="col-md-4 col-xl-3">
+        <button
+          role="button"
+          class="btn btn-block btn-danger"
+          [class.disabled]="!selecionadas?.length"
+          (click)="alterarSituacao(Situacao.Inativo)"
+        >
+          <i class="fas fa-times"></i> Desativar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <custom-table
+      classes="table-striped table-sm"
+      [settings]="settings"
+      [source]="categoriaFornecimentoCategoriasProduto"
+      (select)="selecao($event)"
+    ></custom-table>
+    <pager
+      [page]="pagina"
+      [total-pages]="totalPaginas"
+      [records-per-page]="itensPorPagina"
+      (pagination)="paginacao($event)"
+    ></pager>
+  </div>
+</div>

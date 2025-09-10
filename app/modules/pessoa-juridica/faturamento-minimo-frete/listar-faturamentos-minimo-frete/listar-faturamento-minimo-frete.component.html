@@ -1,0 +1,27 @@
+<div class="row justify-content-start mb-3" *ngIf="!disabled">
+  <div class="col-md-4 col-xl-3">
+    <button role=button class="btn btn-block btn-primary" (click)="incluirFaturamento()">
+      <i class="fas fa-plus"></i> Incluir
+    </button>
+  </div>
+  <div class="col-md-4 col-xl-3">
+    <button role=button class="btn btn-block btn-secondary" [class.disabled]="selecionados?.length != 1"
+      (click)="editarFaturamento()">
+      <i class="fas fa-pencil-alt"></i> Editar
+    </button>
+  </div>
+  <div class="col-md-4 col-xl-3">
+    <button role=button class="btn btn-block btn-danger" [class.disabled]="!selecionados?.length"
+      (click)="solicitarExclusao()">
+      <i class="fas fa-trash-alt"></i> Remover
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <custom-table classes="table-striped table-sm" [settings]="settings" [source]="faturamentos"
+      (select)="selecao($event)"></custom-table>
+    <pager size="sm" [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="itensPorPagina"
+      (pagination)="paginacao($event)"></pager>
+  </div>
+</div>

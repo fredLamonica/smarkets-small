@@ -1,0 +1,169 @@
+
+:host {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: flex-start;
+    border-radius: 8px 0px 0px 8px;
+    align-self: stretch;
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .item-usuario {
+    display: flex;
+    align-self: stretch;    
+    min-height: 85px;
+    margin-bottom: 1em;
+    border-radius: 8px;
+    cursor: pointer; 
+    background-color: #FFFFFF;  
+    font-size: 0.6rem; 
+  
+    &:hover {
+      box-shadow: 0px 2px 8px #00000029;
+  
+  
+      .rotated{
+        visibility: visible;
+      }
+  
+      
+    }
+  
+    .item {
+      cursor: pointer;
+    }      
+    
+    .mouse-hover{
+      i{
+        background: #F0F0F0;
+        color: #FAB248;
+        padding: 0.8rem;
+        border-radius: 49%;
+      &:hover{
+        background:#FAB248;
+        color: #fff;
+      }
+      }
+      
+    }  
+  
+    .content {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 2rem;     
+      width: 100%;
+      a{font-weight: bold;}
+     
+    }
+  
+   .name-status{
+     font-weight: bold;     
+     position: relative;
+     top: -0.5rem; 
+    .point{     
+    
+        font-size: 2em;
+        margin: 0 0.5rem;
+        vertical-align: 0.2rem;
+       
+     }
+   }
+
+   
+  
+   .liberado{
+    color: #98BE6D;    
+  }
+
+  .bloqueado-por-execesso{
+    color: #FAB248;
+  }
+
+  .bloqueado{
+    color: #E74B37;
+  }
+
+   @media only screen and (min-width: 1140px) {
+    .content{
+      font-size: 0.7rem;
+    }
+  }
+  
+   @media only screen and (min-width: 1280px) {
+    .content{
+      font-size: 0.75rem;
+    }
+  }
+   @media only screen and (min-width: 1366px) {
+    .content{
+      font-size: 0.85rem;
+    }
+  }
+    @media only screen and (min-width: 1920px) {
+      .content{
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  // modal de desvinculo
+   ::ng-deep .modal-desvinculo > div.modal-dialog > div.modal-content > app-confirmacao {
+      div.modal-header{ background-color: #FAB248 !important;}
+      div.modal-body{
+        p{
+          padding: 2rem 0 2rem 0;
+          text-align: center;
+        }
+      }
+      button.btn-outline-primary{
+        color: #6E6E72;
+        border-color: #6E6E72;
+        background-color: white !important;
+        width: 8rem;
+        &:hover{
+          background-color: #6E6E72 !important;
+          color: white !important;
+        border-color: #6E6E72 !important;
+        }
+        &:active{
+          color: #6E6E72 !important;
+        border-color: #6E6E72 !important;
+          background-color: white !important;
+        }
+        &:focus{
+          box-shadow: none !important;
+        }
+      }
+      
+      button.btn-primary{
+        color: #FAB248;
+        border-color: #FAB248;
+        background-color: white !important;
+        width: 8rem;
+        &:hover{
+          background-color: #FAB248 !important;
+          color: white !important;
+          border-color: #FAB248 !important;
+        }
+        &:active{
+          color: #FAB248 !important;
+          border-color: #FAB248 !important;
+          background-color: white !important;
+        }
+        &:focus{
+          box-shadow: none !important;
+        }
+      }
+    }
+    
+  .crop-text-2 {
+  -webkit-line-clamp: 2;
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  }

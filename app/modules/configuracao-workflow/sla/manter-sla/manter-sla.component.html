@@ -1,0 +1,158 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    {{ slaItem?.idSlaItem ? 'Alterar ' : 'Incluir ' }} SLA
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form" *ngIf="form">
+    <div class="form-row">
+      <div class="form-group required col-md-6">
+        <label>Tipo:</label>
+        <ng-select
+          [hideSelected]="true"
+          formControlName="tipoSla"
+          [class.invalid]="form.controls.tipoSla.invalid && form.controls.tipoSla.dirty"
+        >
+          <ng-option [value]="TipoSla['Cotação']">Cotação</ng-option>
+          <ng-option [value]="TipoSla['Pedido']">Pedido</ng-option>
+          <ng-option [value]="TipoSla['Requisição']">Requisição</ng-option>
+          <ng-option [value]="TipoSla['Solicitação']">Solicitação</ng-option>
+        </ng-select>
+        <span class="invalid" *ngIf="form.controls.tipoSla.invalid && form.controls.tipoSla.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+      <div class="form-group required col-md-6">
+        <label>SLA:</label>
+        <ng-select
+          id="idSla"
+          name="idSla"
+          bindLabel="descricao"
+          bindValue="idSla"
+          [items]="slas"
+          [hideSelected]="true"
+          formControlName="idSla"
+          [class.invalid]="form.controls.idSla.invalid && form.controls.idSla.dirty"
+        >
+        </ng-select>
+        <span class="invalid" *ngIf="form.controls.idSla.invalid && form.controls.idSla.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+      <div class="form-group required col-md-6">
+        <label>Classificação:</label>
+        <ng-select
+          [hideSelected]="true"
+          formControlName="idClassificacao"
+          [class.invalid]="
+            form.controls.idClassificacao.invalid && form.controls.idClassificacao.dirty
+          "
+        >
+          <ng-option
+            [value]="classificacao.idClassificacao"
+            *ngFor="let classificacao of classificacoes"
+          >
+            {{ classificacao.descricao }}
+          </ng-option>
+        </ng-select>
+
+        <span
+          class="invalid"
+          *ngIf="form.controls.idClassificacao.invalid && form.controls.idClassificacao.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+      <div class="form-group col-md-6 align-self-end">
+        <a (click)="inserirClassificacao()" class="btn btn-icon">
+          <i class="fas fa-plus-circle text-primary"></i>
+          <p class="d-inline-block mb-0 ml-2 align-top">Adicionar Classificação</p>
+        </a>
+      </div>
+      <div class="form-group col-md-6">
+        <label>Código (do ERP):</label>
+        <input
+          class="form-control"
+          type="text"
+          name="codigoErp"
+          formControlName="codigoErp"
+          [class.invalid]="form.controls.codigoErp.invalid && form.controls.codigoErp.dirty"
+        />
+
+        <span
+          class="invalid"
+          *ngIf="form.controls.idClassificacao.invalid && form.controls.idClassificacao.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group required col">
+        <label>Categorias:</label>
+        <ng-select
+          bindLabel="nome"
+          [items]="categorias"
+          [hideSelected]="true"
+          formControlName="categoriasProduto"
+          [multiple]="true"
+          [class.invalid]="
+            form.controls.categoriasProduto.invalid && form.controls.categoriasProduto.dirty
+          "
+        >
+        </ng-select>
+        <small *ngIf="form.controls.idSla.valid && form.controls.categoriasProduto.disabled"
+          >O SLA selecionado não permite definir SLA por categoria</small
+        >
+        <span
+          class="invalid"
+          *ngIf="form.controls.categoriasProduto.invalid && form.controls.categoriasProduto.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group required col-md-3">
+        <label>Tempo:</label>
+        <input-number
+          [class.invalid]="form.controls.tempo.invalid && form.controls.tempo.dirty"
+          formControlName="tempo"
+          [min]="1"
+          [max]="999999999"
+        ></input-number>
+        <span class="invalid" *ngIf="form.controls.tempo.invalid && form.controls.tempo.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+      <div class="form-group required col-md-3">
+        <label>Unidade:</label>
+        <ng-select
+          [hideSelected]="true"
+          formControlName="unidadeMedidaTempo"
+          [class.invalid]="
+            form.controls.unidadeMedidaTempo.invalid && form.controls.unidadeMedidaTempo.dirty
+          "
+        >
+          <ng-option [value]="UnidadeMedidaTempo.Hora">Hora(s)</ng-option>
+          <ng-option [value]="UnidadeMedidaTempo.Dia">Dia(s)</ng-option>
+        </ng-select>
+        <span
+          class="invalid"
+          *ngIf="form.controls.unidadeMedidaTempo.invalid && form.controls.unidadeMedidaTempo.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+    <i class="fas fa-ban"></i> Cancelar
+  </button>
+  <button type="button" (click)="salvar()" class="btn btn-primary">
+    <i class="fas fa-save"></i> Salvar
+  </button>
+</div>

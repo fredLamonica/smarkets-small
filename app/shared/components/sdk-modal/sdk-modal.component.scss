@@ -1,0 +1,78 @@
+//Open Sans
+@import '../../../../assets/fonts/OpenSans/OpenSans.scss';
+$open-sans: 'Open Sans', sans-serif;
+@import 'src/themes/_variables.scss';
+
+$fa-font-path: '/assets/fonts/fontawesome/webfonts';
+
+@import '../../../../assets/fonts/fontawesome/scss/fontawesome.scss';
+@import '../../../../assets/fonts/fontawesome/scss/regular.scss';
+@import '../../../../assets/fonts/fontawesome/scss/solid.scss';
+@import '../../../../assets/fonts/fontawesome/scss/brands.scss';
+
+.sdk-modal-header {
+  border-bottom: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #fff;
+  background: #27ade4;
+  border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
+  padding: 1rem 1rem 0.5rem;
+
+  a {
+    font-weight: normal;
+  }
+
+  .sdk-modal-title {
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+
+  .sdk-modal-close {
+    outline: none;
+    color: #fff;
+    &:hover,
+    &:active,
+    &:focus {
+      color: #fff;
+    }
+    i {
+      color: #fff;
+    }
+  }
+
+  button.sdk-modal-close {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+  }
+}
+
+.sdk-modal-body {
+  border: 1px solid transparent;
+  padding: 0.5rem 1rem;
+  color: $new-ux-smarkets-gray;
+  border: 1px solid transparent;
+}
+
+.sdk-modal-footer {
+  border-top: none;
+  padding: 0.5rem 1rem 1rem 1rem;
+  -webkit-box-align: center;
+  -webkit-box-pack: end;
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
+
+  .btn {
+    &:not(:last-child) {
+      margin-right: 0.25rem;
+    }
+    &:not(:first-child) {
+      margin-left: 0.25rem;
+    }
+  }
+  border-top: none;
+  padding: 0.5rem 1rem 1rem 1rem;
+}

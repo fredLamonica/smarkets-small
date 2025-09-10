@@ -1,0 +1,42 @@
+<div class="item-endereco px-4" (click)="!disabled && editarEndereco()">
+  <div class="content">
+    <div class="col-1 crop-text-2">
+      <a
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ endereco.cidade.estado.abreviacao }}"
+      >
+        {{ endereco.cidade.estado.abreviacao }}
+      </a>
+    </div>
+    <div class="col-3 crop-text-2">
+      <a data-toggle="tooltip" data-placement="bottom" title="{{ endereco.cidade.nome }}">
+        {{ endereco.cidade.nome }}
+      </a>
+    </div>
+    <div class="col-3 crop-text-2">
+      <a data-toggle="tooltip" data-placement="bottom" title="{{ endereco.bairro }}">
+        {{ endereco.bairro }}
+      </a>
+    </div>
+    <div class="col-3 crop-text-2">
+      <a data-toggle="tooltip" data-placement="bottom" title="{{ enderecoLabel }}">
+        {{ enderecoLabel }}
+      </a>
+    </div>
+    <div class="col-2 crop-text-2">
+      <a
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ tipoEndereco.get(endereco.tipo) }}"
+      >
+        {{ tipoEndereco.get(endereco.tipo) }}
+      </a>
+    </div>
+    <div class="col-1 d-flex-justify-end" *ngIf="canEditAddress">
+      <span *ngIf="tipoEndereco.get(endereco.tipo) != 'Institucional'" class="mouse-hover w-100">
+        <i class="far fa-trash-alt" (click)="solicitarExclusao()"></i>
+      </span>
+    </div>
+  </div>
+</div>

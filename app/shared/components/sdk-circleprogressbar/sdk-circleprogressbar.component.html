@@ -1,0 +1,24 @@
+<div class="circle-progress-bar">
+  <div class="label">
+    <span class="font-weight-bold">{{ value }}</span>
+    <span class="text-small-calculate" *ngIf="subtitle">{{ subtitle }}</span>
+  </div>
+  <circle-progress
+    [percent]="percent"
+    [maxPercent]="100"
+    [radius]="radius"
+    [outerStrokeWidth]="stroke"
+    [innerStrokeWidth]="stroke"
+    [outerStrokeColor]="progressColor"
+    [animation]="true"
+    [animationDuration]="300"
+    [space]="-stroke"
+    [showUnits]="false"
+    [showSubtitle]="false"
+    [showTitle]="false"
+    [innerStrokeColor]="'#F0F0F0'"
+    [responsive]="true"
+    [titleFontSize]="titleFontSize"
+    [titleFontWeight]="titleFontWeight"
+  ></circle-progress>
+</div>

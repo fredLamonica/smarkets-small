@@ -1,0 +1,17 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">{{ titulo }}</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body" >
+  <p>{{ confirmacao }}</p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="ArquivoDownload()">
+  Retorno I.A
+  </button>
+  <button type="button" [class]="'btn ' + confirmarBtnClass" (click)="ArquivoImportacao()" *ngIf="confirmarLabel != 'none'">
+  Arquivo Importação
+  </button>
+</div>

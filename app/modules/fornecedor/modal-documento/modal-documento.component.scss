@@ -1,0 +1,52 @@
+.btn-adicionar {
+    outline: none;
+    color: #00BBF3;
+    font-size: 30px;
+    &:hover, &:active, &:focus {
+        color: #00BBF3;
+    }
+    i {
+        color: #00BBF3;
+    }
+}
+
+.btn-remover {
+    outline: none;
+    color: #E74B37;
+    font-size: 24px;
+    &:hover, &:active, &:focus {
+        color: #E74B37;
+    }
+    i {
+        color: #E74B37;
+    }
+}
+
+button.btn-adicionar, button.btn-remover {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+}
+
+sdk-modal ::ng-deep > div.sdk-modal-body{
+     background-color: #F0F0F0;     
+}
+
+sdk-modal ::ng-deep > div.sdk-modal-footer{
+    background-color: #F0F0F0;    
+}
+
+ngb-modal-window ::ng-deep > div.modal-dialog  {
+    &.modal-lg{
+        max-width: 80% !important;
+    }
+    
+}
+
+.modal-dialog {
+    &.modal-xl {
+        max-width: 1200px !important;
+        width: 1200px !important;
+    }
+}

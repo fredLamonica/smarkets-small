@@ -1,0 +1,559 @@
+<div class="header">
+  <div class="header-search row">
+    <div class="col-12 align-self-center">
+      <h3 class="mb-0 text-uppercase text-primary font-weight-bold">
+        {{ idCotacao ? 'Alterar' : 'Nova' }} cotação
+      </h3>
+    </div>
+  </div>
+</div>
+<aw-wizard [navBarLayout]="'large-filled'">
+  <aw-wizard-step stepTitle="{{ !idCotacao ? 'PASSO 1' : 'Dados Gerais' }}">
+    <div class="card card-default">
+      <div class="card-header">{{ !idCotacao ? 'Dados Gerais' : '' }}</div>
+      <div class="card-body">
+        <div class="row bg-white pt-4">
+          <div class="col">
+            <form [formGroup]="form" *ngIf="form" class="mt-2">
+              <div class="form-row">
+                <div class="form-group col-2">
+                  <label for="idCotacao"> Código: </label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="idCotacao"
+                    disabled
+                    formControlName="idCotacao"
+                  />
+                </div>
+                <div class="form-group required col-6">
+                  <label for="descricao"> Descrição: </label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="descricao"
+                    formControlName="descricao"
+                    [class.invalid]="
+                      form.controls.descricao.invalid && form.controls.descricao.dirty
+                    "
+                  />
+                  <span
+                    class="invalid"
+                    *ngIf="form.controls.descricao.invalid && form.controls.descricao.dirty"
+                  >
+                    Preenchimento obrigatório
+                  </span>
+                </div>
+                <div class="form-group col-2">
+                  <label for="nomeUsuarioResponsavel"> Comprador: </label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="nomeUsuarioResponsavel"
+                    disabled
+                    formControlName="nomeUsuarioResponsavel"
+                  />
+                </div>
+                <div class="form-group required col-lg-2">
+                  <label for="moeda"> Moeda: </label>
+                  <ng-select
+                    name="moeda"
+                    formControlName="moeda"
+                    [class.invalid]="form.controls.moeda.invalid && form.controls.moeda.dirty"
+                  >
+                    <ng-option [value]="Moeda.Real">Real</ng-option>
+                    <ng-option [value]="Moeda['Dólar Americano']">Dólar Americano</ng-option>
+                    <ng-option [value]="Moeda['Dólar Australiano']">Dólar Australiano</ng-option>
+                    <ng-option [value]="Moeda['Dólar Canadense']">Dólar Canadense</ng-option>
+                    <ng-option [value]="Moeda.Euro">Euro</ng-option>
+                    <ng-option [value]="Moeda['Franco Suiço']">Franco Suíço</ng-option>
+                    <ng-option [value]="Moeda['Iene Japonês']">Iene Japonês</ng-option>
+                    <ng-option [value]="Moeda['Iuane Chinês']">Iuane Chinês</ng-option>
+                    <ng-option [value]="Moeda['Libra Esterlina']">Libra</ng-option>
+                    <ng-option [value]="Moeda.Peso">Peso Argentino</ng-option>
+                  </ng-select>
+                  <span
+                    class="invalid"
+                    *ngIf="form.controls.moeda.invalid && form.controls.moeda.dirty"
+                  >
+                    Preenchimento obrigatório
+                  </span>
+                </div>
+              </div>
+              <div class="form-row">
+                <div
+                  class="form-group required col-lg-4"
+                  *ngIf="this.form.value.situacao == SituacaoCotacao['Em configuração']"
+                >
+                  <label for="dataInicio"> Data Inicial: </label>
+                  <input
+                    class="form-control"
+                    type="datetime-local"
+                    [min]="currentDate"
+                    name="dataInicio"
+                    formControlName="dataInicio"
+                    [class.invalid]="
+                      form.controls.dataInicio.invalid && form.controls.dataInicio.dirty
+                    "
+                  />
+                  <span
+                    class="invalid"
+                    *ngIf="form.controls.dataInicio.invalid && form.controls.dataInicio.dirty"
+                  >
+                    Preenchimento obrigatório
+                  </span>
+                </div>
+                <div
+                  class="form-group required col-lg-4"
+                  *ngIf="this.form.value.situacao == SituacaoCotacao['Em configuração']"
+                >
+                  <label for="dataFim"> Data Final: </label>
+                  <input
+                    class="form-control"
+                    type="datetime-local"
+                    [min]="currentDate"
+                    name="dataFim"
+                    formControlName="dataFim"
+                    [class.invalid]="form.controls.dataFim.invalid && form.controls.dataFim.dirty"
+                  />
+                  <span
+                    class="invalid"
+                    *ngIf="form.controls.dataFim.invalid && form.controls.dataFim.dirty"
+                  >
+                    Preenchimento obrigatório
+                  </span>
+                </div>
+                <div
+                  class="form-group col-log-4 pt-4 mt-1"
+                  *ngIf="
+                    this.form.value.situacao == SituacaoCotacao['Em configuração'] &&
+                    this.cotacao?.idCotacao
+                  "
+                >
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary mr-3"
+                    (click)="agendarCotacao()"
+                  >
+                    Agendar
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    *ngIf="exibeBtnAssumir"
+                    (click)="onAssumirClick()"
+                  >
+                    <i class="fas fa-user-check"></i>
+                    Assumir
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-row" *ngIf="formularioRodadaVisivel()">
+                <div class="form-group col-lg-2">
+                  <label for="rodadaAtual"> Rodada Atual: </label>
+                  <input
+                    id="rodadaAtual"
+                    name="rodadaAtual"
+                    type="text"
+                    [value]="rodadaAtual ? rodadaAtual.ordem + 'ª rodada' : ''"
+                    [disabled]="true"
+                    class="form-control"
+                  />
+                </div>
+                <div class="form-row col-5">
+                  <div class="form-group col-lg-6">
+                    <label for="dataInicioRodada"> Data Inicial da Rodada: </label>
+                    <input
+                      class="form-control"
+                      type="datetime-local"
+                      [min]="currentDate"
+                      name="dataInicioRodada"
+                      formControlName="dataInicioRodada"
+                    />
+                  </div>
+                  <div class="form-group col-lg-6">
+                    <label for="dataFimRodada"> Data Final da Rodada: </label>
+                    <input
+                      class="form-control"
+                      type="datetime-local"
+                      [min]="currentDate"
+                      name="dataFimRodada"
+                      formControlName="dataFimRodada"
+                    />
+                  </div>
+                </div>
+                <div class="form-group col-5 pt-4 mt-1">
+                  <button
+                    type="button"
+                    class="btn btn-outline-success mr-3"
+                    *ngIf="botaoProrrogarVisivel()"
+                    (click)="prorrogar()"
+                  >
+                    Atualizar Data
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger mr-3"
+                    *ngIf="botaoEncerrarVisivel()"
+                    (click)="encerrarRodada()"
+                  >
+                    Encerrar
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary mr-3"
+                    *ngIf="flagPermitirAnalise"
+                    (click)="abrirTelaAnalise()"
+                  >
+                    Analisar
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    *ngIf="exibeBtnAssumir"
+                    (click)="onAssumirClick()"
+                  >
+                    <i class="fas fa-user-check"></i>
+                    Assumir
+                  </button>
+                </div>
+              </div>
+              <div
+                class="col-12 mt-4 bg-white border-bottom"
+                *ngIf="
+                  cotacao &&
+                  (cotacao.situacao == SituacaoCotacao.Agendada ||
+                    cotacao.situacao == SituacaoCotacao.Encerrada)
+                "
+              >
+                <collapse-footer (open)="obterRodadas()">
+                  <div class="row bg-lighter border-top">
+                    <div class="form-group col">
+                      <label>Rodadas:</label>
+                      <div class="table-responsive" *ngIf="rodadas && rodadas.length > 0">
+                        <table id="table" class="table table-new-ux">
+                          <thead>
+                            <tr>
+                              <!-- <th scope="col">ID Rateio:</th> -->
+                              <th
+                                scope="col"
+                                data-toggle="tooltip"
+                                data-placement="bottom"
+                                title="Ordem da Rodada"
+                              >
+                                Rodada:
+                              </th>
+                              <th
+                                scope="col"
+                                data-toggle="tooltip"
+                                data-placement="bottom"
+                                title="Data de Início"
+                              >
+                                Data de Início:
+                              </th>
+                              <th
+                                scope="col"
+                                data-toggle="tooltip"
+                                data-placement="bottom"
+                                title="Data Final Programada"
+                              >
+                                Data Final Programada:
+                              </th>
+                              <th
+                                scope="col"
+                                data-toggle="tooltip"
+                                data-placement="bottom"
+                                title="Prorrogação"
+                              >
+                                Prorrogado até:
+                              </th>
+                              <th
+                                scope="col"
+                                data-toggle="tooltip"
+                                data-placement="bottom"
+                                title="Data e Hora de Encerramento"
+                              >
+                                Encerrado em:
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let rodada of rodadas; let i = index">
+                              <td>{{ rodada?.ordem }}</td>
+                              <td>{{ formatarData(rodada?.dataInicio) }}</td>
+                              <td>{{ formatarData(rodada?.dataFimProgramada) }}</td>
+                              <td>{{ formatarData(rodada?.dataFimProrrogada) }}</td>
+                              <td>
+                                {{
+                                  rodada?.finalizada ? formatarData(rodada?.dataEncerramento) : ''
+                                }}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </collapse-footer>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-12">
+                  <label> Termo de Concordância: </label>
+                  <textarea
+                    class="form-control"
+                    name="termoConcordancia"
+                    id="termoConcordancia"
+                    formControlName="termoConcordancia"
+                    rows="4"
+                  ></textarea>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-12">
+                  <label class="pr-2"> Anexar Arquivo: </label>
+                  <input-file
+                    [multiple]="true"
+                    accept=".csv,.tiff,.txt,.pdf,.xlsx,.xls,.pptx,.ppt,.docx,.doc,.odt,.ods,.odp,.png,.jpeg,.jpg"
+                    (select)="incluirArquivos($event)"
+                    *ngIf="!readonly"
+                  ></input-file>
+                </div>
+                <div class="form-group col-12">
+                  <galeria-arquivos
+                    [arquivos]="form.controls.anexos.value"
+                    (excluir)="excluirArquivo($event)"
+                    [disabled]="readonly"
+                  >
+                  </galeria-arquivos>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row bg-white pb-4">
+          <div class="col-12 col-md-6">
+            <button
+              type="button"
+              class="btn btn-outline-primary float-left mx-2"
+              (click)="voltar()"
+            >
+              Voltar
+            </button>
+          </div>
+          <div class="col-12 col-md-6">
+            <button
+              type="button"
+              class="btn btn-primary float-right"
+              (click)="irSelecaoItens()"
+              *ngIf="!idCotacao"
+            >
+              Próximo Passo
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary float-right"
+              (click)="salvar()"
+              *ngIf="idCotacao && exibirBotaoSalvar()"
+            >
+              Salvar
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger float-right mr-2"
+              (click)="cancelar()"
+              *ngIf="exibirBotaoCotacao()"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aw-wizard-step>
+  <aw-wizard-step stepTitle="{{ !idCotacao ? 'PASSO 2' : 'Itens' }}" #step2>
+    <div class="card card-default" *ngIf="step2.selected">
+      <div class="card-body">
+        <form [formGroup]="form" *ngIf="form" class="mt-2">
+          <manter-cotacao-itens
+            [id-cotacao]="idCotacao"
+            [cotacao]="cotacao"
+            [cotacao-itens]="cotacao?.itens"
+            formControlName="itens"
+            [readonly]="readonly"
+          >
+          </manter-cotacao-itens>
+        </form>
+        <div class="row bg-white py-3">
+          <div class="col-12 col-md-3 align-self-end">
+            <button
+              type="button"
+              class="btn btn-primary"
+              *ngIf="hasPreviousStep() && !idCotacao"
+              (click)="previousStep()"
+            >
+              Passo Anterior
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary float-left mx-2"
+              (click)="voltar()"
+            >
+              Voltar
+            </button>
+          </div>
+          <div class="col-12 col-md-6">
+            <form class="row" [formGroup]="form" *ngIf="form">
+              <div class="form-group required col-6 mb-0">
+                <label for="incoterms"> Incoterms: </label>
+                <ng-select
+                  name="incoterms"
+                  formControlName="incoterms"
+                  [class.invalid]="form.controls.incoterms.invalid && form.controls.incoterms.dirty"
+                >
+                  <ng-option [value]="TipoFrete.Cif">CIF</ng-option>
+                  <ng-option [value]="TipoFrete.Fob">FOB</ng-option>
+                  <ng-option [value]="TipoFrete.Exw">EXW</ng-option>
+                  <ng-option [value]="TipoFrete.Fca">FCA</ng-option>
+                  <ng-option [value]="TipoFrete.Cpt">CPT</ng-option>
+                  <ng-option [value]="TipoFrete.Cip">CIP</ng-option>
+                  <ng-option [value]="TipoFrete.Dat">DAT</ng-option>
+                  <ng-option [value]="TipoFrete.Dap">DAP</ng-option>
+                  <ng-option [value]="TipoFrete.Ddp">DDP</ng-option>
+                  <ng-option [value]="TipoFrete.Fas">FAS</ng-option>
+                  <ng-option [value]="TipoFrete.Cfr">CFR</ng-option>
+                  <ng-option [value]="TipoFrete.Daf">DAF</ng-option>
+                  <ng-option [value]="TipoFrete.Ddu">DDU</ng-option>
+                  <ng-option [value]="TipoFrete.Deq">DEQ</ng-option>
+                  <ng-option [value]="TipoFrete.Des">DES</ng-option>
+                  <ng-option [value]="TipoFrete.Fh">FH</ng-option>
+                </ng-select>
+                <span
+                  class="invalid"
+                  *ngIf="form.controls.incoterms.invalid && form.controls.incoterms.dirty"
+                >
+                  Preenchimento obrigatório
+                </span>
+              </div>
+              <div class="form-group required col-12 col-md-6 mb-0">
+                <label for="idCondicaoPagamento"> Condição de Pagamento: </label>
+                <ng-select
+                  name="idCondicaoPagamento"
+                  formControlName="idCondicaoPagamento"
+                  [class.invalid]="
+                    form.controls.idCondicaoPagamento.invalid &&
+                    form.controls.idCondicaoPagamento.dirty
+                  "
+                >
+                  <ng-option
+                    [value]="condicaoPagamento.idCondicaoPagamento"
+                    *ngFor="let condicaoPagamento of condicoesPagamento"
+                  >
+                    {{ condicaoPagamento.descricao }}
+                  </ng-option>
+                </ng-select>
+                <span
+                  class="invalid"
+                  *ngIf="
+                    form.controls.idCondicaoPagamento.invalid &&
+                    form.controls.idCondicaoPagamento.dirty
+                  "
+                >
+                  Preenchimento obrigatório
+                </span>
+              </div>
+            </form>
+          </div>
+          <div class="col-12 col-md-3 align-self-end">
+            <button
+              type="button"
+              class="btn btn-primary float-right"
+              (click)="irSelecaoParticipantes()"
+              *ngIf="!idCotacao"
+            >
+              Próximo Passo
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary float-right"
+              (click)="salvar()"
+              *ngIf="idCotacao && exibirBotaoSalvar()"
+            >
+              Salvar
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger float-right mr-2"
+              (click)="cancelar()"
+              *ngIf="exibirBotaoCotacao()"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aw-wizard-step>
+  <aw-wizard-step stepTitle="{{ !idCotacao ? 'PASSO 3' : 'Participantes' }}" #step3>
+    <div class="card card-default" *ngIf="step3.selected">
+      <div class="card-body">
+        <form [formGroup]="form" *ngIf="form" class="mt-2">
+          <manter-cotacao-participantes
+            [id-cotacao]="idCotacao"
+            [categorias]="obterCategoriasItensParticipantes()"
+            [participantes]="cotacao?.participantes"
+            [cotacao]="cotacao"
+            formControlName="participantes"
+            [readonly]="readonly"
+          >
+          </manter-cotacao-participantes>
+        </form>
+        <div class="row bg-white py-3">
+          <div class="col-12 col-md-6">
+            <button
+              type="button"
+              class="btn btn-primary"
+              *ngIf="hasPreviousStep() && !idCotacao"
+              (click)="previousStep()"
+            >
+              Passo Anterior
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary float-left mx-2"
+              (click)="voltar()"
+            >
+              Voltar
+            </button>
+          </div>
+          <div class="col-12 col-md-6">
+            <button
+              type="button"
+              class="btn btn-primary float-right"
+              (click)="salvar()"
+              *ngIf="exibirBotaoSalvar()"
+            >
+              Salvar
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger float-right mr-2"
+              (click)="cancelar()"
+              *ngIf="exibirBotaoCotacao()"
+            >
+              Cancelar
+            </button>
+            <button
+              class="btn btn-primary float-right mr-2"
+              *ngIf="primeiraRodada && emAndamento"
+              (click)="adicionarFornecedor()"
+            >
+              Adicionar Fornecedor
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aw-wizard-step>
+</aw-wizard>

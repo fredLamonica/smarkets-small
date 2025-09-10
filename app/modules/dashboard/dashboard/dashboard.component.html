@@ -1,0 +1,131 @@
+<div class="header" *ngIf="!precisaAceitarTermo">
+  <div class="row align-items-center mx-auto">
+    <div class="col">
+      <p class="text-uppercase mb-0 text-white">
+        Olá<span *ngIf="nomeUsuario">, {{ nomeUsuario }}, Seja bem-vindo!</span>
+      </p>
+      <p class="mb-0 text-white">
+        <span *ngIf="usuario">{{ getProfileEnum() }} | Smarkets</span>
+      </p>
+    </div>
+    <div class="col text-right">
+      <p class="text-uppercase mb-0 text-white font-weight-bold">
+        <span *ngIf="usuario">
+          {{
+          usuario?.permissaoAtual?.pessoaJuridica?.nomeFantasia
+          ? usuario?.permissaoAtual?.pessoaJuridica?.nomeFantasia
+          : usuario?.permissaoAtual?.pessoaJuridica?.razaoSocial
+          }}</span>
+      </p>
+      <p class="mb-0 text-white">
+        <span *ngIf="usuario">{{ usuario?.permissaoAtual?.pessoaJuridica?.cnpj }}</span>
+      </p>
+    </div>
+    <div class="col-12">
+      <p class="text-white" *ngIf="mensagemDeAlertaDeclinado != null">
+        {{ mensagemDeAlertaDeclinado }}
+      </p>
+      <p class="text-white" *ngIf="mensagemDeAlertaHomologadoComPendencias != null">
+        {{ mensagemDeAlertaHomologadoComPendencias }}
+      </p>
+    </div>
+  </div>
+  <div
+    class="header-navigation header-fast-access"
+    *ngIf="acessoRapido?.length && showAcessoRapido()">
+    <div class="bounds row align-items-center">
+      <div class="col-3">
+        <div class="title">
+          <p class="first-line">Acesso rápido</p>
+          <p><span class="second-line">para </span><span class="second-line">você</span></p>
+        </div>
+      </div>
+      <div class="col-3 align-self-center" *ngFor="let item of acessoRapido; let i = index">
+        <div
+          class="btn-group btn-block"
+          role="group"
+          aria-label="itemAcessoRapido"
+          [routerLink]="item.rota">
+          <button type="button" class="btn {{ corAcessoRapido(i) }}">
+            <i class="{{ item.icone }}"></i>
+          </button>
+          <button type="button" class="btn btn-light w-100">{{ item.nome }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="container-fluid no-bounds px-5"
+  [ngSwitch]="usuario?.permissaoAtual?.perfil"
+  [ngClass]="{
+    'background-dashboard-fornecedor':
+      usuario?.permissaoAtual?.pessoaJuridica?.configuracaoDash ==
+      configuracaoDash.PendenciaFornecedores,
+    'background-dashboard-fastEquote' : usuario?.permissaoAtual?.pessoaJuridica?.configuracaoDash == configuracaoDash.FastEquote &&
+        usuario?.permissaoAtual?.idTenant == 1
+  }">
+
+  <ng-template [ngSwitchCase]="PerfilUsuario.Aprovador">
+    <dashboard-aprovador #dashboardAprovador></dashboard-aprovador>
+  </ng-template>
+  <ng-template
+    [ngSwitchCase]="
+      PerfilUsuario.Gestor || PerfilUsuario.GestorDeFornecedores || PerfilUsuario.Administrador
+    ">
+    <dashboard-gestor
+      #dashboardGestor
+      *ngIf="
+        usuario?.permissaoAtual?.pessoaJuridica?.configuracaoDash == configuracaoDash.Integracao ||
+        usuario?.permissaoAtual?.pessoaJuridica?.configuracaoDash == configuracaoDash.Padrao
+      "></dashboard-gestor>
+    <dashboard-fornecedor
+      *ngIf="
+        usuario?.permissaoAtual?.pessoaJuridica?.configuracaoDash ==
+        configuracaoDash.PendenciaFornecedores
+      "
+      class="pl-100"></dashboard-fornecedor>
+  </ng-template>
+  <ng-template [ngSwitchCase]="PerfilUsuario.Fornecedor">
+    <aceite-termos
+      [pdf]="pdfs[pospdf]"
+      [usuario]="usuario"
+      [fornecedor]="fornecedor"
+      (clicado)="finalizarAceiteDeTermos()"
+      #aceiteDeTermos
+      *ngIf="precisaAceitarTermo"></aceite-termos>
+    <div class="text-center">
+      <img
+        *ngIf="usuario?.permissaoAtual?.idTenant == 1 && !precisaAceitarTermo"
+        src="./../../../../assets/img/dashboard.jpg"
+        class="img-fluid mt-3" />
+    </div>
+  </ng-template>
+  <ng-template ngSwitchDefault>
+    <dashboard-gestor
+      #dashboardGestor
+      *ngIf="
+        usuario?.permissaoAtual?.pessoaJuridica?.configuracaoDash == configuracaoDash.Integracao ||
+        usuario?.permissaoAtual?.pessoaJuridica?.configuracaoDash == configuracaoDash.Padrao
+      "></dashboard-gestor>
+    <dashboard-fornecedor
+      *ngIf="
+        usuario?.permissaoAtual?.pessoaJuridica?.configuracaoDash ==
+        configuracaoDash.PendenciaFornecedores
+      "
+      class="pl-100"></dashboard-fornecedor>
+      <smk-dashboard-fast-equote
+      *ngIf="
+        usuario?.permissaoAtual?.pessoaJuridica?.configuracaoDash == configuracaoDash.FastEquote &&
+        usuario?.permissaoAtual?.idTenant == 1"
+      >
+      </smk-dashboard-fast-equote>
+    <div class="text-center" *ngIf="!usuario?.permissaoAtual?.pessoaJuridica?.configuracaoDash">
+      <img
+        *ngIf="usuario?.permissaoAtual?.idTenant == 1"
+        src="./../../../../assets/img/dashboard.jpg"
+        class="img-fluid mt-3" />
+    </div>
+  </ng-template>
+</div>

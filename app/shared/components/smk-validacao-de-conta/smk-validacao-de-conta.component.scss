@@ -1,0 +1,42 @@
+@import "src/themes/_smk-base.scss";
+
+.validacao-de-conta {
+  font-size: 15px;
+
+  .titulo {
+    font-weight: 600;
+  }
+
+  .container-codigo {
+    .codigo {
+      max-width: 140px;
+      text-align: center;
+    }
+  }
+
+  .acoes {
+    .continuar {
+      @include smk-button($smk-primary-color, lg);
+    }
+
+    .reenviar {
+      @include smk-button-outline($smk-primary-color, lg);
+    }
+
+    .codigo-recuperacao {
+      @include smk-button-outline($smk-success-color, lg);
+    }
+
+    .codigo-pin {
+      @include smk-button-outline($smk-success-color, lg);
+    }
+
+    .outro-metodo {
+      @include smk-button-outline($smk-success-color, lg);
+    }
+
+    .sem-acesso {
+      @include smk-button-outline($smk-primary-color, lg);
+    }
+  }
+}

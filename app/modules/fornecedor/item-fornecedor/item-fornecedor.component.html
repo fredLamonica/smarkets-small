@@ -1,0 +1,343 @@
+<div
+  class="item-fornecedor"
+  (mouseover)="isHover = true"
+  (mouseleave)="isHover = false"
+  (click)="!disabled && navigateFor('dados-gerais')"
+>
+  <div
+    class="icon status"
+    [ngClass]="{
+      'bg-novo': fornecedor.status && fornecedor.status == 2 && isHover,
+      'bg-ativo': fornecedor.status && fornecedor.status == 5 && isHover,
+      'bg-bloqueado': fornecedor.status && fornecedor.status == 1 && isHover,
+      'bg-pendencia': fornecedor.status && fornecedor.status == 3 && isHover,
+      'bg-em-analise': fornecedor.status && fornecedor.status == 4 && isHover,
+      'bg-inativo': fornecedor.status && fornecedor.status == 6 && isHover
+    }"
+  >
+    <span class="rotated">{{
+      fornecedor.status != 3 ? statusFornecedorLabel.get(fornecedor.status).valueOf() : 'Pendência'
+    }}</span>
+    <i
+      [ngClass]="{
+        novo: fornecedor.status && fornecedor.status == 2,
+        ativo: fornecedor.status && fornecedor.status == 5,
+        bloqueado: fornecedor.status && fornecedor.status == 1,
+        pendencia: fornecedor.status && fornecedor.status == 3,
+        'em-analise': fornecedor.status && fornecedor.status == 4,
+        inativo: fornecedor.status && fornecedor.status == 6
+      }"
+      class="fa fa-circle point"
+    ></i>
+  </div>
+  <div class="content px-xl-2">
+    <div class="col-xl-2">
+      <a class="font-weight-bold">{{ fornecedor.cnpj }}</a>
+    </div>
+    <div class="col-xl-5">
+      <div class="row px-xl-0">
+        <div class="col-xl-8 pl-xl-0 crop-text-2">
+          <a
+            class="font-weight-bold"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ fornecedor.nomeFantasia ? fornecedor.nomeFantasia : fornecedor.razaoSocial }}"
+          >
+            {{ fornecedor.nomeFantasia ? fornecedor.nomeFantasia : fornecedor.razaoSocial }}</a
+          >
+        </div>
+        <div class="d-flex col-xl-4 pr-xl-0">
+          <a class="w-100 align-self-center text-right font-weight-bold">{{
+            fornecedor.codigoFornecedor
+          }}</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 d-flex justify-content-end pr-0">
+      <sdk-chip
+        [ngClass]="{
+          itemVermelho:
+            fornecedor.situacaoDocumentoFornecedorCor == situacaoDocumentoFornecedorCor.Vencido ||
+            fornecedor.situacaoDocumentoFornecedorCor == situacaoDocumentoFornecedorCor.Recusado,
+          itemLaranja:
+            fornecedor.situacaoDocumentoFornecedorCor == situacaoDocumentoFornecedorCor.Vencer ||
+            fornecedor.situacaoDocumentoFornecedorCor == situacaoDocumentoFornecedorCor.NaoEnviado,
+          itemAzul:
+            fornecedor.situacaoDocumentoFornecedorCor == situacaoDocumentoFornecedorCor.Novo,
+          itemVerde:
+            fornecedor.situacaoDocumentoFornecedorCor == situacaoDocumentoFornecedorCor.Aprovado
+        }"
+        [ngbTooltip]="tipContentDoc"
+        placement="top"
+        tooltipClass="tooltip-light"
+        class="pr-2"
+        icon="<i class='far fa-lg fa-file-alt'></i>"
+        [content]="(fornecedor.qtdDoc > 99 ? '99+' : fornecedor.qtdDoc) + ' DOC'"
+        icon-color="#D3D3D3"
+        icon-text-color="#808080"
+        content-text-color="#808080"
+        (on-click)="showModalDocumentos()"
+      >
+        <ng-template #tipContentDoc>
+          <div class="toolTipCustom">
+            <i
+              class="fas fa-exclamation-circle toolTipColor"
+              [ngClass]="{
+                vermelho:
+                  fornecedor.situacaoDocumentoFornecedorCor ==
+                    situacaoDocumentoFornecedorCor.Vencido ||
+                  fornecedor.situacaoDocumentoFornecedorCor ==
+                    situacaoDocumentoFornecedorCor.Recusado,
+                laranja:
+                  fornecedor.situacaoDocumentoFornecedorCor ==
+                    situacaoDocumentoFornecedorCor.Vencer ||
+                  fornecedor.situacaoDocumentoFornecedorCor ==
+                    situacaoDocumentoFornecedorCor.NaoEnviado,
+                azul:
+                  fornecedor.situacaoDocumentoFornecedorCor == situacaoDocumentoFornecedorCor.Novo,
+                verde:
+                  fornecedor.situacaoDocumentoFornecedorCor ==
+                  situacaoDocumentoFornecedorCor.Aprovado
+              }"
+            >
+            </i>
+            <a *ngIf="fraseDocumento || prefixoFraseDocumentos">
+              {{ prefixoFraseDocumentos }}
+              <b
+                class="toolTipColor"
+                [ngClass]="{
+                  vermelho:
+                    fornecedor.situacaoDocumentoFornecedorCor ==
+                      situacaoDocumentoFornecedorCor.Vencido ||
+                    fornecedor.situacaoDocumentoFornecedorCor ==
+                      situacaoDocumentoFornecedorCor.Recusado,
+                  laranja:
+                    fornecedor.situacaoDocumentoFornecedorCor ==
+                      situacaoDocumentoFornecedorCor.Vencer ||
+                    fornecedor.situacaoDocumentoFornecedorCor ==
+                      situacaoDocumentoFornecedorCor.NaoEnviado,
+                  azul:
+                    fornecedor.situacaoDocumentoFornecedorCor == situacaoDocumentoFornecedorCor.Novo
+                }"
+              >
+                {{ fraseDocumento }}
+              </b>
+              {{ sufixoFraseDocumentos }}
+            </a>
+          </div>
+        </ng-template></sdk-chip
+      >
+      <sdk-chip
+        [ngClass]="{
+          itemLaranja:
+            fornecedor.situacaoQuestionarioFornecedorCor ==
+            situacaoQuestionarioFornecedorCor.Pendente,
+          itemAzul:
+            fornecedor.situacaoQuestionarioFornecedorCor ==
+            situacaoQuestionarioFornecedorCor.Andamento,
+          itemVerde:
+            fornecedor.situacaoQuestionarioFornecedorCor ==
+            situacaoQuestionarioFornecedorCor.Respondido
+        }"
+        [ngbTooltip]="tipContentQuest"
+        placement="top"
+        tooltipClass="tooltip-light"
+        class="pr-2"
+        icon="<i class='fas fa-lg fa-question'></i>"
+        [content]="(fornecedor.qtdQST > 99 ? '99+' : fornecedor.qtdQST) + ' QST'"
+        icon-color="#D3D3D3"
+        icon-text-color="#808080"
+        content-text-color="#808080"
+        (on-click)="navigateFor('questionarios')"
+      >
+        <ng-template #tipContentQuest>
+          <div class="toolTipCustom">
+            <i
+              class="fas fa-exclamation-circle toolTipColor"
+              [ngClass]="{
+                laranja:
+                  fornecedor.situacaoQuestionarioFornecedorCor ==
+                  situacaoQuestionarioFornecedorCor.Pendente,
+                azul:
+                  fornecedor.situacaoQuestionarioFornecedorCor ==
+                  situacaoQuestionarioFornecedorCor.Andamento,
+                verde:
+                  fornecedor.situacaoQuestionarioFornecedorCor ==
+                  situacaoQuestionarioFornecedorCor.Respondido
+              }"
+            >
+            </i>
+            <a *ngIf="fraseQuestionario || prefixoFraseQuestionario">
+              {{ prefixoFraseQuestionario }}
+              <b
+                class="toolTipColor"
+                [ngClass]="{
+                  laranja:
+                    fornecedor.situacaoQuestionarioFornecedorCor ==
+                    situacaoQuestionarioFornecedorCor.Pendente,
+                  azul:
+                    fornecedor.situacaoQuestionarioFornecedorCor ==
+                    situacaoQuestionarioFornecedorCor.Andamento
+                }"
+              >
+                {{ fraseQuestionario }}
+              </b>
+              {{ sufixoFraseQuestionario }}
+            </a>
+          </div>
+        </ng-template>
+      </sdk-chip>
+      <sdk-chip
+        [ngClass]="{
+          itemVermelho:
+            fornecedor.situacaoPlanoAcaoFornecedorCor == situacaoPlanoAcaoFornecedorCor.Atrasado,
+          itemLaranja:
+            fornecedor.situacaoPlanoAcaoFornecedorCor == situacaoPlanoAcaoFornecedorCor.Pendente,
+          itemAzul:
+            fornecedor.situacaoPlanoAcaoFornecedorCor == situacaoPlanoAcaoFornecedorCor.Andamento,
+          itemVerde:
+            fornecedor.situacaoPlanoAcaoFornecedorCor == situacaoPlanoAcaoFornecedorCor.Finalizado
+        }"
+        [ngbTooltip]="tipContentPlan"
+        placement="top"
+        tooltipClass="tooltip-light"
+        class="pr-2"
+        icon="<i class='fas fa-lg fa-directions'></i>"
+        [content]="(fornecedor.qtdPNL > 99 ? '99+' : fornecedor.qtdPNL) + ' PLN'"
+        icon-color="#D3D3D3"
+        icon-text-color="#808080"
+        content-text-color="#808080"
+        (on-click)="navigateFor('planos-acao')"
+      >
+        <ng-template #tipContentPlan>
+          <div class="toolTipCustom">
+            <i
+              class="fas fa-exclamation-circle toolTipColor"
+              [ngClass]="{
+                vermelho:
+                  fornecedor.situacaoPlanoAcaoFornecedorCor ==
+                  situacaoPlanoAcaoFornecedorCor.Atrasado,
+                laranja:
+                  fornecedor.situacaoPlanoAcaoFornecedorCor ==
+                  situacaoPlanoAcaoFornecedorCor.Pendente,
+                azul:
+                  fornecedor.situacaoPlanoAcaoFornecedorCor ==
+                  situacaoPlanoAcaoFornecedorCor.Andamento,
+                verde:
+                  fornecedor.situacaoPlanoAcaoFornecedorCor ==
+                  situacaoPlanoAcaoFornecedorCor.Finalizado
+              }"
+            >
+            </i>
+            <a *ngIf="frasePlanoAcao || prefixoFrasePlanoAcao">
+              {{ prefixoFrasePlanoAcao }}
+              <b
+                class="toolTipColor"
+                [ngClass]="{
+                  vermelho:
+                    fornecedor.situacaoPlanoAcaoFornecedorCor ==
+                    situacaoPlanoAcaoFornecedorCor.Atrasado,
+                  laranja:
+                    fornecedor.situacaoPlanoAcaoFornecedorCor ==
+                    situacaoPlanoAcaoFornecedorCor.Pendente,
+                  azul:
+                    fornecedor.situacaoPlanoAcaoFornecedorCor ==
+                    situacaoPlanoAcaoFornecedorCor.Andamento
+                }"
+              >
+                {{ frasePlanoAcao }}
+              </b>
+              {{ sufixoFrasePlanoAcao }}
+            </a>
+          </div>
+        </ng-template></sdk-chip
+      >
+      <sdk-chip
+        [ngClass]="{
+          itemLaranja:
+            fornecedor.situacaoPendenciaFornecedorCor == situacaoPendenciaFornecedorCor.Pendente,
+          itemVerde:
+            fornecedor.situacaoPendenciaFornecedorCor == situacaoPendenciaFornecedorCor.Resolvida
+        }"
+        [ngbTooltip]="tipContentPend"
+        placement="top"
+        tooltipClass="tooltip-light"
+        class="pr-2"
+        icon="<i class='far fa-lg fa-clipboard'></i>"
+        [content]="(fornecedor.qtdPDC > 99 ? '99+' : fornecedor.qtdPDC) + ' PND'"
+        icon-color="#D3D3D3"
+        icon-text-color="#808080"
+        content-text-color="#808080"
+        (on-click)="navigateFor('pendencias')"
+      >
+        <ng-template #tipContentPend>
+          <div class="toolTipCustom">
+            <i
+              class="fas fa-exclamation-circle toolTipColor"
+              [ngClass]="{
+                laranja:
+                  fornecedor.situacaoPendenciaFornecedorCor ==
+                  situacaoPendenciaFornecedorCor.Pendente,
+                verde:
+                  fornecedor.situacaoPendenciaFornecedorCor ==
+                  situacaoPendenciaFornecedorCor.Resolvida
+              }"
+            >
+            </i>
+            <a *ngIf="frasePendencia || prefixoFrasePendencia">
+              {{ prefixoFrasePendencia }}
+              <b
+                class="toolTipColor"
+                [ngClass]="{
+                  laranja:
+                    fornecedor.situacaoPendenciaFornecedorCor ==
+                    situacaoPendenciaFornecedorCor.Pendente
+                }"
+              >
+                {{ frasePendencia }}
+              </b>
+              {{ sufixoFrasePendencia }}
+            </a>
+          </div>
+        </ng-template>
+      </sdk-chip>
+    </div>
+    <div class="d-flex justify-content-end col-1">
+      <sdk-suspense-menu-button class="menu-suspenso col-1" [icon]="'fa fa-ellipsis-h'" title="...">
+        <ng-template sdkSuspenseMenu>
+          <strong class="text-small label-menu-suspenso">Outras Ações:</strong>
+          <button
+            title="Auditoria"
+            class="btn btn-sm btn-icon"
+            (click)="solicitarAudicaoFornecedor()"
+          >
+            <i class="fas fa-history"></i>
+          </button>
+          <!-- <button
+              *ngIf="fornecedor.status == 5 || fornecedor.status == 3"              
+              title="Inativar"
+              class="btn btn-sm btn-icon"
+              (click)="solicitarInativacaoFornecedor()"
+            >
+              <i class="fas fa-toggle-on text-success"></i>
+            </button>
+            <button
+              *ngIf="fornecedor.status == 6"
+              title="Ativar"
+              class="btn btn-sm btn-icon"
+              (click)="solicitarAtivacaoFornecedor()"
+            >
+              <i class="fas fa-toggle-off"></i>
+            </button> -->
+          <button
+            title="Excluir"
+            class="btn btn-sm btn-icon"
+            (click)="solicitarRemoverFornecedor(fornecedor)"
+          >
+            <i class="far fa-trash-alt text-danger"></i>
+          </button>
+        </ng-template>
+      </sdk-suspense-menu-button>
+    </div>
+  </div>
+</div>

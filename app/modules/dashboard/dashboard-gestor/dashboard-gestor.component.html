@@ -1,0 +1,351 @@
+<div class="container-fluid row" *ngIf="!hasIntegracao">
+  <div
+    class="col my-5 d-flex justify-content-center"
+    *ngIf="!indicadoresNumericos; else hasIndicadoresNumerico"
+  >
+    <div class="spinner spinner-secondary"></div>
+  </div>
+  <ng-template #hasIndicadoresNumerico>
+    <indicador-numerico
+      class="col-6 col-md-4 col-xl-2 my-4"
+      [indicador]="indicador"
+      *ngFor="let indicador of indicadoresNumericos"
+    >
+    </indicador-numerico>
+  </ng-template>
+</div>
+<div class="container-fluid row" *ngIf="!hasIntegracao">
+  <div class="col-md-6 col-xl-8">
+    <div
+      class="col-md-6 my-5 d-flex justify-content-center"
+      *ngIf="!pendenciasMatrizResponsabilidade; else hasPendenciasMatrizResponsabilidade"
+    >
+      <div class="spinner spinner-secondary"></div>
+    </div>
+    <ng-template #hasPendenciasMatrizResponsabilidade>
+      <div class="card indicador-tabela" *ngIf="pendenciasMatrizResponsabilidade?.length">
+        <div class="card-header text-center font-weight-bold text-uppercase">
+          Categorias Pendentes na Matriz de Responsabilidade
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table id="table" class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Categoria:</th>
+                  <th scope="col">Tipo de Requisição:</th>
+                  <th scope="col">Classificação SLA:</th>
+                  <th scope="col">Margem Alçada:</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of pendenciasMatrizResponsabilidade; let i = index">
+                  <td>{{ item?.categoriasProduto[0]?.nome }}</td>
+                  <td>{{ item?.tiposRequisicao[0]?.nome }}</td>
+                  <td>
+                    {{ item?.slaItens[0]?.tempo }}
+                    {{ UnidadeMedidaTempo[item?.slaItens[0]?.unidadeMedidaTempo] }}(s) -
+                    {{ item?.slaItens[0]?.classificacao?.descricao }}
+                  </td>
+                  <td>
+                    {{ item?.alcadas[0]?.alcadaMinima | currency: 'BRL':'symbol':'1.2':'pt-BR' }} -
+                    {{ item?.alcadas[0]?.alcadaMaxima | currency: 'BRL':'symbol':'1.2':'pt-BR' }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="px-2">
+            <p>
+              <small
+                >Para ver mais detalhes, exporte o relatório completo.
+                <a role="button" class="text-indigo-light" (click)="downloadMatrizPendente()"
+                  ><u>Clique aqui</u></a
+                >
+                para Exportar relatório em CSV.</small
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  <div class="col-md-6 col-xl-4">
+    <div
+      class="col my-5 d-flex justify-content-center"
+      *ngIf="
+        !indicadorRequisicoesSemResponsavelPorCategoria;
+        else hasInidicadorRequisicoesSemResponsavelPorCategoria
+      "
+    >
+      <div class="spinner spinner-secondary"></div>
+    </div>
+    <ng-template #hasInidicadorRequisicoesSemResponsavelPorCategoria>
+      <indicador-grafico
+        tipo="pie"
+        titulo="Req. Backlog sem Responsável"
+        (download)="downloadRequisicoesSemResponsavel()"
+        [permitir-download]="true"
+        sub-titulo="Total de Requisições sem Responsável"
+        [indicador]="indicadorRequisicoesSemResponsavelPorCategoria"
+        *ngIf="indicadorRequisicoesSemResponsavelPorCategoria"
+      ></indicador-grafico>
+    </ng-template>
+  </div>
+</div>
+
+<div class="container-fluid row" *ngIf="hasIntegracao">
+  <div class="col-lg-12 align-items-center">
+    <div class="form-row justify-content-center" [formGroup]="formFiltro">
+      <div class="form-group col-lg-2">
+        <label for="centro"> Centro: </label>
+        <ng-select
+          [items]="filiais$ | async"
+          name="codigoFilialEmpresa"
+          formControlName="codigoFilialEmpresa"
+          bindLabel="codigoFilialEmpresa"
+          bindValue="codigoFilialEmpresa"
+          [loading]="filiaisLoading"
+          [loadingText]="'buscando...'"
+          [multiple]="true"
+        >
+        </ng-select>
+      </div>
+      <div class="form-group col-lg-4">
+        <label for="sla"> SLA: </label>
+        <ng-select
+          [hideSelected]="true"
+          [items]="slas$ | async"
+          bindLabel="descricao"
+          bindValue="idClassificacao"
+          name="descricao"
+          formControlName="sla"
+          [loading]="slasLoading"
+          [loadingText]="'buscando...'"
+          [multiple]="true"
+        >
+        </ng-select>
+      </div>
+
+      <div class="form-group col-lg-2">
+        <label for="dataInicio"> Período Inicio: </label>
+        <input class="form-control" type="date" name="dataInicio" formControlName="dataInicio" />
+      </div>
+      <div class="form-group col-lg-2">
+        <label for="dataFim"> Período Fim: </label>
+        <input class="form-control" type="date" name="dataFim" formControlName="dataFim" />
+      </div>
+
+      <div class="form-group col-lg-2">
+        <div class="row">
+          <div class="col-md-12">
+            <label for="filtrar"> </label>
+
+            <button class="btn btn-outline-primary btn-block mt-1" (click)="filtrar()">
+              <i class="fas fa-filter"></i> Filtrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row justify-content-center">
+      <!-- [ngClass]="{ 'border-right' : }" -->
+      <div class="col-lg-12 text-center">
+        <div class="row justify-content-center">
+          <div class="col-lg-4 col-4">
+            <label class="text-uppercase font-weight-bold"> Requisição Recebida </label>
+          </div>
+          <div class="col-lg-4 col-4">
+            <label class="text-uppercase font-weight-bold"> Requisição Andamento </label>
+          </div>
+          <div class="col-lg-4 col-4">
+            <label class="text-uppercase font-weight-bold"> Requisição Finalizada </label>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-4 d-flex justify-content-center" *ngIf="indicadoresRequisicaoLoading">
+            <div class="spinner spinner-secondary"></div>
+          </div>
+          <ng-container *ngIf="!indicadoresRequisicaoLoading">
+            <div class="form-group col-lg-2 col-2 border-right">
+              <h2 class="font-weight-bold text-indigo-light">
+                {{ indicadoresRequisicao.quantidadeRequisicoesRecebidasNormais }}
+              </h2>
+              <small class="text-center text-uppercase"> Normal</small>
+            </div>
+            <div class="form-group col-lg-2 col-2 border-right">
+              <h2 class="font-weight-bold text-indigo-light">
+                {{ indicadoresRequisicao.quantidadeRequisicoesRecebidasPrioritarias }}
+              </h2>
+              <small class="text-center text-uppercase"> Prioritária </small>
+            </div>
+          </ng-container>
+          <div class="col-md-4 d-flex justify-content-center" *ngIf="indicadoresRequisicaoLoading">
+            <div class="spinner spinner-secondary"></div>
+          </div>
+          <ng-container *ngIf="!indicadoresRequisicaoLoading">
+            <div class="form-group col-lg-2 col-2 border-right">
+              <h2 class="font-weight-bold text-indigo-light">
+                {{ indicadoresRequisicao.quantidadeRequisicoesEmAndamentoNormais }}
+              </h2>
+              <small class="text-center text-uppercase"> Normal</small>
+            </div>
+            <div class="form-group col-lg-2 col-2 border-right">
+              <h2 class="font-weight-bold text-indigo-light">
+                {{ indicadoresRequisicao.quantidadeRequisicoesEmAndamentoPrioritarias }}
+              </h2>
+              <small class="text-center text-uppercase"> Prioritária </small>
+            </div>
+          </ng-container>
+          <div class="col-md-4 d-flex justify-content-center" *ngIf="indicadoresRequisicaoLoading">
+            <div class="spinner spinner-secondary"></div>
+          </div>
+          <ng-container *ngIf="!indicadoresRequisicaoLoading">
+            <div class="form-group col-lg-2 col-2 border-right">
+              <h2 class="font-weight-bold text-indigo-light">
+                {{ indicadoresRequisicao.quantidadeRequisicoesFinalizadasNormais }}
+              </h2>
+              <small class="text-center text-uppercase"> Normal</small>
+            </div>
+            <div class="form-group col-lg-2 col-2">
+              <h2 class="font-weight-bold text-indigo-light">
+                {{ indicadoresRequisicao.quantidadeRequisicoesFinalizadasPrioritarias }}
+              </h2>
+              <small class="text-center text-uppercase"> Prioritária</small>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container pt-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 text-center">
+        <label class="text-uppercase font-weight-bold"> Aging </label>
+        <div class="row justify-content-center">
+          <div class="col-lg-3 d-flex justify-content-center" *ngIf="indicadoresAgingLoading">
+            <div class="spinner spinner-secondary"></div>
+          </div>
+          <div class="form-group col-lg-3 col-2 border-right" *ngIf="!indicadoresAgingLoading">
+            <h2 class="font-weight-bold text-indigo-light">{{ indicadoresAging.menorQue4 }}</h2>
+            <small class="text-center text-uppercase"> &lt; 4 Dias </small>
+          </div>
+          <div class="col-lg-3 d-flex justify-content-center" *ngIf="indicadoresAgingLoading">
+            <div class="spinner spinner-secondary"></div>
+          </div>
+          <div class="form-group col-lg-3 col-2 border-right" *ngIf="!indicadoresAgingLoading">
+            <h2 class="font-weight-bold text-indigo-light">{{ indicadoresAging.igualA4 }}</h2>
+            <small class="text-center text-uppercase"> 4 Dias</small>
+          </div>
+          <div class="col-lg-3 d-flex justify-content-center" *ngIf="indicadoresAgingLoading">
+            <div class="spinner spinner-secondary"></div>
+          </div>
+          <div class="form-group col-lg-3 col-2 border-right" *ngIf="!indicadoresAgingLoading">
+            <h2 class="font-weight-bold text-indigo-light">{{ indicadoresAging.igualA5 }}</h2>
+            <small class="text-center text-uppercase"> 5 Dias</small>
+          </div>
+          <div class="col-lg-3 d-flex justify-content-center" *ngIf="indicadoresAgingLoading">
+            <div class="spinner spinner-secondary"></div>
+          </div>
+          <div class="form-group col-lg-3 col-2" *ngIf="!indicadoresAgingLoading">
+            <h2 class="font-weight-bold text-indigo-light">{{ indicadoresAging.maiorQue5 }}</h2>
+            <small class="text-center text-uppercase"> &gt; 5 Dias</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container pt-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-4 text-center">
+        <div class="row justify-content-center">
+          <div class="col-lg-12 col-12">
+            <label class="text-uppercase font-weight-bold"> Pedido Finalizado </label>
+          </div>
+        </div>
+        <div class="col-md-6 d-flex justify-content-center" *ngIf="indicadoresPedidoLoading">
+          <div class="spinner spinner-secondary"></div>
+        </div>
+        <ng-container *ngIf="!indicadoresPedidoLoading">
+          <div class="row justify-content-center">
+            <div class="form-group col-lg-6 col-6 border-right">
+              <h2 class="font-weight-bold text-indigo-light">
+                {{ indicadoresPedido.quantidadePedidosFinalizadosNormais }}
+              </h2>
+              <small class="text-center text-uppercase"> Normal</small>
+            </div>
+            <div class="form-group col-lg-6 col-6">
+              <h2 class="font-weight-bold text-indigo-light">
+                {{ indicadoresPedido.quantidadePedidosFinalizadosPrioritarios }}
+              </h2>
+              <small class="text-center text-uppercase"> Prioritária</small>
+            </div>
+          </div>
+        </ng-container>
+
+        <div class="row justify-content-center pt-4">
+          <div class="col-lg-12 col-12">
+            <label class="text-uppercase font-weight-bold"> Solicitação Bloqueada </label>
+          </div>
+        </div>
+        <div class="col-md-12 d-flex justify-content-center" *ngIf="indicadoresRequisicaoLoading">
+          <div class="spinner spinner-secondary"></div>
+        </div>
+        <ng-container *ngIf="!indicadoresRequisicaoLoading">
+          <div class="row justify-content-center">
+            <div class="form-group col-lg-6 col-6 border-right">
+              <h2 class="font-weight-bold text-indigo-light">
+                {{ indicadoresRequisicao.quantidadeRequisicoesBloqueadasNormal }}
+              </h2>
+              <small class="text-center text-uppercase"> Normal</small>
+            </div>
+            <div class="form-group col-lg-6 col-6">
+              <h2 class="font-weight-bold text-indigo-light">
+                {{ indicadoresRequisicao.quantidadeRequisicoesBloqueadasPrioridade }}
+              </h2>
+              <small class="text-center text-uppercase"> Prioritária</small>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="col-lg-8">
+        <div class="col-md-12 d-flex justify-content-center" *ngIf="backLogLoading">
+          <div class="spinner spinner-secondary"></div>
+        </div>
+        <ng-container *ngIf="!backLogLoading && backLogs?.length">
+          <div class="card indicador-tabela">
+            <div class="card-header text-center font-weight-bold text-uppercase">Backlog</div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table id="table" class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Categoria:</th>
+                      <th scope="col">SLA:</th>
+                      <th scope="col">Requisição:</th>
+                      <th scope="col">Valor:</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let backLog of backLogs; let i = index">
+                      <td>{{ backLog?.categoria }}</td>
+                      <td>{{ backLog?.sla }}</td>
+                      <td>{{ backLog?.requisicoes }}</td>
+                      <td>
+                        {{ backLog?.valor | currency: 'BRL':'symbol':'1.2':'pt-BR' }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

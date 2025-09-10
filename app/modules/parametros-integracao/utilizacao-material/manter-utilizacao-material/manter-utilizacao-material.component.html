@@ -1,0 +1,44 @@
+<div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">{{ utilizacaoMaterial?.idUtilizacaoMaterial ? 'Alterar ' : 'Inserir ' }}
+      Utilizacao de Material</div>
+    <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="form-group required col-lg-3">
+          <label>Código:</label>
+          <input type="text" class="form-control" formControlName="codigo"
+            [class.invalid]="form.controls.codigo.invalid && form.controls.codigo.dirty">
+            <div *ngIf="form.controls.codigo.invalid && form.controls.codigo.dirty">
+                <span class="invalid" *ngIf="form.controls.codigo.errors.invalid">
+                  Preenchimento obrigatório
+                </span>
+                <span class="invalid" *ngIf="form.controls.codigo.errors.maxlength">
+                  Tamanho máximo 10 caracteres
+                </span>
+              </div>
+        </div>
+        <div class="form-group required col-lg-9">
+          <label>Descrição:</label>
+          <input type="text" class="form-control" formControlName="descricao"
+            [class.invalid]="form.controls.descricao.invalid && form.controls.descricao.dirty">
+            <div *ngIf="form.controls.descricao.invalid && form.controls.descricao.dirty">
+                <span class="invalid" *ngIf="form.controls.descricao.errors.invalid">
+                  Preenchimento obrigatório
+                </span>
+                <span class="invalid" *ngIf="form.controls.descricao.errors.maxlength">
+                  Tamanho máximo 200 caracteres
+                </span>
+              </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="cancelar()" class="btn btn-outline-primary"><i class="fas fa-ban"></i>
+      Cancelar</button>
+    <button type="button" (click)="salvar()" class="btn btn-primary"><i class="fas fa-save"></i> Salvar</button>
+  </div>

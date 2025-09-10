@@ -1,0 +1,254 @@
+::ng-deep {
+  .sidebar {
+    -ms-flex: 0 0 3%;
+    flex: 0 0 3%;
+  }
+
+  @media (max-width: 690px) {
+    .sidebar {
+      display: none;
+    }
+  }
+
+  input[type="checkbox"]:before {
+    content: "" !important;
+    position: absolute !important;
+    width: 16px !important;
+    height: 16px !important;
+    border-radius: 4px !important;
+    top: 0 !important;
+    left: 0px !important;
+    background: #ffffff;
+    border: 1px solid #cfdce0;
+    box-sizing: border-box;
+    border-radius: 4px;
+  }
+
+  input[type="checkbox"] {
+    position: relative !important;
+    cursor: pointer !important;
+    height: 16px !important;
+    opacity: 1 !important;
+  }
+
+  input[type="checkbox"]:checked:before {
+    background-color: #00a1d7 !important;
+    border: none !important;
+    border-radius: 4px !important;
+  }
+
+  input[type="checkbox"]:checked:after {
+    content: "" !important;
+    border-radius: 4px !important;
+    display: block !important;
+    width: 5px !important;
+    height: 10px !important;
+    border-radius: 4px !important;
+    border: solid #ffffff !important;
+    border-width: 0 2px 2px 0 !important;
+    -webkit-transform: rotate(45deg) !important;
+    -ms-transform: rotate(45deg) !important;
+    transform: rotate(45deg) !important;
+    position: absolute !important;
+    top: 2px !important;
+    left: 6px !important;
+  }
+
+  //#region status color
+
+  // status active
+  & .status-active {
+    & .sdk-item-card {
+      &:hover {
+        box-shadow: 0px 4px 8px #00000029;
+        & .icon-spot {
+          background: #8bc34a !important;
+        }
+      }
+
+      & .status-text {
+        font-weight: bold !important;
+        color: #8bc34a !important;
+      }
+
+      & .icon-spot {
+        background: rgba(139, 195, 74, 0.7) !important;
+      }
+    }
+
+    &.selected {
+      & .sdk-item-card {
+        border-color: rgba(139, 195, 74, 0.7) !important ;
+        border-style: solid !important;
+        border-width: 1px !important;
+        box-shadow: 0px 4px 8px #00000029 !important;
+
+        & .icon-spot {
+          background: #8bc34a !important;
+        }
+      }
+    }
+  }
+
+  // status Reprovado ou Cancelado
+  & .status-disapproved-or-called-off {
+    & .sdk-item-card {
+      &:hover {
+        box-shadow: 0px 4px 8px #00000029;
+        & .icon-spot {
+          background: #f44336 !important;
+        }
+      }
+
+      & .status-text {
+        font-weight: bold !important;
+        color: #f44336 !important;
+      }
+
+      & .icon-spot {
+        background: #f77b72 !important;
+      }
+    }
+  }
+
+  // status em configuração
+  & .status-in-configuration {
+    & .sdk-item-card {
+      &:hover {
+        box-shadow: 0px 4px 8px #00000029;
+        & .icon-spot {
+          background: #fccc85 !important;
+        }
+      }
+
+      & .status-text {
+        font-weight: bold !important;
+        color: #fccc85 !important;
+      }
+
+      & .icon-spot {
+        background: #fddbaa !important;
+      }
+    }
+  }
+
+  // status solicitado
+  & .status-requested {
+    & .sdk-item-card {
+      &:hover {
+        box-shadow: 0px 4px 8px #00000029;
+        & .icon-spot {
+          background: #ff9800 !important;
+        }
+      }
+
+      & .status-text {
+        font-weight: bold !important;
+        color: #ff9800 !important;
+      }
+
+      & .icon-spot {
+        background: #ffb74d !important;
+      }
+    }
+  }
+
+  // status aguardando integração
+  & .status-awaiting-integration {
+    & .sdk-item-card {
+      &:hover {
+        box-shadow: 0px 4px 8px #00000029;
+        & .icon-spot {
+          background: #38bbc4 !important;
+        }
+      }
+
+      & .status-text {
+        font-weight: bold !important;
+        color: #38bbc4 !important;
+      }
+
+      & .icon-spot {
+        background: #68e5ee !important;
+      }
+    }
+  }
+
+  //#end region
+
+  & .sdk-item-card {
+    a {
+      font-family: Open Sans !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+      color: #417185 !important;
+    }
+
+    .crop-text-2 {
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+    }
+  }
+
+  & .icon-custom-download {
+    i {
+      background: #d4effa;
+      color: #417185;
+      padding: 0.8rem;
+      border-radius: 49%;
+    }
+  }
+
+  .suspense-menu-sla-solicitacao {
+    &::ng-deep > div.suspense-menu {
+      z-index: 2;
+      flex-direction: column !important;
+      border-radius: 10px !important;
+      align-items: flex-start !important;
+      padding: 3px 5px 3px 5px !important;
+      left: -5rem;
+
+      strong.label-menu-suspenso {
+        white-space: nowrap;
+      }
+
+      button {
+        border-bottom: 1px solid #ccc;
+        width: 100%;
+        padding: 3px 4px;
+        font-size: 14px;
+        font-weight: 900;
+
+        :hover {
+          i,
+          a {
+            color: #27ade4 !important;
+          }
+        }
+
+        a {
+          padding: 0.3em !important;
+          padding-left: 10px !important;
+          padding-right: 50px !important;
+          font-family: Open Sans !important;
+          font-style: normal !important;
+          font-weight: 600 !important;
+          font-size: 13px !important;
+          line-height: 100% !important;
+          display: flex !important;
+          align-items: center !important;
+          letter-spacing: -0.02em !important;
+          color: #588394 !important;
+        }
+
+        i {
+          color: #588394 !important;
+        }
+      }
+    }
+  }
+}

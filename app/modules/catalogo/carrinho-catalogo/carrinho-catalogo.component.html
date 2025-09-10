@@ -1,0 +1,686 @@
+<div class="no-content mt-5" *ngIf="!prePedidos?.length" translate>GENERAL.NO_RECORDS_FOUND</div>
+
+<div
+  class="card card-default card-collapse"
+  *ngFor="let prePedido of prePedidos; let prePedidoIndex = index">
+  <a
+    class="card-header text-truncate"
+    data-toggle="collapse"
+    href="#collapsedPrePedido{{ prePedidoIndex }}">
+    Fornecedor:
+    <span class="font-weight-bold">{{
+      prePedido.fornecedor?.nomeFantasia
+      ? prePedido.fornecedor?.nomeFantasia
+      : prePedido.fornecedor?.razaoSocial
+      }}
+      <ng-template #tipContent>
+        <div style="text-align: left">
+          <p><b>Contato:</b> {{ prePedido?.fornecedor?.contato }}</p>
+          <p><b>Telefone:</b> {{ prePedido?.fornecedor?.telefone }}</p>
+          <p><b>Email:</b> {{ prePedido?.fornecedor?.email }}</p>
+        </div>
+      </ng-template>
+      <button
+        type="button"
+        class="btn btn-icon btn-sm"
+        [ngbTooltip]="tipContent"
+        placement="right"
+        tooltipClass="tooltip-light">
+        <i class="fas fa-info-circle"></i>
+      </button>
+    </span>
+    <auto-save-label [ultima-alteracao]="prePedido.ultimaAlteracao"></auto-save-label>
+  </a>
+  <div class="card-body collapse show" id="collapsedPrePedido{{ prePedidoIndex }}">
+    <div class="bg-white border-bottom row py-2">
+      <div class="form-group required col-lg-6 pedido-disabled">
+        <label>Endereço:</label>
+        <ng-container
+          *ngIf="prePedido?.comprador?.listaExtensaEnderecos; then enderecoListaExtensa; else enderecoListaSimples">
+        </ng-container>
+        <ng-template #enderecoListaExtensa>
+          <ng-select
+            class="font-weight-bold"
+            [class.invalid]="prePedido.estadoDeAtendimentoInvalido"
+            [disabled]="!canEditOrder(prePedido)"
+            [items]="enderecos$[prePedidoIndex] | async"
+            typeToSearchText="Digite pelo menos 3 caracteres"
+            [typeahead]="enderecosInputs$[prePedidoIndex]"
+            [loadingText]="'buscando...'"
+            clearAllText="Limpar"
+            placeholder="Selecione"
+            [loading]="enderecosLoadings[prePedidoIndex]"
+            [(ngModel)]="enderecosSelecionados[prePedidoIndex]"
+            (change)="valideEnderecoSalvando(prePedidoIndex, $event)">
+            <ng-template ng-label-tmp let-item="item">
+              {{ item?.logradouro }}, {{ item?.numero }} - {{ item?.bairro }},
+              {{ item?.cidade?.nome }} - {{ item?.cidade?.estado?.abreviacao }}, {{ item?.cep }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              {{ TipoEndereco[item?.tipo] }}<br />
+              <div>
+                <small>Logradouro: {{ item?.logradouro }}</small><br />
+              </div>
+              <div>
+                <small>Bairro: {{ item?.bairro }}</small>
+                <small style="margin-left: 10px">Número: {{ item?.numero }}</small>
+              </div>
+              <div>
+                <small>Cidade: {{ item?.cidade?.nome }} - Estado:
+                  {{ item?.cidade?.estado?.abreviacao }}</small>
+              </div>
+              <div>
+                <small>CEP: {{ item?.cep }}</small>
+              </div>
+            </ng-template>
+          </ng-select>
+        </ng-template>
+        <ng-template #enderecoListaSimples>
+          <ng-select
+            class="font-weight-bold"
+            [class.invalid]="prePedido.estadoDeAtendimentoInvalido"
+            [disabled]="enderecosUnicos[prePedidoIndex] || !canEditOrder(prePedido)"
+            [items]="enderecos$[prePedidoIndex] | async"
+            bindValue="idEndereco"
+            [loadingText]="'buscando...'"
+            clearAllText="Limpar"
+            placeholder="Selecione"
+            [loading]="enderecosLoadings[prePedidoIndex]"
+            [(ngModel)]="prePedido.idEnderecoEntrega"
+            [searchFn]="enderecoSearchFn"
+            (change)="valideEnderecoSalvando(prePedidoIndex, $event)">
+            <ng-template ng-label-tmp let-item="item">
+              {{ item?.logradouro }}, {{ item?.numero }} - {{ item?.bairro }},
+              {{ item?.cidade?.nome }} - {{ item?.cidade?.estado?.abreviacao }}, {{ item?.cep }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              {{ TipoEndereco[item?.tipo] }}<br />
+              <div>
+                <small>Logradouro: {{ item?.logradouro }}</small><br />
+              </div>
+              <div>
+                <small>Bairro: {{ item?.bairro }}</small>
+                <small style="margin-left: 10px">Número: {{ item?.numero }}</small>
+              </div>
+              <div>
+                <small>Cidade: {{ item?.cidade?.nome }} - Estado:
+                  {{ item?.cidade?.estado?.abreviacao }}</small>
+              </div>
+              <div>
+                <small>CEP: {{ item?.cep }}</small>
+              </div>
+            </ng-template>
+          </ng-select>
+        </ng-template>
+      </div>
+      <div class="form-group col-lg-6 col-xl-3"
+        [class.required]="tipoAlcadaAprovacao === tipoAlcadaAprovacaoEnum.desmembrada ||
+        usuarioAtual?.permissaoAtual?.pessoaJuridica?.habilitarIntegracaoERP">
+        <label>Centro de Custo:</label>
+        <ng-select
+          class="font-weight-bold full-width"
+          [disabled]="centroDeCustoUnico || !canEditOrder(prePedido)"
+          [items]="centrosCusto$ | async"
+          bindLabel="descricao"
+          bindValue="idCentroCusto"
+          [loading]="centrosCustoLoading"
+          [loadingText]="'buscando...'"
+          [(ngModel)]="prePedido.idCentroCusto"
+          (change)="salvarAlteracaoPedido(prePedidoIndex)">
+        </ng-select>
+      </div>
+      <div *ngIf="this.tipoAlcadaAprovacao === this.tipoAlcadaAprovacaoEnum.unificada"
+        class="form-group required col-lg-6 col-xl-3">
+        <label>Alçada de Aprovação</label>
+        <ng-select
+          class="font-weight-bold full-width"
+          [disabled]="alcadaUnica || !canEditOrder(prePedido)"
+          [items]="alcadas$ | async"
+          bindLabel="descricao"
+          bindValue="idAlcada"
+          [loading]="alcadasLoading"
+          [loadingText]="'buscando...'"
+          [(ngModel)]="prePedido.idAlcada"
+          (change)="salvarAlteracaoPedido(prePedidoIndex)">
+        </ng-select>
+      </div>
+      <div class="form-group required col-lg-6 col-xl-3">
+        <label class="required">Condição de Pagamento:</label>
+        <ng-select
+          class="font-weight-bold full-width"
+          [disabled]="prePedido.condicaoDePagamentoUnica || !canEditOrder(prePedido)"
+          [items]="prePedido.condicoesPagamentos"
+          bindLabel="descricao"
+          bindValue="idCondicaoPagamento"
+          [loadingText]="'buscando...'"
+          [(ngModel)]="prePedido.idCondicaoPagamento"
+          (change)="salvarAlteracaoPedido(prePedidoIndex)">
+        </ng-select>
+      </div>
+      <div
+        class="form-group required col-lg-6 col-xl-3"
+        [ngbTooltip]="empresaTooltip"
+        placement="auto"
+        tooltipClass="tooltip-light">
+        <label class="required">Empresa:</label>
+        <ng-select
+          class="font-weight-bold full-width"
+          [disabled]="true"
+          [items]="filiais$ | async"
+          bindValue="idPessoaJuridica"
+          [loading]="filiaisLoading"
+          [loadingText]="'buscando...'"
+          [(ngModel)]="prePedido.idComprador"
+          (change)="salvarAlteracaoPedido(prePedidoIndex)">
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.cnpj }} - {{ item.nomeFantasia }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            {{ item.cnpj }} - {{ item.nomeFantasia }}
+          </ng-template>
+        </ng-select>
+
+        <ng-template #empresaTooltip>
+          <div style="text-align: left">
+            <p><b>CNPJ/CPF:</b> {{ prePedido?.comprador?.cnpj }}</p>
+            <p><b>Razão Social:</b> {{ prePedido?.comprador?.razaoSocial }}</p>
+            <p><b>Nome Fantasia:</b> {{ prePedido?.comprador?.nomeFantasia }}</p>
+          </div>
+        </ng-template>
+      </div>
+      <div class="form-group required col-lg-6 col-xl-3">
+        <label class="required">Tipo de Pedido: </label>
+        <ng-select
+          class="font-weight-bold full-width"
+          [disabled]="tipoPedidoUnico || !canEditOrder(prePedido)"
+          [items]="tiposPedido$ | async"
+          bindLabel="nomeTipoPedido"
+          bindValue="idTipoPedido"
+          [loading]="organizacoesCompraLoading"
+          [loadingText]="'buscando...'"
+          [(ngModel)]="prePedido.idTipoPedido"
+          (change)="salvarAlteracaoPedido(prePedidoIndex)">
+        </ng-select>
+      </div>
+      <div *ngIf="tipoAlcadaAprovacao === tipoAlcadaAprovacaoEnum.unificada" class="form-group col-lg-6 col-xl-3">
+        <label>Conta Contábil:</label>
+        <ng-select
+          class="font-weight-bold"
+          [disabled]="contaContabilUnica"
+          [items]="contasContabeis$ | async"
+          bindLabel="descricao"
+          typeToSearchText="Digite pelo menos 3 caracteres"
+          [typeahead]="contasContabeisInput$"
+          [loadingText]="textoNgSelectLoading"
+          [clearAllText]="textoNgSelectLimpar"
+          [placeholder]="textoNgSelectPlaceholder"
+          [loading]="contasContabeisLoading"
+          [(ngModel)]="contaContabilSelecionada"
+          (change)="salvarAlteracaoPedido(prePedidoIndex)">
+        </ng-select>
+      </div>
+      <div
+        *ngIf="parametrosIntegracaoSapHabilitado || empresaCompradoraPossuiIntegracaoErp(prePedido)"
+        class="form-group required col-lg-6 col-xl-3">
+        <label class="required">
+          Grupo de Compradores:
+        </label>
+        <ng-select
+          class="font-weight-bold full-width"
+          [disabled]="grupoDeCompradoresUnico || !canEditOrder(prePedido)"
+          [items]="gruposCompradores$ | async"
+          bindLabel="nomeGrupoCompradores"
+          bindValue="idGrupoCompradores"
+          [loading]="gruposCompradoresLoading"
+          [loadingText]="'buscando...'"
+          [(ngModel)]="prePedido.idGrupoCompradores"
+          (change)="salvarAlteracaoPedido(prePedidoIndex)">
+        </ng-select>
+      </div>
+      <div class="form-group required col-lg-6 col-xl-3" *ngIf="parametrosIntegracaoSapHabilitado">
+        <label class="required">Organização de Compras: </label>
+        <ng-select
+          class="font-weight-bold full-width"
+          [disabled]="organizacaoCompraUnica || !canEditOrder(prePedido)"
+          [items]="organizacoesCompra$ | async"
+          bindLabel="descricaoOrganizacaoCompra"
+          bindValue="idOrganizacaoCompra"
+          [loading]="organizacoesCompraLoading"
+          [loadingText]="'buscando...'"
+          [(ngModel)]="prePedido.idOrganizacaoCompra"
+          (change)="salvarAlteracaoPedido(prePedidoIndex)">
+        </ng-select>
+      </div>
+      <div class="form-group required col-lg-6 col-xl-3" *ngIf="parametrosIntegracaoSapHabilitado">
+        <label>IVA: </label>
+        <ng-select
+          class="font-weight-bold full-width"
+          [disabled]="ivaUnico || !canEditOrder(prePedido)"
+          [items]="ivas$ | async"
+          bindLabel="descricaoIva"
+          bindValue="idIva"
+          [loading]="ivasLoading"
+          [loadingText]="'buscando...'"
+          [(ngModel)]="prePedido.idIva"
+          (change)="salvarAlteracaoPedido(prePedidoIndex)">
+        </ng-select>
+      </div>
+      <div class="form-group required col-lg-6 col-xl-3" *ngIf="isFranchise">
+        <label>Campanha Franquia: </label>
+        <ng-select
+          class="font-weight-bold full-width"
+          [disabled]="!canEditOrder(prePedido)"
+          [items]="franchiseCampaigns$ | async"
+          bindLabel="titulo"
+          bindValue="idCampanhaFranquia"
+          [loading]="franchiseCampaignsLoading"
+          [loadingText]="'buscando...'"
+          [(ngModel)]="prePedido.idCampanhaFranquia">
+        </ng-select>
+      </div>
+      <div class="form-group required col-lg-3 pt-4 mt-1" *ngIf="!prePedido.idUsuario">
+        <button class="btn btn-outline-primary" (click)="takeOrder(prePedido.idPedido)">
+          <i class="fas fa-user-check"></i>
+          Assumir Pedido
+        </button>
+      </div>
+
+    </div>
+
+    <div class="bg-white border-bottom row">
+      <div class="form-group required col-lg-3 pt-4 mt-1"
+        *ngIf="prePedido && prePedido.itens && prePedido.itens.length > 0">
+        <input type="checkbox" class="list-item-check mr-3" (click)="selecionarTodos($event ,prePedido)"
+          [(ngModel)]="prePedido.selecionarTodos" name="selecionarItem{{index}}" placeholder="selecionarTodos" />
+        <button class="btn btn-outline-danger" (click)="removerPedidos(prePedido.itens)"
+          [disabled]="!prePedido.habilitarBtnRemover">
+          <i class="fas fa-trash"></i>
+          Remover Itens
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="bg-white border-bottom row py-2"
+      *ngFor="let pedidoItem of prePedido.itens; let itemIndex = index">
+
+      <div class="align-self-start d-flex  mb-3 ml-3 mb-lg-0">
+        <input
+          id="prePedido{{index}}"
+          type="checkbox"
+          name="prePedido{{index}}"
+          [(ngModel)]="pedidoItem.selecionado"
+          (change)="atualizaSelecionados(prePedido)"
+          placeholder="selecionarPrePedido" />
+      </div>
+
+      <div class="col-md-2 align-self-center d-flex justify-content-center mb-3 mb-lg-0">
+
+        <img
+          class="img-fluid"
+          style="max-height: 175px"
+          [src]="
+            pedidoItem.produto?.imagens?.length
+              ? (pedidoItem.produto?.imagens)[0].url
+              : './../../../../assets/img/produtos/default.png'
+          "
+          alt="{{ pedidoItem.produto?.descricao }}" />
+      </div>
+
+      <div class="col-md-9 align-self-center">
+        <div class="row align-items-center mb-2">
+          <h5 class="col-xl-10 text-primary font-weight-bold text-center text-lg-left">
+             {{ pedidoItem | descricaoCarrinhoCatalogo: idTenantLogado : itemIndex }}
+          </h5>
+          <div class="col-xl-2 d-flex justify-content-around" *ngIf="canEditOrder(prePedido)">
+            <button
+              class="btn btn-icon text-danger float-right pr-0"
+              (click)="solicitarRemoverItem(prePedido.idPedido, pedidoItem.idPedidoItem)"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Remover">
+              <i class="far fa-trash-alt"></i>
+            </button>
+            <button
+              class="btn btn-icon text-primary float-right pr-0"
+              (click)="inserirComentario(content, prePedidoIndex, itemIndex)"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Observação">
+              <i class="far fa-comment-dots"></i>
+            </button>
+          </div>
+        </div>
+        <span span span class="invalid" *ngIf="pedidoItem.estadoDeAtendimentoInvalido">
+            {{ pedidoItem.estadoDeAtendimentoMensagemDeErro }}
+        </span>
+        <div class="row-10-col align-items-center">
+          <div class="form-group col-lg-5 col-xl-2">
+            <label>Marca:</label>
+            <p class="py-2 my-0 font-weight-bold">
+              {{ pedidoItem.marca ? pedidoItem.marca.nome : 'Sem preferência' }}
+            </p>
+          </div>
+
+          <div *ngIf="!pedidoItem.entregaProgramada" class="form-group col-lg-5 col-xl-2">
+            <label for="dataEntrega">Data de Entrega Prevista:</label>
+            <p class="py-2 my-0 font-weight-bold">
+              {{ pedidoItem.dataEntrega ? (pedidoItem.dataEntrega | date:'dd/MM/yyyy') : '--' }}
+            </p>
+          </div>
+
+          <div class="form-group col-6 col-lg-5 col-xl-2">
+            <label>Valor Unitário:</label>
+            <p class="text-indigo-light font-weight-bold py-2 my-0">
+              {{ pedidoItem.valor | customCurrency: pedidoItem.moeda:null:'symbol' }}/{{
+              pedidoItem.produto.unidadeMedida.sigla
+              }}
+            </p>
+          </div>
+
+          <div *ngIf="!pedidoItem.entregaProgramada" class="form-group required col-lg-5 col-xl-2">
+            <label for="quantidade">
+              Quantidade{{
+              pedidoItem.contratoCatalogoItem?.loteMinimo
+              ? ' (mín. ' + pedidoItem.contratoCatalogoItem?.loteMinimo + ')'
+              : ''
+              }}:
+            </label>
+            <input-number
+              class="font-weight-bold"
+              [disabled]="!canEditOrder(prePedido)"
+              [class.invalid]="
+                !pedidoItem.quantidade ||
+                pedidoItem.quantidade > max ||
+                pedidoItem.quantidade < pedidoItem.contratoCatalogoItem?.loteMinimo
+              "
+              [(ngModel)]="pedidoItem.quantidade"
+              [min]="pedidoItem.contratoCatalogoItem?.loteMinimo"
+              [max]="max"
+              [allowDecimal]="pedidoItem.produto?.unidadeMedida?.permiteQuantidadeFracionada"
+              (change)="alterarItem(prePedidoIndex, itemIndex)">
+            </input-number>
+          </div>
+
+          <div *ngIf="pedidoItem.entregaProgramada" class="form-group col-lg-5 col-xl-2">
+            <label>Quantidade Mín.:</label>
+            <p class="py-2 my-0 font-weight-bold">
+              {{ pedidoItem.contratoCatalogoItem?.loteMinimo ? pedidoItem.contratoCatalogoItem?.loteMinimo : '' }}
+            </p>
+          </div>
+
+          <div *ngIf="!pedidoItem.entregaProgramada" class="form-group col-lg-5 col-xl-2">
+            <label>Valor Total:</label>
+            <h5 class="text-indigo-light font-weight-bold mt-1">
+              {{
+              pedidoItem.valor * pedidoItem.quantidade
+              | customCurrency: pedidoItem.moeda:null:'symbol'
+              }}
+            </h5>
+          </div>
+        </div>
+
+        <div class="row-10-col">
+          <div class="form-group col-lg-5 col-xl-2" *ngIf="pedidoItem.itemSolicitacaoCompra">
+            <label>Código RC/Linha:</label>
+            <p class="py-2 my-0 font-weight-bold">
+              {{ pedidoItem.itemSolicitacaoCompra.codigoSolicitacaoCompra + '/' +
+              pedidoItem.itemSolicitacaoCompra.codigo }}
+            </p>
+          </div>
+          <div class="custom-control custom-checkbox ml-3" [class.mb-3]="pedidoItem.entregaProgramada">
+            <input
+              id="entregaProgramada{{ prePedidoIndex }}-{{ itemIndex }}"
+              type="checkbox"
+              class="custom-control-input"
+              (change)="alterarItem(prePedidoIndex, itemIndex, true)"
+              [(ngModel)]="pedidoItem.entregaProgramada">
+            <label
+              class="custom-control-label"
+              for="entregaProgramada{{ prePedidoIndex }}-{{ itemIndex }}">
+              Definir Programação de Entrega
+            </label>
+          </div>
+          <div *ngIf="ItemSemProgramacaoDeEntrega(pedidoItem)" class="col-md-4 col-xl-3 align-self-start">
+            <label class="w-100 info-catalogo">Pr. Entrega (em dias):</label>
+            <h5 class="info-catalogo"> {{ pedidoItem.prazoDeEntregaEmDias ? pedidoItem.prazoDeEntregaEmDias : '--' }}
+            </h5>
+          </div>
+        </div>
+
+        <app-manter-entregas-programadas
+          *ngIf="pedidoItem.entregaProgramada"
+          [config]="configEntregaProgramada(
+          prePedidoIndex + '-' + itemIndex,
+          origemProgramacaoDeEntrega.pedido,
+          pedidoItem.idPedidoItem,
+          1,
+          max,
+          pedidoItem.contratoCatalogoItem?.loteMinimo ? pedidoItem.contratoCatalogoItem?.loteMinimo : 0,
+          pedidoItem.produto?.unidadeMedida?.permiteQuantidadeFracionada,
+          pedidoItem.valor,
+          pedidoItem.minDataEntrega
+          )"
+          (entregasLoad)="atualizeProgramacaoDeEntregas($event, prePedidoIndex, itemIndex)"
+          (entregasChange)="atualizeProgramacaoDeEntregas($event, prePedidoIndex, itemIndex)">
+        </app-manter-entregas-programadas>
+
+        <div class="row-10-col align-items-center">
+          <div
+            class="
+              form-group
+              required
+              col-10 col-lg-8
+              d-flex
+              justify-content-md-between
+              align-self-center
+              mt-4
+            ">
+            <div
+              class="custom-control custom-checkbox d-md-inline-block mr-3"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Entrada de Mercadoria"
+              *ngIf="exibirFlagSapEm">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="sapEm-{{ prePedidoIndex }}-{{ itemIndex }}"
+                [(ngModel)]="pedidoItem.sapEm"
+                (change)="alterarItem(prePedidoIndex, itemIndex)" />
+              <label
+                class="custom-control-label font-weight-bold"
+                for="sapEm-{{ prePedidoIndex }}-{{ itemIndex }}">EM</label>
+            </div>
+
+            <div
+              class="custom-control custom-checkbox d-md-inline-block mr-3"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Entrada de Mercadoria Não Avaliada"
+              *ngIf="exibirFlagSapEmNaoAvaliada">
+              <input
+                type="checkbox"
+                [disabled]="!canEditOrder(prePedido)"
+                class="custom-control-input"
+                id="sapEmNaoAvaliada-{{ prePedidoIndex }}-{{ itemIndex }}"
+                [(ngModel)]="pedidoItem.sapEmNaoAvaliada"
+                (change)="alterarItem(prePedidoIndex, itemIndex)" />
+              <label
+                class="custom-control-label font-weight-bold"
+                for="sapEmNaoAvaliada-{{ prePedidoIndex }}-{{ itemIndex }}">EM n/avaliada</label>
+            </div>
+
+            <div
+              class="custom-control custom-checkbox d-md-inline-block mr-3"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Entrada de Faturas"
+              *ngIf="exibirFlagSapEntrFaturas">
+              <input
+                type="checkbox"
+                [disabled]="!canEditOrder(prePedido)"
+                class="custom-control-input"
+                id="sapEntrFaturas-{{ prePedidoIndex }}-{{ itemIndex }}"
+                [(ngModel)]="pedidoItem.sapEntrFaturas"
+                (change)="alterarItem(prePedidoIndex, itemIndex)" />
+              <label
+                class="custom-control-label font-weight-bold"
+                for="sapEntrFaturas-{{ prePedidoIndex }}-{{ itemIndex }}">Entr.faturas</label>
+            </div>
+
+            <div
+              class="custom-control custom-checkbox d-md-inline-block"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Revisão de Faturas Baseada na Entrada de Mercadorias"
+              *ngIf="exibirFlagSapRevFatEm">
+              <input
+                [disabled]="!canEditOrder(prePedido)"
+                type="checkbox"
+                class="custom-control-input"
+                id="sapRevFatEm-{{ prePedidoIndex }}-{{ itemIndex }}"
+                [(ngModel)]="pedidoItem.sapRevFatEm"
+                (change)="alterarItem(prePedidoIndex, itemIndex)" />
+              <label
+                class="custom-control-label font-weight-bold"
+                for="sapRevFatEm-{{ prePedidoIndex }}-{{ itemIndex }}">Rev.FatEm</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white row py-1 justify-content-between">
+      <div class="col-md-2 col-xl-2 d-flex justify-content-center align-self-center badge-alinhada">
+        <span class="badge"
+          [ngClass]="prePedido?.itens[0]?.contratoCatalogoItem.tipoCatalogo === TipoCatalogo['Catálogo Smarkets'] ? 'badge-primary badge-strong' : 'badge-success font-weight-bold'">
+          {{TipoCatalogo[prePedido?.itens[0]?.contratoCatalogoItem.tipoCatalogo]}}
+        </span>
+      </div>
+      <div class="col-md-9">
+        <div class="bg-white row justify-content-end">
+          <div class="col-md-2 col-xl-2 align-self-start">
+            <label class="w-100 info-catalogo">Produtos:</label>
+            <h5 class="info-catalogo">
+              {{ prePedido?.itens?.length }}
+            </h5>
+          </div>
+
+          <div class="col-md-2 col-xl-1 align-self-start">
+            <label class="w-100 info-catalogo">Frete:</label>
+            <h5 class="info-catalogo text-uppercase">
+              {{ Frete[prePedido.frete] }}
+            </h5>
+          </div>
+          <div
+            class="col-md-4 col-xl-3 align-self-start"
+            *ngIf="!prePedido?.fornecedor?.faturamentoMinimo; else hasFaturamentoMinimo">
+            <label class="w-100 info-catalogo">Faturamento Mínimo:</label>
+            <h5 class="info-catalogo" *ngIf="prePedido.contratoCatalogoFaturamento; else exibirPadrao">
+              {{
+              prePedido.contratoCatalogoFaturamento.valorMinimoPedido
+              | currency: 'BRL':'symbol':'1.2':'pt-BR'
+              }}
+            </h5>
+            <ng-template #exibirPadrao>
+              <h5 class="info-catalogo">
+                {{ 0 | currency: 'BRL':'symbol':'1.2':'pt-BR' }}
+              </h5>
+            </ng-template>
+          </div>
+
+          <ng-template #hasFaturamentoMinimo>
+            <div class="col-6 col-md-4 col-xl-2 align-self-start">
+              <label class="w-100 info-catalogo">Fat. Mínimo {{
+                Frete[prePedido?.fornecedor?.faturamentoMinimo?.tipoFrete]
+                }}:</label>
+              <h5 class="info-catalogo" *ngIf="prePedido?.fornecedor?.faturamentoMinimo; else">
+                {{
+                prePedido?.fornecedor?.faturamentoMinimo?.valor
+                | currency: 'BRL':'symbol':'1.2':'pt-BR'
+                }}
+              </h5>
+            </div>
+          </ng-template>
+
+          <div class="col-md-3 col-xl-3">
+            <label class="w-100 info-catalogo">Valor Total:</label>
+            <h4 class="text-indigo-light font-weight-bold info-catalogo">
+              {{ subTotalPrePedido(prePedidoIndex) | currency: 'BRL':'symbol':'1.2':'pt-BR' }}
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white row pb-4 pt-1 justify-content-end actions" *ngIf="canEditOrder(prePedido)">
+      <div class="col-md-3 col-lg-3 mb-2 mb-lg-0" [class.disabled-action]="prePedido.estadoDeAtendimentoInvalido">
+        <button
+          class="btn btn-outline-primary btn-block"
+          [class.disabled]="prePedido.estadoDeAtendimentoInvalido"
+          (click)="inserirObservacaoNoPedido(prePedidoIndex)">
+          <i class="fas fa-comment-dots"></i>
+          OBSERVAÇÕES
+        </button>
+      </div>
+      <div class="col-md-3 col-lg-3 mb-2 mb-lg-0" [class.disabled-action]="prePedido.estadoDeAtendimentoInvalido">
+        <button
+          class="btn btn-outline-primary btn-block"
+          [class.disabled]="prePedido.estadoDeAtendimentoInvalido"
+          (click)="!prePedido.estadoDeAtendimentoInvalido && gerarOrcamento(prePedidoIndex)">
+          <i class="fas fa-file-invoice-dollar"></i>
+          ORÇAMENTO
+        </button>
+      </div>
+      <div class="col-md-3 col-lg-3 mb-2 mb-lg-0" [class.disabled-action]="prePedido.estadoDeAtendimentoInvalido">
+        <button
+          class="btn btn-outline-primary btn-block"
+          [class.disabled]="prePedido.estadoDeAtendimentoInvalido"
+          (click)="!prePedido.estadoDeAtendimentoInvalido && visualizarPrePedido(prePedidoIndex)">
+          <i class="fas fa-eye"></i>
+          VISUALIZAR
+        </button>
+      </div>
+      <div class="col-md-3 col-lg-3" [class.disabled-action]="prePedido.estadoDeAtendimentoInvalido">
+        <button
+          class="btn btn-primary btn-block"
+          [class.disabled]="prePedido.estadoDeAtendimentoInvalido"
+          (click)="!prePedido.estadoDeAtendimentoInvalido && solicitarConfirmarPedido(prePedidoIndex)">
+          <i class="fas fa-check"></i>
+          {{ empresaCompradoraPossuiIntegracaoErp(prePedido) ? 'ENVIAR REQUISIÇÃO ERP' : 'CONFIRMAR PEDIDO' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">Incluir Comentário</div>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formComentario">
+      <div class="row">
+        <div class="form-group col">
+          <label for="observacao">Observação</label>
+          <textarea
+            class="form-control"
+            id="observacao"
+            formControlName="observacao"
+            row="3"></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">
+      <i class="fas fa-ban"></i> Voltar
+    </button>
+    <button type="button" class="btn btn-primary" (click)="solicitarSalvarComentario()">
+      <i class="fas fa-save"></i> Salvar
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,30 @@
+.form-group {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+.descricao {
+  cursor: default;
+}
+
+.data-de-entrega {
+  padding-right: 0.75rem;
+}
+
+::ng-deep smk-regularizacao-item .quantidade input {
+  height: 32px;
+}
+
+.modal-header {
+  .modal-title {
+    cursor: default;
+  }
+}
+
+.modal-body {
+  .form-group {
+    label {
+      font-weight: 500;
+    }
+  }
+}

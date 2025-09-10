@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Política de Privacidade</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-12 py-4">
+      <h6 class="mb-0 font-weight-bold">
+        Para acessar a Smarkets, você precisa primeiro concordar com os Termos de Privacidade
+        abaixo.
+      </h6>
+    </div>
+
+    <div class="col-12">
+      <iframe class="h-500px e2e-iframe-trusted-src" [src]="pdfSafe" width="100%"></iframe>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="cancelar()">
+    <i class="fas fa-ban"></i> Cancelar
+  </button>
+  <button type="button" class="btn btn-primary" (click)="confirmar()">
+    <i class="fas fa-save"></i> Concordo
+  </button>
+</div>

@@ -1,0 +1,47 @@
+<div class="pager-container">
+  <nav aria-label="navigation">
+    <ul class="pagination justify-content-center" [ngClass]="{'pagination-sm': size == 'sm' }">
+      <li class="page-item">
+        <a class="page-link" tabindex="-1" (click)="firstPage()" [class.disabled]="!totalPages || currentPage == 1"
+          data-toggle="tooltip" data-placement="top" title="Navegar para a primeira página">
+          <i class="lnr lnr-chevron-left"></i>
+          <i class="lnr lnr-chevron-left"></i>
+        </a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" tabindex="-1" (click)="previousPage()" [class.disabled]="!totalPages || currentPage == 1"
+          data-toggle="tooltip" data-placement="top" title="Página anterior">
+          <i class="lnr lnr-chevron-left"></i>
+        </a>
+      </li>
+      <input #inputCurrentPage type="text" min="1" [max]="totalPages"
+        [textMask]="{mask: maskPositiveInteger, guide: false}" class="form-control ml-1"
+        [class.disabled]="totalPages < 2" [ngClass]="{'form-control-sm': size == 'sm' }" name="currentPage"
+        [(ngModel)]="pageChange" (blur)="setCurrentPage()" (keyup.enter)="setCurrentPage()">
+      <div class="label">
+        de {{ totalPages }}
+      </div>
+      <li class="page-item">
+        <a class="page-link" tabindex="-1" (click)="nextPage()"
+          [class.disabled]="!totalPages || currentPage == totalPages"
+          data-toggle="tooltip" data-placement="top" title="Próxima página">
+          <i class="lnr lnr-chevron-right"></i>
+        </a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" tabindex="-1" (click)="lastPage()"
+          [class.disabled]="!totalPages || currentPage == totalPages"
+          data-toggle="tooltip" data-placement="top" title="Navegar para a última página">
+          <i class="lnr lnr-chevron-right"></i>
+          <i class="lnr lnr-chevron-right"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div>
+    <select [class.disabled]="!totalPages" [ngClass]="{'form-control-sm': size == 'sm', 'form-control': !size }"
+      name="currentRecordsPerPage" [(ngModel)]="currentRecordsPerPage">
+      <option [ngValue]="option" *ngFor="let option of recordsPerPageOptions">{{ option }}</option>
+    </select>
+  </div>
+</div>

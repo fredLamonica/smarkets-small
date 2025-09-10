@@ -1,0 +1,18 @@
+<div class="modal-header">
+  <div class="modal-title">Validação de Conta</div>
+  <button type="button" class="close" aria-label="Close" (click)="fechar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body p-3">
+  <smk-validacao-de-conta
+    [tipo]="tipo"
+    [novoEmail]="novoEmail"
+    (contaValidada)="contaValidada($event)">
+  </smk-validacao-de-conta>
+</div>
+<div class="modal-footer p-3">
+  <button type="button" class="cancelar btn btn-outline-primary" (click)="cancelar()">
+    Cancelar
+  </button>
+</div>

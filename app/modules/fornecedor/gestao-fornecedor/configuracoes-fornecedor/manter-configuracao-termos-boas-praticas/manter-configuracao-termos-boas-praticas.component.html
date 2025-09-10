@@ -1,0 +1,58 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    {{ termoDeBoaPratica ? 'Alterar ' : 'Incluir ' }} Configuração Termo de Boas Práticas ao Fornecedor </div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+
+    <div class="form-row">
+      <div class="form-group col-6 col-md-8" [class.required]="true">
+        <label>Lembrar em Dias:</label>
+        <input-number [class.invalid]="form.controls.quantidadeTempo.invalid && form.controls.quantidadeTempo.dirty"
+          formControlName="quantidadeTempo" [min]="1" [max]="999999999">
+        </input-number>
+      </div>
+      <div class="form-group col-6 col-md-4">
+        <label for="unidadeMedidaTempo"> </label>
+        <ng-select class="mt-1" name="unidadeMedidaTempo" formControlName="unidadeMedidaTempo" [clearable]="false">
+          <ng-option [value]="UnidadeMedidaTempo.Dia">Dia(s)</ng-option>
+          <ng-option [value]="UnidadeMedidaTempo['Mês']">Mese(s)</ng-option>
+        </ng-select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-12">
+        <label [class.required]="true"> Termo de boas práticas:</label>
+        <input-file accept=".pdf" (select)="selecionarArquivo($event)">
+        </input-file>
+      </div>
+      <div class="form-group col-12">
+        <galeria-arquivos size="sm" [arquivos]="[form.getRawValue().arquivo]" *ngIf="form.getRawValue().arquivo"
+          (excluir)="excluirArquivo()"></galeria-arquivos>
+      </div>
+    </div>
+    <div class="form-row" *ngIf="form.controls.idArquivo.value">
+      <div class="form-group col">
+        <div class="custom-control custom-checkbox custom-control-inline">
+          <input type="checkbox" id="exigirTermo" name="exigirTermo" class="custom-control-input"
+            formControlName="habilitado" (change)="exigirTermo()">
+          <label class="custom-control-label" for="exigirTermo">Exigir termos de boas práticas ao fornecedor</label>
+        </div>
+
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+    <i class="fas fa-ban"></i>
+    Fechar
+  </button>
+  <button type="button" (click)="salvar()" class="btn btn-primary">
+    <i class="fas fa-save"></i>
+    Salvar
+  </button>
+</div>

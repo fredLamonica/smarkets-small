@@ -1,0 +1,55 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Fornecedores participantes:</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="bg-white border-bottom">
+    <div class="bg-lighter border-top">
+      <div class="form-group">
+        <div class="table-responsive">
+          <table id="table" class="table table-new-ux">
+            <thead>
+              <tr>
+                <th scope="col" data-toggle="tooltip" data-placement="bottom" title="CNPJ">
+                  CNPJ:
+                </th>
+                <th scope="col" data-toggle="tooltip" data-placement="bottom" title="Razão Social">
+                  Razão Social:
+                </th>
+                <th scope="col" data-toggle="tooltip" data-placement="bottom" title="Nome Fantasia">
+                  Nome Fantasia:
+                </th>
+                <th scope="col" data-toggle="tooltip" data-placement="bottom" title="Ações">
+                  Ações
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let participante of cotacao.participantes; let i = index;">
+                <td>{{participante?.pessoaJuridica.cnpj}}</td>
+                <td>{{participante?.pessoaJuridica.razaoSocial}}</td>
+                <td>{{participante?.pessoaJuridica.nomeFantasia}}</td>
+                <td>
+                  <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Excluir"
+                    (click)="onExcluirClick(participante?.idPessoaJuridica)">
+                    <i class="far fa-trash-alt text-danger"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="modal-footer">
+            <div class="float-right">
+              <button class="btn btn-block btn-primary" (click)="incluirFornecedor()"><i class="fas fa-plus"></i>
+                Incluir</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="cancelar()"> Fechar</button>
+</div>

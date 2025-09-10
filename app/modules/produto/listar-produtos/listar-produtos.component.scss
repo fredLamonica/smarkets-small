@@ -1,0 +1,75 @@
+.alinhamento{
+  padding:  0 34em 0 0 ;
+}
+
+.padding-icon{
+  padding-right: 9px;
+}
+
+.submenu {
+    list-style: none;
+    margin: 0;
+    position: absolute;
+    top: 100%;
+    background-color: white;
+    padding: 14px 0 14px 0;
+    display: none;
+    border: 1px solid #0a5274 ;
+    border-radius:  4px;
+    top: 62px;
+    left: -38px;
+}
+
+.submenu li {
+    width: 17rem;
+    justify-content: space-between;
+    padding: 8px 12px;
+}
+
+.submenu li tr td a {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #0a5274;
+    text-decoration: none;
+}
+
+.submenu li:hover{
+  background-color: #ebebeb
+}
+
+.dropdown:hover .submenu {
+    display: block;
+}
+
+.submenu::before {
+    content: '\f078';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    z-index: 1002;
+    position: absolute;
+    bottom: -16px;
+    min-width: 32px;
+    width: 32px;
+    height: 32px;
+    top: -18px;
+    left: 95px;
+    border-radius: 50%;
+    display: -webkit-inline-box;
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    background-color: #0a5274;
+    border: 2.5px solid #ffffff;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+

@@ -1,0 +1,28 @@
+<ul class="nav bg-gray">
+  <li class="nav-item">
+    <a class="nav-link" role="button" [routerLink]="[ 'novo' ]"><i class="fas fa-plus"></i> Incluir</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" [class.disabled]="!departamentoSelecionado" [routerLink]="departamentoSelecionado ? [departamentoSelecionado?.idDepartamento] : null"><i
+        class="fas fa-pencil-alt"></i> Editar</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" [class.disabled]="!departamentoSelecionado" (click)="departamentoSelecionado ? solicitarExclusao(departamentoSelecionado?.idDepartamento) : null"><i class="fas fa-trash-alt"></i>
+      Excluir</a>
+  </li>
+</ul>
+<header>
+  <h1 class="title">Departamentos</h1>
+</header>
+<div class="container-fluid no-bounds">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <div class="no-content" *ngIf="!departamentos?.length" translate>GENERAL.NO_RECORDS_FOUND</div>
+          <tree-root [(state)]="state" [nodes]="departamentos" (activate)="selecionarDepartamento($event)" *ngIf="departamentos?.length"></tree-root>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

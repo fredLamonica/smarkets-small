@@ -1,0 +1,38 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">{{ idNivel?'Alterar':'Incluir' }} Participante</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group required col-lg-10" required>
+        <label for="idUsuario"> Usuário </label>
+        <ng-select name="idUsuario" formControlName="idUsuario" [class.invalid]="form.controls.idUsuario.invalid && form.controls.idUsuario.dirty">
+          <ng-option [value]="usuario.idUsuario" *ngFor="let usuario of usuarios">{{ usuario.pessoaFisica.nome }}</ng-option>
+        </ng-select>
+        <span class="invalid" *ngIf="form.controls.idUsuario.invalid && form.controls.idUsuario.dirty">
+          Preenchimento obrigatório </span>
+      </div>
+      <div class="form-group required col-lg-2" required>
+        <label for="ordem"> Ordem </label>
+        <input class="form-control" type="number" name="ordem" [min]="0" formControlName="ordem" [class.invalid]="form.controls.ordem.invalid && form.controls.ordem.dirty">
+        <span class="invalid" *ngIf="form.controls.ordem.invalid && form.controls.ordem.errors.required && form.controls.ordem.dirty">
+          Preenchimento obrigatório
+        </span>
+        <span class="invalid" *ngIf="form.controls.ordem.invalid && form.controls.ordem.errors.min && form.controls.ordem.dirty">
+            O valor deve ser maior que zero
+        </span>
+        <span class="invalid" *ngIf="form.controls.ordem.invalid && form.controls.ordem.errors.max && form.controls.ordem.dirty">
+            O valor deve ser no máximo {{ordemMaxima}}
+        </span>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- #endregion -->
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Fechar</button>
+  <button type="button" class="btn btn-outline-primary" (click)="salvar()">Salvar</button>
+</div>

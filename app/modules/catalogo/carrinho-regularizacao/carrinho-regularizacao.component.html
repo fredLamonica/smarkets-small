@@ -1,0 +1,38 @@
+<div
+  *ngIf="!regularizacoes || regularizacoes?.length == 0"
+  class="no-content mt-5"
+  translate>
+  GENERAL.NO_RECORDS_FOUND
+</div>
+<smk-regularizacao
+  *ngFor="let regularizacao of regularizacoes; index as i"
+  [indexPai]="i"
+  [regularizacao]="regularizacao"
+  [usuarioAtual]="usuarioAtual"
+  [fornecedores$]="fornecedores$"
+  [fornecedoresLoading]="fornecedoresLoading"
+  [fornecedoresInput$]="fornecedoresInput$"
+  [centrosDeCusto]="centrosDeCusto"
+  [centrosDeCustoLoading]="centrosDeCustoLoading"
+  [centroDeCustoUnico]="centroDeCustoUnico"
+  [condicoesPagamento]="condicoesPagamento"
+  [condicoesPagamentoLoading]="condicoesPagamentoLoading"
+  [gruposCompradores]="gruposCompradores"
+  [gruposCompradoresLoading]="gruposCompradoresLoading"
+  [grupoCompradoresUnico]="grupoCompradoresUnico"
+  [alcadas]="alcadas"
+  [alcadasLoading]="alcadasLoading"
+  [alcadaUnica]="alcadaUnica"
+  [marcas]="marcas"
+  [marcasLoading]="marcasLoading"
+  [textoNgSelectLoading]="textoNgSelectLoading"
+  [textoNgSelectLimpar]="textoNgSelectLimpar"
+  [textoNgSelectPlaceholder]="textoNgSelectPlaceholder"
+  [contasContabeis$]="contasContabeis$"
+  [contasContabeisInput$]="contasContabeisInput$"
+  [contasContabeisLoading]="contasContabeisLoading"
+  [contaContabilUnica]="contaContabilUnica"
+  (confirmar)="confirmeRegularizacao($event)"
+  (remover)="removaRegularizacao($event)"
+  (atualizarCarrinho)="atualizeResumoCarrinho()">
+</smk-regularizacao>

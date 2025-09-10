@@ -1,0 +1,7 @@
+<sdk-modal title="RECUSAR:" subtitle="{{ nomeDoc }}" show-footer="{{ true }}" title-button-cancel="Cancelar"
+  title-button-confirm="Confirmar" (on-confirm)="confirmar()">
+  <form [formGroup]="form">
+    <label class="font-weight-bold required">Motivo:</label>
+    <textarea class="mt-2 w-100 form-control" formControlName="motivoRecusa" maxlength="220"></textarea>
+  </form>
+</sdk-modal>

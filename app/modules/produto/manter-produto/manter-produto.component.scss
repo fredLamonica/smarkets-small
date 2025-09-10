@@ -1,0 +1,70 @@
+$gerar-codigo-unico-color: #88a6b2;
+
+.gerar-codigo-unico {
+  cursor: pointer;
+  accent-color: #1d9ed3;
+
+  &:hover {
+    .gerar-codigo-unico-label {
+      color: darken($gerar-codigo-unico-color, 20%);
+      text-decoration: none;
+    }
+  }
+
+  .gerar-codigo-unico-check {
+    cursor: pointer;
+    margin-top: 5px;
+  }
+
+  .gerar-codigo-unico-label {
+    cursor: pointer;
+    text-decoration: none;
+  }
+}
+
+.dropdown-precificacao{
+    height: 11em;
+    width: 19em;
+    top: -36px !important;
+    left: -89px !important;
+    padding: 20px;
+
+    .table-first-column{
+      background-color: #E0E0E0;
+      border: 1px;
+      font-weight: bold;
+      padding: 3px 10px;
+
+    }
+
+    .table-info-column{
+      padding: 0 0 0 5px;
+      width: 47%;
+    }
+
+    .text-price{
+      font-weight: bold;
+      color: #0081BF;
+    }
+
+    .bac-col-sec-line-col1{
+      background-color: #D8D8D8;
+    }
+
+    .bac-col-sec-line-col2{
+      background-color: #F5F5F5;
+    }
+
+}
+
+.dropdown-precificacao h6{
+  color: #27ADE4;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding-bottom: 5px;
+}
+
+.button-align{
+  padding-right: 15px
+}

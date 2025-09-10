@@ -1,0 +1,99 @@
+<div id="marketplace-top"></div>
+<div id="header" class="container-fluid no-bounds">
+  <div class="row py-5 py-lg-4">
+    <div class="col">
+      <smk-filtro-superior
+        [triggerFocusEmpresaCompradora]="triggerFocusEmpresaCompradora.asObservable()"
+        (busca)="busca($event)"
+        (empresaChange)="empresaChange($event)">
+      </smk-filtro-superior>
+    </div>
+  </div>
+</div>
+<div class="container-fluid no-bounds">
+  <div class="row">
+    <div class="col tabs-wrapper">
+      <ul class="nav nav-tabs row justify-content-end" id="markeplaceTab" role="tablist">
+        <div class="col-lg-8 col-xl-9 col-xxxl-10 d-flex">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [class.active]="tabAtiva == TipoCatalogoItem.Catalogo"
+              id="catalogo-tab"
+              data-toggle="tab"
+              href="#catalogo"
+              role="tab"
+              aria-controls="catalogo"
+              aria-selected="false"
+              (click)="selectTab(TipoCatalogoItem.Catalogo)">
+              <span class="d-none d-xs-none d-sm-block">
+                Produtos em <span class="font-weight-bold">Catálogo</span>
+              </span>
+              <span
+                class="d-block d-xs-block d-sm-none"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Produtos em Catálogo">
+                Catálogo
+              </span>
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="abaRequisicoesDisponivel">
+            <a
+              class="nav-link"
+              [class.active]="tabAtiva == TipoCatalogoItem.Requisicao"
+              id="requisicao-tab"
+              data-toggle="tab"
+              href="#requisicao"
+              role="tab"
+              aria-controls="requisicao"
+              aria-selected="false"
+              (click)="selectTab(TipoCatalogoItem.Requisicao)">
+              <span class="d-none d-xs-none d-sm-block">
+                Produtos em <span class="font-weight-bold">Requisição</span>
+              </span>
+              <span
+                class="d-block d-xs-block d-sm-none"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Produtos em Requisição">
+                Requisição
+              </span>
+            </a>
+          </li>
+        </div>
+      </ul>
+    </div>
+  </div>
+  <div class="row tab-content" id="markeplaceTabContent">
+    <div
+      class="col tab-pane fade"
+      [ngClass]="{ 'active show': tabAtiva == TipoCatalogoItem.Catalogo }"
+      id="catalogo"
+      role="tabpanel"
+      aria-labelledby="catalogo-tab">
+      <smk-aba-catalogo
+        #abaCatalogo
+        [empresa]="idEmpresa"
+        [filtroSuperior]="filtroSuperior"
+        [ativa]="tabAtiva == TipoCatalogoItem.Catalogo"
+        (triggerFocusEmpresaCompradora)="executeTriggerFocusEmpresaCompradora()">
+      </smk-aba-catalogo>
+    </div>
+    <div
+      class="col tab-pane fade"
+      [ngClass]="{ 'active show': tabAtiva == TipoCatalogoItem.Requisicao }"
+      id="requisicao"
+      role="tabpanel"
+      aria-labelledby="requisicao-tab"
+      *ngIf="abaRequisicoesDisponivel">
+      <smk-aba-requisicao
+        #abaRequisicao
+        [empresa]="idEmpresa"
+        [filtroSuperior]="filtroSuperior"
+        [ativa]="tabAtiva == TipoCatalogoItem.Requisicao"
+        (triggerFocusEmpresaCompradora)="executeTriggerFocusEmpresaCompradora()">
+      </smk-aba-requisicao>
+    </div>
+  </div>
+</div>

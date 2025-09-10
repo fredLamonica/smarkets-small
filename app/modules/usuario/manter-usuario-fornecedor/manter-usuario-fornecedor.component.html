@@ -1,0 +1,115 @@
+<!-- Fornecedor -->
+<ng-container *ngIf="showFornecedor; else showComprador">
+  <div class="row justify-content-end mb-4 pr-3" *ngIf="canIncludUser()">
+    <sdk-button
+      [label]="'Incluir Usuário'"
+      [icon]="'fas fa-user-plus'"
+      (buttonClick)="criarUsuario()"
+    ></sdk-button>
+  </div>
+
+  <div class="w-100">
+    <div class="bg-white border-bottom py-4" *ngIf="!users?.length; else listUsers">
+      <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+    </div>
+
+    <ng-template #listUsers>
+      <sdk-list-view [items]="users">
+        <ng-template sdkListViewItem let-item>
+          <app-item-usuario-fornecedor
+            [usuario]="item"
+            [idPessoaJuridica]="idPessoaJuridica"
+            [canDoActions]="canIncludUser()"
+            (obterUsuarios)="getUsers()"
+          >
+          </app-item-usuario-fornecedor>
+        </ng-template>
+      </sdk-list-view>
+    </ng-template>
+  </div>
+</ng-container>
+
+<!-- Comprador -->
+<ng-template #showComprador>
+  <div class="col-12 d-flex justify-content-end">
+    <sdk-rectangle-button
+      [leftIconClass]="'fas fa-plus'"
+      [leftIconColor]="'#FFFFFF'"
+      [label]="'Incluir Usuário'"
+      (buttonClick)="criarUsuario()"
+    ></sdk-rectangle-button>
+  </div>
+
+  <div class="w-100">
+    <div class="bg-white border-bottom py-4" *ngIf="!users?.length; else listUsers">
+      <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+    </div>
+
+    <ng-template #listUsers>
+      <div class="listagem">
+        <div class="row justify-content-center">
+          <div class="header">
+            <p class="col-2 pl-0">Status</p>
+            <p class="col-3 pl-0">Nome</p>
+            <p class="col-4 pl-0">E-mail</p>
+            <p class="col-2 pl-0">Cargo</p>
+            <p class="col-1 pl-0">Ações</p>
+          </div>
+        </div>
+
+        <sdk-list-view [items]="users">
+          <ng-template sdkListViewItem let-item>
+            <div class="list-users">
+              <sdk-item-card
+                (clickEmitter)="!disabled && editaUsuarario(item)"
+                [iconClass]="getIconClass(item?.situacao)"
+                [showStatusBar]="false"
+                [hasMarginBottom]="true"
+                [borderWidth]="'1px'"
+                [borderStyle]="'solid'"
+                [borderColor]="'#B8CAD1'"
+                [borderColorHover]="getColorOnHover(item?.situacao)"
+                [iconSpotColor]="getIconSpotColor(item?.situacao)"
+                [iconSpotColorHover]="getColorOnHover(item?.situacao)"
+                [repositionOnHover]="true"
+                [ngClass]="{
+                  blocked: userSituation.Bloqueado === item?.situacao,
+                  braided: userSituation.BloqueadoPorExcessoTentativas === item?.situacao,
+                  released: userSituation.Liberado === item?.situacao
+                }"
+              >
+                <div class="d-flex w-100 justify-content-around align-items-center">
+                  <div class="col-2">
+                    <a class="situation-label">{{ getStausLabel(item?.situacao) }}</a>
+                  </div>
+                  <div class="col-3">
+                    <a>{{ item.pessoaFisica.nome }}</a>
+                  </div>
+                  <div class="col-4 crop-text-2">
+                    <a data-toggle="tooltip" data-placement="bottom" title="">{{ item.email }}</a>
+                  </div>
+                  <div class="col-2 crop-text-2">
+                    <a data-toggle="tooltip" data-placement="bottom" title="">{{
+                      userProfile.get(item.permissoes[0].perfil)
+                    }}</a>
+                  </div>
+
+                  <div class="col-1 d-flex-justify-end" (click)="solicitarRemocaoVinculo(item)">
+                    <span
+                      class="icon-custom w-100"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="Desvincular Usuário"
+                    >
+                      <i class="fas fa-unlink"></i>
+                    </span>
+                  </div>
+                </div>
+              </sdk-item-card>
+            </div>
+          </ng-template>
+        </sdk-list-view>
+      </div>
+    </ng-template>
+  </div>
+</ng-template>

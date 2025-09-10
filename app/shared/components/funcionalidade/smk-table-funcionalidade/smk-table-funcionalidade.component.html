@@ -1,0 +1,136 @@
+<div class="table-funcionalidade" [ngClass]="class">
+  <smk-card-funcionalidade paddingBottom="0.25rem">
+    <div class="opcoes d-flex flex-column-reverse flex-md-row justify-content-between align-items-center pb-4">
+      <div class="acoes text-center text-md-left">
+        <ng-content></ng-content>
+      </div>
+      <div
+        *ngIf="configuracaoFerramentasDaTable?.exibirFerramentas"
+        class="ferramentas text-center text-md-right mb-4 mb-md-0">
+        <button *ngFor="let ferramenta of ferramentas" class="exportar btn" [ngClass]="ferramenta.classe"
+          [ngbTooltip]="ferramenta.tooltip"
+          (click)="ferramenta.acao()">
+          <i class="fas mr-1" [ngClass]="ferramenta.icone"></i> {{ferramenta.label}}
+        </button>
+        <button
+          *ngIf="configuracaoFerramentasDaTable?.exibirExportar"
+          class="exportar btn btn-outline-success"
+          [ngbTooltip]="tooltipExportar"
+          (click)="exporte()">
+          <i class="fas fa-download mr-1"></i> Exportar
+        </button>
+        <button
+          *ngIf="configuracaoFerramentasDaTable?.exibirConfigurarColunas"
+          class="configurar-colunas btn btn-primary"
+          ngbTooltip="Configurar colunas"
+          (click)="soliciteConfiguracaoDeColunas(modalDeConfiguracaoDeColunasTmp)">
+          <i class="fas fa-wrench"></i>
+        </button>
+      </div>
+    </div>
+    <smk-table
+      [config]="configuracaoDaTable ? configuracaoDaTable : configuracaoDefaultDaTable"
+      [items]="itensDaTable"
+      (selectedChange)="selectedChange.emit($event)"
+      (pageChange)="pageChange.emit($event)">
+    </smk-table>
+  </smk-card-funcionalidade>
+</div>
+
+<ng-template #modalDeConfiguracaoDeColunasTmp let-modal>
+  <div class="modal-config-colunas">
+    <div class="modal-header">
+      <div class="modal-title">Configurar colunas</div>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="modalBody" class="modal-body overflow-y-scroll">
+      <p class="mt-2 mb-3">Adicione ou remova colunas.</p>
+      <div [formGroup]="form">
+        <ng-container formArrayName="configuracoesColuna">
+          <div
+            *ngFor="let _ of formConfiguracoesColuna.controls; index as i; last as isLast"
+            [ngClass]="{ 'mb-2': isLast, 'mb-3': !isLast }">
+            <ng-container [formGroupName]="i">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="w-100 mr-3">
+                  <ng-select
+                    [items]="colunasDisponiveis"
+                    loadingText="Buscando..."
+                    clearAllText="Limpar"
+                    placeholder="Selecione"
+                    [bindValue]="campoColuna"
+                    bindLabel="label"
+                    [formControlName]="campoColuna"
+                    appendTo="body"
+                    [clearable]="true"
+                    [searchable]="true"
+                    [loading]="loadingColunas"
+                    [class.invalid]="formConfiguracoesColuna.controls[i].get(campoColuna).invalid">
+                  </ng-select>
+                </div>
+                <div>
+                  <i
+                    *ngIf="formConfiguracoesColuna.controls.length > 1"
+                    type="button"
+                    class="remover-coluna far fa-trash-alt"
+                    (click)="soliciteExclusaoDaColunaModal(i)"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    container="body"
+                    ngbTooltip="Remover coluna">
+                  </i>
+                  <i
+                    *ngIf="formConfiguracoesColuna.controls.length === 1"
+                    class="info-uma-coluna fas fa-info-circle"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    container="body"
+                    ngbTooltip="Pelo menos uma coluna deve estar configurada">
+                  </i>
+                </div>
+              </div>
+              <div
+                *ngIf="formConfiguracoesColuna.controls[i].get(campoColuna).invalid"
+                class="container-de-erros">
+                <span class="invalid" *ngIf="formConfiguracoesColuna.controls[i].get(campoColuna).errors.required">
+                  Selecione uma coluna
+                </span>
+                <span class="invalid"
+                  *ngIf="formConfiguracoesColuna.controls[i].get(campoColuna).errors.duplicated">
+                  Coluna já selecionada
+                </span>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="modal-footer pt-3">
+      <button
+        class="adicionar-coluna btn btn-outline-success mr-2"
+        ngbTooltip="Adicionar coluna"
+        (click)="adicioneColunaModal()">
+        <i class="fas fa-plus"></i>
+      </button>
+      <button
+        class="resetar-colunas btn btn-outline-primary mr-2"
+        ngbTooltip="Voltar para a configuração original"
+        (click)="soliciteResetarConfiguracaoDeColunasModal()">
+        <i class="fas fa-undo-alt"></i>
+      </button>
+      <div class="separador mr-3">&nbsp;&nbsp;</div>
+      <button type="button" class="cancelar btn btn-outline-primary w-100 mr-3" (click)="modal.dismiss()">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="salvar btn btn-primary w-100"
+        [class.disabled]="formConfiguracoesColuna.invalid"
+        (click)="salveConfiguracoesDasColunasModal()">
+        Confirmar
+      </button>
+    </div>
+  </div>
+</ng-template>

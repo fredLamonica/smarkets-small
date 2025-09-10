@@ -1,0 +1,77 @@
+<div class="modal-header">
+  <div class="modal-title"
+    id="modal-basic-title">
+    {{ condicaoPagamento?.idCondicaoPagamento ? 'Alterar ' : 'Incluir ' }} Condição de Pagamento
+  </div>
+  <button type="button"
+    class="close"
+    aria-label="Close"
+    (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="form-group col-lg-6">
+        <label>Código:</label>
+        <input type="text"
+          class="form-control"
+          formControlName="codigo">
+      </div>
+      <div class="form-group required col-lg-6">
+        <label>Situação:</label>
+        <ng-select id="situacao"
+          [hideSelected]="false"
+          formControlName="situacao"
+          [class.invalid]="form.controls.situacao.invalid && form.controls.situacao.dirty">
+          <ng-option [value]="Situacao.Ativo">Ativa</ng-option>
+          <ng-option [value]="Situacao.Inativo">Inativa</ng-option>
+        </ng-select>
+        <span class="invalid"
+          *ngIf="form.controls.situacao.invalid && form.controls.situacao.dirty">
+          Preenchimento Obrigatório
+        </span>
+      </div>
+      <div class="form-group required col-lg-12">
+        <label>Descrição:</label>
+        <input type="text"
+          class="form-control"
+          formControlName="descricao"
+          [class.invalid]="form.controls.descricao.invalid && form.controls.descricao.dirty">
+        <span class="invalid"
+          *ngIf="form.controls.descricao.invalid && form.controls.descricao.dirty">
+          Preenchimento obrigatório
+        </span>
+      </div>
+    </div>
+  </form>
+  <!-- #region Integração EPR -->
+  <div class="card" *ngIf="idCondicaoPagamento && disponibilizarIntegracaoErp">
+    <a class="card-header collapsed" data-toggle="collapse" href="#collapseIntegracoesErp">
+      Integração ERP
+    </a>
+    <div class="card-body">
+      <div class="collapse" id="collapseIntegracoesErp" *ngIf="idCondicaoPagamento">
+        <app-manter-integracoes-erp
+          [idVinculo]="idCondicaoPagamento"
+          [tipoIntegracaoErp]="TipoIntegracaoErp.condicaoPagamento">
+        </app-manter-integracoes-erp>
+      </div>
+    </div>
+  </div>
+  <!-- #endregion Integração EPR -->
+</div>
+
+<div class="modal-footer">
+  <button type="button"
+    (click)="cancelar()"
+    class="btn btn-outline-primary">
+    <i class="fas fa-ban"></i> Cancelar
+  </button>
+  <button type="button"
+    (click)="salvar()"
+    class="btn btn-primary">
+    <i class="fas fa-save"></i> Salvar
+  </button>
+</div>

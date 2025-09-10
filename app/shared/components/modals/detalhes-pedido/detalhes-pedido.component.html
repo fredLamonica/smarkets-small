@@ -1,0 +1,198 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Detalhes do {{ pedido?.situacao == Situacao['Pré-pedido'] ?
+    'pré-pedido' : 'pedido' }}</div>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <ngb-tabset>
+    <!-- #region Dados Gerais -->
+    <ngb-tab id="dadosGerais">
+      <ng-template ngbTabTitle>Dados gerais</ng-template>
+      <ng-template ngbTabContent>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="label-value col-md-6">
+                <label for="">Tipo</label>
+                <div class="value">Pedido de catálogo</div>
+              </div>
+              <div class="label-value col-md-6" *ngIf="pedido.situacao != Situacao['Pré-pedido']">
+                <label for="">Data de criação</label>
+                <div class="value">{{ pedido.dataConfirmacao | date: 'dd/MM/yyyy' }}</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="label-value col">
+                <label for="">Empresa compradora</label>
+                <div class="value">{{ pedido.comprador.razaoSocial }}</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="label-value col-md-6">
+                <label for="">Condição de pagamento</label>
+                <div class="value">{{ pedido.condicaoPagamento?.descricao }}</div>
+              </div>
+              <div class="label-value col-md-6">
+                <label for="">Frete</label>
+                <div class="value ">{{ Frete[pedido.frete] }}</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="label-value col">
+                <label for="">Usuário comprador</label>
+                <div class="value">{{ pedido.usuario.pessoaFisica.nome }}</div>
+              </div>
+            </div>
+            <div class="row border-top pt-3">
+              <div class="label-value col">
+                <label for="">Empresa fornecedora</label>
+                <div class="value">{{ pedido.fornecedor.razaoSocial }}</div>
+              </div>
+            </div>
+            <!-- <div class="row">
+              <div class="label-value col">
+                <label for="">Empresa transportadora</label>
+                <div class="value">--</div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <!-- #endregion -->
+    <!-- #region Itens -->
+    <ngb-tab id="itens">
+      <ng-template ngbTabTitle>Itens</ng-template>
+      <ng-template ngbTabContent>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <div class="table-responsive">
+                  <table id="table" class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">Produto</th>
+                        <th scope="col">Marca</th>
+                        <th scope="col">Unid. medida</th>
+                        <th scope="col">Qtde.</th>
+                        <th scope="col">Valor unitário</th>
+                        <th scope="col">Data de entrega</th>
+                        <th scope="col">Valor total</th>
+                        <th scope="col"
+                          *permissionsOnly="{ permissions: 'Fornecedor', opts: { extra: pedido.situacao == Situacao['Aguardando fornecedor'] } }">
+                        </th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngIf="!pedido?.itens?.length">
+                        <td class="no-content" colspan="7" translate>GENERAL.NO_RECORDS_FOUND</td>
+                      </tr>
+                      <tr *ngFor="let item of pedido?.itens">
+                        <td>{{ item.produto.descricao }}</td>
+                        <td>{{ item.marca ? item.marca.nome : "Sem preferência" }}</td>
+                        <td>{{ item.produto.unidadeMedida.sigla }}</td>
+                        <td>{{ item.quantidade }}</td>
+                        <td>{{ item.valor | currency:'BRL':'symbol':'1.2':'pt-BR'}}</td>
+                        <td class="text-center">{{ obtenhaDataDeEntrega(item) }}
+                        </td>
+                        <td>{{ item.valorTotal | currency:'BRL':'symbol':'1.2':'pt-BR' }}</td>
+                        <td
+                          *permissionsOnly="{ permissions: 'Fornecedor', opts: { extra: pedido.situacao == Situacao['Aguardando fornecedor'] } }">
+                          <button class="btn btn-secondary" (click)="editarItem(content, item)"><i
+                              class="fas fa-pencil-alt"></i></button>
+                        </td>
+                        <td>
+                          <button class="btn btn-danger" (click)="solicitarExclusaoItem(item.idPedidoItem)"><i
+                              class="fas fa-trash-alt"></i></button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <!-- #endregion -->
+  </ngb-tabset>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="activeModal.close()">Fechar</button>
+</div>
+
+<!-- #region Edicao -->
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">Editar item</div>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')"
+      *permissionsOnly="{ permissions: 'Fornecedor', opts: { extra: pedido.situacao == Situacao['Aguardando fornecedor'] } }">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="form">
+          <div class="form-row">
+            <div class="form-group col">
+              <label for="produto">Produto</label>
+              <div class="form-control disabled" readonly> {{ form.controls.produto.value }} </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-lg-4">
+              <label for="marca">Marca</label>
+              <div class="form-control disabled" readonly> {{ form.controls.marca.value }} </div>
+            </div>
+            <div class="form-group col-lg-4">
+              <label for="unidadeMedida">Unidade de medida</label>
+              <div class="form-control disabled" readonly> {{ form.controls.unidadeMedida.value }} </div>
+            </div>
+            <div class="form-group col-lg-4">
+              <label for="valor">Valor unitário</label>
+              <div class="form-control disabled" readonly> {{ form.controls.valor.value |
+                currency:(itemSelecionado?.moeda|moedaCodigo):'symbol':'1.2':(itemSelecionado?.moeda|moedaLocale)
+                }} </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group required col-lg-4">
+              <label for="quantidade">Quantidade</label>
+              <input type="text" class="form-control" id="quantidade" formControlName="quantidade"
+                [textMask]="{mask: maskPositiveInteger, guide: false}"
+                [min]="0" [max]="2000000000">
+              <span class="invalid"
+                *ngIf="form.controls.quantidade.invalid && form.controls.quantidade.dirty">Preenchimento
+                obrigatório</span>
+            </div>
+            <div class="form-group required col-lg-4">
+              <label for="dataEntrega">Data de entrega</label>
+              <input type="date" class="form-control" id="dataEntrega" formControlName="dataEntrega">
+              <span class="invalid"
+                *ngIf="form.controls.dataEntrega.invalid && form.controls.dataEntrega.dirty">Preenchimento
+                obrigatório</span>
+            </div>
+            <div class="form-group col-lg-4">
+              <label for="valor">Valor total</label>
+              <div class="form-control disabled" readonly> {{ (form.controls.quantidade.value *
+                form.controls.valor.value ) |
+                currency:(itemSelecionado?.moeda|moedaCodigo):'symbol':'1.2':(itemSelecionado?.moeda|moedaLocale)
+                }} </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="d('Cross click')">Voltar</button>
+    <button type="button" class="btn btn-outline-primary" (click)="salvar()">Salvar</button>
+  </div>
+</ng-template>
+<!-- #endregion -->

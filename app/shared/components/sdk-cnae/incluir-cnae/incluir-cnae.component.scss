@@ -1,0 +1,77 @@
+::ng-deep div.dados-gerais {
+  select.form-control,
+  input.form-control {
+    background-color: rgba(255, 255, 255, 0) !important;
+    border-radius: 8px !important;
+    border: 1px solid #cfdce0 !important;
+    .ng-placeholder {
+      color: #588394 !important;
+      font-weight: bold;
+    }
+  }
+
+  color: #417185 !important;
+}
+
+::ng-deep input-number .input-group {
+  background-color: rgba(255, 255, 255, 0) !important;
+  border-radius: 8px !important;
+  border: 1px solid #cfdce0 !important;
+  .ng-placeholder {
+    color: #588394 !important;
+    font-weight: bold;
+  }
+
+  color: #417185 !important;
+
+  select.form-control,
+  input.form-control {
+    border-radius: none !important;
+    border: none !important;
+  }
+}
+
+::ng-deep div.dados-gerais {
+  select.form-control > option.custom {
+    color: red !important;
+    background-color: rgba(255, 255, 255, 0) !important;
+    border-radius: 8px !important;
+    border: 1px solid #cfdce0 !important;
+    .ng-placeholder {
+      color: #588394 !important;
+      font-weight: bold;
+    }
+  }
+}
+
+.icon-color {
+  color: #e74b37;
+}
+
+.button-border-radius {
+  border-radius: 0.5rem !important;
+}
+
+::ng-deep sdk-modal.text-transform-title {
+  .sdk-modal-title.sdk-modal {
+    cursor: default !important;
+  }
+}
+
+::ng-deep sdk-modal.modal-border-radius {
+  .sdk-modal-header:nth-child(1) {
+    border-radius: 8px 8px 0px 0px !important;
+  }
+}
+
+::ng-deep sdk-modal.text-transform-title {
+  div:nth-child(1) {
+    text-transform: none !important;
+  }
+}
+
+.ng-deep sdk-modal.cnaes-border-radius {
+  ng-select:nth-child(1) {
+    border-radius: 8px !important;
+  }
+}

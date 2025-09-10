@@ -1,0 +1,7 @@
+<nav class="nav-bounds row navbar d-flex align-items-center position-fixed">
+  <h5 [class]="titleClass?titleClass:'titulo text-large'">{{title}} >> <strong
+      [class]="subTitleClass? subTitleClass: 'text-primary'">{{subtitle}}</strong></h5>
+  <div class="d-flex flex-row px-2">
+    <ng-content></ng-content>
+  </div>
+</nav>

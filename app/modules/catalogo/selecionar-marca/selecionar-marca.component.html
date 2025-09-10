@@ -1,0 +1,38 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Selecionar marca</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body py-4">
+  <div class="container-fluid">
+    <div class="row mb-4">
+      <div class="col">
+        <input-busca placeholder="Buscar por Marca..." (buscar)="buscar($event)"></input-busca>
+      </div>
+    </div>
+    <div class="row h-500px overflow-y-scroll">
+      <div class="col">
+        <div class="row">
+          <div class="col-12" *ngIf="!marcasBusca?.length; else hasMarcas">
+            <div class="no-content mt-5" translate>GENERAL.NO_RECORDS_FOUND</div>
+          </div>
+          <ng-template #hasMarcas>
+            <div class="col-6 col-lg-4 mb-2" *ngFor="let marca of marcasBusca">
+              <button class="btn btn-link text-truncate w-100 text-input text-left pl-0" (click)="selecionar(marca)" data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ marca.nome }} ({{ marca.total }})">
+                {{ marca.nome }}
+                ({{ marca.total }})
+              </button>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary"><i class="fas fa-ban"></i>
+    Cancelar</button>
+</div>

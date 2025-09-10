@@ -1,0 +1,98 @@
+<div class="infinite-scroll" infinite-scroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
+  [scrollWindow]="false" (scrolled)="onScroll()">
+
+  <div class="header">
+    <div class="header-search row">
+      <div class="col-12 align-self-center">
+        <h3 class="mb-0 text-uppercase text-primary font-weight-bold">
+          Unidades de Medida
+        </h3>
+      </div>
+      <div class="col-lg-8">
+        <input-busca label="O que você procura?" placeholder="Buscar por descrição, código ou sigla"
+          (buscar)="buscar($event)">
+        </input-busca>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-nav-tabs">
+    <ul class="nav nav-tabs row bounds" id="unidadesMedidaTab" role="tablist">
+      <li class="nav-item col-lg-3">
+        <a class="nav-link nav-link-block active" id="unidades-medida-tab" data-toggle="tab" href="#unidadesMedidaTab"
+          role="tab" aria-controls="unidadesMedida" aria-selected="false">Unidades de
+          Medida</a>
+      </li>
+    </ul>
+
+    <div class="tab-content bounds" id="unidadesMedidaTab">
+      <div class="tab-pane fade active show" id="unidadesMedida" role="tabpanel" aria-labelledby="unidades-medida-tab">
+        <div class="card card-tab-content">
+          <div class="card-header">
+            <a (click)="inserir()" class="btn btn-icon p-0 d-flex align-items-center text-primarybtn btn-icon d-flex align-items-center text-primary p-0">
+              <i class="fas fa-plus-circle"></i>
+              <p class="d-inline-block mb-0 ml-2"> Inserir nova unidade de medida</p>
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="container-fluid">
+              <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+                <div class="col-md-1">
+                  <label class="font-weight-bold">ID</label>
+                </div>
+                <div class="col-md-2">
+                  <label class="font-weight-bold">Código:</label>
+                </div>
+                <div class="col-md-4">
+                  <label class="font-weight-bold">Unidade de Medida:</label>
+                </div>
+                <div class="col-md-2">
+                  <label class="font-weight-bold">Sigla:</label>
+                </div>
+                <div class="col-md-3">
+                  <label class="font-weight-bold">Ações:</label>
+                </div>
+              </div>
+              <div class="bg-white border-bottom row py-4" *ngIf="!unidades?.length">
+                <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+              </div>
+  
+              <div class="bg-white border-bottom row py-4" *ngFor="let unidadeMedida of unidades; let i=index;">
+                <div class="col-md-1 col-sm-3 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">ID</label>
+                  <p class="mb-3 mb-lg-0"> {{ unidadeMedida.idUnidadeMedida }} </p>
+                </div>
+                <div class="col-md-2 col-sm-3 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">Código:</label>
+                  <p class="mb-3 mb-lg-0"> {{ unidadeMedida.codigo }} </p>
+                </div>
+                <div class="col-md-4 col-sm-3 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">Unidade de Medida:</label>
+                  <p class="mb-3 mb-lg-0"> {{ unidadeMedida.descricao }} </p>
+                </div>
+                <div class="col-md-2 col-sm-3 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">Sigla:</label>
+                  <p class="mb-3 mb-lg-0"> {{ unidadeMedida.sigla }} </p>
+                </div>
+                <div class="col-md-3 d-flex justify-content-around justify-content-md-between align-self-center">
+                  <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Auditoria"
+                    (click)="auditar(unidadeMedida.idUnidadeMedida)">
+                    <i class="fas fa-history"></i>
+                  </button>
+                  <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Editar"
+                    (click)="editar(unidadeMedida.idUnidadeMedida)">
+                    <i class="far fa-edit"></i>
+                  </button>
+                  <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Excluir"
+                    (click)="solicitarExclusao(unidadeMedida.idUnidadeMedida)">
+                    <i class="far fa-trash-alt text-danger"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

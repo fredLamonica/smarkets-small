@@ -1,0 +1,51 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Incluir empresa</div>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <form class="col-12" [formGroup]="form">
+      <div class="form-row">
+        <div class="form-group col">
+          <label for="razaoSocial" translate> Empresa </label>
+          <input class="form-control" type="text" name="razaoSocial" formControlName="razaoSocial">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col">
+          <label for="cnpj" translate> CNPJ </label>
+          <input class="form-control" type="text" name="cnpj" formControlName="cnpj">
+        </div>
+      </div>
+      <div class="form-row mb-3">
+        <div class="col-md-4 col-xl-2">
+          <button role=button class="btn btn-block btn-primary" (click)="buscar()">
+            <i class="fas fa-search"></i> Pesquisar
+          </button>
+        </div>
+        <div class="col-md-4 col-xl-2">
+          <button role=button class="btn btn-block btn-danger" (click)="limpar()">
+            <i class="fas fa-trash-alt"></i> Limpar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <custom-table classes="table-striped table-sm" [settings]="settings" [source]="fornecedores" (select)="selecao($event)"></custom-table>
+          <pager size="sm" [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="registrosPorPagina"
+            (pagination)="paginacao($event)"></pager>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Fechar</button>
+  <button type="button" class="btn btn-outline-primary" (click)="confirmar()">Confirmar</button>
+</div>

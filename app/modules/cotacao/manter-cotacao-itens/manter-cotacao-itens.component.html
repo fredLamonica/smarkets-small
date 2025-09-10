@@ -1,0 +1,590 @@
+<div class="card-header" [class.col-12]="readonly">
+  <div class="row">
+    <div class="col-12 col-md-12 pl-0 font-weight-bold">ITENS</div>
+  </div>
+</div>
+
+<!-- REGION ITENS NÃO PARTICIPANTES  -->
+<div class="row bg-white py-3 text-small" *ngIf="!readonly">
+  <div class="col-12 col-md-12">
+    <div class="row">
+      <div class="col-12">
+        <input-busca
+          placeholder="Buscar por Produto, Requisição, Código RC, Item RC, Tipo Documento, Comprador da RC"
+          (buscar)="buscarItensDisponiveis($event)">
+        </input-busca>
+      </div>
+    </div>
+    <form [formGroup]="formBuscaAvancada">
+      <div class="row pt-3">
+        <div class="form-group col-lg-3">
+          <ng-select
+            placeholder="Categoria de Produto"
+            [items]="categorias$ | async"
+            bindLabel="nome"
+            bindValue="idCategoriaProduto"
+            [loading]="categoriasLoading"
+            [loadingText]="'buscando...'"
+            formControlName="idCategoriaProduto"
+            (click)="subCategorias()">
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-3">
+          <input
+            class="form-control"
+            formControlName="categoriaDemanda"
+            placeholder="Categoria da Demanda" />
+        </div>
+
+        <div class="form-group col-lg-3">
+          <ng-select
+            placeholder="Classificação / SLA"
+            [items]="classificacaoSlas$ | async"
+            bindLabel="descricao"
+            bindValue="idClassificacao"
+            formControlName="idClassificacaoSla"
+            [loading]="classificacaoLoading"
+            (click)="subClassificacaoSlas()">
+          </ng-select>
+        </div>
+
+        <div class="form-group col-lg-3">
+          <ng-select
+            placeholder="Centro"
+            [items]="filiais$ | async"
+            name="codigoFilialEmpresa"
+            formControlName="codigoFilialEmpresa"
+            bindLabel="codigoFilialEmpresa"
+            bindValue="codigoFilialEmpresa"
+            [loading]="filiaisLoading"
+            [loadingText]="'buscando...'"
+            (click)="subFiliais()">
+          </ng-select>
+        </div>
+
+        <div class="col-3">
+          <input class="form-control" formControlName="marca" placeholder="Marca" />
+        </div>
+
+        <div class="col-2">
+          <input
+            class="form-control"
+            formControlName="codigoSolicitacaoCompra"
+            placeholder="Cód. Req. Integração" />
+        </div>
+        <div class="col-3">
+          <input
+            class="form-control"
+            [textMask]="{ mask: maskValor, guide: false }"
+            type="text"
+            name="valorRequisicaoMin"
+            [min]="0"
+            [max]="999999999.9999"
+            formControlName="valorRequisicaoMin"
+            placeholder="Valor da Requisição (Min)" />
+          <span
+            class="invalid"
+            *ngIf="
+              formBuscaAvancada.controls.valorRequisicaoMin.invalid &&
+              formBuscaAvancada.controls.valorRequisicaoMin.errors.min &&
+              formBuscaAvancada.controls.valorRequisicaoMin.dirty
+            ">
+            O valor da requisição deve ser maior que zero
+          </span>
+        </div>
+        <div class="col-3">
+          <input
+            class="form-control"
+            [textMask]="{ mask: maskValor, guide: false }"
+            type="text"
+            name="valorRequisicaoMax"
+            [min]="0"
+            [max]="999999999.9999"
+            formControlName="valorRequisicaoMax"
+            placeholder="Valor da Requisição (Máx)" />
+          <span
+            class="invalid"
+            *ngIf="
+              formBuscaAvancada.controls.valorRequisicaoMax.invalid &&
+              formBuscaAvancada.controls.valorRequisicaoMax.errors.min &&
+              formBuscaAvancada.controls.valorRequisicaoMax.dirty
+            ">
+            O valor da requisição deve ser maior que zero
+          </span>
+        </div>
+
+        <div class="form-group col-lg-1">
+          <button
+            type="button"
+            class="btn btn-primary float-right"
+            (click)="buscarFiltroAvancado()">
+            <i class="fas fa-search"></i> Buscar
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div class="row px-3 mt-3 mb-1">
+      <div class="col">
+        <div class="row" *ngIf="!readonly">
+          <div class="col-12 align-self-center">
+            <div class="custom-control custom-checkbox" (click)="selecionarTodosDisponiveis()">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="selectAllDisponiveis"
+                [checked]="todosItensDisponiveisSelecionados" />
+              <label
+                class="custom-control-label pl-2"
+                style="position: absolute; pointer-events: none"
+                for="selectAllDisponiveis">
+                Selecionar todas</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive border rounded" style="height: 250px; overflow-y: auto">
+      <table class="table">
+        <thead class="py-1 bg-lighter-dark">
+          <tr>
+            <th class="font-weight-bold align-text-top text-capitalize">Requisição</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Produto</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Marca</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Categoria</th>
+            <th class="font-weight-bold align-text-top text-capitalize">SLA</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Qtde</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Valor Total</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Cod. Req.</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Cod. Filial</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Cat. Demanda</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Tipo Documento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of itensDisponiveis; let index = index">
+            <tr [class.bg-lighter]="index % 2 != 0"
+              *ngIf="exibirItemDisponivel(item)">
+              <td class="pl-2"
+                (click)="selecionarItemDisponivel(item)">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="select{{ index }}"
+                    [checked]="itemDisponivelSelecionado(item)" />
+                  <label
+                    class="custom-control-label"
+                    style="position: absolute; pointer-events: none"
+                    for="select{{ index }}"></label>
+                  {{ item.idRequisicaoItem }}
+                </div>
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item.produto?.descricao }}"
+                class="crop-text-3" [class.text-primary]="item?.produto?.descricao">
+                {{ item.produto?.descricao }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title=" {{ item.idMarca ? item.marca.nome : 'Sem Preferência' }}">
+                {{ item?.marca?.nome | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item.produto?.categoria?.nome }}">
+                {{ item.produto?.categoria?.nome | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.requisicaoItem.slaItem?.classificacao?.descricao }}"
+                class="crop-text-3">
+                {{ item?.requisicaoItem.slaItem?.classificacao?.descricao | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.quantidade }}">
+                {{ item?.requisicaoItem?.quantidade | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{
+                      (item.valorReferencia ? item.valorReferencia * item.quantidade : 0)
+                        | customCurrency: item.moeda:null:'symbol'
+                    }}"
+                [class.text-success]="item?.valorReferencia && item.quantidade">
+                {{
+                (item.valorReferencia ? item.valorReferencia * item.quantidade : 0)
+                | customCurrency: item.moeda:null:'symbol'
+                }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title=" {{ item?.requisicaoItem?.codigoSolicitacaoCompra || item?.requisicaoItem?.idIntegracaoRequisicaoERP }}">
+                {{ (item?.requisicaoItem?.codigoSolicitacaoCompra || item?.requisicaoItem?.idIntegracaoRequisicaoERP) |
+                noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title=" {{ item?.requisicaoItem?.itemSolicitacaoCompra?.codigoFilialEmpresa }}">
+                {{
+                item?.requisicaoItem?.itemSolicitacaoCompra?.codigoFilialEmpresa | noContent
+                }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title=" {{ item?.requisicaoItem?.itemSolicitacaoCompra?.categoriaDemanda }}">
+                {{ item?.requisicaoItem?.itemSolicitacaoCompra?.categoriaDemanda | noContent }}
+              </td>
+              <td>
+                {{item?.requisicaoItem?.itemSolicitacaoCompra?.tipoDocumento}}
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <p
+        *ngIf="
+        (!itensDisponiveis?.length && !itens?.length) ||
+        (itensDisponiveisBusca && !itensDisponiveisBusca.length)
+        "
+        class=" px-auto no-content" translate>
+        GENERAL.NO_RECORDS_FOUND
+      </p>
+    </div>
+    <div class="row" *ngIf="!readonly">
+      <div class="col">
+        <button class="btn btn-light float-right" (click)="adicionar()">
+          Adicionar <i class="fas fa-arrow-right text-primary"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END REGION ITENS NÃO PARTICIPANTES  -->
+
+<!-- REGION ITENS PARTICIPANTES  -->
+<div class="card-header" *ngIf="!readonly">
+  <div class="row">
+    <div class="col-12 col-md-12 font-weight-bold">ITENS PARTICIPANTES</div>
+  </div>
+</div>
+<div
+  class="row bg-white py-3 text-small"
+  [class.border-right]="!readonly"
+  *ngIf="!this.cotacao || this.cotacao.situacao == situacaoCotacao['Em configuração']">
+  <div class="col-12 col-md-12">
+    <div class="row">
+      <div class="col">
+        <input-busca
+          placeholder="Buscar por Produto, Requisição, Código RC, Item RC, Tipo Documento"
+          (buscar)="buscarItensIncluidosParaSalvar($event)">
+        </input-busca>
+      </div>
+    </div>
+
+    <div class="row px-3 mt-3 mb-1">
+      <div class="col">
+        <div class="row" *ngIf="!readonly">
+          <div class="col-12 align-self-center">
+            <div class="custom-control custom-checkbox" (click)="selecionarTodosIncluidos()">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="selectAllIncluidos"
+                [checked]="todosItensIncluidosSelecionados" />
+              <label
+                class="custom-control-label pl-2"
+                style="position: absolute; pointer-events: none"
+                for="selectAllIncluidos">
+                Selecionar todas</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive border rounded" style="height: 250px; overflow-y: auto">
+      <table class="table">
+        <thead class="py-1 bg-lighter-dark">
+          <tr>
+            <th class="font-weight-bold align-text-top text-capitalize">Requisição</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Produto</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Marca</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Categoria</th>
+            <th class="font-weight-bold align-text-top text-capitalize">SLA</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Qtde</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Valor Total</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Cod. Req.</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Cod. Filial</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Cat. Demanda</th>
+            <th class="font-weight-bold align-text-top text-capitalize">Tipo Documento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of itens; let index = index">
+            <tr [class.bg-lighter]="index % 2 != 0"
+              *ngIf="exibirItemIncluido(item)">
+              <td class="pl-2"
+                (click)="selecionarItemIncluido(item)">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="select{{ index }}"
+                    [checked]="itemIncluidoSelecionado(item)" />
+                  <label
+                    class="custom-control-label"
+                    style="position: absolute; pointer-events: none"
+                    for="select{{ index }}"></label>
+                  {{ item.idRequisicaoItem }}
+                </div>
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item.produto?.descricao }}"
+                class="crop-text-3" [class.text-primary]="item?.produto?.descricao">
+                {{ item.produto?.descricao }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title=" {{ item.idMarca ? item.marca.nome : 'Sem Preferência' }}">
+                {{ item?.marca?.nome | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item.produto?.categoria?.nome }}">
+                {{ item.produto?.categoria?.nome | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.requisicaoItem.slaItem?.classificacao?.descricao }}"
+                class="crop-text-3">
+                {{ item?.requisicaoItem.slaItem?.classificacao?.descricao | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.quantidade }}">
+                {{ item?.requisicaoItem?.quantidade | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{
+                      (item.valorReferencia ? item.valorReferencia * item.quantidade : 0)
+                        | customCurrency: item.moeda:null:'symbol'
+                    }}"
+                [class.text-success]="item?.valorReferencia && item.quantidade">
+                {{
+                (item.valorReferencia ? item.valorReferencia * item.quantidade : 0)
+                | customCurrency: item.moeda:null:'symbol'
+                }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title=" {{ item?.requisicaoItem?.codigoSolicitacaoCompra }}">
+                {{ item?.requisicaoItem?.codigoSolicitacaoCompra | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title=" {{ item?.requisicaoItem?.itemSolicitacaoCompra?.codigoFilialEmpresa }}">
+                {{
+                item?.requisicaoItem?.itemSolicitacaoCompra?.codigoFilialEmpresa | noContent
+                }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title=" {{ item?.requisicaoItem?.itemSolicitacaoCompra?.categoriaDemanda }}">
+                {{ item?.requisicaoItem?.itemSolicitacaoCompra?.categoriaDemanda | noContent }}
+              </td>
+              <td>
+                {{item?.requisicaoItem?.itemSolicitacaoCompra?.tipoDocumento}}
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <p
+        *ngIf="
+          (!itens?.length && !itensDisponiveis?.length) ||
+          (itensIncluidosBusca && !itensIncluidosBusca.length)
+        "
+        class=" px-auto no-content" translate>
+        GENERAL.NO_RECORDS_FOUND
+      </p>
+    </div>
+
+    <div class="row" *ngIf="!readonly">
+      <div class="col">
+        <button class="btn btn-light float-left" (click)="remover()">
+          <i class="fas fa-arrow-left text-danger"></i> Remover
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END REGION ITENS PARTICIPANTES  -->
+
+<!-- REGION ITENS PARTICIPANTES DEPOIS QUE A COTAÇÃO FOI CONFIGURADA -->
+<div
+  class="row bg-white py-3 text-small"
+  [class.border-right]="!readonly"
+  *ngIf="idCotacao && this.cotacao && this.cotacao.situacao != situacaoCotacao['Em configuração']">
+  <div class="col-12 col-md-12">
+    <div class="row d-flex justify-content-between">
+      <div class="col-8">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Buscar por Produto, Requisição, Código RC, Item RC, Categoria, Tipo Documento"
+          [(ngModel)]="termo" />
+      </div>
+      <div class="col-2">
+        <div class="form-row">
+          <div class="form-group col-7 pr-0 d-flex align-items-center">
+            <a>Nº de Propostas</a>
+          </div>
+          <div class="form-group col-5 px-0">
+            <input
+              class="form-control"
+              type="number"
+              min="0"
+              [(ngModel)]="numeroPropostasRecebidas" />
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-outline-primary btn-block" (click)="buscarItensIncluidos()">
+          <i class="fas fa-filter"></i> Filtrar
+        </button>
+      </div>
+    </div>
+
+    <div class="table-responsive border rounded" style="height: 250px; overflow-y: auto">
+      <table class="table">
+        <thead class="py-1 bg-info">
+          <tr>
+            <th class="font-weight-bold text-white align-text-top text-capitalize">Requisição</th>
+            <th class="font-weight-bold text-white align-text-top text-capitalize">Produto</th>
+            <th class="font-weight-bold text-white align-text-top text-capitalize">Marca</th>
+            <th class="font-weight-bold text-white align-text-top text-capitalize">Categoria</th>
+            <th class="font-weight-bold text-white align-text-top text-capitalize">SLA</th>
+            <th class="font-weight-bold text-white align-text-top text-capitalize">Qtde</th>
+            <th class="font-weight-bold text-white align-text-top text-capitalize">Valor Total</th>
+            <th class="font-weight-bold text-white align-text-top text-capitalize">Cod. Req.</th>
+            <th class="font-weight-bold text-white align-text-top text-capitalize">Cod. Filial</th>
+            <th class="font-weight-bold text-white align-text-top text-capitalize">Cat. Demanda</th>
+            <th class="font-weight-bold text-white align-text-top text-capitalize">N° de Propostas</th>
+            <th class="font-weight-bold text-white align-text-top text-capitalize">Tipo Documento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of itens; let index = index">
+            <tr [class.bg-lighter]="index % 2 != 0"
+              *ngIf="exibirItemIncluido(item)">
+              <td class="align-self-center">{{ item.idRequisicaoItem }}</td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item.produto?.descricao }}"
+                class="crop-text-3" [class.text-primary]="item?.produto?.descricao">
+                {{ item.produto?.descricao }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title=" {{ item.idMarca ? item.marca.nome : 'Sem Preferência' }}">
+                {{ item?.marca?.nome | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item.produto?.categoria?.nome }}">
+                {{ item.produto?.categoria?.nome | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.requisicaoItem.slaItem?.classificacao?.descricao }}"
+                class="crop-text-3">
+                {{ item?.requisicaoItem.slaItem?.classificacao?.descricao | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.quantidade }}">
+                {{ item?.requisicaoItem?.quantidade | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{
+                      (item.valorReferencia ? item.valorReferencia * item.quantidade : 0)
+                        | customCurrency: item.moeda:null:'symbol'
+                    }}"
+                [class.text-success]="item?.valorReferencia && item.quantidade">
+                {{
+                (item.valorReferencia ? item.valorReferencia * item.quantidade : 0)
+                | customCurrency: item.moeda:null:'symbol'
+                }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title=" {{ item?.requisicaoItem?.codigoSolicitacaoCompra }}">
+                {{ item?.requisicaoItem?.codigoSolicitacaoCompra | noContent }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title=" {{ item?.requisicaoItem?.itemSolicitacaoCompra?.codigoFilialEmpresa }}">
+                {{
+                item?.requisicaoItem?.itemSolicitacaoCompra?.codigoFilialEmpresa | noContent
+                }}
+              </td>
+              <td
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title=" {{ item?.requisicaoItem?.itemSolicitacaoCompra?.categoriaDemanda }}">
+                {{ item?.requisicaoItem?.itemSolicitacaoCompra?.categoriaDemanda | noContent }}
+              </td>
+              <td>{{ item?.numeroPropostasRecebidas ? item?.numeroPropostasRecebidas : 0 }}</td>
+              <td>
+                {{item?.requisicaoItem?.itemSolicitacaoCompra?.tipoDocumento}}
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <p
+        *ngIf="
+        (!itens?.length && !itensDisponiveis?.length) ||
+        (itensIncluidosBusca && !itensIncluidosBusca.length)
+        "
+        class=" px-auto no-content" translate>
+        GENERAL.NO_RECORDS_FOUND
+      </p>
+    </div>
+  </div>
+</div>
+<!-- END REGION ITENS PARTICIPANTES QUE A COTAÇÃO FOI CONFIGURADA--->

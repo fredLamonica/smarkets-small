@@ -1,0 +1,101 @@
+aw-wizard-navigation-bar {
+  background-color: $lighter;
+  
+  &.large-filled {
+    height: $navbar-height;
+    .steps-indicator {
+      max-width: $page-max-width !important;
+      margin: 0 auto !important;
+      padding: 40px 0 0 0 !important;
+    }
+  }
+
+  &.small {
+    height: 50px !important;
+    .steps-indicator {
+      padding: 10px 0 0 0 !important;
+    }
+  }
+
+  .steps-indicator {
+    min-height: unset;
+    border-bottom: none;
+    justify-content: start !important;
+
+    li {
+      display: flex;
+      padding: 0 1rem !important;
+
+      &::before {
+        width: 0 !important;
+        height: 0 !important;
+      }
+
+      &.current, &.editing {
+        a {
+          background-color: $smarkets-light;
+          height: 40px;
+          margin-bottom: 0;
+
+          .label {
+            padding: 0 !important;
+            font-weight: 700 !important;
+            color: $new-ux-smarkets-gray !important;
+          }
+        }
+      }
+
+      &.done {
+        &:not(.navigable) {
+          a {
+            background-color: $smarkets-light;
+            height: 40px;
+            margin-bottom: 0;
+  
+            .label {
+              padding: 0 !important;
+              font-weight: 700 !important;
+              color: $new-ux-smarkets-gray !important;
+            }
+          }
+        }
+      }
+
+      a {
+        width: 100%;
+        box-shadow: none;
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+        background-color: $white;
+        font-size: 16px;
+        padding: .5rem 2rem;
+        height: 36px;
+        margin-bottom: 4px;
+
+        .label {
+          padding: 0 !important;
+          font-weight: normal !important;
+          color: $new-ux-smarkets-gray !important;
+          text-transform: capitalize !important;
+        }
+
+        .step-indicator {
+          width: 0 !important;
+          height: 0 !important;
+        }
+      }
+    }
+
+    &.steps-2, &.steps-3, &.step-4 {
+      li {
+        flex: 0 0 25%;
+        max-width: 25%;
+      }
+    }
+  }
+}
+
+.wizard-steps {
+  max-width: $page-max-width !important;
+  margin: 0 auto !important;
+}

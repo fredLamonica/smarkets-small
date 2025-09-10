@@ -1,0 +1,111 @@
+<sdk-header-default [showShadow]="true" [ngStyle]="{ 'z-index': '102' }" heightValue="64px">
+  <div class="col-md-6 pl-4">
+    <span class="page-title text-large">Gestão de Fornecedores &nbsp;&nbsp;<i class="fas fa-chevron-right"></i>
+      <span class="subtitle">&nbsp;&nbsp; Solicitação de Cadastro</span></span>
+  </div>
+</sdk-header-default>
+
+<sdk-header-default heightValue="64px" topValue="10.2em">
+  <sdk-input-icon
+    name="cnpj"
+    style="margin: 10px"
+    [placeHolder]="'Cnpj'"
+    [icon]="'fas fa-search'"
+    [inputClass]="'input-icon-right-sm'"
+    [(ngModel)]="solicitacaoCadastroFornecedorFiltro.cnpj"
+    (keyup.enter)="getSolicitacaoCadastroFornecedor()"
+    ngDefaultControl></sdk-input-icon>
+
+  <sdk-input-icon
+    name="razaosocial"
+    style="margin: 10px"
+    [placeHolder]="'Razão Social'"
+    [icon]="'fas fa-search'"
+    [inputClass]="'input-icon-right-md'"
+    [(ngModel)]="solicitacaoCadastroFornecedorFiltro.razaoSocial"
+    (keyup.enter)="getSolicitacaoCadastroFornecedor()"
+    ngDefaultControl></sdk-input-icon>
+
+  <sdk-select
+    name="statusOptions"
+    style="margin: 10px"
+    [class]="'select-sm'"
+    [placeHolder]="'Status'"
+    [items]="statusOptions"
+    (event)="solicitacaoCadastroFornecedorFiltro._status = $event"></sdk-select>
+
+  <div class="col-1">
+    <sdk-rectangle-button
+      class="custom-rectangule-button"
+      [leftIconClass]="'fas fa-search'"
+      [leftIconColor]="'#FFFFFF'"
+      [label]="'Buscar'"
+      (buttonClick)="getSolicitacaoCadastroFornecedor()">
+    </sdk-rectangle-button>
+  </div>
+
+  <div class="col d-flex justify-content-end pr-0">
+    <div class="d-flex border-left pr-3" style="height: 100%">
+      <div class="pl-3">
+        <sdk-rectangle-button
+          class="custom-rectangule-button-include"
+          [class.disabled]="!usuarioPodeIncluirSolicitacao()"
+          [label]="'Incluir Fornecedor'"
+          [leftIconClass]="'fas fa-plus'"
+          [leftIconColor]="'#FFFFFF'"
+          (buttonClick)="incluirSolicitacaoCadastroFornecedor()">
+        </sdk-rectangle-button>
+      </div>
+    </div>
+  </div>
+
+</sdk-header-default>
+
+
+<p
+  class="semListagem d-flex text-truncate w-100"
+  *ngIf="!itens?.length; else SlaSolicitacaoList"
+  data-toggle="tooltip"
+  data-placement="bottom"
+  title="Nenhum fornecedor encontrado">
+  <a class="text-center font-weight-bold text-primary">Nenhuma solicitação foi encontrada</a>
+</p>
+
+
+<div class="col-12">
+  <div class="w-100">
+    <ng-template #SlaSolicitacaoList>
+      <div class="listagem">
+        <div class="row col-12 justify-content-right">
+          <p class="col-1 ml-5 pl-5 ">Id</p>
+          <p class="col-3 pl-5">Cnpj Fornecedor</p>
+          <p class="col-3 text-center">Razão Social Fornecedor</p>
+          <p class="col-2 pl-5 text-center">Empresa</p>
+          <p class="col-1 ml-3 pl-5 text-center">Status</p>
+          <p class="col-1 ml-4 pl-5">Ações</p>
+        </div>
+
+        <sdk-list-view [items]="itens">
+          <ng-template sdkListViewItem let-item>
+            <item-solicitacao-cadastro-fornecedor
+              [solicitacaoCadastroFornecedor]="item"
+              (reloadList)="getSolicitacaoCadastroFornecedor($event)"
+              [user]="currentUser">
+            </item-solicitacao-cadastro-fornecedor>
+          </ng-template>
+        </sdk-list-view>
+      </div>
+
+    </ng-template>
+
+    <div class="row" *ngIf="itens?.length">
+      <div class="col-12">
+        <div class="paging">
+          <pager
+            [page]="solicitacaoCadastroFornecedorFiltro.pagina"
+            [total-pages]="solicitacaoCadastroFornecedorFiltro.totalPaginas"
+            [records-per-page]="solicitacaoCadastroFornecedorFiltro.itensPorPagina"
+            (pagination)="page($event)"></pager>
+        </div>
+      </div>
+    </div>

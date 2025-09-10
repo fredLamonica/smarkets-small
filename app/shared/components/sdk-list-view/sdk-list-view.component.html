@@ -1,0 +1,8 @@
+<div class="d-flex flex-column">
+  <div
+    class="d-flex flex-column list-item"
+    *ngFor="let item of items"
+    (click)="internalItemClick(item)">
+    <ng-container *ngTemplateOutlet="listItemTemplate; context: { $implicit: item }"></ng-container>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+<div class="form-row" [formGroup]="form">
+  <div class="form-group col col-8">
+    <input
+      type="text"
+      class="form-control"
+      id="termo"
+      formControlName="termo"
+      placeholder="Buscar por empresa, razão social ou CNPJ"
+      (keyup.enter)="buscar()"
+      (keyup)="campoBuscaChanged()"
+    />
+  </div>
+  <div class="form-group col col-4">
+    <button class="btn btn-primary" (click)="buscar()"><i class="fas fa-search"></i> Buscar</button>
+  </div>
+</div>
+<div class="row mb-3">
+  <div class="col-0 pad-lef">
+    <button role="button" ngbTooltip="Incluir" class="btn btn-block btn-primary" (click)="incluir()">
+      <i class="fas fa-plus"></i>
+    </button>
+  </div>
+  <div class="col-0 pad-lef">
+    <button
+      role="button"
+      class="btn btn-block btn-secondary"
+      [class.disabled]="selecionados?.length != 1"
+      (click)="abrirItensPorEmpresa()"
+      ngbTooltip="Editar"
+    >
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+  </div>
+  <div class="col-0 pad-lef">
+    <button
+      role="button"
+      class="btn btn-block btn-danger"
+      [class.disabled]="!selecionados?.length"
+      (click)="solicitarExclusao()"
+      ngbTooltip="Remover"
+    >
+      <i class="fas fa-trash-alt"></i>
+    </button>
+  </div>
+  <div class="col-0 pad-lef" *ngIf="isSmarkets">
+    <button
+      role="button"
+      class="btn btn-block btn-secondary"
+      [class.disabled]="selecionados?.length != 1"
+      (click)="vincularItem()"
+      ngbTooltip="Vincular Item"
+    >
+      <i class="fas fa-link"></i>
+    </button>
+  </div>
+  <div class="col d-flex justify-content-end">
+      <div class="col-0 pad-lef">
+        <button
+          role="button"
+          class="btn btn-block btn-success"
+          [class.disabled]="!selecionados?.length"
+          (click)="alterarSituacao(Situacao.Ativo)"
+          ngbTooltip="Ativar"
+        >
+          <i class="fas fa-check"></i>
+        </button>
+      </div>
+      <div class="col-0 pad-lef">
+        <button
+          role="button"
+          class="btn btn-block btn-danger"
+          [class.disabled]="!selecionados?.length"
+          (click)="alterarSituacao(Situacao.Inativo)"
+          ngbTooltip="Desativar"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <custom-table
+      classes="table-striped table-sm"
+      [settings]="settings"
+      [source]="participantes"
+      (select)="selecao($event)"
+      (sort)="ordenar($event)"
+    ></custom-table>
+    <pager
+      [page]="pagina"
+      [total-pages]="totalPaginas"
+      [records-per-page]="itensPorPagina"
+      (pagination)="paginacao($event)"
+    ></pager>
+  </div>
+</div>

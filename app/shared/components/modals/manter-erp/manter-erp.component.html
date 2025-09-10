@@ -1,0 +1,49 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">{{title}}</div>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div *ngIf="!id" class="row">
+    <div class="col">
+      <div class="form-row" [formGroup]="form">
+        <div class="form-group col">
+          <input type="text" class="form-control" id="termo" formControlName="termo"
+            placeholder="Buscar por Id, Razão Social ou CNPJ" (keyup.enter)="buscar()" (keyup)="campoBuscaChanged()">
+        </div>
+        <div class="form-group col">
+          <button class="btn btn-primary" (click)="buscar()"><i class="fas fa-search"></i> Buscar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <custom-table classes="table-striped table-sm" [settings]="settings" [source]="source"
+        (select)="selecaoInclusao($event)"></custom-table>
+
+      <div class="form-group col-lg-4" [formGroup]="form">
+        <label class="required" style="color: #296075; font-size: 12px; font-weight: 600;"> Código Integração </label>
+        <input
+          class="form-control"
+          type="text"
+          id="codigoIntegracao"
+          maxlength="255"
+          formControlName="codigoIntegracao">
+      </div>
+
+      <pager size="sm" [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="itensPorPagina"
+        (pagination)="paginacao($event)"></pager>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="fechar()">Voltar</button>
+  <button *ngIf="!id" type="button" class="btn btn-outline-primary"
+    (click)="salvarInclusoes()">Incluir
+  </button>
+  <button *ngIf="id" type="button" class="btn btn-outline-primary"
+    (click)="salvarEdicao()">Salvar
+  </button>
+</div>

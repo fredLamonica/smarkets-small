@@ -1,0 +1,10 @@
+$coloTextHeader : #fff;
+
+ ::ng-deep  div.modal-header{    
+    color:$coloTextHeader;
+    background: #00bbf3;    
+    padding: 1rem 1rem 1rem;    
+        
+    button.close{i{color: $coloTextHeader;}}
+   
+}

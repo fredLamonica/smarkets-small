@@ -1,0 +1,151 @@
+<sdk-modal
+  [title]="(endereco ? 'Editar ' : 'Incluir ') + 'Endereço'"
+  [show-footer]="true"
+  [show-button-cancel]="true"
+  [show-button-confirm]="true"
+  (on-confirm)="salvar()"
+>
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group col-4" *ngIf="!endereco; else edicao">
+        <label class="required-field" for="tipos">Tipos</label>
+        <ng-select
+          name="tipos"
+          formControlName="tipos"
+          [multiple]="true"
+          [class.invalid]="form.controls.tipos.invalid && form.controls.tipos.dirty"
+          [clearable]="false"
+          [closeOnSelect]="false"
+        >
+          <ng-option
+            *ngFor="let tipo of tiposEnderecos"
+            [value]="tipo"
+            [disabled]="tipo == TipoEndereco['Institucional']"
+          >
+            {{ TipoEndereco[tipo] }}
+          </ng-option>
+        </ng-select>
+        <span class="invalid" *ngIf="form.controls.tipos.invalid && form.controls.tipos.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+      <ng-template #edicao>
+        <div class="form-group col-lg-4">
+          <label class="required-field" for="tipo">Tipo</label>
+          <ng-select
+            name="tipos"
+            formControlName="tipo"
+            [class.invalid]="form.controls.tipo.invalid && form.controls.tipo.dirty"
+          >
+            <ng-option [value]="TipoEndereco['Institucional']">Institucional</ng-option>
+            <ng-option [value]="TipoEndereco['Cobrança']">Cobrança</ng-option>
+            <ng-option [value]="TipoEndereco['Entrega']">Entrega</ng-option>
+            <ng-option [value]="TipoEndereco['Faturamento']">Faturamento</ng-option>
+          </ng-select>
+          <span class="invalid" *ngIf="form.controls.tipos.invalid && form.controls.tipos.dirty"
+            >Preenchimento obrigatório</span
+          >
+        </div>
+      </ng-template>
+      <div class="form-group col-lg-4">
+        <label class="required-field">Estado</label>
+        <ng-select
+          class="full-width"
+          [items]="estados$ | async"
+          bindValue="idEstado"
+          bindLabel="nome"
+          [loading]="estadosLoading"
+          [loadingText]="'buscando...'"
+          formControlName="idEstado"
+          [class.invalid]="form.controls.idEstado.invalid && form.controls.idEstado.dirty"
+        >
+        </ng-select>
+      </div>
+      <div class="form-group col-lg-4">
+        <label class="required-field">Cidade</label>
+        <ng-select
+          class="full-width"
+          [items]="cidades$ | async"
+          bindValue="idCidade"
+          bindLabel="nome"
+          [loading]="cidadesLoading"
+          [loadingText]="'buscando...'"
+          formControlName="idCidade"
+          [class.invalid]="form.controls.idCidade.invalid && form.controls.idCidade.dirty"
+        >
+        </ng-select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-lg-4">
+        <label class="required-field">CEP</label>
+        <input
+          type="text"
+          [textMask]="{ mask: maskCep, guide: false }"
+          class="form-control"
+          name="cep"
+          formControlName="cep"
+          [class.invalid]="form.controls.cep.invalid && form.controls.cep.dirty"
+        />
+        <span class="invalid" *ngIf="form.controls.cep.invalid && form.controls.cep.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+      <div class="form-group col-lg-8">
+        <label class="required-field" for="bairro">Bairro</label>
+        <input
+          type="text"
+          class="form-control"
+          name="bairro"
+          formControlName="bairro"
+          [class.invalid]="form.controls.bairro.invalid && form.controls.bairro.dirty"
+        />
+        <span class="invalid" *ngIf="form.controls.bairro.invalid && form.controls.bairro.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-lg-9">
+        <label class="required-field" for="logradouro">Logradouro</label>
+        <input
+          type="text"
+          class="form-control"
+          name="logradouro"
+          formControlName="logradouro"
+          [class.invalid]="form.controls.logradouro.invalid && form.controls.logradouro.dirty"
+        />
+        <span
+          class="invalid"
+          *ngIf="form.controls.logradouro.invalid && form.controls.logradouro.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+      <div class="form-group col-lg-3">
+        <label class="required-field" for="numero">Número</label>
+        <input-number
+          type="text"
+          name="numero"
+          formControlName="numero"
+          [class.invalid]="form.controls.numero.invalid && form.controls.numero.dirty"
+        >
+        </input-number>
+        <span class="invalid" *ngIf="form.controls.numero.invalid && form.controls.numero.dirty"
+          >Preenchimento obrigatório</span
+        >
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col">
+        <label for="complemento"> Complemento </label>
+        <input type="text" class="form-control" name="complemento" formControlName="complemento" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col">
+        <label for="referencia"> Referência </label>
+        <input type="text" class="form-control" name="referencia" formControlName="referencia" />
+      </div>
+    </div>
+  </form>
+</sdk-modal>

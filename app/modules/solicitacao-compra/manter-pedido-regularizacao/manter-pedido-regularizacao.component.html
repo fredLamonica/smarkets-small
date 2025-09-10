@@ -1,0 +1,409 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Gerar um Pedido Já Negociado ou Realizado</div>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body" *ngIf="pedidos && pedidos.length">
+  <div
+    class="row align-items-center mb-2 border-bottom"
+    *ngFor="let pedido of pedidos; let indexPedido = index">
+    <div class="col-12">
+      <div
+        class="bg-white border-bottom row py-2"
+        *ngFor="let pedidoItem of pedido?.itens; let indexPedidoItem = index">
+        <div class="col align-self-center">
+          <div class="row align-items-center mb-2">
+            <h5
+              class="col-xl-8 text-primary font-weight-bold line-clamp line-clamp-2"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{ pedidoItem.descricao }}">
+              <span *ngIf="pedidoItem.itemSolicitacaoCompra?.idSolicitacaoCompra" class="cod-produto">{{
+                pedidoItem.itemSolicitacaoCompra.codigoProduto}} -</span>
+              {{pedidoItem.descricao != undefined ? pedidoItem.descricao : pedidoItem.itemSolicitacaoCompra?.descricao}}
+            </h5>
+
+          </div>
+
+          <div class="row-10-col align-items-center">
+            <div class="form-group col-lg-4 col-xl-4">
+              <label>Marca:</label>
+              <p class="py-2 my-0 font-weight-bold">Sem preferência</p>
+            </div>
+
+            <div class="form-group required col-lg-4 col-xl-6">
+              <label>Endereço de Entrega:</label>
+              <ng-select
+                class="font-weight-bold"
+                [items]="enderecos"
+                bindValue="idEndereco"
+                placeholder="Selecionar endereço"
+                [(ngModel)]="pedidoItem.idEnderecoEntrega">
+                <ng-template ng-label-tmp let-item="item">
+                  {{ item?.logradouro }}, {{ item?.numero }} - {{ item?.bairro }},
+                  {{ item?.cidade?.nome }} - {{ item?.cidade?.estado?.abreviacao }}, {{ item?.cep }}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                  {{ TipoEndereco[item?.tipo] }}<br />
+                  <div>
+                    <small>Logradouro: {{ item?.logradouro }}</small><br />
+                  </div>
+                  <div>
+                    <small>Bairro: {{ item?.bairro }}</small>
+                    <small style="margin-left: 10px">Número: {{ item?.numero }}</small>
+                  </div>
+                  <div>
+                    <small>Cidade: {{ item?.cidade?.nome }} - Estado:
+                      {{ item?.cidade?.estado?.abreviacao }}</small>
+                  </div>
+                  <div>
+                    <small>CEP: {{ item?.cep }}</small>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </div>
+
+            <div
+              *ngIf="tipoAlcadaAprovacao === tipoAlcadaAprovacaoEnum.unificada"
+              class="form-group required col-lg-4 col-xl-3">
+              <label>Alçada Unificada:</label>
+              <ng-select
+                class="font-weight-bold full-width"
+                [items]="alcadas$ | async"
+                bindLabel="descricao"
+                bindValue="idAlcada"
+                [loading]="alcadasLoading"
+                [loadingText]="'buscando...'"
+                [(ngModel)]="pedido.idAlcada">
+              </ng-select>
+            </div>
+
+            <div
+              class="form-group col-lg-4 col-xl-4"
+              [class.required]="tipoAlcadaAprovacao === tipoAlcadaAprovacaoEnum.desmembrada ||
+              usuarioAtual?.permissaoAtual?.pessoaJuridica?.habilitarIntegracaoERP">
+              <label>Centro custo:</label>
+              <ng-select
+                class="font-weight-bold full-width"
+                [items]="centrosCusto$ | async"
+                bindLabel="descricao"
+                bindValue="idCentroCusto"
+                [loading]="centrosCustoLoading"
+                [loadingText]="'buscando...'"
+                [(ngModel)]="pedidoItem.idCentroCusto">
+              </ng-select>
+            </div>
+
+            <div class="form-group required col-lg-4 col-xl-3">
+              <label
+                for="prazoEntrega"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="prazoEntrega">
+                Prazo de Entrega:
+              </label>
+
+              <div class="form-row">
+                <div class="form-group col-10 col-md-9 mb-0">
+                  <input-number [(ngModel)]="pedidoItem.prazoEntrega" [allowDecimal]="false">
+                  </input-number>
+                </div>
+                <div class="form-group col-2 col-md-3 d-flex align-items-center mb-0">
+                  <a> dia(s) </a>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="form-group required col-lg-4 col-xl-3"
+              *ngIf="parametrosIntegracaoSapHabilitado">
+              <label>IVA: </label>
+              <ng-select
+                class="font-weight-bold full-width"
+                [items]="ivas$ | async"
+                bindValue="idIva"
+                bindLabel="descricaoIva"
+                [loading]="ivasLoading"
+                [loadingText]="'buscando...'"
+                (open)="openIvas()"
+                [(ngModel)]="pedidoItem.idIva">
+              </ng-select>
+            </div>
+
+            <div class="form-group required col-lg-2 col-xl-2">
+              <label for="quantidade">Quantidade:</label>
+              <input-number
+                class="font-weight-bold"
+                [(ngModel)]="pedidoItem.quantidade"
+                [min]="min"
+                [max]="max"
+                [class.invalid]="!pedidoItem.quantidade || pedidoItem.quantidade < 1"
+                [allowDecimal]="true">
+              </input-number>
+            </div>
+
+            <div class="form-group required col-lg-2 col-xl-2">
+              <label>Valor frete:</label>
+              <input-number
+                class="font-weight-bold"
+                [(ngModel)]="pedidoItem.valorFrete"
+                [min]="0"
+                [max]="max"
+                [class.invalid]="pedidoItem.valorFrete < 0"
+                [allowDecimal]="true">
+              </input-number>
+            </div>
+
+            <div class="form-group col-6 col-lg-4 col-xl-3">
+              <label>Valor unitário:</label>
+              <input-number
+                class="font-weight-bold"
+                [(ngModel)]="pedidoItem.valor"
+                [min]="0"
+                [max]="max"
+                [class.invalid]="pedidoItem.valor < 0"
+                [allowDecimal]="true">
+              </input-number>
+            </div>
+
+            <div class="form-group col-6 col-lg-4 col-xl-3">
+              <label>Valor total:</label>
+              <h5 class="text-indigo-light font-weight-bold mt-1">
+                <!-- {{
+                  pedidoItem.valor * pedidoItem.quantidade
+                    | customCurrency: pedidoItem.moeda:null:'symbol'
+                }} -->
+                {{ obtemValorTotal(pedidoItem) | customCurrency: pedidoItem.moeda:null:'symbol' }}
+              </h5>
+            </div>
+          </div>
+
+          <div class="row-10-col align-items-center">
+            <div class="form-group required col-10 col-lg-6">
+              <label>Inclua um produto que você deseja vincular, que já exista na base.</label>
+            </div>
+            <div class="form-group col-10 col-lg-6 required">
+              <input-produto
+                id="codigo"
+                name="codigo"
+                [includeCodeInSearch]="true"
+                [(ngModel)]="pedidoItem.produto?.idProduto ? pedidoItem.produto.idProduto : pedidoItem.idProduto"
+                [produtoSelecionado]="pedidoItem.produto"></input-produto>
+            </div>
+          </div>
+
+          <div class="row py-1">
+            <div
+              class="
+                form-group
+                required
+                col
+                d-flex
+                justify-content-md-between
+                align-self-center
+                mt-2
+              ">
+              <div
+                class="custom-control custom-checkbox d-md-inline-block mr-3"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Entrada de Mercadoria"
+                *ngIf="exibirFlagSapEm">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="sapEm-{{ indexPedido }}-{{ indexPedidoItem }}"
+                  [(ngModel)]="pedidoItem.sapEm" />
+                <label
+                  class="custom-control-label font-weight-bold"
+                  for="sapEm-{{ indexPedido }}-{{ indexPedidoItem }}">EM</label>
+              </div>
+
+              <div
+                class="custom-control custom-checkbox d-md-inline-block mr-3"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Entrada de Mercadoria Não Avaliada"
+                *ngIf="exibirFlagSapEmNaoAvaliada">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="sapEmNaoAvaliada-{{ indexPedido }}-{{ indexPedidoItem }}"
+                  [(ngModel)]="pedidoItem.sapEmNaoAvaliada" />
+                <label
+                  class="custom-control-label font-weight-bold"
+                  for="sapEmNaoAvaliada-{{ indexPedido }}-{{ indexPedidoItem }}">EM n/avaliada</label>
+              </div>
+
+              <div
+                class="custom-control custom-checkbox d-md-inline-block mr-3"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Entrada de Faturas"
+                *ngIf="exibirFlagSapEntrFaturas">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="sapEntrFaturas-{{ indexPedido }}-{{ indexPedidoItem }}"
+                  [(ngModel)]="pedidoItem.sapEntrFaturas" />
+                <label
+                  class="custom-control-label font-weight-bold"
+                  for="sapEntrFaturas-{{ indexPedido }}-{{ indexPedidoItem }}">Entr.faturas</label>
+              </div>
+
+              <div
+                class="custom-control custom-checkbox d-md-inline-block"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Revisão de Faturas Baseada na Entrada de Mercadorias"
+                *ngIf="exibirFlagSapRevFatEm">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="sapRevFatEm-{{ indexPedido }}-{{ indexPedidoItem }}"
+                  [(ngModel)]="pedidoItem.sapRevFatEm" />
+                <label
+                  class="custom-control-label font-weight-bold"
+                  for="sapRevFatEm-{{ indexPedido }}-{{ indexPedidoItem }}">Rev.FatEm</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white row pt-4">
+        <div class="form-group required col-lg-4" *ngIf="parametrosIntegracaoSapHabilitado">
+          <label>Grupo de Compradores: </label>
+          <ng-select
+            class="font-weight-bold full-width"
+            [items]="gruposCompradores$ | async"
+            bindValue="idGrupoCompradores"
+            bindLabel="nomeGrupoCompradores"
+            loadingText="buscando..."
+            [loading]="gruposCompradoresLoading"
+            [loadingText]="'buscando...'"
+            [(ngModel)]="pedido.idGrupoCompradores"></ng-select>
+        </div>
+        <div class="form-group required col-lg-4" *ngIf="parametrosIntegracaoSapHabilitado">
+          <label data-toggle="tooltip" data-placement="bottom" title="Organização de Compras">Org. de Compras:
+          </label>
+          <ng-select
+            class="font-weight-bold full-width"
+            [items]="organizacoesCompras$ | async"
+            bindValue="idOrganizacaoCompra"
+            bindLabel="descricaoOrganizacaoCompra"
+            [loading]="organizacoesComprasLoading"
+            [loadingText]="'buscando...'"
+            [(ngModel)]="pedido.idOrganizacaoCompra">
+          </ng-select>
+        </div>
+        <div class="form-group required col-lg-4">
+          <label>Tipo de Pedido: </label>
+          <ng-select
+            class="font-weight-bold full-width"
+            [items]="tiposPedido$ | async"
+            bindValue="idTipoPedido"
+            bindLabel="nomeTipoPedido"
+            [loading]="tiposPedidoLoading"
+            [loadingText]="'buscando...'"
+            [(ngModel)]="pedido.idTipoPedido">
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="bg-white row">
+        <div class="form-group required mb-2 col-lg-6">
+          <label>Empresa Compradora:</label>
+          <ng-select
+            class="font-weight-bold full-width"
+            placeholder="Selecionar compradora"
+            [items]="filiais$ | async"
+            bindValue="idPessoaJuridica"
+            [(ngModel)]="pedido.idComprador"
+            (change)="changedValueFilial(pedido.idComprador)">
+            <ng-template ng-label-tmp let-item="item">
+              {{ item.cnpj }} - {{ item.nomeFantasia }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              {{ item.cnpj }} - {{ item.nomeFantasia }}
+            </ng-template>
+          </ng-select>
+        </div>
+        <div class="form-group required col-lg-6">
+          <label data-toggle="tooltip" data-placement="bottom" title="Condição de Pagamento">Condição de Pgto.:
+          </label>
+          <ng-select
+            class="font-weight-bold full-width"
+            [items]="condicoesPagamento$ | async"
+            bindValue="idCondicaoPagamento"
+            bindLabel="descricao"
+            [loading]="condicoesPagamentoLoading"
+            [loadingText]="'buscando...'"
+            (open)="openCondicoesPagamento()"
+            [(ngModel)]="pedido.idCondicaoPagamento">
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="bg-white row">
+        <div class="form-group required col-lg-4">
+          <label for="moeda">Moeda:</label>
+          <select-moeda
+            [(moeda)]="pedido.moeda"
+            (change)="mudarMoeda($event, pedido)"></select-moeda>
+        </div>
+        <div class="form-group required col-lg-4">
+          <label for="fornecedores">Fornecedor:</label>
+          <input-fornecedor name="idFornecedor" [(ngModel)]="pedido.idFornecedor">
+          </input-fornecedor>
+        </div>
+        <div class="form-group required col-lg-4">
+          <label>Frete:</label>
+          <ng-select class="font-weight-bold full-width" [(ngModel)]="pedido.frete">
+            <ng-option [value]="Frete.Cif">CIF</ng-option>
+            <ng-option [value]="Frete.Fob">FOB</ng-option>
+            <ng-option [value]="Frete.Exw">EXW</ng-option>
+            <ng-option [value]="Frete.Fca">FCA</ng-option>
+            <ng-option [value]="Frete.Cpt">CPT</ng-option>
+            <ng-option [value]="Frete.Cip">CIP</ng-option>
+            <ng-option [value]="Frete.Dat">DAT</ng-option>
+            <ng-option [value]="Frete.Dap">DAP</ng-option>
+            <ng-option [value]="Frete.Ddp">DDP</ng-option>
+            <ng-option [value]="Frete.Fas">FAS</ng-option>
+            <ng-option [value]="Frete.Cfr">CFR</ng-option>
+            <ng-option [value]="Frete.Daf">DAF</ng-option>
+            <ng-option [value]="Frete.Ddu">DDU</ng-option>
+            <ng-option [value]="Frete.Deq">DEQ</ng-option>
+            <ng-option [value]="Frete.Des">DES</ng-option>
+            <ng-option [value]="Frete.Fh">FH</ng-option>
+          </ng-select>
+        </div>
+        <div class="form-group col-12">
+          <label>Observação:</label>
+          <textarea rows="6" class="form-control" [(ngModel)]="pedido.observacao"> </textarea>
+        </div>
+      </div>
+      <div class="bg-white row pb-1 justify-content-end">
+        <div class="col-md-4 col-xl-3">
+          <label class="w-100 text-right">Valor total:</label>
+          <h4 class="text-indigo-light font-weight-bold text-right">
+            {{ subTotalPedido(pedido) | customCurrency: pedido.moeda:null:'symbol' }}
+          </h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer px-0">
+    <button type="button" class="btn btn-outline-primary" (click)="fechar()">
+      <i class="fas fa-ban"></i> Fechar
+    </button>
+    <button type="button" class="btn btn-primary" (click)="confirmar()">
+      <i class="fas fa-cart-arrow-down"></i> Confirmar Pedidos
+    </button>
+  </div>
+</div>

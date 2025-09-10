@@ -1,0 +1,28 @@
+<div class="mfa-recovery-code col-12">
+  <p class="title"><strong>Inserir código de recuperação</strong></p>
+  <p>Insira um dos códigos de recuperação que foi apresentado na configuração da autenticação em dois fatores.</p>
+  <form class="mt-4 mb-4" name="form" [formGroup]="form" novalidate>
+    <div class="form-group recovery-code mx-auto text-center">
+      <label for="recoveryCode">Código de recuperação</label>
+      <div class="input-group">
+        <input
+          #recoveryCode
+          id="recoveryCode"
+          type="text"
+          class="form-control recovery-code-input"
+          maxlength="8"
+          autofocus
+          formControlName="recoveryCode"
+          (keyup.enter)="form.valid && authenticate()" />
+      </div>
+    </div>
+  </form>
+  <div class="actions mx-auto">
+    <button class="btn btn-primary btn-block py-2" [class.disabled]="form.invalid" (click)="authenticate()">
+      Enviar
+    </button>
+    <button type="button" class="btn btn-outline-primary btn-block" (click)="navigateToPinCode()">
+      Utilizar código de autenticação
+    </button>
+  </div>
+</div>

@@ -1,0 +1,115 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    {{ form.controls.idUsuario.value ? 'Alterar ' : 'Incluir ' }} Usuário
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="row">
+      <div
+        class="form-group"
+        [ngClass]="{
+          'col-lg-12': buscaDeUsuarioRealizada || idUsuario,
+          'col-lg-10': !(buscaDeUsuarioRealizada || idUsuario)
+        }"
+      >
+        <label>Email:</label>
+        <input class="form-control" rows="1" formControlName="email" />
+        <span
+          class="invalid"
+          *ngIf="
+            form.controls.email.invalid &&
+            form.controls.email.errors.email &&
+            form.controls.email.dirty
+          "
+        >
+          Email inválido
+        </span>
+        <span
+          class="invalid"
+          *ngIf="
+            form.controls.email.invalid &&
+            form.controls.email.errors.required &&
+            form.controls.email.dirty
+          "
+        >
+          Preenchimento obrigatório
+        </span>
+      </div>
+      <div class="form-group col-lg-2" *ngIf="!(buscaDeUsuarioRealizada || idUsuario)">
+        <label> </label>
+        <button class="btn btn-primary btn-block mt-lg-1" (click)="buscarUsuario()">
+          <i class="fas fa-search"></i> Buscar
+        </button>
+      </div>
+    </div>
+    <div class="row" *ngIf="usuarioNaoExiste || idUsuario">
+      <div class="form-group required col-lg-8">
+        <label>Nome:</label>
+        <input name="nome" class="form-control" formControlName="nome" />
+        <span class="invalid" *ngIf="form.controls.nome.invalid && form.controls.nome.dirty">
+          Preenchimento obrigatório
+        </span>
+      </div>
+      <div class="form-group required col-lg-4">
+        <label>Situação:</label>
+        <ng-select id="situacao" [hideSelected]="false" formControlName="situacao">
+          <ng-option [value]="SituacaoUsuario.Liberado">Liberado</ng-option>
+          <ng-option [value]="SituacaoUsuario.Bloqueado">Bloqueado</ng-option>
+          <ng-option [value]="SituacaoUsuario.BloqueadoPorExcessoTentativas"
+            >Bloqueado por excesso de tentativas</ng-option
+          >
+        </ng-select>
+        <span
+          class="invalid"
+          *ngIf="form.controls.situacao.invalid && form.controls.situacao.dirty"
+        >
+          Preenchimento obrigatório
+        </span>
+      </div>
+    </div>
+    <div class="row" *ngIf="usuarioNaoExiste || idUsuario">
+      <div class="form-group col-md-5">
+        <label for="celular" translate>Celular</label>
+        <input
+          class="form-control"
+          [textMask]="{ mask: maskCelular, guide: false }"
+          type="text"
+          name="celular"
+          formControlName="celular"
+        />
+      </div>
+      <div class="form-group col-md-5">
+        <label for="telefone" translate>Telefone</label>
+        <input
+          class="form-control"
+          [textMask]="{ mask: maskTelefone, guide: false }"
+          type="text"
+          name="telefone"
+          formControlName="telefone"
+        />
+      </div>
+      <div class="form-group col-md-2">
+        <label for="ramal" translate>Ramal</label>
+        <input class="form-control" type="text" name="ramal" formControlName="ramal" />
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+    <i class="fas fa-ban"></i> Cancelar
+  </button>
+  <button
+    *ngIf="usuarioNaoExiste || idUsuario"
+    type="button"
+    id="btnSalvar"
+    (click)="salvar()"
+    class="btn btn-primary"
+  >
+    <i class="fas fa-save"></i> Salvar
+  </button>
+</div>

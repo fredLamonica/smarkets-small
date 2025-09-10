@@ -1,0 +1,129 @@
+<div class="bg-white border-bottom py-4" *ngIf="!visitasTecnicas?.length">
+  <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+</div>
+<div class="card" *ngIf="fornecedor?.idFornecedor && visitasTecnicas?.length">
+  <a class="card-header collapsed" data-toggle="collapse" href="#collapseVisitasTecnicas">
+    Visita Técnica
+  </a>
+  <div class="card-body pt-0">
+    <div class="collapse" id="collapseVisitasTecnicas">
+      <div>
+        <a
+          class="btn btn-icon d-flex align-items-center text-primary"
+          (click)="realizarAgendamento()"
+        >
+          <i class="far fa-calendar-plus"></i>
+          <p class="d-inline-block mb-0 ml-2">Agendar visita técnica</p>
+        </a>
+        <div class="container-fluid no-bounds">
+          <div class="bg-lighter border-bottom row py-2 d-none d-md-flex">
+            <div class="col-md-2">
+              <label class="font-weight-bold">Data e Hora:</label>
+            </div>
+            <div class="col-md-2">
+              <label class="font-weight-bold">Status:</label>
+            </div>
+            <div class="col-md-3">
+              <label class="font-weight-bold">Responsável:</label>
+            </div>
+            <div class="col-md-3">
+              <label class="font-weight-bold">Fornecedor Representante:</label>
+            </div>
+            <div class="col-md-2">
+              <label class="font-weight-bold">Ações:</label>
+            </div>
+          </div>
+          <div class="bg-white border-bottom row py-4" *ngIf="!visitasTecnicas?.length">
+            <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+          </div>
+          <div class="row py-2 border-bottom" *ngFor="let visitaTecnica of visitasTecnicas">
+            <div class="col-md-2 col-sm-2 align-self-center">
+              <label for="" class="font-weight-bold d-block d-md-none">Data e Hora:</label>
+              <p
+                class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+                data-toggle="tooltip"
+                data-placement="bottom"
+              >
+                {{ visitaTecnica.data | date: 'dd/MM/yyyy HH:mm' }}
+              </p>
+            </div>
+            <div class="col-md-2 col-sm-2 align-self-center">
+              <label for="" class="font-weight-bold d-block d-md-none">Status:</label>
+              <p
+                class="mb-3 mb-lg-0 line-clamp line-clamp-1"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ SituacaoVisitaTecnica[visitaTecnica.status] }}"
+              >
+                {{ SituacaoVisitaTecnica[visitaTecnica.status] }}
+              </p>
+            </div>
+            <div class="col-md-3 col-sm-3 align-self-center">
+              <label for="" class="font-weight-bold d-block d-md-none">Responsável:</label>
+              <p
+                class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ visitaTecnica.gestorFornecedor.pessoaFisica.nome }}"
+              >
+                {{ visitaTecnica.gestorFornecedor.pessoaFisica.nome }}
+              </p>
+            </div>
+            <div class="col-md-3 col-sm-3 align-self-center">
+              <label for="" class="font-weight-bold d-block d-md-none"
+                >Fornecedor Representante:</label
+              >
+              <p
+                class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ visitaTecnica.representante.pessoaFisica.nome }}"
+              >
+                {{ visitaTecnica.representante.pessoaFisica.nome }}
+              </p>
+            </div>
+            <div class="col-md-2 d-flex justify-content-between align-self-center">
+              <button
+                class="btn btn-icon"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{
+                  visitaTecnica.status == SituacaoVisitaTecnica.Agendado ? 'Realizar' : 'Visualizar'
+                }} Visita"
+                (click)="realizarVisitaTecnica(visitaTecnica.idVisitaTecnica)"
+              >
+                <i
+                  class="far"
+                  [ngClass]="{
+                    'fa-calendar-check': visitaTecnica.status == SituacaoVisitaTecnica.Agendado,
+                    'fa-eye': visitaTecnica.status != SituacaoVisitaTecnica.Agendado
+                  }"
+                ></i>
+              </button>
+              <button
+                class="btn btn-icon"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Editar"
+                *ngIf="visitaTecnica.status == SituacaoVisitaTecnica.Agendado"
+                (click)="editarVisitaTecnica(visitaTecnica)"
+              >
+                <i class="far fa-edit"></i>
+              </button>
+              <button
+                class="btn btn-icon"
+                *ngIf="visitaTecnica.status == SituacaoVisitaTecnica.Agendado"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Excluir"
+                (click)="solicitarExclusaoVisitaTecnica(visitaTecnica)"
+              >
+                <i class="far fa-trash-alt text-danger"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,625 @@
+<div class="bg-white border-bottom row pt-4">
+  <div class="col-md-1 align-self-center d-flex justify-content-center mb-3 mb-lg-0">
+    <img
+      class="img-fluid"
+      [src]="
+        item?.produto?.imagens?.length
+          ? item?.produto?.imagens[0].url
+          : './../../../../../assets/img/produtos/default.png'
+      "
+      alt="{{ item.produto?.descricao }}" />
+  </div>
+  <div class="col-md-11">
+    <div class="row">
+      <div class="col-12 col-md-10">
+        <div class="row">
+          <div class="col-12 align-self-center">
+            <h5 class="text-primary font-weight-bold"
+              role="button"
+              (click)="exibirDetalhesRequisicao(item.idProduto)">
+              ITEM {{index + 1}}: {{ item?.produto?.descricao }}
+            </h5>
+          </div>
+          <div class="col-md-3 col-xl-2">
+            <label>NCM:</label>
+            <p class="font-weight-bold mb-2 mb-xl-0">
+              {{ item?.produto?.codigoNcm }}
+            </p>
+          </div>
+          <div class="col-md-3 col-xl-2">
+            <label>Marca:</label>
+            <p
+              class="font-weight-bold mb-2 mb-xl-0 text-truncate"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{ item?.marca ? item?.marca?.nome : 'Sem preferência' }}">
+              {{ item?.marca ? item?.marca?.nome : 'Sem preferência' }}
+            </p>
+          </div>
+
+          <div
+            class="col-md-3 col-xl-2"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Quantidade Solicitada: {{
+              item.produto?.unidadeMedida?.permiteQuantidadeFracionada
+                ? (item.quantidade | number: '1.0-10':'pt-BR')
+                : item.quantidade
+            }}&#013;Quantidade Comprada: {{
+              item.produto?.unidadeMedida?.permiteQuantidadeFracionada
+                ? (item.requisicaoItem.quantidadeComprada | number: '1.0-10':'pt-BR')
+                : item.requisicaoItem.quantidadeComprada
+            }}&#013;Quantidade Restante: {{
+              item.produto?.unidadeMedida?.permiteQuantidadeFracionada
+                ? (item.requisicaoItem.quantidadeRestante | number: '1.0-10':'pt-BR')
+                : item.requisicaoItem.quantidadeRestante
+            }}">
+            <label class="d-inline-block pr-1">Qtd. Solicitada:</label>
+            <p class="font-weight-bold mb-2 mb-xl-0">
+              {{
+              item.produto?.unidadeMedida?.permiteQuantidadeFracionada
+              ? (item.quantidade | number: '1.0-10':'pt-BR')
+              : item.quantidade
+              }}
+              {{ item.produto?.unidadeMedida?.sigla }}
+            </p>
+          </div>
+
+          <div class="col-md-3 col-xl-2">
+            <label data-toggle="tooltip" data-placement="bottom" title="Unidade de Medida">Und. Medida:</label>
+            <p class="font-weight-bold mb-2 mb-xl-0">
+              {{ item?.produto?.unidadeMedida?.sigla }}
+            </p>
+          </div>
+          <div class="col-md-3 col-xl-2">
+            <label data-toggle="tooltip" data-placement="bottom" title="Condição de Pagamento">Condição Pgto.:</label>
+            <p
+              class="font-weight-bold mb-0"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{ item?.condicaoPagamento?.descricao }}">
+              {{ item?.condicaoPagamento?.descricao }}
+            </p>
+          </div>
+          <div class="col-md-3 col-xl-2">
+            <label data-toggle="tooltip" data-placement="bottom" title="Incoterms">Incoterms:</label>
+            <p class="font-weight-bold mb-0">
+              {{ TipoFrete[item?.incoterms] }}
+            </p>
+          </div>
+          <div class="col-md-3 col-xl-2 mt-xl-2" *ngIf="item?.targetPrice">
+            <label data-toggle="tooltip" data-placement="bottom" title="Target Price">Target Price:</label>
+            <p class="font-weight-bold mb-0">
+              {{
+              item?.targetPrice
+              | currency: (item.moeda | moedaCodigo):'symbol':'1.2':(item.moeda | moedaLocale)
+              }}
+            </p>
+          </div>
+          <div class="col-6" *ngIf="item?.filial">
+            <label>Razão Social - CNPJ:</label>
+            <p class="font-weight-bold mb-0">
+              {{ item?.filial?.razaoSocial }}, {{ item?.filial?.cnpj }}
+            </p>
+          </div>
+          <div class="col-6">
+            <label>Endereço de Entrega: </label>
+            <p class="font-weight-bold">{{ enderecoEntrega ? enderecoEntrega : '--' }}</p>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-12 col-md-2 d-flex justify-content-center justify-content-md-end align-self-center"
+        *ngIf="!readonly || _reenviarProposta">
+        <button
+          class="btn btn-icon text-danger"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Inativar Produto"
+          (click)="solicitarInativarProduto()"
+          *ngIf="form?.controls?.ativo?.value; else reativar">
+          <i class="far fa-times-circle"></i>
+        </button>
+        <ng-template #reativar>
+          <button
+            class="btn btn-icon text-primary"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Reativar Produto"
+            (click)="solicitarReativarProduto()">
+            <i class="fas fa-undo-alt"></i>
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 mt-4">
+    <collapse-footer>
+      <div class="row bg-lighter" [class.pt-4]="!item?.proposta?.ultimaAlteracao">
+        <div class="col-12" *ngIf="item?.proposta?.ultimaAlteracao">
+        </div>
+        <form class="col-12" [formGroup]="form" *ngIf="form">
+          <div class="form-row">
+            <div class="form-group required col-lg-2">
+              <label for="marca"> Marca: </label>
+              <input
+                type="text"
+                class="form-control"
+                name="marca"
+                formControlName="marca"
+                [class.invalid]="form.controls.marca.invalid && form.controls.marca.dirty" />
+              <span
+                class="invalid"
+                *ngIf="form.controls.marca.invalid && form.controls.marca.dirty">
+                Preenchimento obrigatório
+              </span>
+            </div>
+            <div class="form-group required col-lg-2">
+              <label for="precoUnidade" title="Preço Unitário"> Preço Unitário: </label>
+              <input
+                [textMask]="{ mask: maskValor, guide: false }"
+                type="text"
+                class="form-control"
+                name="precoUnidade"
+                [class.invalid]="
+                  form.controls.precoUnidade.invalid && form.controls.precoUnidade.dirty
+                "
+                formControlName="precoUnidade" />
+              <span
+                class="invalid"
+                *ngIf="form.controls.precoUnidade.invalid && form.controls.precoUnidade.dirty">
+                Preenchimento obrigatório
+              </span>
+            </div>
+
+            <div class="form-group required col-lg-2">
+              <label
+                for="quantidadeDisponivel"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Quantidade Disponível">
+                Quantidade Disp.:
+              </label>
+              <input-number
+                [class.invalid]="
+                  form.controls.quantidadeDisponivel.invalid &&
+                  form.controls.quantidadeDisponivel.dirty
+                "
+                formControlName="quantidadeDisponivel"
+                [min]="item?.produto?.unidadeMedida?.permiteQuantidadeFracionada ? 0.0001 : 1"
+                [disabled]="form.controls.quantidadeDisponivel.disabled"
+                [allowDecimal]="item.produto.unidadeMedida.permiteQuantidadeFracionada">
+              </input-number>
+              <div
+                *ngIf="
+                  form.controls.quantidadeDisponivel.invalid &&
+                  form.controls.quantidadeDisponivel.dirty
+                ">
+                <span class="invalid" *ngIf="form.controls.quantidadeDisponivel.errors?.required">
+                  Preenchimento obrigatório
+                </span>
+                <span class="invalid" *ngIf="form.controls.quantidadeDisponivel.errors?.min">
+                  Quantidade mínima permitida é
+                  {{
+                  item?.produto?.unidadeMedida?.permiteQuantidadeFracionada ? '0,0001' : '1'
+                  }}</span>
+              </div>
+            </div>
+            <div class="form-group col-lg-2">
+              <label for="precoLiquido"> Preço Bruto: </label>
+              <input
+                [textMask]="{ mask: maskValor, guide: false }"
+                type="text"
+                class="form-control"
+                name="precoBruto"
+                [value]="precoBruto"
+                readonly />
+            </div>
+            <div class="form-group required col-lg-2 mb-2 mb-md-3">
+              <label
+                class="d-flex"
+                for="embalagemEmbarque"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Embalagem Embarque">
+                Embalagem Embarque:
+              </label>
+              <input-number
+                [class.invalid]="
+                  form.controls.embalagemEmbarque.invalid && form.controls.embalagemEmbarque.dirty
+                "
+                formControlName="embalagemEmbarque"
+                [disabled]="form.controls.embalagemEmbarque.disabled"
+                [allowDecimal]="
+                  form?.controls?.unidadeMedidaEmbalagemEmbarque?.value?.permiteQuantidadeFracionada
+                ">
+              </input-number>
+              <div
+                *ngIf="
+                  form.controls.embalagemEmbarque.invalid && form.controls.embalagemEmbarque.dirty
+                ">
+                <span class="invalid" *ngIf="form.controls.embalagemEmbarque.errors">
+                  Quantidade mínima permitida é : 1
+                </span>
+              </div>
+            </div>
+            <div class="form-group col-lg-2 ">
+              <label>Sigla:</label>
+              <input
+                formControlName="idUnidadeMedidaEmbalagemEmbarque"
+                [value]="getUnidadeMedida"
+                bindValue="idUnidadeMedida"
+                class="form-control"
+                readonly>
+            </div>
+          </div>
+          <div class="form-row">
+            <div
+              class="form-group required col-lg-2"
+              [ngClass]="{ required: getTipoFrete }">
+              <label for="valorFrete"> Valor do Frete: </label>
+              <input
+                [textMask]="{ mask: maskValor, guide: false }"
+                type="text"
+                class="form-control"
+                name="valorFrete"
+                [readonly]="this.formPropostaItemHeader.value.incoterms == TipoFrete.Cif"
+                formControlName="valorFrete"
+                [class.invalid]="form.controls.valorFrete.invalid && form.controls.valorFrete.dirty" />
+              <div *ngIf="form.controls.valorFrete.invalid && form.controls.valorFrete.dirty ">
+                <span class="invalid" *ngIf="form.controls.valorFrete.errors?.required">
+                  Preenchimento obrigatório
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group col-lg-2">
+              <label
+                for="dataEntregaSolicitada"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Data de Entrega Solicitada">
+                Data Entrega Solicit.:
+              </label>
+              <div class="d-flex justify-content-between">
+                <input
+                  [ngClass]="{'input-data-entrega-programada' : item.requisicaoItem.entregaProgramada }"
+                  type="text"
+                  class="form-control"
+                  name="dataEntregaSolicitada"
+                  [value]="(item.requisicaoItem.entregaProgramada ? '' : item.dataEntrega | date: 'dd/MM/yyyy')"
+                  readonly />
+                <button
+                  *ngIf="item.requisicaoItem.entregaProgramada"
+                  ngbTooltip="Programação de entrega"
+                  class="btn btn-outline-primary col-1 btn-programacao-de-entrega"
+                  (click)="visualizeEntregasProgramadas(item)">
+                  <i class="fas fa-clock"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group col-lg-2" *ngIf="item.produto?.tipo === 2"
+              [ngClass]="{ required: habilitarimpostoNcmCotacao }">
+              <label
+                for="csllAliquota"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="CSLL Alíquota (%)">
+                CSLL Alíquota (%):
+              </label>
+              <input
+                [textMask]="{ mask: maskValor, guide: false }"
+                type="text"
+                class="form-control"
+                name="csllAliquota"
+                formControlName="csllAliquota" />
+              <div *ngIf="form.controls.csllAliquota.invalid && form.controls.csllAliquota.dirty">
+                <span class="invalid" *ngIf="form.controls.csllAliquota.errors?.required">
+                  Preenchimento obrigatório
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group col-lg-2" *ngIf="item.produto?.tipo === 1"
+              [ngClass]="{ required: habilitarimpostoNcmCotacao }">
+              <label
+                for="ipiAliquota"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="IPI Alíquota (%)">
+                IPI Alíquota (%):
+              </label>
+              <input
+                [textMask]="{ mask: maskValor, guide: false }"
+                type="text"
+                class="form-control"
+                name="ipiAliquota"
+                formControlName="ipiAliquota" />
+              <div *ngIf="form.controls.ipiAliquota.invalid && form.controls.ipiAliquota.dirty">
+                <span class="invalid" *ngIf="form.controls.ipiAliquota.errors?.required">
+                  Preenchimento obrigatório
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group col-lg-2" [ngClass]="{ required: habilitarimpostoNcmCotacao }">
+              <label
+                for="pisAliquota"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="PIS Alíquota (%)">
+                PIS Alíquota (%):
+              </label>
+              <input
+                [textMask]="{ mask: maskValor, guide: false }"
+                type="text"
+                class="form-control"
+                name="pisAliquota"
+                formControlName="pisAliquota" />
+              <div *ngIf="form.controls.pisAliquota.invalid && form.controls.pisAliquota.dirty">
+                <span class="invalid" *ngIf="form.controls.pisAliquota.errors?.required">
+                  Preenchimento obrigatório
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group col-lg-2" [ngClass]="{ required: habilitarimpostoNcmCotacao }">
+              <label
+                for="confinsAliquota"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="COFINS Alíquota (%)">
+                COFINS Alíquota (%):
+              </label>
+              <input
+                [textMask]="{ mask: maskValor, guide: false }"
+                type="text"
+                class="form-control"
+                name="confinsAliquota"
+                formControlName="confinsAliquota" />
+              <div
+                *ngIf="form.controls.confinsAliquota.invalid && form.controls.confinsAliquota.dirty">
+                <span class="invalid" *ngIf="form.controls.confinsAliquota.errors?.required">
+                  Preenchimento obrigatório
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group col-lg-2" *ngIf="item.produto?.tipo === 1"
+              [ngClass]="{ required: habilitarimpostoNcmCotacao }">
+              <label
+                for="icmsAliquota"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="ICMS Alíquota (%)">
+                ICMS Alíquota (%):
+              </label>
+              <input
+                [textMask]="{ mask: maskValor, guide: false }"
+                type="text"
+                class="form-control"
+                name="icmsAliquota"
+                formControlName="icmsAliquota" />
+              <div *ngIf="form.controls.icmsAliquota.invalid && form.controls.icmsAliquota.dirty">
+                <span class="invalid" *ngIf="form.controls.icmsAliquota.errors?.required">
+                  Preenchimento obrigatório
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group col-lg-2" *ngIf="item.produto?.tipo === 2"
+              [ngClass]="{ required: habilitarimpostoNcmCotacao }">
+              <label
+                for="issAliquota"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="ISS Alíquota (%)">
+                ISS Alíquota (%):
+              </label>
+              <input
+                [textMask]="{ mask: maskValor, guide: false }"
+                type="text"
+                class="form-control"
+                name="issAliquota"
+                formControlName="issAliquota" />
+              <div *ngIf="form.controls.issAliquota.invalid && form.controls.issAliquota.dirty">
+                <span class="invalid" *ngIf="form.controls.issAliquota.errors?.required">
+                  Preenchimento obrigatório
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col-lg-4">
+              <div class="form-row">
+                <div class="form-group col-6" *ngIf="item.produto?.tipo === 1"
+                  [ngClass]="{ required: habilitarimpostoNcmCotacao }">
+                  <label
+                    for="difalAliquota"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="DIFAL Alíquota (%)">
+                    DIFAL Alíquota (%):
+                  </label>
+                  <input
+                    [textMask]="{ mask: maskValor, guide: false }"
+                    type="text"
+                    class="form-control"
+                    name="difalAliquota"
+                    formControlName="difalAliquota" />
+                  <div
+                    *ngIf="form.controls.difalAliquota.invalid && form.controls.difalAliquota.dirty">
+                    <span class="invalid" *ngIf="form.controls.difalAliquota.errors?.required">
+                      Preenchimento obrigatório
+                    </span>
+                  </div>
+                </div>
+
+                <div class="form-group col-6" *ngIf="item.produto?.tipo === 2"
+                  [ngClass]="{ required: habilitarimpostoNcmCotacao }">
+                  <label
+                    for="irAliquota"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="IR Alíquota (%)">
+                    IR Alíquota (%):
+                  </label>
+                  <input
+                    [textMask]="{ mask: maskValor, guide: false }"
+                    type="text"
+                    class="form-control"
+                    name="irAliquota"
+                    formControlName="irAliquota" />
+                  <div
+                    *ngIf="form.controls.irAliquota.invalid && form.controls.irAliquota.dirty">
+                    <span class="invalid" *ngIf="form.controls.irAliquota.errors?.required">
+                      Preenchimento obrigatório
+                    </span>
+                  </div>
+                </div>
+
+                <div
+                  class="form-group col-6 pl-lg-0" *ngIf="item.produto?.tipo === 1"
+                  [ngClass]="{ required: habilitarimpostoNcmCotacao }">
+                  <label
+                    for="stAliquota"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="ST Alíquota (%)">
+                    ST Alíquota (%):
+                  </label>
+                  <input
+                    [textMask]="{ mask: maskValor, guide: false }"
+                    type="text"
+                    class="form-control"
+                    name="stAliquota"
+                    formControlName="stAliquota" />
+                  <div *ngIf="form.controls.stAliquota.invalid && form.controls.stAliquota.dirty">
+                    <span class="invalid" *ngIf="form.controls.stAliquota.errors?.required">
+                      Preenchimento obrigatório
+                    </span>
+                  </div>
+                </div>
+
+
+                <div
+                  class="form-group col-6 pl-lg-0" *ngIf="item.produto?.tipo === 2"
+                  [ngClass]="{ required: habilitarimpostoNcmCotacao }">
+                  <label
+                    for="inssAliquota"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="INSS Alíquota (%)">
+                    INSS Alíquota (%):
+                  </label>
+                  <input
+                    [textMask]="{ mask: maskValor, guide: false }"
+                    type="text"
+                    class="form-control"
+                    name="inssAliquota"
+                    formControlName="inssAliquota" />
+                  <div *ngIf="form.controls.inssAliquota.invalid && form.controls.inssAliquota.dirty">
+                    <span class="invalid" *ngIf="form.controls.inssAliquota.errors?.required">
+                      Preenchimento obrigatório
+                    </span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div class="form-row">
+                <div class="form-group col-6" [ngClass]="{ required: habilitarimpostoNcmCotacao }">
+                  <label for="ncm"> NCM: </label>
+                  <ng-select
+                    class="font-weight-bold"
+                    [items]="ncm$ | async"
+                    bindLabel="codigo"
+                    bindValue="codigo"
+                    typeToSearchText="Digite pelo menos 3 caracteres"
+                    [typeahead]="ncmInput$"
+                    [loadingText]="textoNgSelectLoading"
+                    [clearAllText]="textoNgSelectLimpar"
+                    [placeholder]="textoNgSelectPlaceholder"
+                    [loading]="ncmLoading"
+                    formControlName="ncm"
+                    >
+                  </ng-select>
+                </div>
+                <div class="form-group col-6 pl-lg-0">
+                  <label for="ca"> CA: </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="ca"
+                    formControlName="ca" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="modelo"> Modelo: </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="modelo"
+                    formControlName="modelo" />
+                </div>
+                <div class="form-group col-3 pl-lg-0">
+                  <label for="garantia"> Garantia: </label>
+                  <input-number
+                    formControlName="garantia"
+                    [min]="1"
+                    [max]="999999999"
+                    [disabled]="form.controls.garantia.disabled"></input-number>
+                </div>
+
+                <div class="form-group col-3 pl-lg-0 pt-4 pl-1">
+                  <ng-select
+                    class="mt-1"
+                    [hideSelected]="true"
+                    formControlName="unidadeMedidaGarantia">
+                    <ng-option [value]="UnidadeMedidaTempo.Dia">Dia</ng-option>
+                    <ng-option [value]="UnidadeMedidaTempo['Mês']">Mês</ng-option>
+                    <ng-option [value]="UnidadeMedidaTempo.Ano">Ano</ng-option>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-lg-2">
+              <label for="precoLiquido"> Preço Líquido: </label>
+              <input
+                [textMask]="{ mask: maskValor, guide: false }"
+                type="text"
+                class="form-control"
+                name="precoLiquido"
+                formControlName="precoLiquido"
+                />
+            </div>
+
+            <div class="form-group col-lg-12">
+              <label for="observacao"> Observação </label>
+              <textarea
+                class="form-control"
+                name="observacao"
+                formControlName="observacao"
+                rows="4"></textarea>
+            </div>
+            <div class="form-group offset-lg-10 col-lg-2">
+              <button type="button"
+                [class]="permiteSalvarProposta() ? ' btn col-lg-12 btn-primary' : ' btn col-lg-12 btn-secondary'"
+                [disabled]="!permiteSalvarProposta()"
+                (click)="salvar()"><i class="fas fa-save mr-2"></i>Salvar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </collapse-footer>
+  </div>
+</div>

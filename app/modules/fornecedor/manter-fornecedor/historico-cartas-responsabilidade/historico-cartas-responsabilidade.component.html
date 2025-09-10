@@ -1,0 +1,51 @@
+<div class="container-fluid no-bounds">
+    <div class="bg-lighter border-bottom row py-2 d-none d-md-flex">
+        <div class="col-md-3">
+            <label class="font-weight-bold">Data:</label>
+        </div>
+        <div class="col-md-3">
+            <label class="font-weight-bold">Responsável:</label>
+        </div>
+        <div class="col-md-3">
+            <label class="font-weight-bold">Enviadas para:</label>
+        </div>
+        <div class="col-md-2">
+            <label class="font-weight-bold">Situação:</label>
+        </div>
+        <div class="col-md-1">
+            <label class="font-weight-bold">Ações:</label>
+        </div>
+    </div>
+    <div class="bg-white border-bottom row py-2" *ngIf="!historicoDeCartasDeResponsabilidade?.length">
+        <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+    </div>
+
+    <div class="bg-white border-bottom row py-2" *ngFor="let carta of historicoDeCartasDeResponsabilidade; let i=index;">
+        <div class="col-md-3 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Data:</label>
+            <p class="mb-3 mb-lg-0"> {{ carta.dataCriacao | date:"dd/MM/yyyy" }} </p>
+        </div>
+        <div class="col-md-3 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Responsável:</label>
+            <p class="mb-3 mb-lg-0"> {{ carta.usuarioRemetente.pessoaFisica.nome }} </p>
+        </div>
+        <div class="col-md-3 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Enviadas para:</label>
+            <p class="mb-3 mb-lg-0"> {{ carta.usuarioDestinatario.pessoaFisica.nome }} </p>
+        </div>
+        <div class="col-md-2 col-sm-2 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Situação:</label>
+            <p class="mb-3 mb-lg-0"> {{ SituacaoCartaDeResponsabilidade[carta.situacao] }} </p>
+        </div>
+        <div class="col-md-1 col-sm-1 align-self-center">
+            <button class="btn btn-icon" 
+            data-toggle="tooltip" 
+            data-placement="bottom" 
+            title="Visualizar"
+            (click)="visualizarCarta(carta)">
+            <i class="far fa-eye"></i>
+    </button>
+        </div>
+    </div>
+    <pager size="sm" [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="itensPorPagina" (pagination)="paginacao($event)"></pager>
+</div>

@@ -1,0 +1,12 @@
+<div class="w-100" [ngStyle]="{ 'padding-bottom': heightValue }">
+  <div class="bar-fixed w-100" [ngStyle]="{ top: topValue, background: colorBackground }">
+    <div class="d-flex col-1 border-right" style="height: 100%">
+      <a class="back-button align-self-center" role="button" (click)="back()"
+        ><i class="fas fa-arrow-left"></i>
+      </a>
+    </div>
+    <div class="col-11 d-flex align-items-center" style="height: 100%">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

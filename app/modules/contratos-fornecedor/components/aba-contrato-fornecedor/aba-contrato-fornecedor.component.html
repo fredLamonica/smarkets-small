@@ -1,0 +1,71 @@
+<div class="row">
+  <div class="filtro col-sm-6 col-lg-4 col-xl-3 col-xxxl-2">
+    <smk-filtro-contrato-fornecedor
+      [filtro]="filtro"
+      [ativo]="ativa"
+      [empresa]="empresa"
+      (filtroChange)="filtroChange($event)">
+    </smk-filtro-contrato-fornecedor>
+  </div>
+  <div *ngIf="produtosLoading" class="spinner spinner-secondary mx-auto"></div>
+  <div class="col-sm-6 col-lg-8 col-xl-9 col-xxxl-10" [class.d-none]="produtosLoading">
+    <div class="d-flex align-items-start align-items-lg-center flex-column flex-lg-row">
+      <div class="breadcrumb p-0 flex-grow-1">
+        <span class="d-none d-xl-block pr-2">
+          Marketplace
+          <i class="separador fas fa-chevron-right mx-1"></i>
+          Produtos em Catálogo
+        </span>
+      </div>
+      <div class="d-flex align-items-center">
+        <span class="ordenation-filter">Classificar por:</span>
+        <div class="dropdown">
+          <button
+            class="btn btn-link dropdown-toggle d-flex font-weight-bold"
+            type="button"
+            id="ordenacao"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
+            {{ filtro.ordenacao.descricao }}
+          </button>
+          <div class="opcoes-de-ordenacao dropdown-menu" aria-labelledby="ordenacao">
+            <a
+              class="dropdown-item"
+              (click)="ordenar(ordenacao)"
+              *ngFor="let ordenacao of opcoesOrdenacao">
+              {{ ordenacao.descricao }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="!registros?.length && !isFirstLoad; else itensTmp">
+      <div class="col-12 no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+    </div>
+  </div>
+</div>
+
+<ng-template #itensTmp>
+  <div class="row produtos">
+    <ng-container *ngFor="let item of registros; let i = index">
+      <div class="col-12 col-lg-6 col-xl-4 col-xxl-4 col-xxxl-3 col-xxxxxl-2 mb-3">
+        <smk-item-contrato-fornecedor
+          [item]="item"
+        >
+        </smk-item-contrato-fornecedor>
+      </div>
+    </ng-container>
+  </div>
+  <div class="row">
+    <pager
+      class="col"
+      [page]="pagina"
+      [total-pages]="totalPaginas"
+      [records-per-page]="registrosPorPagina"
+      [records-per-page-options]="[15, 30, 60]"
+      (pagination)="paginar($event)">
+    </pager>
+  </div>
+</ng-template>
+

@@ -1,0 +1,1149 @@
+<ul class="nav bg-gray">
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="voltar()"
+      ><i class="fas fa-chevron-left"></i> Voltar</a
+    >
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="salvar()"> <i class="fas fa-save"></i> Salvar </a>
+  </li>
+
+  <li class="nav-item" *ngIf="idPessoaJuridica">
+    <a class="nav-link" role="button" (click)="auditar()"
+      ><i class="fas fa-history"></i> Auditoria
+    </a>
+  </li>
+
+  <li class="nav-item" *ngIf="idPessoaJuridica && !this.pessoaJuridica?.filial">
+    <a class="nav-link" role="button" (click)="adicionarNovaEmpresa()"
+      ><i class="fas fa-plus"></i> Adicionar nova empresa
+    </a>
+  </li>
+  <li class="nav-item" *ngIf="true">
+    <a class="nav-link" role="button" (click)="adicionarLogo()"
+      ><i class="fas fa-image"></i> Adicionar logo
+    </a>
+  </li>
+</ul>
+
+<header>
+  <div class="col-12 align-self-center">
+    <h3 class="mb-0 text-uppercase text-primary font-weight-bold">
+      <ng-container *ngIf="perfilUsuario == tipoPerfilUsuario.Fornecedor">
+        {{ idPessoaJuridica ? 'Alterar' : 'Nova' }} cadastro
+      </ng-container>
+      <ng-container *ngIf="perfilUsuario != tipoPerfilUsuario.Fornecedor">
+        {{ idPessoaJuridica ? 'Alterar' : 'Nova' }} empresa
+      </ng-container>
+    </h3>
+  </div>
+</header>
+
+<div class="custom-nav-tabs">
+  <ul class="nav nav-tabs row bounds" id="empresaTab" role="tablist">
+    <li
+      class="nav-item"
+      [ngClass]="{ 'col-lg-3': perfilUsuario != 3, 'col-12 col-lg': perfilUsuario == 3 }"
+    >
+      <a
+        class="nav-link nav-link-block active"
+        id="dados-empresa-tab"
+        data-toggle="tab"
+        href="#dados-empresa"
+        role="tab"
+        aria-controls="dados-empresa"
+        aria-selected="false"
+        (click)="selectTab('dados-empresa')"
+        >Dados Empresa</a
+      >
+    </li>
+    <li class="nav-item col-3" *ngIf="permitiVisualizarUsuarios()">
+      <a
+        class="nav-link nav-link-block"
+        id="usuarios-empresa-tab"
+        data-toggle="tab"
+        href="#usuarios-empresa"
+        role="tab"
+        aria-controls="usuarios-empresa"
+        aria-selected="false"
+        (click)="selectTab('usuarios-empresa')"
+        >Usuários</a
+      >
+    </li>
+    <li
+      class="nav-item"
+      *ngIf="exibirDocumentos()"
+      [ngClass]="{ 'col-lg-3': perfilUsuario != 3, 'col-12 col-lg': perfilUsuario == 3 }"
+    >
+      <a
+        class="nav-link nav-link-block"
+        id="documentos-fornecedor-tab"
+        data-toggle="tab"
+        href="#documentos-fornecedor"
+        role="tab"
+        aria-controls="documentos-fornecedor"
+        aria-selected="false"
+        >Documentos</a
+      >
+    </li>
+    <li class="nav-item col-12 col-lg" *ngIf="perfilUsuario == 3">
+      <a
+        class="nav-link nav-link-block"
+        id="pendencias-fornecedor-tab"
+        data-toggle="tab"
+        href="#pendencias-fornecedor"
+        role="tab"
+        aria-controls="pendencias-fornecedor"
+        aria-selected="false"
+        >Pendências</a
+      >
+    </li>
+
+    <li class="nav-item col-12 col-lg" *ngIf="perfilUsuario == 3">
+      <a
+        class="nav-link nav-link-block"
+        id="planos-acao-tab"
+        data-toggle="tab"
+        href="#planos-acao"
+        role="tab"
+        aria-controls="planos-acao"
+        aria-selected="false"
+        >Planos de Ação</a
+      >
+    </li>
+    <li class="nav-item col-12 col-lg" *ngIf="perfilUsuario == 3">
+      <a
+        class="nav-link nav-link-block"
+        id="questionarios-fornecedor-tab"
+        data-toggle="tab"
+        href="#questionarios-fornecedor"
+        role="tab"
+        aria-controls="questionarios-fornecedor"
+        aria-selected="false"
+        (click)="obterResultadosQuestionarios()"
+        >Questionários</a
+      >
+    </li>
+  </ul>
+  <div class="tab-content bounds" id="empresaTabContent">
+    <div
+      class="tab-pane fade active show"
+      id="dados-empresa"
+      role="tabpanel"
+      aria-labelledby="dados-empresa-tab"
+    >
+      <div class="card card-tab-content tab-content">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <div class="row bg-white">
+              <div class="col">
+                <form [formGroup]="form">
+                  <div class="divisor">
+                    <div class="title">Dados da Empresa</div>
+                  </div>
+                  <div
+                    class="row"
+                    *ngIf="
+                      usuarioLogado?.permissaoAtual?.isSmarkets &&
+                      empresaPrimeiroNivel() &&
+                      !this.idEmpresaCadastradora
+                    "
+                  >
+                    <div class="form-group col-lg-12">
+                      <label class="required col pl-0"> Estrutura Organizacional </label>
+                      <div>
+                        <select
+                          id="tipoEmpresa"
+                          class="form-control"
+                          [(ngModel)]="tipoEmpresa"
+                          [ngModelOptions]="{ standalone: true }"
+                          (change)="onChangeTipoEmpresa()"
+                        >
+                          <option [ngValue]="null"></option>
+                          <option *ngFor="let item of tipoEmpresaValues" [value]="item">
+                            {{ tipoEmpresaDisplay.get(item).valueOf() }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-lg-2">
+                      <label for="codigo-filial"> Código Empresa</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="codigo-filial"
+                        formControlName="codigoFilialEmpresa"
+                      />
+                    </div>
+                    <div class="form-group required col-lg-3">
+                      <label for="cnpj">
+                        {{ tipoDocumento == TipoDocumentoFornecedor.Cpf ? 'CPF' : 'CNPJ' }}
+                      </label>
+                      <input
+                        class="form-control"
+                        [textMask]="{
+                          mask: tipoDocumento == TipoDocumentoFornecedor.Cpf ? maskCpf : maskCnpj,
+                          guide: false
+                        }"
+                        type="text"
+                        name="cnpj"
+                        formControlName="cnpj"
+                        [class.invalid]="form.controls.cnpj.invalid && form.controls.cnpj.dirty"
+                        (keyup)="onKeyUpDocumento()"
+                      />
+                      <div *ngIf="form.controls.cnpj.invalid && form.controls.cnpj.dirty">
+                        <span class="invalid" *ngIf="form.controls.cnpj.errors.invalidCnpj">
+                          CNPJ inválido
+                        </span>
+                        <span class="invalid" *ngIf="form.controls.cnpj.errors.invalidCpf">
+                          CPF inválido
+                        </span>
+                      </div>
+                    </div>
+                    <div class="form-group col-lg-3">
+                      <label for="tipo-cadastro"> Tipo do Cadastro </label>
+                      <select
+                        id="tipo-Cadastro"
+                        class="form-control"
+                        formControlName="tipoCadastro"
+                      >
+                        <option *ngFor="let key of opcoesTipoCadastroEmpresa" [value]="key">
+                          {{ enumTipoCadastroEmpresa[key] }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col-lg-2">
+                      <label for="porteEmpresa"> Porte da Empresa </label>
+                      <select id="porteEmpresa" class="form-control" formControlName="porte">
+                        <option *ngFor="let key of opcoesPorteEmpresa" [value]="key">
+                          {{ enumPorteEmpresa[key] }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col-lg-2">
+                      <label for="numero-funcionarios"> Nº de funcionários </label>
+                      <input-number
+                        [min]="0"
+                        [max]="999999999"
+                        [allowDecimal]="false"
+                        formControlName="numeroFuncionarios"
+                      >
+                      </input-number>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group required col">
+                      <label for="razao-social"> Razão Social </label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="razaoSocial"
+                        formControlName="razaoSocial"
+                        [class.invalid]="
+                          form.controls.razaoSocial.invalid && form.controls.razaoSocial.dirty
+                        "
+                      />
+                      <span
+                        class="invalid"
+                        *ngIf="form.controls.razaoSocial.invalid && form.controls.razaoSocial.dirty"
+                      >
+                        Preenchimento obrigatório
+                      </span>
+                    </div>
+
+                    <div class="form-group col-lg-3" *ngIf="idPessoaJuridica">
+                      <label for="datacadastro"> Cadastro </label>
+                      <input
+                        class="form-control"
+                        type="date"
+                        name="datacadastro"
+                        [readonly]="idPessoaJuridica"
+                        formControlName="dataCadastro"
+                      />
+                    </div>
+                    <div class="form-group col-lg-3">
+                      <label for="datavalidade"> Validade </label>
+                      <input
+                        class="form-control"
+                        type="date"
+                        name="datavalidade"
+                        formControlName="dataValidade"
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col">
+                      <label for="nomefantasia"> Nome Fantasia </label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="nomeFantasia"
+                        formControlName="nomeFantasia"
+                      />
+                    </div>
+                    <div class="form-group col-lg-6">
+                      <label for="idNaturezaJuridica"> Natureza Jurídica </label>
+                      <ng-select
+                        class="full-width"
+                        [items]="naturezasJuridicas$ | async"
+                        bindValue="idNaturezaJuridica"
+                        [loading]="naturezasJuridicasLoading"
+                        [loadingText]="'buscando...'"
+                        formControlName="idNaturezaJuridica"
+                      >
+                        <ng-template ng-label-tmp let-item="item">
+                          {{ item.codigo }} - {{ item.descricao }}
+                        </ng-template>
+                        <ng-template ng-option-tmp let-item="item">
+                          {{ item.codigo }} - {{ item.descricao }}
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group required col-lg-4">
+                      <label for="contato"> Contato </label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="contato"
+                        formControlName="contato"
+                        [class.invalid]="
+                          form.controls.contato.invalid && form.controls.contato.dirty
+                        "
+                      />
+                      <span
+                        class="invalid"
+                        *ngIf="form.controls.contato.invalid && form.controls.contato.dirty"
+                      >
+                        Preenchimento obrigatório
+                      </span>
+                    </div>
+                    <div class="form-group required col-lg-4">
+                      <label for="telefone"> Telefone </label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="telefone"
+                        formControlName="telefone"
+                        [textMask]="{
+                          mask:
+                            form?.controls?.telefone?.value?.length < 15
+                              ? maskTelefone
+                              : maskCelular,
+                          guide: false
+                        }"
+                        [class.invalid]="
+                          form.controls.telefone.invalid && form.controls.telefone.dirty
+                        "
+                      />
+                      <span
+                        class="invalid"
+                        *ngIf="form.controls.telefone.invalid && form.controls.telefone.dirty"
+                      >
+                        Preenchimento obrigatório
+                      </span>
+                    </div>
+                    <div class="form-group required col-lg-4">
+                      <label for="email"> E-mail </label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="email"
+                        formControlName="email"
+                        [class.invalid]="
+                          form.controls.telefone.invalid && form.controls.telefone.dirty
+                        "
+                      />
+                      <span
+                        class="invalid"
+                        *ngIf="
+                          form.controls.email.invalid &&
+                          form.controls.email.errors.email &&
+                          form.controls.email.dirty
+                        "
+                      >
+                        Email inválido
+                      </span>
+                      <span
+                        class="invalid"
+                        *ngIf="
+                          form.controls.email.invalid &&
+                          form.controls.email.errors.required &&
+                          form.controls.email.dirty
+                        "
+                      >
+                        Preenchimento obrigatório
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div
+                      class="form-group col-lg-12"
+                      *ngIf="form?.controls?.idPessoaJuridicaMatriz.value"
+                    >
+                      <label for="matriz"> Empresa Cadastradora </label>
+                      <input
+                        disabled
+                        class="form-control"
+                        type="text"
+                        name="empresaCadastradora"
+                        value="{{
+                          empresaCadastradora?.nomeFantasia
+                            ? empresaCadastradora?.nomeFantasia
+                            : empresaCadastradora?.razaoSocial
+                        }}"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="divisor">
+                    <div class="title">Informações Fiscais</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-6">
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="inscricao-estadual"> Inscrição Estadual </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="inscricao-estadual"
+                            formControlName="inscricaoEstadual"
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="inscricao-municipal"> Inscrição Municipal </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="inscricao-municipal"
+                            formControlName="inscricaoMunicipal"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6 col-xl-4">
+                          <label for="capital-social"> Capital Social </label>
+                          <input-number
+                            [min]="0"
+                            [max]="999999999.9999"
+                            [allowDecimal]="true"
+                            formControlName="capitalSocial"
+                          >
+                          </input-number>
+                        </div>
+                        <div class="form-group col-md-6 col-xl-4">
+                          <label for="capital-integralizado"> Capital Integralizado </label>
+                          <input-number
+                            [min]="0"
+                            [max]="999999999.9999"
+                            [allowDecimal]="true"
+                            formControlName="capitalIntegralizado"
+                          >
+                          </input-number>
+                        </div>
+                        <div class="form-group col-md-6 col-xl-4">
+                          <label for="data-integralizacao"> Data da Integralização </label>
+                          <input
+                            class="form-control"
+                            type="date"
+                            name="data-integralizacao"
+                            formControlName="dataIntegralizacao"
+                          />
+                        </div>
+                        <div class="form-group col-md-6 col-xl-12">
+                          <label for="pasta-integracao"> Pasta Integração </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="pasta-integracao"
+                            formControlName="pastaIntegracao"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-6">
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="patrimonio-liquido"> Patrimônio Líquido </label>
+                          <input-number
+                            [min]="0"
+                            [max]="999999999.9999"
+                            [allowDecimal]="true"
+                            formControlName="patrimonioLiquido"
+                          >
+                          </input-number>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="perfil-tributario"> Perfil Tributário </label>
+                          <select
+                            id="perfil-tributario"
+                            class="form-control"
+                            formControlName="perfilTributario"
+                          >
+                            <option *ngFor="let key of opcoesPerfilTributario" [value]="key">
+                              {{ enumPerfilTributario[key] }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label> Optante pelo Simples Nacional </label>
+                          <div class="py-2">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input
+                                type="radio"
+                                id="optanteSimplesNacional-sim"
+                                name="optanteSimplesNacional"
+                                formControlName="optanteSimplesNacional"
+                                class="custom-control-input"
+                                [value]="true"
+                              />
+                              <label class="custom-control-label" for="optanteSimplesNacional-sim"
+                                >Sim</label
+                              >
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input
+                                type="radio"
+                                id="optanteSimplesNacional-nao"
+                                name="optanteSimplesNacional"
+                                formControlName="optanteSimplesNacional"
+                                class="custom-control-input"
+                                [value]="false"
+                              />
+                              <label class="custom-control-label" for="optanteSimplesNacional-nao"
+                                >Não</label
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col">
+                          <label for="observacao"> Observação </label>
+                          <textarea
+                            class="form-control"
+                            type="text"
+                            rows="1"
+                            name="observacao"
+                            formControlName="observacao"
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="divisor">
+                    <div class="title">Informações Gerais</div>
+                  </div>
+                  <div class="form-row">
+                    <div
+                      class="form-group required col-md-6"
+                      required
+                      *permissionsOnly="'Administrador'"
+                    >
+                      <label for="idUsuarioPrincipal"> Usuário principal </label>
+                      <ng-select
+                        class="full-width"
+                        [items]="usuarios$ | async"
+                        bindValue="idUsuario"
+                        [loading]="usuariosLoading"
+                        [loadingText]="'buscando...'"
+                        formControlName="idUsuarioPrincipal"
+                        [searchFn]="usuarioCustomSearchFn"
+                      >
+                        <ng-template ng-label-tmp let-item="item">
+                          {{ item?.pessoaFisica?.nome }} - {{ item?.email }}
+                        </ng-template>
+                        <ng-template ng-option-tmp let-item="item">
+                          <p class="mb-0">{{ item?.pessoaFisica?.nome }}</p>
+                          <span
+                            ><small>{{ item?.email }}</small></span
+                          >
+                        </ng-template>
+                      </ng-select>
+                      <span
+                        class="invalid"
+                        *ngIf="
+                          form.controls.idUsuarioPrincipal.invalid &&
+                          form.controls.idUsuarioPrincipal.dirty
+                        "
+                      >
+                        Preenchimento obrigatório
+                      </span>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="homepage"> Site Institucional </label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="homepage"
+                        formControlName="homePage"
+                      />
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="logo"> Logo </label>
+                      <input-file
+                        [multiple]="false"
+                        accept=".png,.jpeg,.jpg"
+                        (select)="imagenSelecionada($event)"
+                      >
+                      </input-file>
+                      <img
+                        [src]="logo"
+                        *ngIf="logo?.length > 0"
+                        class="img-thumbnail mt-2"
+                        alt="Logo institucional"
+                      />
+                    </div>
+                  </div>
+                  <div class="divisor">
+                    <div class="title">
+                      <label for="enderecos" class="required">Endereços</label>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col-xl-12">
+                      <input-enderecos formControlName="enderecos"></input-enderecos>
+                      <span
+                        class="invalid"
+                        *ngIf="form.controls.enderecos.invalid && form.controls.enderecos.dirty"
+                      >
+                        Preenchimento obrigatório
+                      </span>
+                    </div>
+                  </div>
+                  <div *ngIf="idPessoaJuridica && pessoaJuridica?.idPessoa">
+                    <div class="divisor">
+                      <div class="title">Informações Bancárias</div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-xl-12">
+                        <div class="card card-collapse">
+                          <a
+                            class="card-header bg-white collapsed"
+                            data-toggle="collapse"
+                            href="#collapseDomiciliosBancarios"
+                            (click)="permitirExibirDomicilios()"
+                          >
+                            Domicílios Bancários
+                          </a>
+                          <div class="card-body bg-white collapse" id="collapseDomiciliosBancarios">
+                            <listar-domicilios-bancarios
+                              [id-pessoa]="pessoaJuridica?.idPessoa"
+                              *ngIf="exibirDomicilios"
+                            >
+                            </listar-domicilios-bancarios>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="divisor">
+                      <div class="title">CNAEs</div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-xl-12">
+                        <div class="card card-collapse">
+                          <a
+                            class="card-header bg-white collapsed"
+                            data-toggle="collapse"
+                            href="#collapsedCnae"
+                          >
+                            CNAEs
+                          </a>
+                          <div class="card-body bg-white collapse" id="collapsedCnae">
+                            <manter-pessoa-cnae
+                              [id-pessoa]="pessoaJuridica?.idPessoa"
+                              [idPessoaJuririca]="pessoaJuridica?.idPessoaJuridica"
+                            ></manter-pessoa-cnae>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="row bg-white py-3">
+              <div class="col">
+                <button type="button" class="btn btn-primary float-right" (click)="salvar()">
+                  <i class="fas fa-save"></i> Salvar
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary float-right mx-2"
+                  (click)="voltar()"
+                >
+                  <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Usuários -->
+    <div
+      class="tab-pane fade"
+      id="usuarios-empresa"
+      role="tabpanel"
+      aria-labelledby="usuarios-empresa-tab"
+    >
+      <!-- [id-pessoa-juridica]="pessoaJuridica?.idPessoaJuridica" -->
+      <listar-empresa-usuario
+        *ngIf="tabAtiva == 'usuarios-empresa'"
+        [pessoa-juridica]="pessoaJuridica"
+      >
+      </listar-empresa-usuario>
+    </div>
+    <!-- #endregion Usuários -->
+
+    <!-- #region Tab Documentos -->
+    <div
+      class="tab-pane fade"
+      id="documentos-fornecedor"
+      role="tabpanel"
+      aria-labelledby="documentos-fornecedor-tab"
+      *ngIf="exibirDocumentos()"
+    >
+      <div class="card card-tab-content tab-content">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <div class="row bg-white">
+              <div class="col">
+                <listar-documentos-fornecedor></listar-documentos-fornecedor>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Tab Questionarios -->
+    <div
+      class="tab-pane fade"
+      id="questionarios-fornecedor"
+      role="tabpanel"
+      aria-labelledby="questionarios-fornecedor-tab"
+    >
+      <div class="no-content" *ngIf="!resultados?.length" translate>GENERAL.NO_RECORDS_FOUND</div>
+      <div
+        class="card card-tab-content card-collapse"
+        *ngFor="let resultado of resultados; let i = index"
+      >
+        <a
+          class="card-header collapsed"
+          data-toggle="collapse"
+          href="#questionario{{ i }}"
+          id="collapse{{ i }}"
+          (click)="mostrarQuestionario('collapse' + i, i)"
+        >
+          <div class="d-none d-lg-inline-flex mr-5 text-truncate w-50">
+            <span
+              class="font-weight-bold pl-1 pr-3 text-truncate"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{ resultado.nomeQuestionario }}"
+            >
+              {{ resultado.nomeQuestionario }}</span
+            >
+          </div>
+          <div class="d-none d-lg-inline-flex pr-1 w-40 ml-5 pl-5 text-truncate">
+            <span
+              class="font-weight-bold pr-2 ml-1 pl-5 text-truncate"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{
+                'Situação: ' +
+                  enumSituacaoQuestionario[resultado.situacao] +
+                  (resultado.avaliacaoQuestionario ? ' / ' + resultado.avaliacaoQuestionario : '')
+              }}"
+            >
+              {{
+                'Situação: ' +
+                  enumSituacaoQuestionario[resultado.situacao] +
+                  (resultado.avaliacaoQuestionario ? ' / ' + resultado.avaliacaoQuestionario : '')
+              }}
+            </span>
+          </div>
+          <div class="d-inline-flex d-lg-none pr-1 text-truncate w-100">
+            <span
+              class="font-weight-bold pl-1 pr-3 text-truncate"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{ resultado.nomeQuestionario }}"
+            >
+              {{ resultado.nomeQuestionario }}</span
+            >
+          </div>
+          <div class="d-inline-flex d-lg-none pr-1 w-100 text-truncate">
+            <span
+              class="font-weight-bold pl-1 pr-2 text-truncate"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{
+                'Situação: ' +
+                  enumSituacaoQuestionario[resultado.situacao] +
+                  (resultado.avaliacaoQuestionario ? ' / ' + resultado.avaliacaoQuestionario : '')
+              }}"
+            >
+              {{
+                'Situação: ' +
+                  enumSituacaoQuestionario[resultado.situacao] +
+                  (resultado.avaliacaoQuestionario ? ' / ' + resultado.avaliacaoQuestionario : '')
+              }}
+            </span>
+          </div>
+        </a>
+        <div class="card-body collapse" id="questionario{{ i }}">
+          <div class="container-fluid">
+            <div class="bg-lighter border-bottom row-9-col row vertical-divider py-4">
+              <div
+                [ngClass]="{
+                  'col-9': resultado.situacao != enumSituacaoQuestionario.Respondido,
+                  'col-md-7 col-lg-8 pr-4':
+                    resultado.situacao == enumSituacaoQuestionario.Respondido
+                }"
+              >
+                <label
+                  class="mt-2 pr-4 pr-lg-2 text-uppercase text-primary text-justify font-weight-bold"
+                >
+                  {{ resultado.introducao }}</label
+                >
+              </div>
+              <div
+                class="col-md-2 col-lg-1 my-auto"
+                *ngIf="resultado.situacao == enumSituacaoQuestionario.Respondido"
+              >
+                <!-- <div style="height: 8vh; width: 1px; background-color: #000000; opacity: 0.8"></div> -->
+                <h5 class="mt-4 mt-md-2 text-uppercase font-weight-bold text-center">Nota</h5>
+                <h2 class="mt-2 mb-md-5 text-uppercase font-weight-bold text-center">
+                  {{ resultado.notaQuestionario.toFixed(2).replace('.', ',') }}
+                </h2>
+              </div>
+            </div>
+
+            <div
+              class="row bg-white border-bottom"
+              *ngFor="let formsResposta of formsRespostas; let i2 = index"
+            >
+              <div class="col-12">
+                <div
+                  class="bg-white border-bottom row-9-col row vertical-divider py-4"
+                  *ngIf="
+                    formsRespostas[i2 - 1]?.controls.categoriaQuestao.value?.idCategoriaQuestao !=
+                    formsResposta.controls?.categoriaQuestao.value?.idCategoriaQuestao
+                  "
+                >
+                  <div
+                    [ngClass]="{
+                      'col-9': resultado.situacao != enumSituacaoQuestionario.Respondido,
+                      'col-md-7 col-lg-8': resultado.situacao == enumSituacaoQuestionario.Respondido
+                    }"
+                  >
+                    <label
+                      class="mt-2 pr-4 pr-lg-2 text-uppercase text-primary text-justify font-weight-bold"
+                    >
+                      {{ formsResposta.controls.categoriaQuestao.value.descricao }}</label
+                    >
+                    <br />
+                    <div class="mt-2">
+                      <small class="font-italic">
+                        {{ formsResposta.controls.categoriaQuestao.value.notaExplicativa }}
+                      </small>
+                    </div>
+                  </div>
+                  <div
+                    class="col-md-2 col-lg-1 my-auto"
+                    *ngIf="resultado.situacao == enumSituacaoQuestionario.Respondido"
+                  >
+                    <h5 class="mt-4 mt-md-2 text-uppercase font-weight-bold text-center">Nota</h5>
+                    <h2 class="mt-2 mb-md-5 text-uppercase font-weight-bold text-center">
+                      {{
+                        formsResposta.controls.categoriaQuestao.value.notaCategoria
+                          .toFixed(2)
+                          .replace('.', ',')
+                      }}
+                    </h2>
+                  </div>
+                </div>
+                <form [formGroup]="formsResposta">
+                  <div class="form row">
+                    <div class="form-group col-lg-12 text-justify mt-2">
+                      {{ formsResposta.controls.pergunta.value }}
+                      <br />
+                      <div class="mt-2">
+                        <small class="font-italic">
+                          {{ formsResposta.controls.notaExplicativa.value }}
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form row">
+                    <div
+                      class="form-group"
+                      [ngClass]="
+                        formsResposta.controls.permiteComentario.value ? 'col-lg-11' : 'col-lg-12'
+                      "
+                    >
+                      <ng-select
+                        *ngIf="formsResposta.controls.tipo.value == 2"
+                        formControlName="resposta"
+                      >
+                        <ng-option
+                          *ngFor="let opcao of formsResposta.controls.opcoes.value"
+                          [value]="opcao.descricao"
+                        >
+                          {{ opcao.descricao }}
+                        </ng-option>
+                      </ng-select>
+                      <input
+                        class="form-control"
+                        formControlName="resposta"
+                        type="text"
+                        *ngIf="formsResposta.controls.tipo.value == 1"
+                      />
+                    </div>
+                    <div
+                      class="form-group col-lg-1"
+                      *ngIf="formsResposta.controls.permiteComentario.value"
+                    >
+                      <a
+                        class="btn btn-icon"
+                        data-toggle="collapse"
+                        href="#comentarios{{ i }}-{{ i2 }}"
+                        role="button"
+                        aria-expanded="false"
+                        aria-controls="comentarios"
+                      >
+                        <i class="far fa-comment-dots"></i>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="form row collapse" id="comentarios{{ i }}-{{ i2 }}">
+                    <div class="form-group required bg-white col-lg-12">
+                      <div class="row">
+                        <div class="form-group col-12 bg-lighter">
+                          <p class="my-2"><span class="font-weight-bold">Comentário</span></p>
+                        </div>
+                      </div>
+                      <div class="row my-3" *ngIf="resultado.situacao != 3">
+                        <div class="d-none d-lg-block col-lg-1 col-xl-2 pr-0 align-self-center">
+                          <div class="initials-container current-user">
+                            <div class="initials">
+                              {{ getInitials(usuarioLogado?.pessoaFisica?.nome) }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-11 col-xl-10">
+                          <div class="input-group">
+                            <textarea
+                              class="form-control resize-none"
+                              rows="5"
+                              placeholder="Adcione um novo comentário"
+                              [(ngModel)]="comentarios[i2]"
+                              [ngModelOptions]="{ standalone: true }"
+                            ></textarea>
+                            <div class="input-group-append">
+                              <button
+                                class="btn btn-icon px-5"
+                                type="button"
+                                (click)="salvarComentario(i2)"
+                              >
+                                <i class="far fa-paper-plane"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row my-3" *ngIf="formsResposta.controls.comentario.value">
+                        <div class="d-none d-lg-block col-lg-1 col-xl-2 pr-0 align-self-center">
+                          <div
+                            class="initials-container"
+                            [ngClass]="{
+                              'other-user':
+                                formsResposta.controls.comentario.value.idUsuarioAutor ==
+                                usuarioLogado.idUsuario,
+                              'current-user':
+                                formsResposta.controls.comentario.value.idUsuarioAutor !=
+                                usuarioLogado.idUsuario
+                            }"
+                          >
+                            <div class="initials">
+                              {{
+                                getInitials(
+                                  formsResposta.controls.comentario.value?.usuarioAutor
+                                    ?.pessoaFisica?.nome
+                                )
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-11 col-xl-10">
+                          <div class="comment">
+                            <p>
+                              <span class="font-weight-bold text-uppercase">{{
+                                formsResposta.controls.comentario.value.usuarioAutor?.pessoaFisica
+                                  ?.nome
+                              }}</span>
+                              comentado em
+                              {{
+                                formsResposta.controls.comentario.value.dataCriacao
+                                  | date: 'dd/MM/yyyy HH:mm:ss'
+                              }}
+                            </p>
+                            <p>
+                              {{ formsResposta.controls.comentario.value.comentario }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer bg-white" *ngIf="resultado.situacao != 3">
+            <button type="button" (click)="salvarResultado(i)" class="btn btn-primary">
+              <i class="fas fa-save"></i> SALVAR
+            </button>
+            <button
+              type="button"
+              id="btnSalvar"
+              (click)="finalizarResultado(i)"
+              class="btn btn-primary"
+            >
+              <i class="fas fa-check"></i> FINALIZAR
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Tab Planos de Ação -->
+    <div
+      class="tab-pane fade"
+      id="planos-acao"
+      role="tabpanel"
+      aria-labelledby="planos-acao-tab"
+      *ngIf="perfilUsuario == enumPerfilUsuario.Fornecedor"
+    >
+      <div class="card card-tab-content tab-content">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <div class="row bg-white">
+              <div class="col">
+                <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+                  <div class="col-md-6">
+                    <label class="font-weight-bold">Nome do Plano de Ação:</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Status:</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Prazo:</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Ações:</label>
+                  </div>
+                </div>
+
+                <div
+                  class="bg-white border-bottom row py-4"
+                  *ngIf="!planosAcao?.length; else hasValue"
+                >
+                  <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+                </div>
+
+                <ng-template #hasValue>
+                  <div
+                    class="bg-white border-bottom row py-4"
+                    *ngFor="let planoAcao of planosAcao; let i = index"
+                  >
+                    <div class="col-md-6 align-self-center">
+                      <label for="" class="font-weight-bold d-block d-md-none"
+                        >Nome do Plano de Ação:</label
+                      >
+                      <p class="mb-3 mb-md-0">
+                        {{ planoAcao?.nome }}
+                      </p>
+                    </div>
+
+                    <div class="col-md-2 align-self-center">
+                      <label for="" class="font-weight-bold d-block d-md-none">Status:</label>
+                      <p class="mb-3 mb-md-0">
+                        {{ enumStatusPlanoAcaoFornecedor[planoAcao?.status] }}
+                      </p>
+                    </div>
+
+                    <div class="col-md-2 align-self-center">
+                      <label for="" class="font-weight-bold d-block d-md-none">Prazo:</label>
+                      <p class="mb-3 mb-md-0">
+                        {{ planoAcao?.prazo | date: 'dd/MM/yyyy' }}
+                      </p>
+                    </div>
+
+                    <div class="col-md-2 align-self-center d-flex justify-content-between">
+                      <label for="" class="font-weight-bold d-block d-md-none">Ações:</label>
+                      <button
+                        class="btn btn-icon"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Atualizar Plano de Ação"
+                        (click)="atualizarPlanoAcao(planoAcao.idPlanoAcaoFornecedor)"
+                      >
+                        <i class="far fa-edit"></i>
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- #endregion -->
+
+    <!-- #region Tab Pendências -->
+    <div
+      class="tab-pane fade"
+      id="pendencias-fornecedor"
+      role="tabpanel"
+      aria-labelledby="pendencias-fornecedor-tab"
+      *ngIf="perfilUsuario == 3"
+    >
+      <div class="card card-tab-content tab-content">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <div class="row bg-white">
+              <div class="col">
+                <listar-pendencia-fornecedor
+                  [pendenciasFornecedor]="pendenciasFornecedor"
+                  [idPessoaJuridica]="idPessoaJuridica"
+                  [habilitarResponderPendencia]="true"
+                ></listar-pendencia-fornecedor>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- #endregion -->
+  </div>
+</div>

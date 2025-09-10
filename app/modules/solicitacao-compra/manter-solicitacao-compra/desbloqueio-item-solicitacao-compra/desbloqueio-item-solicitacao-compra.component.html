@@ -1,0 +1,56 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Desbloquear Solicitação de Compra</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="form-row d-flex justify-content-between">
+    <div class="form-group col-4">
+      <input
+        class="form-control"
+        type="date"
+        name="dataLiberacaoHeader"
+        [(ngModel)]="this.dataLiberacaoHeader"
+      />
+    </div>
+    <div class="form-group col-7 align-self-end text-right">
+      <button type="button" class="btn btn-success" (click)="copiarDataParaItens()">
+        Usar mesma data para todos itens
+      </button>
+    </div>
+  </div>
+  <div *ngIf="!itensSolicitacaoCompra?.length; else hasItem">
+    <td class="no-content" colspan="7" translate>GENERAL.NO_RECORDS_FOUND</td>
+  </div>
+
+  <ng-template #hasItem>
+    <div class="row d-flex justify-content-between">
+      <div class="col-7 font-weight-bold">Item</div>
+      <div class="col-4 font-weight-bold text-end">Data Liberação</div>
+    </div>
+    <hr class="row col-12" />
+    <div class="col-12 col-lg-12 mh-250px overflow-y-scroll pl-0">
+      <div *ngFor="let item of itensSolicitacaoCompra; let itemIndex = index">
+        <div class="form-row d-flex justify-content-between">
+          <div class="form-group col-8">
+            {{ item.descricao }}
+          </div>
+          <div class="form-group col-4">
+            <input
+              class="form-control"
+              type="date"
+              name="dataLiberacaoItem"
+              [(ngModel)]="item.dataLiberacaoItem"
+              [required]="true"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="cancelar()">Cancelar</button>
+  <button type="button" class="btn btn-primary" (click)="confirmaDesbloquear()">Confirmar</button>
+</div>

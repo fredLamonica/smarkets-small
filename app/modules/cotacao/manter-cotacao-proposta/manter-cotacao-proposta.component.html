@@ -1,0 +1,310 @@
+<div class="header">
+  <div class="header-search row">
+    <div class="col-12 align-self-center">
+      <h3 class="mb-0 text-primary font-weight-bold">
+        <span class="font-weight-normal">DADOS GERAIS</span> - COTAÇÃO {{ cotacao?.idCotacao }} -
+        Descrição: {{ cotacao?.descricao }}
+      </h3>
+    </div>
+  </div>
+  <div class="header-navigation py-4">
+    <div class="bounds row align-items-center">
+      <div class="col-6 col-md-2">
+        <button class="btn btn-primary btn-block" (click)="voltar()">
+          <i class="fas fa-arrow-left"></i> Voltar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="card card-default">
+    <div class="card-header"></div>
+    <div class="card-body">
+      <div class="bg-lighter-dark border-bottom row" *ngIf="cotacao?.anexos?.length">
+        <div class="col-12 col-md-1 align-self-start pt-4">
+          <label class="font-weight-bold">Anexos: </label>
+        </div>
+        <div class="col-12 col-md-11">
+          <galeria-arquivos [arquivos]="cotacao?.anexos" [disabled]="true"> </galeria-arquivos>
+        </div>
+      </div>
+      <div class="bg-lighter border-bottom row py-3">
+        <div class="col-6 col-md-2 pr-0">
+          <label>Data Inicial:</label>
+          <p class="font-weight-bold">{{ cotacao?.dataInicio | date: 'dd/MM/yyyy' }}</p>
+        </div>
+        <div class="col-6 col-md-2 pr-0">
+          <label>Data Fim:</label>
+          <p class="font-weight-bold">{{ cotacao?.dataFim | date: 'dd/MM/yyyy' }}</p>
+        </div>
+        <div class="col-md-2 pr-0">
+          <label>Moeda:</label>
+          <p class="font-weight-bold">{{ Moeda[cotacao?.moeda] }}</p>
+        </div>
+        <div class="col-md-3 pr-0">
+          <label> Comprador:</label>
+          <p class="font-weight-bold">{{ cotacao?.usuarioResponsavel?.pessoaFisica?.nome }}</p>
+        </div>
+        <div class="col-md-3">
+          <label>Email do Comprador:</label>
+          <p
+            class="font-weight-bold text-truncate"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            [title]="cotacao?.usuarioResponsavel?.email">
+            {{ cotacao?.usuarioResponsavel?.email }}
+          </p>
+        </div>
+        <div class="col-md-12 pr-0">
+          <label>Razão Social - CNPJ:</label>
+          <p class="font-weight-bold mb-0">{{ cotacao?.razaoSocial }}</p>
+          <p class="font-weight-bold">{{ cotacao?.cnpj }}</p>
+        </div>
+
+        <form class="col-12" [formGroup]="formPropostaItemHeader" *ngIf="formPropostaItemHeader">
+          <div class="form-row">
+            <div class="form-group required col-lg-3">
+              <label for="incoterms"> Incoterms: </label>
+              <ng-select
+                name="incoterms"
+                formControlName="incoterms"
+                [class.invalid]="
+                  formPropostaItemHeader.controls.incoterms.invalid &&
+                  formPropostaItemHeader.controls.incoterms.dirty
+                "
+                (blur)="(!readonly); notificarFormHeader()"
+                [class.invalid]="
+                  formPropostaItemHeader.controls.incoterms.invalid &&
+                  formPropostaItemHeader.controls.incoterms.dirty
+                ">
+                <ng-option [value]="TipoFrete.Cif">CIF</ng-option>
+                <ng-option [value]="TipoFrete.Fob">FOB</ng-option>
+                <ng-option [value]="TipoFrete.Exw">EXW</ng-option>
+                <ng-option [value]="TipoFrete.Fca">FCA</ng-option>
+                <ng-option [value]="TipoFrete.Cpt">CPT</ng-option>
+                <ng-option [value]="TipoFrete.Cip">CIP</ng-option>
+                <ng-option [value]="TipoFrete.Dat">DAT</ng-option>
+                <ng-option [value]="TipoFrete.Dap">DAP</ng-option>
+                <ng-option [value]="TipoFrete.Ddp">DDP</ng-option>
+                <ng-option [value]="TipoFrete.Fas">FAS</ng-option>
+                <ng-option [value]="TipoFrete.Cfr">CFR</ng-option>
+              </ng-select>
+              <div
+                *ngIf="
+                  formPropostaItemHeader.controls.incoterms.invalid &&
+                  formPropostaItemHeader.controls.incoterms.dirty
+                ">
+                <span
+                  class="invalid"
+                  *ngIf="formPropostaItemHeader.controls.incoterms.errors?.required">
+                  Preenchimento obrigatório
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group required col-lg-3">
+              <label
+                for="idCondicaoPagamento"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Condição de Pagamento">
+                Condição de Pag.:
+              </label>
+
+              <input
+                type="text"
+                class="form-control"
+                name="idCondicaoPagamento"
+                [value]="formPropostaItemHeader.getRawValue().condicaoPagamento?.descricao"
+                readonly
+                *ngIf="formPropostaItemHeader.controls.idCondicaoPagamento.disabled" />
+
+              <ng-select
+                [items]="condicoesPagamento$ | async"
+                bindValue="idCondicaoPagamento"
+                bindLabel="descricao"
+                [loading]="condicoesPagamentoLoading"
+                formControlName="idCondicaoPagamento"
+                (open)="openCondicoesPagamento()"
+                (blur)="notificarFormHeader()"
+                *ngIf="formPropostaItemHeader.controls.idCondicaoPagamento.enabled"
+                [class.invalid]="
+                  formPropostaItemHeader.controls.idCondicaoPagamento.invalid &&
+                  formPropostaItemHeader.controls.idCondicaoPagamento.dirty
+                ">
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-truncate" title="{{ item.descricao }}">{{ item.descricao }}</div>
+                </ng-template>
+              </ng-select>
+              <div
+                *ngIf="
+                  formPropostaItemHeader.controls.idCondicaoPagamento.invalid &&
+                  formPropostaItemHeader.controls.idCondicaoPagamento.dirty
+                ">
+                <span
+                  class="invalid"
+                  *ngIf="formPropostaItemHeader.controls.idCondicaoPagamento.errors?.required">
+                  Preenchimento obrigatório
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group required col-lg-3">
+              <label
+                class="d-block d-md-none"
+                for="faturamentoMinimo"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Faturamento Mínimo">
+                Faturamento Mínimo:
+              </label>
+              <label
+                class="d-none d-md-block"
+                for="faturamentoMinimo"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Faturamento Mínimo">Faturamento Mín.:</label>
+              <input
+                [textMask]="{ mask: maskValor, guide: false }"
+                type="text"
+                class="form-control"
+                [class.invalid]="
+                  formPropostaItemHeader.controls.faturamentoMinimo.invalid &&
+                  formPropostaItemHeader.controls.faturamentoMinimo.dirty
+                "
+                name="faturamentoMinimo"
+                formControlName="faturamentoMinimo"
+                (blur)="(!readonly); notificarFormHeader()" />
+              <div
+                *ngIf="
+                  formPropostaItemHeader.controls.faturamentoMinimo.invalid &&
+                  formPropostaItemHeader.controls.faturamentoMinimo.dirty
+                ">
+                <span
+                  class="invalid"
+                  *ngIf="formPropostaItemHeader.controls.faturamentoMinimo.errors?.required">
+                  Preenchimento obrigatório
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group required col-lg-3 mb-0">
+              <label
+                for="prazoEntrega"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Embalagem Embarque">
+                Prazo de Entrega:
+              </label>
+
+              <div class="form-row">
+                <div class="form-group col-10 col-lg-9 mb-0">
+                  <input-number
+                    [class.invalid]="
+                      formPropostaItemHeader.controls.prazoEntrega.invalid &&
+                      formPropostaItemHeader.controls.prazoEntrega.dirty
+                    "
+                    formControlName="prazoEntrega"
+                    (blur)="(!readonly); notificarFormHeader()"
+                    [disabled]="formPropostaItemHeader.controls.prazoEntrega.disabled"
+                    [allowDecimal]="false">
+                  </input-number>
+                </div>
+                <div class="form-group col-2 col-lg-3 d-flex align-items-center mb-0">
+                  <a> Dias </a>
+                </div>
+              </div>
+              <a class="hint d-flex justify-content-end font-weight-bold text-small text-danger">após aprovação</a>
+              <div
+                *ngIf="
+                  formPropostaItemHeader.controls.prazoEntrega.invalid &&
+                  formPropostaItemHeader.controls.prazoEntrega.dirty
+                ">
+                <span
+                  class="invalid"
+                  *ngIf="formPropostaItemHeader.controls.prazoEntrega.errors?.required">
+                  Preenchimento obrigatório
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group col-lg-12">
+              <label class="pr-2"> Anexar Arquivo: </label>
+              <input-file
+                [multiple]="true"
+                accept=".csv,.tiff,.txt,.pdf,.xlsx,.xls,.pptx,.ppt,.docx,.doc,.odt,.ods,.odp,.png,.jpeg,.jpg"
+                (select)="incluirArquivos($event)"
+                *ngIf="!formPropostaItemHeader.controls.anexos.disabled"></input-file>
+            </div>
+
+            <div class="form-group col-12">
+              <galeria-arquivos
+                [arquivos]="rodadaAtiva?.anexos"
+                (excluir)="excluirArquivo($event)"
+                [disabled]="formPropostaItemHeader.controls.anexos.disabled">
+              </galeria-arquivos>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Rodadas -->
+      <div class="row bg-white">
+        <div class="col-12 px-0 border-bottom">
+          <ul class="nav nav-pills overflow-x-scroll pb-2 pt-3" id="rodadasTab" role="tablist">
+            <li class="nav-item" *ngFor="let rodada of rodadas; let i = index">
+              <a
+                class="nav-link nav-link-block text-nowrap"
+                [class.active]="rodadaAtiva?.idCotacaoRodada == rodada.idCotacaoRodada"
+                id="rodada-{{ i }}-tab"
+                data-toggle="tab"
+                href="#rodada"
+                role="tab"
+                aria-controls="rodada"
+                aria-selected="false"
+                (click)="selecionarRodada(i)">{{ i + 1 }}ª rodada
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-12">
+          <div class="tab-content" id="rodadasTabContent">
+            <div
+              class="tab-pane fade"
+              [ngClass]="{ 'active show': rodadaAtiva }"
+              id="rodada"
+              role="tabpanel"
+              aria-labelledby="rodada-tab">
+              <div class="row py-2 border-bottom">
+                <div class="col-6 col-md-2 pr-0">
+                  <label>Data Inicial:</label>
+                  <p class="font-weight-bold mb-md-0">
+                    {{ rodadaAtiva?.dataInicio | date: 'dd/MM/yyyy HH:mm' }}
+                  </p>
+                </div>
+                <div class="col-6 col-md-2 pr-0">
+                  <label>Data Fim:</label>
+                  <p class="font-weight-bold mb-md-0">
+                    {{ rodadaAtiva?.dataEncerramento | date: 'dd/MM/yyyy HH:mm' }}
+                  </p>
+                </div>
+              </div>
+
+              <manter-cotacao-rodada-proposta
+                [cotacaoItemHeaderEvent]="cotacaoItemHeaderEvent"
+                [rodada]="rodadaAtiva"
+                *ngIf="rodadaAtiva"
+                [habilitar-imposto-ncm-cotacao]="flagImpostosNcm"
+                (inativarAtivarProduto)="habilitarDesabilitarFormulario()"
+                (itensAlterados)="onItensAlterados($event)"
+                (itensSalvos)="onItensSalvos($event)"
+                [formPropostaItemHeader]="formPropostaItemHeader">
+              </manter-cotacao-rodada-proposta>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

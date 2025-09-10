@@ -1,0 +1,307 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title" style="color:#fff">
+    {{ planoAcaoFornecedor.idPlanoAcaoFornecedor == undefined ? 'Incluir' : 'Alterar' }} Plano de
+    Ação
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="fecharModal()">
+    <i class="fas fa-times" style="color:#fff"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-group required">
+      <label for="nome">Nome do Plano Ação:</label>
+      <input class="form-control" type="text" name="nome" formControlName="nome" />
+    </div>
+    <div class="form-row">
+      <div class="col-6">
+        <div class="form-group required">
+          <label for="prazo">Prazo do Plano de Ação:</label>
+          <input class="form-control" type="date" name="prazo" formControlName="prazo" />
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="form-group" *ngIf="planoAcaoFornecedor?.idPlanoAcaoFornecedor">
+          <label for="status">Status:</label>
+          <ng-select name="status" formControlName="status">
+            <ng-option [value]="StatusPlanoAcaoFornecedor['Em Andamento']">Em Andamento</ng-option>
+            <ng-option [value]="StatusPlanoAcaoFornecedor.Finalizado">Finalizado</ng-option>
+          </ng-select>
+        </div>
+      </div>
+    </div>
+    <div class="form-row" *ngIf="mostrarInputNome == true">
+      <div class="col">
+        <div class="form-group required">
+          <label for="nomeDoUsuarioResponsavel">Nome do Usuário Responsável:</label>
+          <input
+            class="form-control"
+            type="text"
+            name="nomeDoUsuarioResponsavel"
+            formControlName="nomeDoUsuarioResponsavel"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col">
+        <div class="form-group required">
+          <label for="emailDoResponsavel">E-mail do Responsável:</label>
+          <input
+            class="form-control"
+            type="email"
+            name="emailDoResponsavel"
+            formControlName="emailDoResponsavel"
+          />
+          <span
+            class="invalid"
+            *ngIf="
+              form.controls.emailDoResponsavel.invalid &&
+              form.controls.emailDoResponsavel.errors.email &&
+              form.controls.emailDoResponsavel.dirty
+            "
+          >
+            Email inválido
+          </span>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div *ngIf="planoAcaoFornecedor.idPlanoAcaoFornecedor">
+    <div class="divisor">
+      <div class="title">Ações</div>
+    </div>
+    <div *ngIf="fornecedor">
+      <button type="button" class="btn btn-icon" (click)="abrirModalDeIncluirAcao()">
+        <i class="fas fa-plus-circle text-primary"></i>
+        <span class="d-inline-block mb-0 ml-2 align-top"> Incluir Ação</span>
+      </button>
+      <div class="container-fluid no-bounds" *ngIf="planoAcaoFornecedor?.acoes?.length > 0">
+        <div class="row bg-lighter border-bottom py-2">
+          <div class="col-4">
+            <label class="font-weight-bold">Descrição</label>
+          </div>
+          <div class="col-2">
+            <label class="font-weight-bold">Sim</label>
+          </div>
+          <div class="col-2">
+            <label class="font-weight-bold">Não</label>
+          </div>
+          <div class="col-2">
+            <label class="font-weight-bold">Parcial</label>
+          </div>
+          <div class="col-2">
+            <label class="font-weight-bold"></label>
+          </div>
+        </div>
+        <div
+          class="row py-2"
+          *ngFor="let acao of planoAcaoFornecedor?.acoes; let indexAcao = index"
+        >
+          <div class="col-4">
+            <label>{{ acao?.descricao }}</label>
+          </div>
+          <div class="col-2">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input
+                type="radio"
+                id="sim{{ indexAcao }}"
+                name="{{ indexAcao }}"
+                class="custom-control-input"
+                [value]="SituacaoAcaoFornecedor.Sim"
+                [(ngModel)]="acao.situacao"
+                (click)="alterarSituacaoAcao(acao, SituacaoAcaoFornecedor.Sim)"
+              />
+              <label class="custom-control-label" for="sim{{ indexAcao }}"></label>
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input
+                type="radio"
+                id="nao{{ indexAcao }}"
+                name="{{ indexAcao }}"
+                class="custom-control-input"
+                [value]="SituacaoAcaoFornecedor.Nao"
+                [(ngModel)]="acao.situacao"
+                (click)="alterarSituacaoAcao(acao, SituacaoAcaoFornecedor.Nao)"
+              />
+              <label class="custom-control-label" for="nao{{ indexAcao }}"></label>
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input
+                type="radio"
+                id="parcial{{ indexAcao }}"
+                name="{{ indexAcao }}"
+                class="custom-control-input"
+                [value]="SituacaoAcaoFornecedor.Parcial"
+                [(ngModel)]="acao.situacao"
+                (click)="alterarSituacaoAcao(acao, SituacaoAcaoFornecedor.Parcial)"
+              />
+              <label class="custom-control-label" for="parcial{{ indexAcao }}"></label>
+            </div>
+          </div>
+          <div class="col-2">
+            <button
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Editar"
+              (click)="abrirModalDeEditarAcao(acao)"
+              *ngIf="acao?.dataFinalizacao == null"
+            >
+              <i class="far fa-edit text-primary"></i>
+            </button>
+            <button
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Visualizar"
+              (click)="abrirModalDeEditarAcao(acao)"
+              *ngIf="acao?.dataFinalizacao != null"
+            >
+              <i class="far fa-eye text-primary"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="container-fluid no-bounds"
+      *ngIf="!fornecedor && planoAcaoFornecedor?.acoes?.length > 0"
+    >
+      <form>
+        <div
+          class="form-row border-bottom py-2"
+          *ngFor="let acao of planoAcaoFornecedor.acoes; let i = index"
+        >
+          <div class="col-12 mb-0 mt-2">
+            <h5
+              class="mb-0 text-primary font-weight-bold text-truncate"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{ acao.descricao }}"
+            >
+              {{ acao.descricao }}
+            </h5>
+          </div>
+          <div class="form-group col-12">
+            <small class="font-weight-bold">
+              {{ acao.observacoes }}
+            </small>
+          </div>
+          <div class="form-group col-10 col-md-11" *ngIf="true">
+            <label class="pr-2"> Anexos: </label>
+          </div>
+          <div class="col-2 col-md-1 my-auto">
+            <a
+              type="button"
+              id="btnComentarios-{{ i }}"
+              data-toggle="collapse"
+              href="#comentarios-{{ i }}"
+              role="button"
+              aria-expanded="false"
+              aria-controls="comentarios"
+              class="btn btn-icon pl-0"
+              data-placement="bottom"
+              title="Comentários"
+              (click)="obterComentarios(i)"
+            >
+              <i class="far fa-comment-dots"></i>
+            </a>
+          </div>
+          <div class="form-group col-12 mb-0">
+            <galeria-arquivos
+              [arquivos]="planoAcaoFornecedor.acoes[i].anexos"
+              (excluir)="excluirArquivo($event, i)"
+              [disabled]="true"
+              size="sm"
+            >
+            </galeria-arquivos>
+          </div>
+          <div class="col-12 collapse" id="comentarios-{{ i }}">
+            <div class="row">
+              <div class="col-12 bg-lighter">
+                <p class="my-2">
+                  <span class="font-weight-bold">Comentários</span>
+                  {{
+                    planoAcaoFornecedor.acoes[i]?.comentarios?.length
+                      ? 'Último comentário ' +
+                        ((planoAcaoFornecedor.acoes[i]?.comentarios)[0]?.dataCriacao
+                          | date: 'dd/MM/yyyy HH:mm:ss')
+                      : ''
+                  }}
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="row my-3"
+              *ngFor="let comentario of planoAcaoFornecedor.acoes[i]?.comentarios"
+            >
+              <div class="d-none d-lg-block col-lg-1 col-xl-2 pr-0 align-self-center">
+                <div
+                  class="initials-container"
+                  [ngClass]="{
+                    'other-user': comentario.idUsuarioAutor == usuarioLogado.idUsuario,
+                    'current-user': comentario.idUsuarioAutor != usuarioLogado.idUsuario
+                  }"
+                >
+                  <div class="initials">
+                    {{ getInitials(comentario.usuarioAutor?.pessoaFisica?.nome) }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-11 col-xl-10">
+                <div class="comment">
+                  <p>
+                    <span class="font-weight-bold text-uppercase">{{
+                      comentario.usuarioAutor?.pessoaFisica?.nome
+                    }}</span>
+                    comentado em {{ comentario.dataCriacao | date: 'dd/MM/yyyy HH:mm:ss' }}
+                  </p>
+                  <p>
+                    {{ comentario.comentario }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-lg-8" *ngIf="acao.dataFinalizacao">
+            <label>Nota:</label>
+            <ng-select
+              [(ngModel)]="planoAcaoFornecedor.acoes[i].nota"
+              [ngModelOptions]="{ standalone: true }"
+              (ngModelChange)="avaliarAcao(acao)"
+            >
+              <ng-option [value]="NotaAcaoFornecedor['Atende Plenamente']"
+                >Atende Plenamente</ng-option
+              >
+              <ng-option [value]="NotaAcaoFornecedor['Atende Parcialmente']"
+                >Atende Parcialmente</ng-option
+              >
+              <ng-option [value]="NotaAcaoFornecedor['Não Atende']">Não Atende</ng-option>
+            </ng-select>
+          </div>
+          <div class="form-group col-lg-4 my-auto" align="center" *ngIf="acao.dataFinalizacao">
+            <label>Ação finalizada em:</label>
+            <p>{{ acao.dataFinalizacao | date: 'dd/MM/yyyy hh:mm' }}</p>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="fecharModal()">
+    <i class="fas fa-times"></i>
+    Fechar
+  </button>
+  <button type="button" class="btn btn-primary" (click)="salvar()" *ngIf="fornecedor">
+    <i class="fas fa-save"></i>
+    {{ planoAcaoFornecedor.idPlanoAcaoFornecedor == undefined ? 'Continuar' : 'Salvar' }}
+  </button>
+</div>

@@ -1,0 +1,102 @@
+<div class="col-12 item-campanha-franquia">
+  <div class="row">
+    <sdk-item-card
+      (clickEmitter)="cardClicked()"
+      [iconClass]="'fas fa-bullhorn'"
+      [showStatusBar]="false"
+      [hasMarginBottom]="true"
+      [borderColor]="'none'"
+      [borderWidth]="'1px'"
+      [ngClass]="{
+        'status-active': franchiseCampaign.status == SituacaoCampanha.Ativa && !franchiseCampaign.cicloEncerrado,
+        'status-terminated': franchiseCampaign.status == SituacaoCampanha.Ativa && franchiseCampaign.cicloEncerrado,
+        'status-in-configuration': franchiseCampaign.status == SituacaoCampanha['Em Configuração'],
+        'status-inactive': franchiseCampaign.status == SituacaoCampanha.Inativa
+      }"
+    >
+      <div class="d-flex w-100 justify-content-around align-items-center">
+        <div class="col-1 pl-4">
+          <a>{{ franchiseCampaign.idCampanhaFranquia }}</a>
+        </div>
+
+        <div class="col-4 pl-4 crop-text-2">
+          <a data-toggle="tooltip" data-placement="bottom" title="{{ franchiseCampaign.titulo }}">{{
+            franchiseCampaign.titulo
+          }}</a>
+        </div>
+
+        <div class="col-2 pl-4 crop-text-2">
+          <a
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ franchiseCampaign.dataInicio | date: 'dd/MM/yyyy' }}"
+            >{{ franchiseCampaign.dataInicio | date: 'dd/MM/yyyy' }}</a
+          >
+        </div>
+
+        <div class="col-2 pl-4 crop-text-2">
+          <a
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ franchiseCampaign.dataFim | date: 'dd/MM/yyyy' }}"
+            >{{ franchiseCampaign.dataFim | date: 'dd/MM/yyyy' }}</a
+          >
+        </div>
+
+        <div class="col-2 pl-4">
+          <a
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ getStatus() }}"
+            class="status-text"
+            >{{ getStatus()}}</a
+          >
+        </div>
+
+        <div class="col-1 pl-5">
+          <sdk-suspense-menu-button class="menu-suspenso-item-campanha-franquia" [icon]="'fa fa-ellipsis-h'" title="...">
+            <ng-template sdkSuspenseMenu>
+              <button
+                class="d-flex btn btn-sm btn-icon text-dark"
+                title="Auditoria"
+                (click)="audit(franchiseCampaign.idCampanhaFranquia)"
+              >
+                <i class="fa fa-history"></i> <a>Auditoria</a>
+              </button>
+              <button             
+              title="Exportar Nota de Débito"
+              class="d-flex btn btn-sm btn-icon"
+              (click)="exportDebitNoteReport()"
+            >
+              <i class="fas fa-file-invoice-dollar"></i> <a>Exportar Nota de Débito</a>
+            </button>
+              <button
+                *ngIf="franchiseCampaign.status == SituacaoCampanha.Ativa"
+                title="Inativar"
+                class="d-flex btn btn-sm btn-icon"
+                (click)="requestInactivation(franchiseCampaign.idCampanhaFranquia)"
+              >
+                <i class="fas fa-toggle-on text-success"></i> <a>Inativar</a>
+              </button>
+              <button
+                *ngIf="franchiseCampaign.status != SituacaoCampanha.Ativa"
+                title="Ativar"
+                class="d-flex btn btn-sm btn-icon"
+                (click)="requestActivation(franchiseCampaign.idCampanhaFranquia)"
+              >
+                <i class="fas fa-toggle-off"></i> <a>Ativar</a>
+              </button>
+              <button
+                title="Excluir"
+                class="d-flex btn btn-sm btn-icon"
+                (click)="requestDeletion(franchiseCampaign.idCampanhaFranquia)"
+              >
+                <i class="far fa-trash-alt text-danger"></i> <a>Excluir</a>
+              </button>
+            </ng-template>
+          </sdk-suspense-menu-button>
+        </div>
+      </div>
+    </sdk-item-card>
+  </div>
+</div>

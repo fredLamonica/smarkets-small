@@ -1,0 +1,156 @@
+<ul class="nav bg-gray">
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="voltar()"><i class="fas fa-ban"></i> Voltar</a>
+  </li>
+  <li class="nav-item" *ngIf="possuiEdicaoContrato">
+    <a class="nav-link" role="button" (click)="concluiEdicao()"><i class="fas fa-check-circle"></i> Concluir Edição</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="auditar()"><i class="fas fa-history"></i> Auditoria </a>
+  </li>
+</ul>
+<header>
+  <h1 class="title" translate>Alterar contrato</h1>
+</header>
+<div class="container-fluid no-bounds">
+  <!-- #region Dados Gerais -->
+  <div class="card">
+    <a class="card-header" data-toggle="collapse" href="#collapsedFormDadosGerais">
+      Dados gerais
+    </a>
+    <div class="card-body">
+      <form class="collapse show" id="collapsedFormDadosGerais" [formGroup]="form">
+        <div class="form-row">
+          <div class="form-group col-2">
+            <label for="idContrato" translate> ID Contrato </label>
+            <input class="form-control" type="text" [value]="idContrato" readonly />
+          </div>
+          <div class="form-group col-2">
+            <label for="codigo" translate> Código </label>
+            <input class="form-control" type="text" name="codigo" formControlName="codigo" readonly />
+          </div>
+          <div class="form-group col-2">
+            <label for="situacao" translate> Situação </label>
+            <ng-select
+              name="situacao"
+              formControlName="situacao">
+              <ng-option [value]="SituacaoContratoCatalogo['Em configuração']">Em configuração</ng-option>
+              <ng-option [value]="SituacaoContratoCatalogo.Ativo">Ativo</ng-option>
+              <ng-option [value]="SituacaoContratoCatalogo.Inativo">Inativo</ng-option>
+              <ng-option *ngIf="!situacaoPendente" [value]="SituacaoContratoCatalogo['Pendente de Aprovação']">Pendente
+                de Aprovação</ng-option>
+              <ng-option *ngIf="!situacaoPendente" [value]="SituacaoContratoCatalogo['Em Revisão']">Em
+                revisão</ng-option>
+            </ng-select>
+          </div>
+          <div class="form-group col-2">
+            <label for="validadeContrato" translate>
+              Status
+              <i *ngIf="validadeContrato == 'Vencido'" [ngbTooltip]="dataExpirada" tooltipClass="tooltip-light"
+                class="fas fa-info-circle"></i>
+            </label>
+            <div readonly class="form-control" type="text">{{validadeContrato}}</div>
+          </div>
+          <ng-template #dataExpirada>
+            <div style="text-align: left">
+              Data de encerramento expirada
+            </div>
+          </ng-template>
+          <div class="form-group col-4">
+            <label for="titulo" translate> Titulo </label>
+            <input
+              class="form-control"
+              type="text"
+              name="titulo"
+              formControlName="titulo"
+              readonly />
+          </div>
+          <div class="form-group col-2" readonly>
+            <label for="dataInicio" translate> Data de início </label>
+            <input type="date" class="form-control" name="dataInicio" formControlName="dataInicio">
+          </div>
+          <div class="form-group col-2">
+            <label for="dataFim" translate> Data de encerramento </label>
+            <input type="date" class="form-control" name="dataFim" id="dataFim" formControlName="dataFim">
+            <span
+              class="invalid"
+              *ngIf="exibeAlteracaoEncerramento">
+              Solicitado alteração para: {{getDataSeller}}
+            </span>
+          </div>
+          <div class="form-group col-2 align" *ngIf="!exibeAlteracaoEncerramento">
+            <button type="button" class="btn btn-primary" (click)="soliciteAlteracaoDadosGerais()">
+              Alterar Data
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- #endregion -->
+
+  <!-- #region Faturamento -->
+  <div class="card" *ngIf="idContrato">
+    <a
+      class="card-header collapsed"
+      data-toggle="collapse"
+      href="#collapseFaturamentos"
+      (click)="permitirExibirEstados()">
+      <i *ngIf="possuiEdicaoFaturamento" class="fa fa-circle point possuiEdicao"></i> Faturamento Estado
+    </a>
+    <div class="card-body">
+      <div class="collapse" id="collapseFaturamentos">
+        <smk-liste-faturamento-contrato-fornecedor
+          [id-contrato]="idContrato"
+          *ngIf="exibirFaturamentos"
+          (possuiEdicao)="permiteEdicaoFaturamento($event)">
+        </smk-liste-faturamento-contrato-fornecedor>
+      </div>
+    </div>
+  </div>
+
+  <!-- #endregion -->
+
+  <!-- #region Condicao Pagamento -->
+  <div class="card" *ngIf="idContrato">
+    <a
+      class="card-header collapsed"
+      data-toggle="collapse"
+      href="#collapseCondicaoPagamento"
+      (click)="permitirExibirCondicaoPagamento()">
+      Condições de pagamento
+    </a>
+    <div class="card-body">
+      <div class="collapse" id="collapseCondicaoPagamento">
+        <smk-liste-condicao-pagamento-contrato-fornecedor
+          [id-contrato]="idContrato"
+          [id-tenant]="idTenant"
+          *ngIf="exibirCondicaoPagamento">
+        </smk-liste-condicao-pagamento-contrato-fornecedor>
+      </div>
+    </div>
+  </div>
+  <!-- #endregion -->
+
+  <!-- #region Itens -->
+  <div class="card" *ngIf="idContrato">
+    <a
+      class="card-header collapsed"
+      data-toggle="collapse"
+      href="#collapseItens"
+      (click)="permitirExibirItens()">
+      <i *ngIf="possuiEdicaoItem" class="fa fa-circle point possuiEdicao"></i> Itens
+    </a>
+    <div class="card-body">
+      <div class="collapse" id="collapseItens">
+        <smk-liste-itens-contrato-fornecedor
+          [id-contrato]="idContrato"
+          [id-fornecedor]="idFornecedor"
+          (atualizacao)="atualizarItens($event)"
+          (possuiEdicao)="permiteEdicaoItem($event)"
+          *ngIf="exibirItens"></smk-liste-itens-contrato-fornecedor>
+      </div>
+    </div>
+  </div>
+  <!-- #endregion -->
+</div>

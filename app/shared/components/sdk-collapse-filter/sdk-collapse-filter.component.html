@@ -1,0 +1,65 @@
+<div class="container">
+  <div class="d-flex justify-content-center align-items-center">
+    <ng-content select="[colap-head-item]"></ng-content>
+    <div class="mx-3">
+      <button class="btn b-dark shadow-none" *ngIf="!detailedSearch" (click)="searchClick()">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+    <div class="mx-3 fl-1">
+      <button
+        style="display: inline-block"
+        class="btn b-shaped shadow-none"
+        data-toggle="collapse"
+        data-target="#collapse-filter"
+        aria-expanded="false"
+        aria-controls="collapse-filter"
+        *ngIf="!detailedSearch"
+        (click)="showDetailedSearch(true)"
+      >
+        <i class="fas fa-filter"></i>
+      </button>
+      <button
+        style="display: inline-block"
+        class="btn b-shaped shadow-none float-right"
+        data-toggle="collapse"
+        data-target="#collapse-filter"
+        aria-expanded="false"
+        aria-controls="collapse-filter"
+        (click)="showDetailedSearch(false)"
+        *ngIf="detailedSearch"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="mx-3">
+      <button
+        class="btn btn-primary"
+        style="display: inline-block"
+        *ngIf="!detailedSearch"
+        (click)="aditionalButtonClick()"
+      >
+        <i [ngClass]="aditionalButtonIcon"></i> {{ aditionalButtonLabel }}
+      </button>
+    </div>
+  </div>
+
+  <div colap class="collapse" id="collapse-filter">
+    <div class="d-flex justify-content-start align-items-center flex-wrap">
+      <ng-content select="[colap-item]"></ng-content>
+      <div class="m-3">
+        <button
+          class="btn b-dark shadow-none"
+          data-toggle="collapse"
+          data-target="#collapse-filter"
+          aria-expanded="false"
+          aria-controls="collapse-filter"
+          *ngIf="detailedSearch"
+          (click)="searchClick(); showDetailedSearch(false)"
+        >
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

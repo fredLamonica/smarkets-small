@@ -1,0 +1,34 @@
+<sdk-modal
+  title="ALTERAR DATA VIGÊNCIA"
+>
+  <div class="d-flex">
+    <form [formGroup]="form"
+    class="w-100">
+    <div class="form-group required">
+      <label class="ml-3"
+            for="dataVencimento"
+            [class.required]="
+              documento.documentoFornecedor.vencimentoObrigatorio
+            "
+          >
+            Vigência
+          </label>
+          <div class="d-flex justify-content-around">            
+            <input
+              class="form-control col-7 "
+              [class.invalid]="
+                form.controls.dataVencimento.invalid && form.controls.dataVencimento.dirty
+              "
+              type="date"
+              name="dataVencimento"
+              formControlName="dataVencimento"   
+              [value]="dateDefault"  
+              [min]="currentDate"
+            />   
+            <button class='btn btn-primary text-center col-4'  (click)="alterarData()">Salvar</button> 
+        </div>      
+    </div>
+    
+  </form>
+  </div>
+</sdk-modal>

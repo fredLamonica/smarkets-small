@@ -1,0 +1,73 @@
+<div class="suporte">
+  <div class="modal-header">
+    <div class="modal-title">Contato com o suporte</div>
+    <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="modal-body-title mt-2 mb-3"><strong>Relate seu problema abaixo:</strong></div>
+    <form [formGroup]="form">
+      <div class="form-group required">
+        <label for="titulo">Título</label>
+        <input id="titulo" class="form-control" type="text" maxlength="100" formControlName="titulo" />
+      </div>
+      <div class="form-group required">
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" class="form-control" type="text" formControlName="descricao" rows="6"></textarea>
+      </div>
+      <div class="form-group anexos mb-0">
+        <label for="anexos">Anexos</label>
+        <div class="card mb-2">
+          <div class="card-body p-3">
+            <input-file
+              [multiple]="true"
+              accept=".pdf,.jpg,.jpeg,.png,.txt,.xls,.xlsx"
+              (select)="definaAnexosSelecionados($event)">
+            </input-file>
+            <span class="regras">
+              Arquivos permitidos:
+              <span class="destaque">PDF, JPG, JPEG, PNG, TXT, XLS e XLSX</span>, limitados a
+              <span class="destaque">5 MB</span> e
+              <span class="destaque">3</span> arquivos.
+            </span>
+            <div *ngIf="formAnexos && formAnexos.length > 0">
+              <hr class="mt-2">
+              <ul class="list-unstyled text-justify lista mb-0">
+                <ng-container formArrayName="anexos">
+                  <li *ngFor="let formAnexo of formAnexos.controls; index as i; last as last">
+                    <ng-container [formGroupName]="i">
+                      <span class="anexo d-flex align-items-center justify-content-between px-3 py-1"
+                        [class.mb-2]="!last">
+                        <span class="mr-2">
+                          <i class="icone-anexo fas fa-paperclip mr-2"></i>
+                          <span class="nome mr-2 text-truncate">{{ formAnexo.get('nome').value }}</span>
+                          <span class="tamanho">({{ formAnexo.get('descricaoTamanho').value }})</span>
+                        </span>
+                        <i
+                          class="icone-remover fas fa-times fa-lg"
+                          title="Remover anexo"
+                          (click)="solicitarExclusaoDeAnexo(i)">
+                        </i>
+                      </span>
+                    </ng-container>
+                  </li>
+                </ng-container>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="cancelar()">
+      <i class="fas fa-ban mr-1"></i>
+      Cancelar
+    </button>
+    <button type="button" class="btn btn-primary" (click)="enviar()">
+      <i class="fas fa-paper-plane mr-1"></i>
+      Enviar
+    </button>
+  </div>
+</div>

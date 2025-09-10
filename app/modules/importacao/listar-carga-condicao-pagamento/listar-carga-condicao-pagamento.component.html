@@ -1,0 +1,84 @@
+<ul class="nav bg-gray">
+</ul>
+<header>
+  <h2 class="title text-uppercase text-primary font-weight-bold" translate>
+    Carga de Condições de Pagamentos
+  </h2>
+</header>
+<div class="container-fluid no-bounds">
+  <div class="form-row">
+    <div class="form-group col-md-8">
+      <input
+        type="text"
+        class="form-control"
+        id="termo"
+        placeholder="Buscar..."
+        [(ngModel)]="termo"
+        (keyup.enter)="buscar()"
+        (keyup)="campoBuscaChanged()" />
+    </div>
+    <div class="form-group col-6 col-md-1 d-flex d-md-block d-lg-flex">
+      <button
+        class="btn btn-primary px-5 px-md-3 px-lg-1 px-xl-3 mx-auto mx-md-0"
+        (click)="buscar()">
+        <i class="fas fa-search"></i> Buscar
+      </button>
+    </div>
+    <div class="form-group col-6 col-md-3 d-flex">
+      <button [disabled]="!clientSelectedIdTenant" class="btn btn-primary px-5 px-md-3 px-lg-5 mx-auto"
+        (click)="upload()">
+        Importar
+      </button>
+      <input-file
+        class="d-none"
+        accept=".xlsx,.xls,.xlsm"
+        (select)="selecionarArquivo($event)"
+        id="inputFile">
+      </input-file>
+      <button class="btn btn-success px-5 px-md-3 px-lg-5 mx-auto" (click)="downloadTemplateFile()">
+        Modelo
+      </button>
+    </div>
+  </div>
+
+  <div class="form-group required col-lg-4 mb-4" *ngIf="authService.usuario().permissaoAtual.isSmarkets">
+    <label for="clientes"> Empresas</label>
+    <ng-select
+      [items]="clients"
+      bindLabel="razaoSocial"
+      bindValue="idTenant"
+      (change)="setClientSelected($event)"
+      [(ngModel)]="clientSelectedIdTenant">
+      <ng-template ng-option-tmp let-item="item">
+        <div
+          title="{{ item.cnpj + ' - ' + item.razaoSocial }}"
+          class="align-self-center text-truncate">
+          {{ item.razaoSocial }}
+        </div>
+      </ng-template>
+    </ng-select>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <custom-table
+            classes="table-striped"
+            [settings]="settings"
+            [source]="importations"
+            (select)="agruparSelecionados($event)"
+            (sort)="ordenar($event)"
+            [colunasComBotoes]="colunasComBotoes"
+            (button-click)="baixarArquivo($event)">
+          </custom-table>
+          <pager
+            [page]="pagina"
+            [total-pages]="totalPaginas"
+            [records-per-page]="itensPorPagina"
+            (pagination)="paginacao($event)"></pager>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

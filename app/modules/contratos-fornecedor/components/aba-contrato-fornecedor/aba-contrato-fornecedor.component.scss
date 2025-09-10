@@ -1,0 +1,162 @@
+@import "./../../../../../styles.scss";
+
+$breadcrumb-color: #88a6b2;
+
+@media (min-width: 576px) and (max-width: 991px) {
+  .filtro {
+    margin-top: 35px;
+  }
+}
+
+.breadcrumb {
+  cursor: default;
+  align-items: center;
+  min-height: 60px;
+  margin-bottom: 0;
+  background-color: transparent;
+  font-size: 15px;
+  color: $breadcrumb-color;
+
+  .separador {
+    font-size: 14px;
+  }
+}
+
+.ordenation-filter {
+  font-size: 15px;
+}
+
+.opcoes-de-ordenacao {
+  cursor: pointer;
+  left: -40px !important;
+}
+
+.dropdown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .btn-link {
+    text-align: left;
+    font-size: 15px;
+    color: $new-ux-smarkets-gray;
+
+    &:after {
+      border: none;
+      float: right;
+      @include fa-icon;
+      @extend .fas;
+      font-size: 14px;
+      font-weight: 900;
+      content: fa-content($fa-var-chevron-down);
+      margin-left: 5px;
+      margin-top: 5px;
+      color: $new-ux-smarkets-blue-light;
+    }
+  }
+
+  .clear-selection-button {
+    margin-left: 5%;
+    font-size: 10px;
+    cursor: pointer;
+  }
+}
+
+.spinner {
+  margin-top: 150px;
+}
+
+.produtos {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+::ng-deep smk-aba-contrato-fornecedor {
+  label {
+    color: #616161;
+    font-weight: normal !important;
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+
+  .form-control,
+  .input-group,
+  ng-select .ng-select-container,
+  ng-select .ng-dropdown-panel {
+    border: 1px solid #b8cad1 !important;
+    border-radius: 8px !important;
+  }
+
+  .form-control,
+  .input-group,
+  .ng-select .ng-select-container {
+    height: 32px !important;
+    font-size: 13px !important;
+
+    &.ng-has-value {
+      color: $breadcrumb-color !important;
+      font-size: 15px !important;
+    }
+  }
+  .empresaSelect {
+    width: 200px;
+  }
+
+  .form-control {
+    color: #616161;
+  }
+
+  .input-group {
+    .form-control {
+      border: none !important;
+      height: unset !important;
+
+      &:focus {
+        box-shadow: none !important;
+      }
+    }
+
+    .input-group-append {
+      &::before {
+        content: "";
+        margin: 5px 0;
+        border: 0.5px solid #e7edf0 !important;
+      }
+
+      .btn {
+        box-shadow: none;
+        border-radius: 8px;
+        color: #727272;
+
+        &:active {
+          border: none;
+        }
+
+        &:hover {
+          background-color: #ffffff;
+        }
+      }
+    }
+  }
+
+  ng-select {
+    .ng-dropdown-panel {
+      margin-top: 5px !important;
+
+      .ng-option {
+        height: 32px !important;
+        font-size: 13px !important;
+
+        &:first-child {
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
+        }
+
+        &:last-child {
+          border-bottom-left-radius: 8px;
+          border-bottom-right-radius: 8px;
+        }
+      }
+    }
+  }
+}

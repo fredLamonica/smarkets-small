@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-12 py-4">
+    <h4 class="mb-0 text-uppercase font-weight-bold">Termo de boas práticas de {{ razaoSocialDoCliente }}</h4>
+  </div>
+  <div class="col-12">
+    <iframe class="h-500px e2e-iframe-trusted-src" [src]='pdf' width="100%"></iframe>
+  </div>
+  <div class="col-12 d-flex justify-content-end mt-4">
+    <button type="button" (click)="negarTermo()" class="btn btn-outline-primary mr-4"><i class="fas fa-times"></i> Não estou de
+      acordo</button>
+    <button type="button" (click)="aceitarTermo()" class="btn btn-primary"><i class="fas fa-check"></i> Li e
+      Aceito</button>
+  </div>
+</div>

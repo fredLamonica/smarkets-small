@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Associar a um Produto Existente</div>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-6">
+      <catalogo-item-grade [item]="item" [quant]="quantidade"></catalogo-item-grade>
+    </div>
+    <div class="col-md-6 align-self-md-center">
+      <p>
+        Tem certeza que deseja vincular a este item?
+      </p>
+      <small>(Obs. Selecione a quantidade)</small>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="fechar()"><i class="fas fa-ban"></i> Fechar</button>
+  <button type="button" class="btn"
+    [ngClass]="{'btn-primary': item.tipo == TipoCatalogoItem.Catalogo, 'btn-primary-dark': item.tipo == TipoCatalogoItem.Requisicao}"
+    (click)="confirmar()"> <i class="fas fa-cart-arrow-down"
+      [ngClass]="{'cart-arrow-down': item.tipo == TipoCatalogoItem.Catalogo, 'fa-file-alt': item.tipo == TipoCatalogoItem.Requisicao}"></i>
+    Confirmar</button>
+</div>

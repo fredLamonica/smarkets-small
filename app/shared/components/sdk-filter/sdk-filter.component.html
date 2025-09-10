@@ -1,0 +1,55 @@
+<sdk-horizontal-scroll [contentColor]="scrollBackgroundColor">
+  <sdk-dynamic-filter
+    *ngFor="let filter of filters"
+    [dynamicFilter]="filter"
+    [clearFilter]="removeTagFilterEvent"
+    (onFilter)="addOrRemoveFilter($event)"
+    class="col-lg-{{ filter.filterColumnSize + 1 }} col-xl-{{ filter.filterColumnSize }}"
+  >
+  </sdk-dynamic-filter>
+</sdk-horizontal-scroll>
+
+<div class="row pt-2 tags col-lg-12">
+  <ng-container *ngIf="tagFilters && tagFilters.length > 0">
+    <sdk-tag-input
+      style="cursor: pointer"
+      [tagLabel]="'Limpar Filtro'"
+      [leftIconClass]="'fas fa-undo-alt'"
+      [isClickableTagInput]="true"
+      (taginputClick)="clearFilter()"
+      class="pt-2 limpar-botao"
+    >
+    </sdk-tag-input>
+    <sdk-tag-input
+      style="cursor: pointer"
+      [tagLabel]="'Aplicar Filtro'"
+      [leftIconClass]="'fas fa-filter'"
+      [isClickableTagInput]="true"
+      (taginputClick)="onApplyFilter()"
+      class="pt-2 aplicar-botao"
+    >
+    </sdk-tag-input>
+
+    <ng-container *ngFor="let tag of tagFilters">
+      <ng-container *ngFor="let filterResultValue of tag.values">
+        <sdk-tag-input
+          [tagLabel]="filterResultValue.label"
+          [tagKey]="tag.name"
+          [isClickableTagInput]="false"
+          [tagStyle]="{
+            'background-color': '#00BBF3',
+            color: '#FFFFFF',
+            border: 'none',
+            'border-color': '#00BBF3'
+          }"
+          [rightIconStyle]="{
+            color: '#FFFFFF'
+          }"
+          (rightIconClick)="onRemoveTag(tag.name, filterResultValue)"
+          [hasRightIcon]="true"
+          class="pt-2"
+        ></sdk-tag-input>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

@@ -1,0 +1,99 @@
+<ng-container *ngTemplateOutlet="item?.tipo == TipoCatalogoItem.Catalogo ? catalogo : requisicao">
+</ng-container>
+
+<!-- #region Catalogo -->
+<ng-template #catalogo>
+  <div class="card p-0 mb-1 flex-fill">
+    <div class="card-body bg-white p-0 my-2">
+      <div class="d-flex justify-content-center px-3 py-2" style="height: 150px">
+        <img class="img-fluid mh-100"
+          [src]="item?.contratoCatalogoItem?.produto?.imagens?.length ? item?.contratoCatalogoItem?.produto?.imagens[0].url : './../../../../assets/img/produtos/default.png'"
+          alt="{{ item?.contratoCatalogoItem?.produto?.descricao }}">
+      </div>
+      <div class="bg-lighter-dark px-3 py-1">
+        <p class="mb-0 line-clamp line-clamp-2" data-toggle="tooltip" data-placement="bottom"
+          title="{{ item?.contratoCatalogoItem?.produto?.descricao }}">
+          {{ item?.contratoCatalogoItem?.produto?.descricao }}
+        </p>
+      </div>
+      <div class="bg-white px-3 py-1">
+        <p class="mb-0"> {{ item?.contratoCatalogoItem?.produto?.unidadeMedida?.sigla }}.:
+          <span class="font-weight-bold text-indigo-light">
+            {{ item?.contratoCatalogoItem?.valor | customCurrency : item?.contratoCatalogoItem?.moeda : null : 'symbol' }}
+          </span>
+        </p>
+        <p class="mb-0">Por: <span
+            class="font-weight-bold text-truncate">{{ (item?.contratoCatalogoItem?.fornecedor?.nomeFantasia) ? (item?.contratoCatalogoItem?.fornecedor?.nomeFantasia) :  (item?.contratoCatalogoItem?.fornecedor?.razaoSocial) }}</span>
+        </p>
+        <p class="mb-0">Prazo: <span
+            class="font-weight-bold">{{ (item?.contratoCatalogoItem?.prazoEntrega) != 1 ? item?.contratoCatalogoItem?.prazoEntrega + ' dias úteis' : item?.contratoCatalogoItem?.prazoEntrega + ' dia útil' }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-group">
+    <input-number class="border-0 with-shadow" [class.invalid]="!quantidade || quantidade > maxQuant || quantidade < 1"
+      [(ngModel)]="quantidade" [min]="item?.contratoCatalogoItem?.loteMinimo" [max]="maxQuant"
+      [allowDecimal]="item?.contratoCatalogoItem?.produto?.unidadeMedida?.permiteQuantidadeFracionada">
+    </input-number>
+
+    <div class="input-group-append">
+      <button class="btn btn-primary" type="button" data-toggle="tooltip" data-placement="bottom"
+        title="Adicionar ao carrinho" (click)="adicionarCarrinho()">
+        <i class="fas fa-cart-arrow-down"></i>
+      </button>
+    </div>
+  </div>
+
+</ng-template>
+<!-- #endregion -->
+
+<!-- #region Requisição -->
+<ng-template #requisicao>
+  <div class="card p-0 mb-1 flex-fill">
+    <div class="card-body bg-white p-0 my-2">
+      <div class="d-flex justify-content-center px-3 py-2" style="height: 150px">
+        <img class="img-fluid mh-100"
+          [src]="item?.produto?.imagens?.length ? item?.produto?.imagens[0].url : './../../../../assets/img/produtos/default.png'"
+          alt="{{ item?.produto?.descricao }}">
+      </div>
+      <div class="bg-lighter-dark px-3 py-1">
+        <p class="mb-0 line-clamp line-clamp-2" data-toggle="tooltip" data-placement="bottom"
+          title="{{ item?.produto?.descricao }}">{{ item?.produto?.descricao }}
+        </p>
+      </div>
+      <div class="bg-white px-3 py-1">
+        <p class="mb-0" *ngIf="!item?.produto?.valorReferencia; else hasValue">Ref.: <span
+            class="font-weight-bold text-indigo-light">{{ 0.00 | customCurrency : item?.produto?.moeda : null : 'symbol' }}</span>
+        </p>
+        <ng-template #hasValue>
+          <p class="mb-0">Ref.:
+            <span class="font-weight-bold text-primary">
+              {{ item?.produto?.valorReferencia | customCurrency : item?.produto?.moeda : null : 'symbol' }}
+            </span>
+          </p>
+        </ng-template>
+        <p class="mb-0">SLA: <span
+            class="font-weight-bold">{{ (item?.prazoSLA) != 1 ? item?.prazoSLA + ' dias úteis' : item?.prazoSLA + ' dia útil' }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-group">
+    <input-number class="border-0 with-shadow" [class.invalid]="!quantidade || quantidade > maxQuant || quantidade < 1"
+      [(ngModel)]="quantidade" [min]="1" [max]="maxQuant"
+      [allowDecimal]="item?.produto?.unidadeMedida?.permiteQuantidadeFracionada">
+    </input-number>
+
+    <div class="input-group-append">
+      <button class="btn btn-primary-dark" type="button" data-toggle="tooltip" data-placement="bottom"
+        title="Adicionar ao carrinho" (click)="adicionarCarrinho()">
+        <i class="fas fa-file-alt"></i>
+      </button>
+    </div>
+  </div>
+
+</ng-template>
+<!-- #endregion  -->

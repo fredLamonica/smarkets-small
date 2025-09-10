@@ -1,0 +1,40 @@
+<div class="header">
+  <div class="header-search row align-items-center">
+    <div class="col">
+      <h4 class="title text-uppercase">Relatório de Catálogos</h4>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col align-items-center">
+      <div class="form-row justify-content-center" [formGroup]="formFiltro">
+        <div class="form-group col-md-4">
+          <label for="situacaoContrato"> Situação do Contrato</label>
+          <ng-select
+            name="situacaoContrato"
+            formControlName="situacaoContrato"
+            [items]="opcoesSituacaoContrato"
+            [clearable]="false"
+            bindValue="index">
+            <ng-template ng-label-tmp let-item="item">
+              {{ item.name }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              <span [title]="item.name">
+                {{ item.name }}<br />
+              </span>
+            </ng-template>
+          </ng-select>
+        </div>
+        <div class="form-group col-md-2">
+          <label for="exportar"> </label>
+          <button class="btn btn-primary btn-block mt-1" (click)="downloadRelatorio()">
+            <i class="fas fa-download"></i> Exportar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

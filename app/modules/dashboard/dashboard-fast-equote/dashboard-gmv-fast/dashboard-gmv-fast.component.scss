@@ -1,0 +1,23 @@
+.seta {
+  color: #f0f0f0;
+}
+
+.label {
+  color: #707070;
+}
+
+.card-gmv{
+    position: relative;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #ffffff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.5rem;
+    height: 19.89rem;
+}

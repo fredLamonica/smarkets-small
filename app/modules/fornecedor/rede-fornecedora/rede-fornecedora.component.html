@@ -1,0 +1,5 @@
+<meus-fornecedores *ngIf="fornecedoresLocal; else baseFornecedores"></meus-fornecedores>
+
+<ng-template #baseFornecedores>
+  <base-fornecedores></base-fornecedores>
+</ng-template>

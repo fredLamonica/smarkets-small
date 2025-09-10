@@ -1,0 +1,44 @@
+<sdk-modal 
+  title="HISTÓRICO DE DOCUMENTOS"
+  [show-footer]="true"
+  [show-button-confirm]="false"
+  [title-button-cancel]="'Cancelar'"
+  >
+  <p *ngIf="historicoSolicitacaoDocumento.datas.length == 0; else timeline" class=" text-center font-weight-bold">
+    Nenhum histórico de pedido encontrado.
+  </p>
+  <ng-template #timeline>
+    <sdk-timeline>
+      <div *ngFor="let data of historicoSolicitacaoDocumento?.datas let index1 = index">             
+        <sdk-timeline-entry         
+          class="d-flex flex-column"
+          [showTitle]="false"    
+          [icon]="'far fa-clock'"
+        >       
+          <div *ngFor="let arquivo of historicoSolicitacaoDocumento?.historico[data]; let index2 = index">
+            <p >
+                <a class="font-weight-bold">{{arquivo.arquivo.nome}}</a>
+                <br>
+                <span style="color: #00bbf3; font-weight: normal">{{ convertDate(data) }}</span> às {{ arquivo.dataInclusao | date: 'HH:mm'}} 
+                <a *ngIf="arquivo.dataVencimento" class="font-weight-bold">Vigência </a>
+                  <a *ngIf="!arquivo.dataVencimento" class="font-weight-bold">Sem Vigência</a>
+                  <span *ngIf="arquivo.dataVencimento" style="color: #00bbf3; font-weight: normal"><a class="font-weight-bold">{{ arquivo.dataVencimento | date: 'dd/MM/yyyy' }}</a></span>
+                  
+                <span class="mouse-hover btn-download"
+                  (click)="baixarArquivosPorData(data)">
+                  <i
+                    *ngIf="documento?.arquivo"
+                    class="fas fa-lg fa-download"            
+                  ></i>
+                </span>
+            </p>
+          </div>       
+            
+          <hr>
+        </sdk-timeline-entry> 
+      </div>
+    </sdk-timeline>
+  </ng-template>
+
+</sdk-modal>
+

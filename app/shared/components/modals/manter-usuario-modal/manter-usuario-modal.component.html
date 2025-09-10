@@ -1,0 +1,108 @@
+<sdk-modal
+  title="Incluir Usuário"
+  [show-footer]="true"
+  [show-button-cancel]="true"
+  [show-button-confirm]="true"
+  (on-confirm)="save()"
+>
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group col-md-8">
+        <label for="nome" class="required-field" translate>Nome</label>
+        <input
+          class="form-control"
+          [class.invalid]="form.controls.nome.invalid && form.controls.nome.dirty"
+          type="text"
+          name="nome"
+          formControlName="nome"
+        />
+        <span class="invalid" *ngIf="form.controls.nome.invalid && form.controls.nome.dirty">
+          Preenchimento obrigatório
+        </span>
+      </div>
+      <div class="form-group col-12 col-md-4">
+        <label for="situacao" class="required-field" translate>Situação</label>
+        <ng-select
+          id="situacao"
+          [class.invalid]="form.controls.situacao.invalid && form.controls.situacao.dirty"
+          name="situacao"
+          formControlName="situacao"
+        >
+          <ng-option [value]="Situacao.Liberado" translate>Liberado</ng-option>
+          <ng-option [value]="Situacao.Bloqueado" translate>Bloqueado</ng-option>
+          <ng-option [value]="Situacao.BloqueadoPorExcessoTentativas" translate>
+            Bloqueado por excesso de tentativas
+          </ng-option>
+        </ng-select>
+        <span
+          class="invalid"
+          *ngIf="form.controls.situacao.invalid && form.controls.situacao.dirty"
+        >
+          Preenchimento obrigatório
+        </span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-12">
+        <label for="email" class="required-field" translate>Email</label>
+        <div class="d-flex">
+          <input
+            class="form-control"
+            [class.invalid]="form.controls.email.invalid && form.controls.email.dirty"
+            type="text"
+            name="email"
+            formControlName="email"
+            [(ngModel)]="email"
+          />
+        </div>
+        <span
+          class="invalid"
+          *ngIf="
+            form.controls.email.invalid &&
+            form.controls.email.errors.email &&
+            form.controls.email.dirty
+          "
+        >
+          Email inválido
+        </span>
+        <span
+          class="invalid"
+          *ngIf="
+            form.controls.email.invalid &&
+            form.controls.email.errors.required &&
+            form.controls.email.dirty
+          "
+        >
+          Preenchimento obrigatório
+        </span>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="celular" translate>Celular</label>
+        <input
+          class="form-control"
+          [textMask]="{ mask: maskCelular, guide: false }"
+          type="text"
+          name="celular"
+          formControlName="celular"
+        />
+      </div>
+      <div class="form-group col-md-4">
+        <label for="telefone" translate>Telefone</label>
+        <input
+          class="form-control"
+          [textMask]="{ mask: maskTelefone, guide: false }"
+          type="text"
+          name="telefone"
+          formControlName="telefone"
+        />
+      </div>
+      <div class="form-group col-md-4">
+        <label for="ramal" translate>Ramal</label>
+        <input class="form-control" type="text" name="ramal" formControlName="ramal" />
+      </div>
+    </div>
+  </form>
+</sdk-modal>

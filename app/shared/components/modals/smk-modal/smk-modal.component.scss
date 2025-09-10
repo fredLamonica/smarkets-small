@@ -1,0 +1,172 @@
+@import "src/themes/_smk-base.scss";
+@include smk-button-styles;
+
+.smk-modal {
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px 0px #75757559;
+}
+
+.smk-modal-header {
+  border-bottom: 1px solid #BDBDBD;
+  padding: 16px;
+  border-radius: 8px 8px 0px 0px;
+  border: 0px 0px 1px 0px;
+  gap: 10px;
+  background: linear-gradient(0deg, $smk-white-color, $smk-white-color),
+  linear-gradient(0deg, #BDBDBD, #BDBDBD);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .smk-modal-title {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: "Open Sans";
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: $smk-primary-color;
+  }
+
+  .smk-button-times {
+    background: transparent;
+    border: none;
+
+    .smk-times {
+      font-size: 16px;
+      color: $smk-primary-color;
+    }
+  }
+}
+
+.smk-modal-body {
+  padding: 16px 10px 16px 10px;
+  background: $smk-white-color;
+}
+
+.smk-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px;
+  border-radius: 0px 0px 8px 8px;
+  border: 1px 0px 0px 0px;
+  gap: 10px;
+  border-top: 1px solid #BDBDBD;
+
+  background: linear-gradient(0deg, $smk-white-color, $smk-white-color),
+    linear-gradient(0deg, #BDBDBD, #BDBDBD);
+}
+
+::ng-deep smk-modal .smk-modal-body {
+  .form-group {
+    margin-bottom: 1rem;
+
+    label:not(.form-check-label):not(.custom-file-label) {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 24px;
+      color: $smk-dark-green-color;
+    }
+
+    .form-control:not(.form-check) {
+      border-radius: 8px;
+      border-color: $smk-border-color !important;
+
+      &[class*="form-"].ng-dirty.ng-invalid,
+      &[class*="form-"].ng-touched.ng-invalid {
+        border-color: $smk-danger-color;
+
+        &:focus {
+          box-shadow: $smk-box-shadow-danger-color;
+        }
+      }
+    }
+
+    &.form-check {
+      .form-check-label {
+        font-size: 14px;
+        line-height: 20px;
+        color: $smk-dark-color;
+        font-weight: normal;
+        margin-left: 0.25rem;
+      }
+
+      .form-check-input {
+        &:disabled {
+          & ~ .form-check-label {
+            color: $smk-secondary-color;
+          }
+        }
+      }
+    }
+  }
+
+  .form-check {
+    .form-check-input {
+      accent-color: $smk-accent-color;
+    }
+  }
+
+  .ng-select {
+    .ng-select-container {
+      border-radius: 8px;
+      border-color: $smk-border-color !important;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+      .ng-value-container {
+        .ng-input {
+          padding-right: 54px;
+        }
+      }
+
+      .ng-clear-wrapper {
+        margin-top: 3px;
+
+        &:hover {
+          .ng-clear {
+            color: $smk-danger-color;
+          }
+        }
+
+        .ng-clear {
+          font-size: 21px;
+          font-weight: normal;
+        }
+      }
+    }
+
+    &.ng-dirty.ng-invalid,
+    &.ng-touched.ng-invalid {
+      .ng-select-container {
+        border-color: $smk-danger-color;
+      }
+    }
+
+    &.ng-select-disabled {
+      .ng-select-container {
+        background-color: $smk-disabled-color;
+      }
+    }
+
+    &.ng-select-focused:not(.ng-select-opened) {
+      .ng-select-container {
+        color: $smk-dark-color;
+        background-color: $smk-white-color;
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+      }
+
+      &.ng-dirty.ng-invalid,
+      &.ng-touched.ng-invalid {
+        .ng-select-container {
+          border-color: $smk-danger-color;
+          box-shadow: $smk-box-shadow-danger-color;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+<form>
+  <label *ngIf="label">{{ label }}</label>
+  <div class="input-group">
+    <input type="text" class="form-control" [class.disabled]="disabled" [(ngModel)]="termo" name="termo"
+      [placeholder]="placeholder" (keyup.enter)="buscar()" (keyup)="onKeyUp()">
+    <div class="input-group-append">
+      <button class="btn" [class.disabled]="disabled" type="button" (click)="buscar()"><i class="fas fa-search"></i></button>
+    </div>
+  </div>
+</form>

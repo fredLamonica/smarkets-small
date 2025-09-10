@@ -1,0 +1,99 @@
+.tipo{
+  margin-bottom: 5%;
+}
+
+::ng-deep modal-incluir-editar-sla div.dados {
+  input.form-control {
+    background-color: rgba(255, 255, 255, 0) !important;
+    border-radius: 8px !important;
+    border: 1px solid #cfdce0 !important;
+    .ng-placeholder {
+      color: #588394 !important;
+      font-weight: bold;
+    }
+
+    color: #417185 !important;
+    font-family: Open Sans !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+  }
+
+  color: #417185 !important;
+}
+::ng-deep modal-incluir-editar-sla input-number .input-group {
+  background-color: rgba(255, 255, 255, 0) !important;
+  border-radius: 8px !important;
+  border: 1px solid #cfdce0 !important;
+  padding: 0 1.25rem !important;
+
+  .ng-placeholder {
+    color: #588394 !important;
+    font-weight: bold;
+  }
+
+  button i {
+    color: #417185 !important;
+  }
+
+  select.form-control,
+  input.form-control {
+    border-radius: none !important;
+    border: none !important;
+  }
+}
+
+::ng-deep modal-incluir-editar-sla div.dados {
+  ng-select.ng-select-opened.ng-select-bottom > .ng-select-container,
+  ng-select.ng-select.ng-select-single .ng-select-container,
+  ng-dropdown-panel.ng-dropdown-panel.ng-select-bottom {
+    background-color: rgba(255, 255, 255, 0) !important;
+    border-radius: 8px !important;
+    border: 1px solid #cfdce0 !important;
+    .ng-placeholder {
+      color: #588394 !important;
+      font-weight: bold;
+    }
+
+    color: #417185 !important;
+    font-family: Open Sans !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+
+    div.ng-option {
+      color: #588394 !important;
+    }
+  }
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+
+.button-cancelar{
+  justify-content: center;
+  align-items: center;
+  padding: 5px 44px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  border-color: #27ADE4;
+  color: #27ADE4;
+  box-shadow: none !important;
+  font-weight: bold;
+  border-color: #27ADE4;
+}
+
+.button-salvar{
+  justify-content: center;
+  align-items: center;
+  padding: 5px 44px;
+  background: #27ADE4;
+  border-radius: 8px;
+  margin-left: 15px;
+  color: #FFFFFF;
+  box-shadow: none !important;
+  font-weight: bold;
+  border-color: #27ADE4;
+  margin-right: 5%;
+}
+

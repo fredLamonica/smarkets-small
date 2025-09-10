@@ -1,0 +1,90 @@
+<div class="infinite-scroll" infinite-scroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50" [scrollWindow]="false"
+  (scrolled)="onScroll()">
+
+  <div class="header">
+    <div class="header-search row">
+      <div class="col-12 align-self-center">
+        <h3 class="mb-0 text-uppercase text-primary font-weight-bold">Parâmetros de integração</h3>
+      </div>
+      <div class="col-lg-8">
+        <input-busca label="O que você procura?" placeholder="Buscar por descrição ou código" (buscar)="buscar($event)">
+        </input-busca>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-nav-tabs">
+    <ul class="nav nav-tabs row bounds" id="configuracaoTab" role="tablist">
+      <li class="nav-item col-md-6 col-lg-3">
+        <a class="nav-link nav-link-block" [class.active]="tabAtiva == 'iva'" id="iva-tab" data-toggle="tab" href="#iva"
+          role="tab" aria-controls="iva" aria-selected="false" (click)="selectTab('iva')">
+          IVAs
+        </a>
+      </li>
+
+      <li class="nav-item col-md-6 col-lg-4">
+        <a class="nav-link nav-link-block" [class.active]="tabAtiva == 'organizacaoCompra'" id="organizacaoCompra-tab"
+          data-toggle="tab" href="#organizacaoCompra" role="tab" aria-controls="organizacaoCompra" aria-selected="false"
+          (click)="selectTab('organizacaoCompra')">
+          Organizações de Compras
+        </a>
+      </li>
+      <li class="nav-item col-md-6 col-lg-4">
+        <a class="nav-link nav-link-block" [class.active]="tabAtiva == 'grupo-compradores'" id="grupo-compradores-tab"
+          data-toggle="tab" href="#grupoCompradores" role="tab" aria-controls="grupo-compradores" aria-selected="false"
+          (click)="selectTab('grupo-compradores')">
+          Grupo de Compradores
+        </a>
+      </li>
+      <li class="nav-item col-md-6 col-lg-4">
+        <a class="nav-link nav-link-block" [class.active]="tabAtiva == 'origem-material'" id="origem-material-tab"
+          data-toggle="tab" href="#origemMaterial" role="tab" aria-controls="origem-material" aria-selected="false"
+          (click)="selectTab('origem-material')">
+          Origem do Material
+        </a>
+      </li>
+      <li class="nav-item col-md-6 col-lg-4">
+        <a class="nav-link nav-link-block" [class.active]="tabAtiva == 'utilizacao-material'" id="utilizacao-material-tab"
+          data-toggle="tab" href="#utilizacaoMaterial" role="tab" aria-controls="utilizacao-material" aria-selected="false"
+          (click)="selectTab('utilizacao-material')">
+          Utilização do Material
+        </a>
+      </li>
+      <li class="nav-item col-md-6 col-lg-4">
+        <a class="nav-link nav-link-block" [class.active]="tabAtiva == 'categoria-material'" id="categoria-material-tab"
+          data-toggle="tab" href="#categoriaMaterial" role="tab" aria-controls="categoria-material" aria-selected="false"
+          (click)="selectTab('categoria-material')">
+          Categoria do Material
+        </a>
+      </li>
+    </ul>
+    <div class="tab-content bounds" id="configuracaoTabContent">
+      <div class="tab-pane fade" [ngClass]="{ 'active show': tabAtiva == 'iva' }" id="iva" role="tabpanel"
+        aria-labelledby="iva-tab">
+        <listar-iva #iva *ngIf="tabAtiva == 'iva'"></listar-iva>
+      </div>
+      <div class="tab-pane fade" [ngClass]="{ 'active show': tabAtiva == 'organizacaoCompra' }" id="organizacaoCompra"
+        role="tabpanel" aria-labelledby="organizacaoCompra-tab">
+        <listar-organizacao-compra #organizacaoCompra *ngIf="tabAtiva == 'organizacaoCompra'">
+        </listar-organizacao-compra>
+      </div>
+      <div class="tab-pane fade" [ngClass]="{ 'active show': tabAtiva == 'grupo-compradores' }" id="grupo-compradores"
+        role="tabpanel" aria-labelledby="grupo-compradores-tab">
+        <listar-grupo-compradores #grupoCompradores *ngIf="tabAtiva == 'grupo-compradores'"></listar-grupo-compradores>
+      </div>
+      <div class="tab-pane fade" [ngClass]="{ 'active show': tabAtiva == 'origem-material' }" id="origem-material"
+        role="tabpanel" aria-labelledby="origem-material-tab">
+        <listar-origem-material #origemMaterial *ngIf="tabAtiva == 'origem-material'"></listar-origem-material>
+      </div>
+      <div class="tab-pane fade" [ngClass]="{ 'active show': tabAtiva == 'utilizacao-material' }" id="utilizacao-material"
+        role="tabpanel" aria-labelledby="utilizacao-material-tab">
+        <listar-utilizacao-material #utilizacaoMaterial *ngIf="tabAtiva == 'utilizacao-material'"></listar-utilizacao-material>
+      </div>
+      <div class="tab-pane fade" [ngClass]="{ 'active show': tabAtiva == 'categoria-material' }" id="categoria-material"
+        role="tabpanel" aria-labelledby="categoria-material-tab">
+        <listar-categoria-material #categoriaMaterial *ngIf="tabAtiva == 'categoria-material'"></listar-categoria-material>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-around">
+  <div class="row text-center">
+    <div class="col-4">
+      <div class="col-12 px-0 progressFont">
+        <sdk-circleprogressbar
+          [progressColor]="'#B9E08C'"
+          [value]="fornecedoresInteressados"
+          [maxValue]="totalFornecedores"
+          [subtitle]="'Fornecedores'"
+          [titleFontWeight]="600"
+        >
+        </sdk-circleprogressbar>
+      </div>
+      <i class="col-12 fa fa-caret-down fa-lg seta px-0"></i>
+      <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0"
+        >Interessados</span
+      >
+    </div>
+    <div class="col-4">
+      <div class="col-12 px-0">
+        <sdk-circleprogressbar
+          [progressColor]="'#6D8CA8'"
+          [value]="fornecedoresNaoHomologados"
+          [maxValue]="totalFornecedores"
+          [subtitle]="'Fornecedores'"
+          [titleFontWeight]="600"
+        ></sdk-circleprogressbar>
+      </div>
+      <i class="col-12 fa fa-caret-down fa-lg seta px-0"></i>
+      <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0"
+        >Em Análise</span
+      >
+    </div>
+    <div class="col-4">
+      <div class="col-12 px-0">
+        <sdk-circleprogressbar
+          [progressColor]="'#01B0F1'"
+          [value]="fornecedoresHomologados"
+          [maxValue]="totalFornecedores"
+          [subtitle]="'Fornecedores'"
+          [titleFontWeight]="600"
+        ></sdk-circleprogressbar>
+      </div>
+      <i class="col-12 fa fa-caret-down fa-lg seta px-0"></i>
+      <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0"
+        >Ativos</span
+      >
+    </div>
+  </div>
+</div>

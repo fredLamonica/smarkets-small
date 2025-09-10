@@ -1,0 +1,73 @@
+.badge {
+  &.badge-status {
+    min-width: 10rem;
+    font-size: 0.75rem;
+    font-weight: normal;
+    padding: 0.5rem;
+  }
+  &.badge-warning {
+    color: $white;
+  }
+
+  text-transform: uppercase;
+  padding: 5px;
+  min-width: 6rem;
+  font-weight: normal;
+
+  &.badge-lg {
+    font-size: 1rem;
+    height: min-content;
+  }
+}
+
+.badge-strong {
+  font-weight: bold;
+  background-color: $new-ux-smarkets-blue-light;
+}
+
+.badge-primary-dark {
+  background-color: $primary-dark;
+  border-color: $primary-dark;
+  color: $white;
+}
+
+.badge-icon {
+  font-size: 16px;
+  min-width: 2.25rem;
+
+  &.badge-sm {
+    padding: 0.5em 0.4em;
+    font-size: 12px;
+    i {
+      font-size: 14px;
+    }
+  }
+}
+
+.badge-nav {
+  z-index: 1002;
+  position: absolute;
+  bottom: -16px;
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: -webkit-inline-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  i {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  background-color: $new-ux-smarkets-blue-light;
+  border: 2.5px solid $white;
+
+  color: $white;
+  font-size: 16px;
+  line-height: 16px;
+}

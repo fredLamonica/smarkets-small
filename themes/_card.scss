@@ -1,0 +1,144 @@
+.card {
+    -webkit-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25);
+    margin-bottom: 1rem;
+    border: none;
+}
+
+.card-header {
+    border-bottom: none;
+}
+
+.card-footer {
+    border-top: none;
+}
+
+a {
+    &.card-header {
+        color: $new-ux-smarkets-gray;
+        text-decoration: none;
+        &:after {
+            float: right;
+            @include fa-icon;
+            @extend .fas;
+            font-size: 15px;
+            margin-left: 10px;
+            margin-top: 0.25rem;
+            font-weight: 900;
+            content: fa-content($fa-var-angle-double-up);
+        }
+        &.collapsed {
+            &:after {
+                content: fa-content($fa-var-angle-double-down);
+            }
+        }
+    }
+}
+
+.card-title {
+    color: $new-ux-smarkets-gray;
+    font-weight: 200;
+    font-size: 1.25rem;
+}
+
+.card-subtitle {
+    color: $new-ux-smarkets-gray;
+    font-weight: 200;
+    font-size: 1rem;
+}
+
+.card-carousel {
+    box-shadow: none;
+    .card-header {
+        border-bottom: none;
+        text-transform: uppercase;
+        border: none;
+        font-weight: bold;
+        border-bottom: 1px solid $secondary;
+        padding-right: 0;
+        .pagination {
+            display: inline-block;
+            float: right;
+            i {
+                margin: 0 1rem;
+            }
+        }
+    }
+    .card-body {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+.card-collapse {
+    a.card-header {
+        &:after {
+            float: right;
+            @include fa-icon;
+            @extend .fas;
+            font-size: 15px;
+            margin-left: 10px;
+            margin-top: 0.25rem;
+            font-weight: 900;
+            color: $primary;
+            content: fa-content($fa-var-angle-double-up);
+        }
+        &.collapsed {
+            &:after {
+                content: fa-content($fa-var-angle-double-down);
+            }
+        }
+    }
+}
+
+.card-default {
+    color: $new-ux-smarkets-gray;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    background-color: $smarkets-light;
+
+    .card-header {
+        border: none;
+        background-color: $smarkets-light;
+        font-size: 16px;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .card-body {
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 1rem;
+        background-color: $smarkets-light;
+        border-bottom-right-radius: 0.5rem;
+        border-bottom-left-radius: 0.5rem;
+        border: none;
+    }    
+}
+
+.card-tab-content {
+    color: $new-ux-smarkets-gray;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    background-color: $smarkets-light;
+
+    .card-header {
+        border: none;
+        background-color: $smarkets-light;
+        font-size: 16px;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    > .card-body {
+        padding: 0;
+        margin-bottom: 1rem;
+        background-color: $smarkets-light;
+        border-bottom-right-radius: 0.5rem;
+        border-bottom-left-radius: 0.5rem;
+        border: 2px solid $smarkets-light;
+    }    
+}

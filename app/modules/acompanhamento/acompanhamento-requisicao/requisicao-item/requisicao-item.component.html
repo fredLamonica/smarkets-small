@@ -1,0 +1,508 @@
+<div class="card card-tab-content text-small">
+  <div class="card-header"></div>
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="bg-lighter border-bottom row py-4">
+        <div class="col-md-2 pr-md-0 align-self-top">
+          <div class="row">
+            <div class="col text-truncate">
+              <label class="d-md-inline-block pr-1">ID Requisição:</label>
+              <p class="font-weight-bold d-md-inline-block mb-md-4">{{ item.idRequisicaoItem }}</p>
+            </div>
+          </div>
+          <div class="row" *ngIf="item.codigoSolicitacaoCompra">
+            <div class="col text-truncate">
+              <label class="d-md-inline-block pr-1">Código RC:</label>
+              <p
+                class="font-weight-bold d-md-inline-block"
+                [ngClass]="{
+                  'mb-3 mb-lg-1': !item.produto?.codigo,
+                  'mb-md-4': item.produto?.codigo
+                }">
+                {{ item.codigoSolicitacaoCompra }}
+              </p>
+            </div>
+          </div>
+          <div class="row" *ngIf="item.produto?.codigo">
+            <div class="col">
+              <label class="d-md-inline-block pr-1">Material:</label>
+              <p
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item.produto?.codigo }}"
+                class="font-weight-bold text-nowrap d-md-inline-block mb-3 mb-lg-4"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item.produto?.codigo }}">
+                {{ item.produto?.codigo }}
+              </p>
+            </div>
+          </div>
+          <div class="row" *ngIf="integracaoErpHabilitada && item.contaContabil">
+            <div class="col pr-md-0">
+              <ng-container *ngIf="integracaoErpHabilitada; then idContaContabil"></ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2 pr-md-0 align-self-top">
+          <ng-container *ngIf="item.idIntegracaoRequisicaoERP; then idRequisicaoErp; else dataDeCriacao"></ng-container>
+          <ng-container *ngIf="item.numRequisicaoSistemaChamado; then idChamado; else moeda"></ng-container>
+          <div class="row" *ngIf="item.itemSolicitacaoCompra?.codigo">
+            <div class="col text-truncate">
+              <label class="d-md-inline-block pr-1">Item:</label>
+              <p
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item.itemSolicitacaoCompra?.codigo }}"
+                class="font-weight-bold d-md-inline-block mb-3 mb-lg-1">
+                {{ item.itemSolicitacaoCompra?.codigo }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="pr-md-0 align-self-top"
+          [ngClass]="{
+            'col-md-3': !item.idIntegracaoRequisicaoERP && flagBotoesAvaliacaoVisivel,
+            'col-md-4': !item.numRequisicaoSistemaChamado && !item.idIntegracaoRequisicaoERP && !flagBotoesAvaliacaoVisivel,
+            'col-md-2': item.idIntegracaoRequisicaoERP || item.numRequisicaoSistemaChamado
+          }">
+          <div class="row">
+            <div class="col d-block d-md-none">
+              <label class="pr-1">Cliente Solicitante:</label>
+              <p class="font-weight-bold text-truncate">
+                {{
+                item.itemSolicitacaoCompra?.codigoFilialEmpresa
+                ? item.itemSolicitacaoCompra?.codigoFilialEmpresa
+                : item.empresaSolicitante.nomeFantasia
+                ? item.empresaSolicitante.nomeFantasia
+                : item.empresaSolicitante.razaoSocial
+                }}
+              </p>
+            </div>
+            <ng-container *ngIf="item.idIntegracaoRequisicaoERP; then dataDeCriacao; else clienteSolicitante">
+            </ng-container>
+            <div
+              class="col d-block d-md-none line-clamp line-clamp-1"
+              *ngIf="item.itemSolicitacaoCompra">
+              <label class="pr-1">Categoria da Demanda:</label>
+              <p class="font-weight-bold text-truncate">
+                {{ item.itemSolicitacaoCompra?.categoriaDemanda }}
+              </p>
+            </div>
+            <div
+              class="col-8 d-none d-md-block line-clamp line-clamp-1"
+              *ngIf="item.itemSolicitacaoCompra">
+              <p
+                class="mb-md-4 text-truncate"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item.itemSolicitacaoCompra?.categoriaDemanda }}">
+                Categoria da Demanda:
+                <span class="font-weight-bold">{{
+                  item.itemSolicitacaoCompra?.categoriaDemanda
+                  }}</span>
+              </p>
+            </div>
+          </div>
+          <ng-container *ngIf="item.numRequisicaoSistemaChamado; then moeda; else usuarioSolicitante"></ng-container>
+          <div class="row pt-3" *ngIf="item.itemSolicitacaoCompra?.codigo">
+            <div class="col text-truncate">
+              <label class="d-md-inline-block pr-1">Tipo Documento:</label>
+              <p
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item.tpDoc }}"
+                class="font-weight-bold d-md-inline-block mb-3 mb-lg-1">
+                {{ item.tpDoc }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="item.idIntegracaoRequisicaoERP || item.numRequisicaoSistemaChamado"
+          class="col-md-2 pr-md-0 align-self-top">
+          <ng-container *ngIf="item.idIntegracaoRequisicaoERP; then clienteSolicitante"></ng-container>
+          <ng-container *ngIf="item.numRequisicaoSistemaChamado; then usuarioSolicitante"></ng-container>
+        </div>
+        <div
+          [ngClass]="{
+            'col-md-5': !item.idIntegracaoRequisicaoERP && flagBotoesAvaliacaoVisivel,
+            'col-md-4': item.idIntegracaoRequisicaoERP || !flagBotoesAvaliacaoVisivel
+          }">
+          <div class="row">
+            <div class="col pr-md-0 align-self-center">
+              <label class="d-md-inline-block pr-1">Status:</label>
+              <p
+                class="font-weight-bold d-md-inline-block mb-3 mb-lg-0"
+                [class.text-danger]="item.situacao == SituacaoRequisicaoItem.Cancelado || item.situacao == SituacaoRequisicaoItem['Integração Requisição Cancelada']">
+                {{ SituacaoRequisicaoItem[item.situacao] }}
+              </p>
+            </div>
+            <div
+              class="col pr-md-0 align-self-center"
+              *ngIf="item.itemSolicitacaoCompra || item.subItemSolicitacaoCompra">
+              <label class="d-md-inline-block pr-1">Status SC:</label>
+              <p
+                class="font-weight-bold d-md-inline-block mb-3 mb-lg-0"
+                [class.text-danger]="
+                  item.itemSolicitacaoCompra
+                    ? item.itemSolicitacaoCompra?.situacao ==
+                      SituacaoSolicitacaoItemCompra.Cancelada
+                    : item.subItemSolicitacaoCompra?.situacao ==
+                      SituacaoSolicitacaoItemCompra.Cancelada
+                ">
+                {{
+                item.itemSolicitacaoCompra
+                ? SituacaoSolicitacaoItemCompra[item.itemSolicitacaoCompra.situacao]
+                : SituacaoSolicitacaoItemCompra[item.subItemSolicitacaoCompra.situacao]
+                }}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col pl-md-0 d-flex justify-content-between align-self-center">
+              <a
+                class="btn btn-icon"
+                data-toggle="collapse"
+                href="#comentarios{{ item.idRequisicao }}-{{ item.idRequisicaoItem }}"
+                role="button"
+                aria-expanded="false"
+                aria-controls="comentarios"
+                (click)="obterComentarios()">
+                <i class="far fa-comments"></i>
+              </a>
+              <button
+                class="btn btn-icon text-primary"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Editar"
+                (click)="editarItem()"
+                *ngIf="flagBotaoEditarVisivel">
+                <i class="far fa-edit"></i>
+              </button>
+              <button
+                class="btn btn-icon"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Alterar responsável"
+                (click)="alterarResponsavel()"
+                *ngIf="flagBotoesGestorVisivel">
+                <i class="fas fa-user-edit"></i>
+              </button>
+              <!-- Substituir método chamado abaixo pelo de integração assim que o mesmo for criado -->
+              <button
+                class="btn btn-icon"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Fluxo de Integração ERP"
+                (click)="monitorarIntegracaoErp()"
+                *ngIf="exibirBotaoFluxoIntegracaoErp()">
+                <i class="fa fa-cogs"></i>
+              </button>
+              <button
+                class="btn btn-icon text-primary"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Aprovar"
+                (click)="solicitaAprovarItem()"
+                *ngIf="flagBotoesAvaliacaoVisivel">
+                <i class="far fa-check-circle"></i>
+              </button>
+              <button
+                class="btn btn-icon text-danger"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Reprovar"
+                (click)="solicitaReprovarItem()"
+                *ngIf="flagBotoesAvaliacaoVisivel">
+                <i class="far fa-times-circle"></i>
+              </button>
+              <button
+                class="btn btn-icon"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Auditoria"
+                (click)="exibirAuditoriaItem()">
+                <i class="fas fa-history"></i>
+              </button>
+              <input-bookmark
+                class="float-right"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Favoritar"
+                [valor]="item.isFavorito"
+                (click)="onRequisicaoItemFavoritoChanged(!item.isFavorito)">
+              </input-bookmark>
+              <button
+                class="btn btn-icon text-danger"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Cancelar"
+                (click)="solicitaCancelarItem()"
+                *ngIf="flagBotaoCancelarVisivel">
+                <i class="fas fa-ban"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white border-bottom row pt-4">
+        <div class="col-md-1 align-self-center mb-3 mb-lg-0 d-flex justify-content-center">
+          <img
+            class="img-fluid"
+            style="max-height: 150px"
+            [src]="
+              item.produto?.imagens?.length
+                ? item.produto?.imagens[0].url
+                : './../../../../../assets/img/produtos/default.png'
+            "
+            alt="{{ item.produto?.descricao }}" />
+        </div>
+        <div class="col-md-11">
+          <div class="row mb-2">
+            <div class="col-md-8 align-self-center">
+              <h5 class="text-primary font-weight-bold mb-0">
+                {{ item.produto?.descricao }}
+              </h5>
+            </div>
+            <div class="col-md-4 align-self-center">
+              <cronometro
+                [event-time]="slaEvent"
+                [start-time]="slaStart"
+                [paused]="item.ultimoRegistroPausaSla"
+                (pause)="pausarSla()"
+                [allow-actions]="permitirAcoesCronometroSla()"
+                (start)="iniciarSla()"
+                *ngIf="flagExibirCronometro && slaEvent && slaStart"></cronometro>
+            </div>
+          </div>
+          <div class="row-10-col">
+            <div class="col-md-2 pr-md-0">
+              <label>Marca:</label>
+              <p class="font-weight-bold">
+                {{ item.marca ? item.marca?.nome : 'Sem preferência' }}
+              </p>
+            </div>
+            <div
+              class="col-md-1 pr-md-0"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Quantidade Solicitada: {{
+                item.produto?.unidadeMedida?.permiteQuantidadeFracionada
+                  ? (item.quantidade | number: '1.0-10':'pt-BR')
+                  : item.quantidade
+              }}&#013;Quantidade Comprada: {{
+                item.produto?.unidadeMedida?.permiteQuantidadeFracionada
+                  ? (item.quantidadeComprada | number: '1.0-10':'pt-BR')
+                  : item.quantidadeComprada
+              }}&#013;Quantidade Restante: {{
+                item.produto?.unidadeMedida?.permiteQuantidadeFracionada
+                  ? (item.quantidadeRestante | number: '1.0-10':'pt-BR')
+                  : item.quantidadeRestante
+              }}">
+              <label class="d-block d-md-none">Quantidade:</label>
+              <label class="d-none d-md-block">Quant.:</label>
+              <p class="font-weight-bold">
+                {{
+                item.produto?.unidadeMedida?.permiteQuantidadeFracionada
+                ? (item.quantidade | number: '1.0-10':'pt-BR')
+                : item.quantidade
+                }}
+                {{ item.produto?.unidadeMedida?.sigla }}
+              </p>
+            </div>
+            <div class="col-md-1 pr-md-0">
+              <label class="d-block d-md-none">Valor de Referência:</label>
+              <label
+                class="d-none d-md-block"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Valor de Referência">Valor de Ref.:</label>
+              <p class="font-weight-bold">
+                {{
+                (item.valorReferencia ? item.valorReferencia : 0)
+                | customCurrency: item.moeda:null:'symbol'
+                }}
+              </p>
+            </div>
+            <div class="col-md-2 pr-md-0" *ngIf="item.usuarioResponsavel">
+              <label>Responsável:</label>
+              <p class="font-weight-bold mb-3 mb-lg-0">
+                {{ item.usuarioResponsavel?.pessoaFisica?.nome }}
+              </p>
+            </div>
+            <div class="col-md-2" *ngIf="item.tipoRequisicao">
+              <label>Tipo:</label>
+              <p class="font-weight-bold mb-3 mb-lg-0">
+                {{ item.tipoRequisicao.nome }}
+              </p>
+            </div>
+            <div class="col-md-2 pl-md-0" *ngIf="item.slaItem">
+              <label>Classificação - SLA:</label>
+              <p class="font-weight-bold mb-0">
+                {{ item.slaItem.classificacao?.descricao }}
+              </p>
+              <p class="font-weight-bold mb-3 mb-lg-0">
+                SLA {{ item.slaItem.tempo }}
+                {{ UnidadeMedidaTempo[item.slaItem.unidadeMedidaTempo] }}(s)
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="idEnderecoEntrega"> Endereço de Entrega: </label>
+              <p class="font-weight-bold mb-3 mb-lg-0">
+                {{ item.enderecoEntrega?.logradouro }}, {{ item.enderecoEntrega?.numero }} -
+                {{ item.enderecoEntrega?.bairro }}, {{ item.enderecoEntrega?.cidade?.nome }} -
+                {{ item.enderecoEntrega?.cidade?.estado?.abreviacao }}, CEP
+                {{ item.enderecoEntrega?.cep }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 px-0 mt-4">
+          <collapse-footer (open)="obterTramites()">
+            <timeline
+              [canceled]="item.situacao == SituacaoRequisicaoItem.Cancelado || item.situacao == SituacaoRequisicaoItem['Integração Requisição Cancelada']"
+              [timeline]="item.timeline"
+              [classes]="'bg-lighter p-3'"
+              *ngIf="item?.timeline?.length"></timeline>
+          </collapse-footer>
+        </div>
+        <div class="col-12">
+          <comentarios
+            class="collapse"
+            id="comentarios{{ item.idRequisicao }}-{{ item.idRequisicaoItem }}"
+            [comentarios]="item.comentarios"
+            (enviar)="enviarComentario($event)"
+            [readOnly]="item.situacao == SituacaoRequisicaoItem['Integração Requisição Cancelada']">
+          </comentarios>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #dataDeCriacao>
+  <div [class.row]="!item.idIntegracaoRequisicaoERP">
+    <div class="col">
+      <p
+        class="text-truncate mb-3 mb-md-4"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ item.dataCriacao | date: 'dd/MM/yyyy HH:mm' }}">
+        Criação:
+        <span class="font-weight-bold mb-1">{{ item.dataCriacao | date: 'dd/MM/yyyy HH:mm' }}</span>
+      </p>
+    </div>
+  </div>
+</ng-template>
+<ng-template #idRequisicaoErp>
+  <div class="row">
+    <div class="col">
+      <p
+        class="text-truncate mb-3 mb-md-4"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        [title]="item.idIntegracaoRequisicaoERP">
+        ID Requisição ERP:
+        <span class="font-weight-bold mb-1">{{ item.idIntegracaoRequisicaoERP }}</span>
+      </p>
+    </div>
+  </div>
+</ng-template>
+<ng-template #idChamado>
+  <div class="row">
+    <div class="col">
+      <p
+        class="text-truncate mb-3 mb-md-4"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        [title]="item.numRequisicaoSistemaChamado">
+        ID Chamado:
+        <span class="font-weight-bold mb-1">{{ item.numRequisicaoSistemaChamado }}</span>
+      </p>
+    </div>
+  </div>
+</ng-template>
+<ng-template #moeda>
+  <div class="row">
+    <div class="col text-truncate">
+      <label class="d-md-inline-block pr-1">Moeda:</label>
+      <p
+        class="font-weight-bold d-md-inline-block"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ Moeda[item.moeda] }}"
+        [ngClass]="{
+                     'mb-3 mb-lg-1': !item.itemSolicitacaoCompra?.codigo,
+                     'mb-md-4': item.itemSolicitacaoCompra?.codigo
+                   }">
+        {{ Moeda[item.moeda] }}
+      </p>
+    </div>
+  </div>
+</ng-template>
+<ng-template #usuarioSolicitante>
+  <div class="row">
+    <div class="col d-block d-md-none">
+      <label class="pr-1">Usuário Solicitante:</label>
+      <p class="font-weight-bold text-truncate">
+        {{ item.usuarioSolicitante.pessoaFisica.nome }}
+      </p>
+    </div>
+    <div class="col d-none d-md-block">
+      <p
+        class="text-truncate mb-3 mb-lg-1"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="{{ item.usuarioSolicitante.pessoaFisica.nome }}">
+        Usuário Solicitante:
+        <span class="font-weight-bold mb-1">{{
+          item.usuarioSolicitante.pessoaFisica.nome
+          }}</span>
+      </p>
+    </div>
+  </div>
+</ng-template>
+<ng-template #clienteSolicitante>
+  <div
+    class="d-none d-md-block"
+    [ngClass]="{ 'col-4': item.itemSolicitacaoCompra && !item.idIntegracaoRequisicaoERP, 'col': !item.itemSolicitacaoCompra && !item.idIntegracaoRequisicaoERP }">
+    <p
+      class="mb-md-4 text-truncate"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="{{
+                item.itemSolicitacaoCompra?.codigoFilialEmpresa
+                  ? item.itemSolicitacaoCompra?.codigoFilialEmpresa
+                  : item.empresaSolicitante.nomeFantasia
+                  ? item.empresaSolicitante.nomeFantasia
+                  : item.empresaSolicitante.razaoSocial
+        }}">
+      {{ item.itemSolicitacaoCompra ? 'Solicitante:' : 'Cliente Solicitante:' }}
+      <span class="font-weight-bold">{{
+        item.itemSolicitacaoCompra?.codigoFilialEmpresa
+        ? item.itemSolicitacaoCompra?.codigoFilialEmpresa
+        : item.empresaSolicitante.nomeFantasia
+        ? item.empresaSolicitante.nomeFantasia
+        : item.empresaSolicitante.razaoSocial
+        }}</span>
+    </p>
+  </div>
+</ng-template>
+<ng-template #idContaContabil>
+  <div class="row">
+    <div class="col d-none d-md-block">
+      <p
+        class="text-truncate mb-3 mb-md-4"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        [title]="item.contaContabil?.descricao">
+        Conta Contábil:
+        <span class="font-weight-bold mb-1">{{ item.contaContabil?.descricao }}</span>
+      </p>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,49 @@
+.card-title {
+  font-size: inherit;
+  color: #6e6e72;
+  opacity: 1;
+}
+
+.progress-bar {
+  background-color: #01b0f1;
+  width: 70%; /* Valor a ser preenchido de progresso*/
+}
+
+.progress-value-right {
+  line-height: unset;
+  font-size: x-small;
+  color: #6e6e72;
+  opacity: 1;
+  padding-left: 1%;
+  padding-right: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.clickable_area {
+  cursor: pointer;
+}
+
+.rounded-right {
+  border-top-right-radius: 0.4rem !important;
+  border-bottom-right-radius: 0.4rem !important;
+}
+
+.progress {
+  border-top-left-radius: 0px 0px;
+  border-bottom-left-radius: 0px 0px;
+}
+
+@media only screen and (min-width: 1281px) {
+  /* For desktop: */
+  .container-body {
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+}
+
+.dashboard-fornecedor {
+  div.card {
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,43 @@
+<!-- OBS: essa modal esta está implementada!!! -->
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    <!-- {{ idSolicitacaoDocumento ? 'Alterar ' : 'Inserir' }}
+    solicitação de documento -->
+    Atenção
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="form-group col-lg-12">
+      <p>
+       <!-- <app-mapa-comparativo-por-item >
+        </app-mapa-comparativo-por-item> -->
+         <!-- <app-mapa-comparativo-por-ite >
+
+         </app-mapa-comparativo-por-ite> -->
+     Na requisição  <!--  {{requisicaoItem.requisicaoItem.idRequisicaoItem}}  
+        - {{requisicaoItem.produto.descricao}},
+        o requisitante solicitou {{requisicaoItem.requisicaoItem.quantidade}}.
+        Já foi comprado {{requisicaoItem.requisicaoItem.quantidadeComprada}}.
+        Gostaria de manter a requisição para comprar os {{requisicaoItem.requisicaoItem.quantidadeRestante}} itens
+        restantes? -->
+      </p>
+    </div>
+
+    <!-- <div class="alert alert-primary" role="alert" *ngIf="!idSolicitacaoDocumento && usuarioAtual.permissaoAtual.idTenant != idTenantSmarkets">
+      Não é necessário solicitar documentos que já solicitamos como padrão da plataforma, se desejar que eles sejam obrigatórios, assim você poderá incluí-los.
+    </div> -->
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary  pull-left"><i class="fas fa-ban"></i>
+    Cancelar</button>
+  <button type="button" (click)="finalizarRequisicaoitem()" class="btn btn-danger"><i class="fas fa-save"></i>
+    Não</button>
+  <button type="button" (click)="aprovarRequisicaoItem()" class="btn btn-primary"><i class="fas fa-save"></i>
+    Sim</button>
+</div>

@@ -1,0 +1,29 @@
+.icon-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.span {
+  justify-content: flex-start;
+  -webkit-box-align: start;
+  flex: 1;
+  flex-shrink: 0;
+}
+
+.icon-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.card-entry {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.text-no-space {
+  line-height: 13px;
+}

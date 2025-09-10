@@ -1,0 +1,34 @@
+<div class="form-row" [formGroup]="form">
+  <div class="form-group required col-lg-4 col-12">
+    <label for="idCondicaoPagamento"> Condição de Pagamento </label>
+    <ng-select [items]="condicoesPagamento" bindLabel="descricao" bindValue="idCondicaoPagamento" [hideSelected]="true"
+      name="idCondicaoPagamento" formControlName="idCondicaoPagamento"></ng-select>
+    <span class="invalid" *ngIf="form.controls.idCondicaoPagamento.invalid && form.controls.idCondicaoPagamento.dirty">Preenchimento
+      obrigatório</span>
+  </div>
+  <div class="form-group mt-1 col-lg-1 col-12">
+    <label for="idCondicaoPagamento"> </label>
+    <button role=button class="btn btn-block btn-primary" [class.disabled]="form.invalid" (click)="incluir()">
+      <i class="fas fa-plus"></i> Incluir
+    </button>
+  </div>
+</div>
+<div class="row mb-3">
+<div class="col-md-6">
+    <div class="row justify-content-start">
+      <div class="col-md-4 col-xl-3">
+        <button role=button class="btn btn-block btn-danger" *ngIf="selecionadas?.length"
+          (click)="solicitarExclusao()">
+          <i class="fas fa-trash-alt"></i> Remover
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <custom-table classes="table-striped table-sm" [settings]="settings" [source]="contratoCatalogoCondicoesPagamentos" (select)="selecao($event)"></custom-table>
+    <pager [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="itensPorPagina"
+      (pagination)="paginacao($event)"></pager>
+  </div>
+</div>

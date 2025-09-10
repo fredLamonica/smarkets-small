@@ -1,0 +1,84 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Itens por empresa</div>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <form class="col-12">
+      <div class="form-row">
+        <div class="form-group col-xl-6">
+          <label for="razaoSocial" translate> Empresa </label>
+          <input
+            class="form-control"
+            type="text"
+            name="razaoSocial"
+            [value]="participante?.pessoaJuridica?.razaoSocial"
+            readonly
+          />
+        </div>
+        <div class="form-group col-xl-6">
+          <label for="cnpj" translate> CNPJ </label>
+          <input
+            class="form-control"
+            type="text"
+            name="cnpj"
+            [value]="participante?.pessoaJuridica?.cnpj"
+            readonly
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="row justify-content-start">
+            <div class="col-md-4">
+              <button role="button" class="btn btn-block btn-primary" (click)="AdicionarProdutos()">
+                <i class="fas fa-plus"></i> Adicionar
+              </button>
+            </div>
+            <div class="col-md-4">
+              <button
+                role="button"
+                class="btn btn-block btn-danger"
+                [class.disabled]="!selecionados?.length"
+                (click)="RemoverItens()"
+              >
+                <i class="fas fa-trash-alt"></i> Remover
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <custom-table
+            classes="table-striped table-sm"
+            [settings]="settings"
+            [source]="itens"
+            (select)="selecao($event)"
+          ></custom-table>
+          <pager
+            size="sm"
+            [page]="pagina"
+            [total-pages]="totalPaginas"
+            [records-per-page]="registrosPorPagina"
+            (pagination)="paginacao($event)"
+          ></pager>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Fechar</button>
+</div>

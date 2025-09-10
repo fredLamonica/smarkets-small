@@ -1,0 +1,45 @@
+<ul class="nav bg-gray">
+  <li class="nav-item">
+    <a class="nav-link" role="button" [routerLink]="[ 'novo' ]"><i class="fas fa-plus"></i> Incluir</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" [class.disabled]="selecionados?.length != 1" [routerLink]="selecionados?.length ? [selecionados[0].idUsuario] : null"><i class="fas fa-pencil-alt"></i> Editar</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" [class.disabled]="selecionados?.length != 1" (click)="solicitarExclusao()"><i class="fas fa-trash-alt"></i> Excluir</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" [class.disabled]="!selecionados?.length" (click)="alterarSituacao(Situacao.Liberado)"><i class="fas fa-check"></i> Liberar </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" [class.disabled]="!selecionados?.length" (click)="alterarSituacao(Situacao.Bloqueado)"><i class="fas fa-ban"></i> Bloquear </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" [class.disabled]="selecionados?.length != 1" (click)="auditar()"><i class="fas fa-history"></i> Auditoria </a>
+  </li>
+</ul>
+<header>
+  <h1 class="title" translate>PAGES.USER.USERS</h1>
+</header>
+<div class="container-fluid no-bounds"><div class="form-row" [formGroup]="form">
+  <div class="form-group col col-8">
+      <input type="text" class="form-control" id="termo" formControlName="termo" placeholder="Buscar por nome ou e-mail"
+             (keyup.enter)="buscar()" (keyup)="campoBuscaChanged()">
+    </div>
+    <div class="form-group col col-4">
+      <button class="btn btn-primary" (click)="buscar()"><i class="fas fa-search"></i> Buscar</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <custom-table classes="table-striped" [settings]="settings" [source]="usuarios" 
+            (select)="selecao($event)" (sort)="ordenar($event)">            
+          </custom-table>
+          <pager [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="registrosPorPagina" (pagination)="paginacao($event)"></pager>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,106 @@
+@import "./../../../../styles.scss";
+@import "src/themes/_smk-base.scss";
+
+$cor-base: #616161;
+
+.btn {
+  min-width: unset;
+}
+
+::ng-deep catalogo-item .tooltip-estados-atendimento {
+  .tooltip-inner {
+    width: 200px;
+    color: $cor-base;
+  }
+}
+
+.abreviacao-estado {
+  width: 200px;
+}
+
+.card {
+  cursor: default;
+  color: $cor-base;
+  box-shadow: 0px 4px 4px #00000040 !important;
+  border: 1px solid #e0e0e0 !important;
+
+  .container-imagem {
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+    .imagem {
+      height: 172px;
+      padding: 1rem;
+      margin-bottom: 0px;
+    }
+  }
+
+  .icone-favorito {
+    cursor: pointer;
+    position: absolute;
+    right: 1rem;
+    font-size: 20px;
+    color: $smk-secondary-color;
+
+    &.marcado {
+      color: $smk-warning-color;
+    }
+  }
+
+  .card-body {
+    border-top: 1px solid #e7edf0;
+
+    .descricao {
+      font-size: 15px;
+    }
+
+    .valor {
+      color: #3db5e7;
+      font-size: 22px;
+    }
+
+    .icone-estados-atendimento {
+      font-size: 14px !important;
+      color: $cor-base;
+    }
+  }
+
+  .card-footer {
+    .adicionar-carrinho {
+      background-color: #27ade4;
+      box-shadow: none !important;
+    }
+  }
+
+  &.catalogo {
+    .container-imagem {
+      border-top: 8px solid #01b0f1 !important;
+      border-top-left-radius: calc(0.5rem - 1px);
+      border-top-right-radius: calc(0.5rem - 1px);
+    }
+
+    .icone-favorito {
+      top: 1.5rem;
+    }
+
+    .card-body {
+      .container-descricao {
+        min-height: 68px;
+      }
+    }
+  }
+
+  &.requisicao {
+    .icone-favorito {
+      top: 1rem;
+    }
+
+    .card-body {
+      .descricao {
+        min-height: 67px;
+      }
+    }
+  }
+}

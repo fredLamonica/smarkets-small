@@ -1,0 +1,92 @@
+<sdk-header-default heightValue="64px" [showShadow]="true" [ngStyle]="{ 'z-index': '102' }">
+  <div class="col-md-6 px-0">
+    <span class="titulo text-large">GESTÃO DE EMPRESAS > <strong class="text-primary">EMPRESA</strong></span>
+  </div>
+</sdk-header-default>
+
+<sdk-header-default heightValue="64px" topValue="10.2em">
+  <sdk-input-icon
+    name="razaoSocial"
+    style="margin-right: 10px"
+    [placeHolder]="'Nome da Empresa'"
+    [icon]="'fas fa-search'"
+    [inputClass]="'input-icon-right-lg'"
+    [(ngModel)]="buyerFilter.razaoSocial"
+    (keyup.enter)="search()"
+    ngDefaultControl></sdk-input-icon>
+
+  <sdk-input-icon
+    name="cnpj"
+    style="margin: 10px"
+    [placeHolder]="'CNPJ'"
+    [icon]="'fas fa-search'"
+    [inputClass]="'input-icon-right-md'"
+    [(ngModel)]="buyerFilter.cnpj"
+    (keyup.enter)="search()"
+    ngDefaultControl></sdk-input-icon>
+
+  <sdk-select
+    name="situacao"
+    [class]="'select-sm'"
+    [placeHolder]="'Status'"
+    (event)="buyerFilter._status = $event"
+    [items]="opcoesSituacaoEmpresa"></sdk-select>
+
+  <sdk-input-icon
+    style="margin: 10px"
+    [placeHolder]="'ID, Código'"
+    [icon]="'fas fa-search'"
+    [inputClass]="'input-icon-right-sm'"
+    [(ngModel)]="buyerFilter.codigoEmpresa"
+    (keyup.enter)="search()"
+    ngDefaultControl></sdk-input-icon>
+
+  <div class="col d-flex justify-content-end pr-0">
+    <div class="d-flex border-right pr-3" style="height: 100%">
+      <sdk-rectangle-button-custom
+        [label]="'Buscar'"
+        [leftIconClass]="'fas fa-search'"
+        [leftIconColor]="'#FFFFFF'"
+        (click)="search()">
+      </sdk-rectangle-button-custom>
+    </div>
+
+    <div class="pl-3">
+      <sdk-rectangle-button-custom
+        [label]="'Incluir empresa'"
+        [leftIconClass]="'fas fa-plus'"
+        [leftIconColor]="'#FFFFFF'"
+        [colorBackground]="'#27ADE4'"
+        (buttonClick)="novaEmpresa()"
+        *ngIf="!perfilFranquia">
+      </sdk-rectangle-button-custom>
+    </div>
+  </div>
+</sdk-header-default>
+
+<div class="listagem">
+  <div class="header">
+    <p class="col-1">ID</p>
+    <p class="col-1">Código</p>
+    <p class="col-2">CNPJ</p>
+    <p class="col-3">Razão Social</p>
+    <p class="col-3">Nome Fantasia</p>
+    <p class="col-1">Status</p>
+    <p class="col-1">Ações</p>
+  </div>
+
+  <div class="bg-white border-bottom row py-4" *ngIf="itens.length == 0; else hasContent">
+    <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+  </div>
+  <ng-template #hasContent>
+    <sdk-list-view [items]="itens">
+      <ng-template sdkListViewItem let-item>
+        <!-- <item-pessoa-juridica
+        [pessoaJuridica]="item"
+        (itemChange)="obterPessoasJuridicas($event)"
+      ></item-pessoa-juridica> -->
+        <sdk-group-companies [item]="item" (itemChange)="search($event)"> </sdk-group-companies>
+      </ng-template>
+    </sdk-list-view>
+  </ng-template>
+</div>

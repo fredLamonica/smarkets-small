@@ -1,0 +1,40 @@
+<div class="row">
+  <div
+    class="{{ fileClasses }}"
+    [class.col-xl-3]="size == 'sm'"
+    *ngFor="let arquivo of arquivos; let i = index"
+  >
+    <div class="arquivo bg-lighter">
+      <div class="d-flex justify-content-between align-items-center">
+        <i
+          class="{{ iconeExtensao(i) }} icone mr-3"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="{{ arquivo.nome }}"
+        ></i>
+        <button
+          class="btn btn-icon"
+          (click)="download(i)"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Baixar"
+        >
+          <i class="fas fa-download text-primary"></i>
+        </button>
+        <button
+          class="btn btn-icon"
+          (click)="excluir(i)"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Excluir"
+          *ngIf="!disabled"
+        >
+          <i class="far fa-trash-alt text-danger"></i>
+        </button>
+      </div>
+      <span class="text-truncate mt-2" *ngIf="exibirNome"
+        ><small>{{ arquivo.nome }}</small></span
+      >
+    </div>
+  </div>
+</div>

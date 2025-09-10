@@ -1,0 +1,26 @@
+<div class="container-fluid bounce">
+  <div class="row">
+    <div class="col-12 py-4">
+      <h2 class="title" translate>Política de Privacidade</h2>
+    </div>
+
+    <div class="col-12">
+      <iframe
+        class="h-500px e2e-iframe-trusted-src"
+        name="politica-privacidade"
+        [src]="pdfSafe"
+        width="100%"
+      ></iframe>
+    </div>
+
+    <div class="col-lg-2">
+      <label for="valorTotal"> Termos aceito na data: </label>
+      <input
+        type="text"
+        disabled="true"
+        [value]="usuarioAtual.dataAceitePoliticaPrivacidade | date: 'dd/MM/yyyy HH:mm'"
+        class="form-control"
+      />
+    </div>
+  </div>
+</div>

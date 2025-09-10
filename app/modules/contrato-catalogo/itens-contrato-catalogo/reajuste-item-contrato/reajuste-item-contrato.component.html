@@ -1,0 +1,86 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    Reajuste solicitado pelo fornecedor
+  </div>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group col-lg-4">
+        <label for="idContratoCatalogoItem">Id Item</label>
+        <input
+          class="form-control"
+          type="text"
+          name="idContratoCatalogoItem"
+          formControlName="idContratoCatalogoItem"
+        />
+      </div>
+      <div class="form-group col-lg-8">
+        <label for="descricao">Descrição Produto</label>
+        <input
+          class="form-control"
+          type="text"
+          name="descricao"
+          formControlName="descricao"
+        />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-lg-4">
+        <label for="valor">Valor</label>
+        <input *ngIf="getValor()" class="form-control"  [value]="formatCurrency(contratoCatalogoItem.valor)" readonly/>
+        <div *ngIf="!getValor()">
+          <span class="form-control" readonly > {{formatCurrency(contratoCatalogoItem.valor) }}  <i class="fas fa-sync"></i> {{ formatCurrency(contratoCatalogoItem.aprovacaoContratoCatalogoItem?.valor)}} </span>
+        </div>
+      </div>
+      <div class="form-group col-lg-4">
+        <label for="frete"> Frete </label>
+        <input *ngIf="getFrete()" class="form-control" [value]="getTipoFreteNome(contratoCatalogoItem.frete)" readonly/>
+        <div *ngIf="!getFrete()">
+          <span class="form-control" readonly > {{getTipoFreteNome(contratoCatalogoItem.frete)}}  <i class="fas fa-sync"></i> {{getTipoFreteNome(contratoCatalogoItem.aprovacaoContratoCatalogoItem?.frete)}} </span>
+        </div>
+      </div>
+      <div class="form-group col-lg-4">
+        <label for="loteMinimo">Lote Mínimo</label>
+        <input *ngIf="getloteMinimo()" class="form-control" [value]="contratoCatalogoItem.loteMinimo" readonly/>
+        <div *ngIf="!getloteMinimo()">
+          <span class="form-control" readonly > {{contratoCatalogoItem.loteMinimo}}  <i class="fas fa-sync"></i> {{contratoCatalogoItem.aprovacaoContratoCatalogoItem?.loteMinimo}} </span>
+        </div>
+      </div>
+       <div class="form-group col-lg-4">
+        <label for="situacaoContratoCatalogoItem"> Situação Item </label>
+        <input *ngIf="getSituacao()" class="form-control" [value]="getSituacaoItemNome(contratoCatalogoItem.situacao)" readonly/>
+        <div *ngIf="!getSituacao()">
+          <span class="form-control" readonly > {{getSituacaoItemNome(contratoCatalogoItem.aprovacaoContratoCatalogoItem?.situacaoItemOld)}}  <i class="fas fa-sync"></i> {{getSituacaoItemNome(contratoCatalogoItem.aprovacaoContratoCatalogoItem?.situacaoContratoCatalogoItem)}} </span>
+        </div>
+      </div>
+      <div class="form-group col-lg-4">
+        <label for="moeda"> Moeda </label>
+        <input
+          class="form-control"
+          [value]="getMoedaNome(contratoCatalogoItem.moeda)"
+          readonly
+        />
+      </div>
+      <div class="form-group col-lg-4">
+        <label for="garantia"> Garantia </label>
+        <input *ngIf="getGarantia()" class="form-control" [value]="contratoCatalogoItem.garantia == undefined ? 'Nenhuma' : getGarantiaNome(contratoCatalogoItem.garantia)" readonly/>
+        <div *ngIf="!getGarantia()">
+          <span class="form-control" readonly > {{contratoCatalogoItem.garantia == undefined ? 'Nenhuma' : getGarantiaNome(contratoCatalogoItem.garantia) }}  <i class="fas fa-sync"></i> {{getGarantiaNome(contratoCatalogoItem.aprovacaoContratoCatalogoItem?.garantia)}} </span>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="cancelar()">Cancelar</button>
+  <button type="button" class="btn btn-danger" (click)="recuse()"><i class="fas fa-times"></i> Recusar</button>
+  <button type="button" class="btn btn-primary" (click)="aprove()"> <i class="fas fa-check"></i> Aprovar</button>
+</div>

@@ -1,0 +1,13 @@
+<span
+  class="icon-custom w-100"
+  [title]="title"
+  (click)="suspense($event, !suspenseOpened)">
+  <i [class]="icon"></i>
+</span>
+
+<div *ngIf="suspenseOpened" class="suspense-menu" (click)="suspense($event, !suspenseOpened)">
+  <!-- <button class="btn btn-sm btn-icon">
+    <i class="fa fa-times" (click)="suspense($event, !suspenseOpened)"></i>
+  </button> -->
+  <ng-container *ngTemplateOutlet="suspenseMenuTemplate"></ng-container>
+</div>

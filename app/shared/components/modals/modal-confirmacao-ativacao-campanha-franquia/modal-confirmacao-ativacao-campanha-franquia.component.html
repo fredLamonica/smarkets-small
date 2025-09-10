@@ -1,0 +1,12 @@
+<sdk-modal
+  title="ATENÇÃO"
+  [show-footer]="true"
+  [show-button-cancel]="true"
+  [show-button-confirm]="true"
+  title-button-confirm="Confirmar"
+  (on-confirm)="confirm()"
+>
+
+  <span class="font-dark-blue">Tem certeza que deseja ativar a campanha?</span>
+  <label class="font-dark-blue">Lembrando que ao <b>Ativar</b> será encaminhada uma mensagem para todos os franqueados.</label>
+</sdk-modal>

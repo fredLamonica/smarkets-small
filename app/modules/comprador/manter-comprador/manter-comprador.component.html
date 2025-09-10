@@ -1,0 +1,108 @@
+<div class="container-fluid-xl manter-comprador">
+  <div class="w-100" [ngStyle]="{ 'padding-bottom': '64px' }">
+    <div
+      class="col-12 identification-bar-fixed w-100"
+      [ngStyle]="{ top: '80px', background: '#ffffff' }">
+      <div class="col-1 d-flex" style="height: 100%"></div>
+      <div class="col-11 d-flex align-items-center" style="height: 100%">
+        <span class="identification-font identification-color"> Gestão de Empresas </span>
+        <i class="fas fa-greater-than identification-color mx-2"></i>
+        <span class="identification-font identification-color"> Empresas </span>
+        <i class="fas fa-greater-than identification-color mx-2"></i>
+        <span class="current-page-font"> {{ idPessoaJuridica ? 'Editar' : 'Incluir' }} </span>
+      </div>
+    </div>
+  </div>
+  <sdk-header [heightValue]="'64px'" [topValue]="'144px'">
+    <div
+      *ngIf="idPessoaJuridica"
+      class="col-1 d-flex justify-content-center align-items-center border-right identificacao"
+      style="height: 100%">
+      <span>
+        {{ buyerInformation?.idPessoaJuridica }}
+      </span>
+    </div>
+    <div *ngIf="idPessoaJuridica" class="col-7 d-flex align-items-center razaoSocial">
+      <span>
+        {{ buyerInformation?.razaoSocial }}
+      </span>
+    </div>
+    <div *ngIf="!idPessoaJuridica" class="col-8 d-flex align-items-center razaoSocial">
+      <span> Nova Empresa </span>
+    </div>
+    <div class="col-4 d-flex align-items-center justify-content-end header-action">
+      <div class="pr-2" *ngIf="idPessoaJuridica">
+        <span class="icon-custom" (click)="auditar()">
+          <i
+            class="fas fa-history"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            ngbTooltip="Auditoria"></i>
+        </span>
+      </div>
+      <div class="pr-4">
+        <span class="icon-custom" (click)="adicionarLogo()">
+          <i
+            class="fas fa-image"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            ngbTooltip="Inserir Logo"></i>
+        </span>
+      </div>
+      <sdk-rectangle-button
+        *ngIf="idPessoaJuridica && (!buyerInformation?.filial && !buyerInformation?.franquia)"
+        [label]="'Incluir empresa'"
+        [leftIconClass]="'fas fa-plus'"
+        [leftIconColor]="'#FFFFFF'"
+        (buttonClick)="adicionarNovaEmpresa()">
+      </sdk-rectangle-button>
+    </div>
+  </sdk-header>
+
+  <sdk-two-columns>
+    <div class="w-100" tc-1>
+      <sdk-menu
+        id="menu"
+        [itens]="itens"
+        [showMenu]="true"
+        [menuIcon]="getMenuIcon(buyerInformation?.situacao)"
+        [menuIconColor]="getMenuIconColor(buyerInformation?.situacao)"
+        [statusBarColor]="getStatusColor(buyerInformation?.situacao)">
+        <div class="px-3 py-4 w-100 align-items-center">
+          <div class="col-12">
+            <p class="title my-2">CNPJ</p>
+          </div>
+          <div class="col-12">
+            <p class="text">{{ isCreate ? documento : buyerInformation?.cnpj }}</p>
+          </div>
+
+          <ng-container *ngIf="showStatus(buyerInformation?.situacao); else showType">
+            <div class="col-12">
+              <p class="title my-2">Status</p>
+            </div>
+            <div class="col-12">
+              <p class="text text-warning">{{ getStatusMessage(buyerInformation?.situacao) }}</p>
+            </div>
+          </ng-container>
+
+          <ng-template #showType>
+            <div class="col-12">
+              <p class="title my-2">Tipo</p>
+            </div>
+            <div class="col-12">
+              <p *ngIf="buyerInformation?.holding" class="text">Holding</p>
+              <p *ngIf="!buyerInformation?.holding && !buyerInformation?.filial && !buyerInformation?.franquia"
+                class="text">Matriz</p>
+              <p *ngIf="!buyerInformation?.holding && !buyerInformation?.filial && buyerInformation?.franquia"
+                class="text">Franquia</p>
+              <p *ngIf="buyerInformation?.filial" class="text">Filial</p>
+            </div>
+          </ng-template>
+        </div>
+      </sdk-menu>
+    </div>
+    <div class="scroll-y w-100" tc-2>
+      <router-outlet></router-outlet>
+    </div>
+  </sdk-two-columns>
+</div>

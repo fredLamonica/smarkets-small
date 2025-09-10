@@ -1,0 +1,127 @@
+<div class="col-12">
+  <div class="row">
+
+    <sdk-item-card
+      [iconClass]="'fas fa-clipboard-list'"
+      [showStatusBar]="false"
+      [hasMarginBottom]="true"
+      [borderColor]="'none'"
+      [borderWidth]="'1px'"
+      [ngClass]="{
+        'status-active': slaSolicitacao.statusSla == statusSla.Ativo,
+        'status-inactive': slaSolicitacao.statusSla == statusSla.Inativo
+      }"
+    >
+      <div class="d-flex w-100 justify-content-around align-items-center">
+        <div class="col-1">
+          <a>{{ slaSolicitacao.idSlaSolicitacao }}</a>
+        </div>
+
+        <div class="col-1 crop-text-2">
+          <a *ngIf="!slaSolicitacao.slaSmarkets" data-toggle="tooltip" data-placement="bottom" title="{{ slaSolicitacao.classificacao }}">{{
+            classificacaoSlaLabel.get(slaSolicitacao.classificacao)
+          }}</a>
+          <a *ngIf="slaSolicitacao.slaSmarkets" data-toggle="tooltip" data-placement="bottom" title="{{ slaSolicitacao.classificacaoSmarkets }}">{{
+            slaSolicitacao.classificacaoSmarkets
+          }}</a>
+        </div>
+
+        <div class="col-1 crop-text-2" *ngIf="usarSLAPadraoSmarkets">
+          <label *ngIf="!slaSolicitacao.isSmarkets">Holding</label>
+          <label *ngIf="slaSolicitacao.isSmarkets">Smarkets</label>
+        </div>
+
+       <div class="col-1 crop-text-2 ml-2">
+          <a
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ slaSolicitacao.descricaoTempo }}"
+            >{{ slaSolicitacao.descricaoTempo }}</a
+          >
+        </div>
+
+        <div class="col-2 crop-text-2 ml-2" >
+          <a
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ tipoSlaSolicitacaoLabel.get(slaSolicitacao.tipoSlaSolicitacao) }}"
+            >{{ tipoSlaSolicitacaoLabel.get(slaSolicitacao.tipoSlaSolicitacao) }}</a>
+        </div>
+
+        <div class="col-1 ">
+          <a class="status-text"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="{{ statusSlaLabel.get(slaSolicitacao.statusSla) }}"
+          >{{ statusSlaLabel.get(slaSolicitacao.statusSla) }}</a>
+        </div>
+
+        <div class="col-1">
+          <sdk-suspense-menu-button class="suspense-menu-sla-solicitacao" [icon]="'fa fa-ellipsis-h'" title="...">
+            <ng-template sdkSuspenseMenu>
+              <button
+                [disabled]="slaSolicitacao.isSmarkets"
+                *ngIf="slaSolicitacao.statusSla !== 2"
+                class="btn btn-sm btn-icon text-dark"
+                title="Editar"
+                (click)="editar($event, slaSolicitacao)"
+              >
+              <div class="d-flex">
+                <i class="fas fa-edit"></i> <a>Editar</a>
+              </div>
+              </button>
+
+
+              <button
+                [disabled]="slaSolicitacao.isSmarkets"
+                class="btn btn-sm btn-icon text-dark"
+                title="Auditoria"
+                (click)="auditar(slaSolicitacao.idSlaSolicitacao)"
+              >
+              <div class="d-flex">
+                <i class="fa fa-history"></i> <a>Auditoria</a>
+              </div>
+              </button>
+
+
+              <button
+                [disabled]="slaSolicitacao.isSmarkets"
+                *ngIf="slaSolicitacao.statusSla !== 2"
+                title="Excluir"
+                class="btn btn-sm btn-icon"
+                (click)="exclusao(slaSolicitacao.idSlaSolicitacao)"
+              >
+              <div class="d-flex">
+                <i class="far fa-trash-alt text-danger"></i> <a>Excluir</a>
+              </div>
+              </button>
+
+              <button
+                [disabled]="slaSolicitacao.isSmarkets || slaSolicitacao.statusSla === 2"
+                *ngIf="slaSolicitacao.statusSla === 1 && !slaSolicitacao.slaSmarkets"
+                title="Desativar"
+                class="btn btn-sm btn-icon"
+                (click)="inativar(slaSolicitacao)"
+              >
+              <div class="d-flex">
+                <i class="fas fa-toggle-on text-success"></i> <a>Inativar</a>
+              </div>
+              </button>
+              <button
+                *ngIf="(slaSolicitacao.statusSla === 2 && !utilizaSLAPadraoSmarkets) && !slaSolicitacao.isSmarkets"
+                title="Ativar"
+                class="btn btn-sm btn-icon"
+                (click)="ativar(slaSolicitacao)"
+              >
+              <div class="d-flex">
+                <i class="fas fa-toggle-off"></i> <a>Ativar</a>
+              </div>
+              </button>
+
+            </ng-template>
+          </sdk-suspense-menu-button>
+        </div>
+      </div>
+    </sdk-item-card>
+  </div>
+</div>

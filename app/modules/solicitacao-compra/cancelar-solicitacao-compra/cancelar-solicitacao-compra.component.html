@@ -1,0 +1,38 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">{{ titulo }}</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div *ngFor="let item of itensSolicitacaoCompra">
+    <p>{{ item.descricao }}</p>
+  </div>
+  <p>
+    <b>Observação: </b>ao concluir essa ação, você estará cancelando o item na plataforma Smarkets,
+    mas no ERP a solicitação se manterá ativa.
+  </p>
+  <form [formGroup]="form">
+    <div class="form-group required">
+      <label>Justificativa de cancelamento:</label>
+      <textarea
+        class="form-control"
+        rows="3"
+        formControlName="justificativa"
+        [class.invalid]="form.controls.justificativa.invalid && form.controls.justificativa.dirty"
+      ></textarea>
+      <span
+        class="invalid"
+        *ngIf="form.controls.justificativa.invalid && form.controls.justificativa.dirty"
+      >
+        Preenchimento obrigatório
+      </span>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="cancelar()">
+    {{ cancelarLabel }}
+  </button>
+  <button type="button" class="btn btn-primary" (click)="confirmar()">{{ confirmarLabel }}</button>
+</div>

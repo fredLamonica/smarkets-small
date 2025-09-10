@@ -1,0 +1,27 @@
+<div class="row mb-3">
+  <div class="col-md-12">
+    <div class="row justify-content-start">
+      <div class="col-md-4 col-xl-3">
+        <button role=button class="btn btn-block btn-primary" (click)="novoNivelParticipante()">
+          <i class="fas fa-plus"></i> Incluir
+        </button>
+      </div>
+      <div class="col-md-4 col-xl-3">
+          <button role=button class="btn btn-block btn-secondary" [class.disabled]="niveisParticipantesSelecionados?.length != 1"
+          (click)="manterNivelParticipante()">
+          <i class="fas fa-pencil-alt"></i> Editar
+        </button>
+      </div>
+      <div class="col-md-4 col-xl-3">
+        <button role=button class="btn btn-block btn-danger" [class.disabled]="!niveisParticipantesSelecionados?.length" (click)="solicitarExclusao()">
+          <i class="fas fa-trash-alt"></i> Remover
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <custom-table classes="table-striped table-sm" [settings]="settings" [source]="niveisParticipantes" (select)="selecao($event)"></custom-table>
+  </div>
+</div>

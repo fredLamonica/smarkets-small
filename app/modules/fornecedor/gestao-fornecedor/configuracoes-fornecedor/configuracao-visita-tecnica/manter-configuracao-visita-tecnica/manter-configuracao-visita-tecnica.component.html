@@ -1,0 +1,54 @@
+<div class="modal-header">
+  <div class="modal-title" 
+       id="modal-basic-title">
+    {{ form.controls.idConfiguracaoVisitaTecnica.value? 'Alterar ' : 'Incluir '}} Questão de Visita Técnica
+  </div>
+  <button type="button" 
+          class="close" 
+          aria-label="Close" 
+     (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+<form [formGroup]="form">
+  <div class="row">
+    <div class="form-group required col-lg-12">
+      <label>Descrição:</label>
+      <textarea type="text" 
+             class="form-control" 
+             formControlName="questao"
+             autofocus>
+      </textarea>
+    </div>
+      <div class="form-group required col-lg-12">
+        <label>Risco/Impacto:</label>
+        <ng-select id="impacto" 
+            [hideSelected]="false" 
+            formControlName="impacto"
+            [class.invalid]="form.controls.impacto.invalid && form.controls.impacto.dirty">
+            <ng-option [value]="ImpactoQuestao['Muito Baixo / Trivial / Não se aplica']">Muito Baixo / Trivial / Não se aplica</ng-option>
+            <ng-option [value]="ImpactoQuestao['Baixo / Aceitável / Tolerável']">Baixo / Aceitável / Tolerável</ng-option>
+            <ng-option [value]="ImpactoQuestao['Médio / Moderável / Controlado']">Médio / Moderável / Controlado</ng-option>
+            <ng-option [value]="ImpactoQuestao['Alto / Importante / Substancial']">Alto / Importante / Substancial</ng-option>
+            <ng-option [value]="ImpactoQuestao['Muito Alto / Muito Importante / Intolerável']">Muito Alto / Muito Importante / Intolerável</ng-option>
+        </ng-select>
+        <p><small>Observação: O risco/impacto da questão será relevante como parâmetro de avaliação, ou seja, é o peso da pergunta no questionário. Isso será utilizado para calcular a nota e classificação final do fornecedor na avaliação.</small></p>
+      </div>
+    </div>  
+</form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" 
+          (click)="cancelar()"
+          class="btn btn-outline-primary">
+    <i class="fas fa-ban"></i> Cancelar
+  </button>
+  <button type="button" 
+             id="btnSalvar"
+           (click)="salvar()"
+          class="btn btn-primary">
+    <i class="fas fa-save"></i> Salvar
+  </button>
+</div>

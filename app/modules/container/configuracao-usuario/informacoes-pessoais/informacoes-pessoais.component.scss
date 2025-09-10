@@ -1,0 +1,48 @@
+@import "src/themes/_smk-base.scss";
+
+.usuario-info-pessoais {
+  .input-group {
+    .form-control {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .btn {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  .btn-alterar {
+    @include smk-button-outline($smk-danger-color, lg);
+  }
+}
+
+.modal-alteracao {
+  .input-group {
+    .form-control {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .input-group-text {
+      border-left: none;
+      background-color: transparent;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      border-color: $smk-border-color;
+    }
+  }
+
+  .modal-footer {
+    border-top: $smk-border;
+
+    .cancelar {
+      @include smk-button-outline($smk-primary-color, lg);
+    }
+
+    .confirmar {
+      @include smk-button($smk-success-color, lg);
+    }
+  }
+}

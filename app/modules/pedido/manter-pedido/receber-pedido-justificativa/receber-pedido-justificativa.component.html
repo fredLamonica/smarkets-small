@@ -1,0 +1,20 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Justificatica do cancelamento de recebimento</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <p>
+    <b>Observação: </b>esteja ciente de que, ao confirmar essa ação, não será possível receber mais
+    itens desse pedido
+  </p>
+  <div class="form-group">
+    <label>Justificativa:</label>
+    <textarea class="form-control" rows="3" [(ngModel)]="justificativa"></textarea>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="cancelar()">Cancelar</button>
+  <button type="button" class="btn btn-primary" (click)="confirmar()">Confirmar</button>
+</div>

@@ -1,0 +1,19 @@
+<div
+  [ngClass]="{
+    primary: type === 'primary',
+    danger: type === 'danger',
+    'danger-fixed': type === 'danger-fixed'
+  }"
+  (click)="removeAllTags()"
+  [ngStyle]="tagStyle"
+  [ngStyle]="mouseOverStyle"
+>
+  <i class="{{ leftIconClass }} left-icon"></i>{{ tagLabel }}
+  <strong> {{ tagValues ? '- ' + tagValues.toString() : '' }} </strong>
+  <i
+    class="{{ rightIconClass }} right-icon"
+    [ngStyle]="rightIconStyle"
+    (click)="removeTag()"
+    *ngIf="hasRightIcon"
+  ></i>
+</div>

@@ -1,0 +1,306 @@
+<div class="card solicitacao-fornecedor-dados-gerais">
+  <div class="card-body">
+    <div class="col-12 d-flex justify-content-end">
+      <sdk-rectangle-button
+        [label]="'Salvar'"
+        [leftIconClass]="'fas fa-check'"
+        [leftIconColor]="'#FFFFFF'"
+        (buttonClick)="salvar()">
+      </sdk-rectangle-button>
+    </div>
+
+    <div class="col-12 title-hr pt-0">
+      Dados da Empresa
+      <hr />
+    </div>
+    <form [formGroup]="form">
+      <div class="col-12 dados-gerais">
+
+
+        <div class="row">
+          <div class="col-3">
+            <div class="form-group">
+              <label> Código ERP</label>
+              <input
+                class="form-control"
+                type="text"
+                name="codigoERP"
+                formControlName="codigoERP" />
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="form-group col-6">
+                <label class="required"> Razão Social</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  name="razaoSocial"
+                  formControlName="razaoSocial"
+                  [class.invalid]="
+                    form.controls.razaoSocial.invalid && form.controls.razaoSocial.dirty
+                  " />
+                <span
+                  class="invalid"
+                  *ngIf="form.controls.razaoSocial.invalid && form.controls.razaoSocial.dirty">
+                  Preenchimento obrigatório
+                </span>
+              </div>
+
+              <div class="form-group col-6">
+                <label> Nome Fantasia </label>
+                <input
+                  class="form-control"
+                  type="text"
+                  name="nomeFantasia"
+                  formControlName="nomeFantasia" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-3">
+            <label> Data de Abertura CNPJ</label>
+            <input
+              class="form-control"
+              type="date"
+              name="datacadastro"
+              formControlName="dataCadastro" />
+          </div>
+          <div class="form-group col-3">
+            <label> Porte da Empresa</label>
+            <ng-select [clearable]="false" formControlName="porte" [items]="opcoesPorteEmpresa">
+              <ng-template ng-label-tmp let-item="item">
+                {{ enumPorteEmpresa[item] }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                {{ enumPorteEmpresa[item] }}
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="form-group col-6">
+            <label> Natureza Jurídica</label>
+            <ng-select
+              [clearable]="false"
+              [searchable]="true"
+              [searchFn]="naturezasJuridicaSearchFn"
+              [items]="naturezasJuridicas$ | async"
+              bindValue="idNaturezaJuridica"
+              [loading]="naturezasJuridicasLoading"
+              [loadingText]="'buscando...'"
+              formControlName="idNaturezaJuridica">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.codigo }} - {{ item.descricao }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                {{ item.codigo }} - {{ item.descricao }}
+              </ng-template>
+            </ng-select>
+          </div>
+
+          <div class="form-group col-3">
+            <label> Nº de funcionários </label>
+            <input-number
+              [min]="0"
+              [max]="999999999"
+              [allowDecimal]="false"
+              formControlName="numeroFuncionarios">
+            </input-number>
+          </div>
+
+          <div class="form-group col-3">
+            <label for="tipo-cadastro"> Tipo do Cadastro </label>
+            <ng-select
+              [clearable]="false"
+              formControlName="tipoCadastro"
+              [items]="opcoesTipoCadastroEmpresa">
+              <ng-template ng-label-tmp let-item="item">
+                {{ enumTipoCadastroEmpresa[item] }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                {{ enumTipoCadastroEmpresa[item] }}
+              </ng-template>
+            </ng-select>
+          </div>
+
+          <div class="form-group col-6">
+            <label> Site Institucional </label>
+            <input class="form-control" type="text" name="homepage" formControlName="homePage" />
+          </div>
+
+          <div class="form-group col-3">
+            <label class="required"> Contato </label>
+            <input
+              class="form-control"
+              type="text"
+              name="contato"
+              formControlName="contato"
+              [class.invalid]="form.controls.contato.invalid && form.controls.contato.dirty" />
+          </div>
+          <div class="form-group col-3">
+            <label class="required"> Telefone </label>
+            <input
+              class="form-control"
+              type="text"
+              name="telefone"
+              formControlName="telefone"
+              [textMask]="{
+                mask: form?.controls?.telefone?.value?.length < 15 ? maskTelefone : maskCelular,
+                guide: false
+              }"
+              [class.invalid]="form.controls.telefone.invalid && form.controls.telefone.dirty" />
+          </div>
+          <div class="form-group col-6">
+            <label class="required"> E-mail </label>
+            <input
+              class="form-control"
+              type="text"
+              name="email"
+              formControlName="email"
+              [class.invalid]="form.controls.email.invalid && form.controls.email.dirty" />
+          </div>
+        </div>
+
+        <div class="row" *ngIf="isCreate">
+          <div class="col-12 title-hr">
+            Usuário Principal
+            <hr />
+          </div>
+          <div class="form-group required col-6">
+            <label for="">Usuário</label>
+            <sdk-user-select
+              formControlName="idUsuarioPrincipal"
+              [users]="mainUserArray"
+              [value]="idMainUser"></sdk-user-select>
+          </div>
+          <div class="form-group col-3 d-flex mt-3 pt-1">
+            <sdk-rectangle-button
+              leftIconClass="fas fa-plus"
+              leftIconColor="#588394"
+              type="secondary"
+              label="Incluir usuário"
+              (click)="createUser()"></sdk-rectangle-button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 title-hr">
+            Informações Fiscais
+            <hr />
+          </div>
+          <div class="form-group col-3">
+            <label> Perfil Tributário </label>
+            <ng-select
+              [clearable]="false"
+              formControlName="perfilTributario"
+              [items]="opcoesPerfilTributario">
+              <ng-template ng-label-tmp let-item="item">
+                {{ perfilTributarioDisplay.get(item)?.valueOf() }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                {{ perfilTributarioDisplay.get(item)?.valueOf() }}
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="form-group col-3">
+            <label> Inscrição Estadual </label>
+            <input
+              class="form-control"
+              type="text"
+              name="inscricao-estadual"
+              formControlName="inscricaoEstadual" />
+          </div>
+          <div class="form-group col-3">
+            <label> Inscrição Municipal </label>
+            <input
+              class="form-control"
+              type="text"
+              name="inscricao-municipal"
+              formControlName="inscricaoMunicipal" />
+          </div>
+          <div class="form-group col-3">
+            <label> Patrimônio Líquido </label>
+            <input-number
+              [min]="0"
+              [max]="999999999.9999"
+              [allowDecimal]="true"
+              [text_align]="'left'"
+              formControlName="patrimonioLiquido">
+            </input-number>
+          </div>
+
+          <div class="form-group col-3">
+            <label> Optante pelo Simples Nacional </label>
+            <ng-select [clearable]="false" formControlName="optanteSimplesNacional">
+              <ng-option [value]="true">Sim</ng-option>
+              <ng-option [value]="false">Não</ng-option>
+            </ng-select>
+          </div>
+          <div class="form-group col-3">
+            <label> Capital Social </label>
+            <input-number
+              [min]="0"
+              [max]="999999999.9999"
+              [allowDecimal]="true"
+              [text_align]="'left'"
+              formControlName="capitalSocial">
+            </input-number>
+          </div>
+          <div class="form-group col-3">
+            <label> Capital Integralizado </label>
+            <input-number
+              [min]="0"
+              [max]="999999999.9999"
+              [allowDecimal]="true"
+              [text_align]="'left'"
+              formControlName="capitalIntegralizado">
+            </input-number>
+          </div>
+
+          <div class="form-group col-3">
+            <label> Data de Integralização </label>
+            <input
+              class="form-control"
+              type="date"
+              name="data-integralizacao"
+              formControlName="dataIntegralizacao" />
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-12 title-hr">
+            Tempo de Atendimento
+            <hr />
+          </div>
+          <div class="form-group col-3 required">
+            <label>SLA</label>
+            <div class="sla-form">
+              <ng-select
+                [clearable]="false"
+                [searchable]="true"
+                [searchFn]="slaSearchFn"
+                [items]="listaDeSlas$ | async"
+                bindValue="idSlaSolicitacao"
+                [loading]="listaDeSlasLoading"
+                [loadingText]="'buscando...'"
+                formControlName="idSlaSolicitacao"
+                [class.invalid]="form.controls.idSlaSolicitacao.invalid && form.controls.idSlaSolicitacao.dirty">
+                <ng-template ng-label-tmp let-item="item">
+                  {{item.descricaoTempo}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                  {{item.descricaoTempo}}
+                </ng-template>
+              </ng-select>
+            </div>
+            <span class="invalid"
+              *ngIf="form.controls.idSlaSolicitacao.invalid && form.controls.idSlaSolicitacao.dirty">
+              Preenchimento obrigatório
+            </span>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="row mb-3">
+  <div class="col-lg-6">
+    <input-file [multiple]="true" accept=".csv,.tiff,.txt,.pdf,.xlsx,.xls,.pptx,.ppt,.docx,.doc,.odt,.ods,.odp" (select)="arquivosSelecionados($event)"></input-file>
+  </div>
+</div>
+<div class="row mb-3">
+  <div class="col-md-4 col-lg-2">
+    <button role=button class="btn btn-block btn-primary" [class.disabled]="!anexosSelecionados?.length" (click)="download()">
+      <i class="fas fa-download"></i> Download
+    </button>
+  </div>
+  <div class="col-md-4 col-lg-2">
+    <button role=button class="btn btn-block btn-danger" [class.disabled]="!anexosSelecionados?.length" (click)="solicitarExclusao()">
+      <i class="fas fa-trash-alt"></i> Remover
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <custom-table classes="table-striped table-sm" [settings]="settings" [source]="anexos" (select)="selecaoExclusao($event)"></custom-table>
+  </div>
+</div>

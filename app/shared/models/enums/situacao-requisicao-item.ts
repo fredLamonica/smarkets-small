@@ -1,0 +1,16 @@
+export enum SituacaoRequisicaoItem {
+  'Pré Requisição' = 1,
+  'Em Configuração' = 2,
+  'Aguardando Aprovação Interna' = 3,
+  'Recusado' = 4,
+  'Aprovado' = 5,
+  'Em Cotação' = 6,
+  'Finalizado' = 7,
+  'Cancelado' = 8,
+  'Vinculado' = 9,
+  'Aguardando Pacote' = 10,
+  'Aguardando Integração Requisição' = 11,
+  'Integração Requisição Cancelada' = 12,
+  'Aguardando Integração' = 13,
+  'Erro de Integração' = 14,
+}

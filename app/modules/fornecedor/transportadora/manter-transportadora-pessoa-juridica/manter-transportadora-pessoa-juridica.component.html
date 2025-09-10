@@ -1,0 +1,610 @@
+<div class="header">
+  <div class="header-search row">
+    <div class="col-12 align-self-center">
+      <h3 class="mb-0 text-uppercase text-primary font-weight-bold">
+        <ng-container> {{ idPessoaJuridica ? 'Alterar' : 'Nova' }} transportadora </ng-container>
+      </h3>
+    </div>
+  </div>
+</div>
+<div class="custom-nav-tabs">
+  <ul class="nav nav-tabs row bounds" id="empresaTab" role="tablist">
+    <li class="col-lg-3 nav-item">
+      <a
+        class="nav-link nav-link-block active"
+        id="dados-empresa-tab"
+        data-toggle="tab"
+        href="#dados-empresa"
+        role="tab"
+        aria-controls="dados-empresa"
+        aria-selected="false"
+        >Dados Transportadora</a
+      >
+    </li>
+  </ul>
+  <div class="tab-content bounds" id="empresaTabContent">
+    <div
+      class="tab-pane fade active show"
+      id="dados-empresa"
+      role="tabpanel"
+      aria-labelledby="dados-empresa-tab"
+    >
+      <div class="card card-tab-content tab-content">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <div class="row bg-white">
+              <div class="col">
+                <form [formGroup]="form">
+                  <div class="divisor">
+                    <div class="title">Dados da Transportadora</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-6">
+                      <div class="form-row">
+                        <div class="form-group required col-md-6">
+                          <label for="cnpj">
+                            {{ tipoDocumento == TipoDocumentoFornecedor.Cpf ? 'CPF' : 'CNPJ' }}
+                          </label>
+                          <input
+                            class="form-control"
+                            [textMask]="{
+                              mask:
+                                tipoDocumento == TipoDocumentoFornecedor.Cpf ? maskCpf : maskCnpj,
+                              guide: false
+                            }"
+                            type="text"
+                            name="cnpj"
+                            formControlName="cnpj"
+                            [class.invalid]="form.controls.cnpj.invalid && form.controls.cnpj.dirty"
+                            (keyup)="onKeyUpDocumento()"
+                          />
+                          <div *ngIf="form.controls.cnpj.invalid && form.controls.cnpj.dirty">
+                            <span class="invalid" *ngIf="form.controls.cnpj.errors.invalidCnpj">
+                              CNPJ inválido
+                            </span>
+                            <span class="invalid" *ngIf="form.controls.cnpj.errors.invalidCpf">
+                              CPF inválido
+                            </span>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="tipo-cadastro"> Tipo do Cadastro </label>
+                          <select
+                            id="tipo-Cadastro"
+                            class="form-control"
+                            formControlName="tipoCadastro"
+                          >
+                            <option *ngFor="let key of opcoesTipoCadastroEmpresa" [value]="key">
+                              {{ enumTipoCadastroEmpresa[key] }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group required col">
+                          <label for="razao-social"> Razão Social </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="razaoSocial"
+                            formControlName="razaoSocial"
+                            [class.invalid]="
+                              form.controls.razaoSocial.invalid && form.controls.razaoSocial.dirty
+                            "
+                          />
+                          <span
+                            class="invalid"
+                            *ngIf="
+                              form.controls.razaoSocial.invalid && form.controls.razaoSocial.dirty
+                            "
+                          >
+                            Preenchimento obrigatório
+                          </span>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col">
+                          <label for="nomefantasia"> Nome Fantasia </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="nomeFantasia"
+                            formControlName="nomeFantasia"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col">
+                          <label for="idNaturezaJuridica"> Natureza Jurídica </label>
+                          <ng-select
+                            class="full-width"
+                            [items]="naturezasJuridicas$ | async"
+                            bindValue="idNaturezaJuridica"
+                            [loading]="naturezasJuridicasLoading"
+                            [loadingText]="'buscando...'"
+                            formControlName="idNaturezaJuridica"
+                          >
+                            <ng-template ng-label-tmp let-item="item">
+                              {{ item.codigo }} - {{ item.descricao }}
+                            </ng-template>
+                            <ng-template ng-option-tmp let-item="item">
+                              {{ item.codigo }} - {{ item.descricao }}
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-6">
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="porteEmpresa"> Porte da Empresa </label>
+                          <select id="porteEmpresa" class="form-control" formControlName="porte">
+                            <option *ngFor="let key of opcoesPorteEmpresa" [value]="key">
+                              {{ enumPorteEmpresa[key] }}
+                            </option>
+                          </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="numero-funcionarios"> Nº de funcionários </label>
+                          <input-number
+                            [min]="0"
+                            [max]="999999999"
+                            [allowDecimal]="false"
+                            formControlName="numeroFuncionarios"
+                          >
+                          </input-number>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6" *ngIf="idPessoaJuridica">
+                          <label for="datacadastro"> Cadastro </label>
+                          <input
+                            class="form-control"
+                            type="date"
+                            name="datacadastro"
+                            [readonly]="idPessoaJuridica"
+                            formControlName="dataCadastro"
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="datavalidade"> Validade </label>
+                          <input
+                            class="form-control"
+                            type="date"
+                            name="datavalidade"
+                            formControlName="dataValidade"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label class="required col pl-0"> É Filial? </label>
+                          <div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input
+                                type="radio"
+                                id="filial-sim"
+                                name="filial"
+                                formControlName="filial"
+                                class="custom-control-input"
+                                [value]="true"
+                              />
+                              <label class="custom-control-label" for="filial-sim">Sim</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input
+                                type="radio"
+                                id="filial-nao"
+                                name="filial"
+                                formControlName="filial"
+                                class="custom-control-input"
+                                [value]="false"
+                              />
+                              <label class="custom-control-label" for="filial-nao">Não</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6" *ngIf="form?.controls?.filial.value">
+                          <label for="codigo-filial"> Codigo Filial </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="codigo-filial"
+                            formControlName="codigoFilialEmpresa"
+                          />
+                        </div>
+                        <div class="form-group col-12" *ngIf="form?.controls?.filial.value">
+                          <label for="matriz"> Matriz </label>
+                          <ng-select
+                            class="full-width"
+                            [items]="empresas$ | async"
+                            bindValue="idPessoaJuridica"
+                            [loading]="empresasLoading"
+                            [loadingText]="'buscando...'"
+                            formControlName="idPessoaJuridicaMatriz"
+                            [searchFn]="empresasCustomSearchFn"
+                          >
+                            <ng-template ng-label-tmp let-item="item">
+                              {{ item.cnpj }} - {{ item.razaoSocial }}
+                            </ng-template>
+                            <ng-template ng-option-tmp let-item="item">
+                              <p class="mb-0">{{ item.razaoSocial }}</p>
+                              <span
+                                ><small>{{ item.cnpj }}</small></span
+                              >
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-12">
+                      <div class="form-row">
+                        <div class="form-group required col">
+                          <label for="contato"> Contato </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="contato"
+                            formControlName="contato"
+                            [class.invalid]="
+                              form.controls.contato.invalid && form.controls.contato.dirty
+                            "
+                          />
+                          <span
+                            class="invalid"
+                            *ngIf="form.controls.contato.invalid && form.controls.contato.dirty"
+                          >
+                            Preenchimento obrigatório
+                          </span>
+                        </div>
+                        <div class="form-group required col">
+                          <label for="telefone"> Telefone </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="telefone"
+                            formControlName="telefone"
+                            [textMask]="{
+                              mask:
+                                form?.controls?.telefone?.value?.length < 15
+                                  ? maskTelefone
+                                  : maskCelular,
+                              guide: false
+                            }"
+                            [class.invalid]="
+                              form.controls.telefone.invalid && form.controls.telefone.dirty
+                            "
+                          />
+                          <span
+                            class="invalid"
+                            *ngIf="form.controls.telefone.invalid && form.controls.telefone.dirty"
+                          >
+                            Preenchimento obrigatório
+                          </span>
+                        </div>
+                        <div class="form-group required col">
+                          <label for="email"> E-mail </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="email"
+                            formControlName="email"
+                            [class.invalid]="
+                              form.controls.telefone.invalid && form.controls.telefone.dirty
+                            "
+                          />
+                          <span
+                            class="invalid"
+                            *ngIf="
+                              form.controls.email.invalid &&
+                              form.controls.email.errors.email &&
+                              form.controls.email.dirty
+                            "
+                          >
+                            Email inválido
+                          </span>
+                          <span
+                            class="invalid"
+                            *ngIf="
+                              form.controls.email.invalid &&
+                              form.controls.email.errors.required &&
+                              form.controls.email.dirty
+                            "
+                          >
+                            Preenchimento obrigatório
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="divisor">
+                    <div class="title">Informações Fiscais</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-6">
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="inscricao-estadual"> Inscrição Estadual </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="inscricao-estadual"
+                            formControlName="inscricaoEstadual"
+                          />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="inscricao-municipal"> Inscrição Municipal </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="inscricao-municipal"
+                            formControlName="inscricaoMunicipal"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6 col-xl-4">
+                          <label for="capital-social"> Capital Social </label>
+                          <input-number
+                            [min]="0"
+                            [max]="999999999.9999"
+                            [allowDecimal]="true"
+                            formControlName="capitalSocial"
+                          >
+                          </input-number>
+                        </div>
+                        <div class="form-group col-md-6 col-xl-4">
+                          <label for="capital-integralizado"> Capital Integralizado </label>
+                          <input-number
+                            [min]="0"
+                            [max]="999999999.9999"
+                            [allowDecimal]="true"
+                            formControlName="capitalIntegralizado"
+                          >
+                          </input-number>
+                        </div>
+                        <div class="form-group col-md-6 col-xl-4">
+                          <label for="data-integralizacao"> Data da Integralização </label>
+                          <input
+                            class="form-control"
+                            type="date"
+                            name="data-integralizacao"
+                            formControlName="dataIntegralizacao"
+                          />
+                        </div>
+                        <div class="form-group col-md-6 col-xl-12">
+                          <label for="pasta-integracao"> Pasta Integração </label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            name="pasta-integracao"
+                            formControlName="pastaIntegracao"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-6">
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="patrimonio-liquido"> Patrimônio Líquido </label>
+                          <input-number
+                            [min]="0"
+                            [max]="999999999.9999"
+                            [allowDecimal]="true"
+                            formControlName="patrimonioLiquido"
+                          >
+                          </input-number>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="perfil-tributario"> Perfil Tributário </label>
+                          <select
+                            id="perfil-tributario"
+                            class="form-control"
+                            formControlName="perfilTributario"
+                          >
+                            <option *ngFor="let key of opcoesPerfilTributario" [value]="key">
+                              {{ enumPerfilTributario[key] }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label> Optante pelo Simples Nacional </label>
+                          <div class="py-2">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input
+                                type="radio"
+                                id="optanteSimplesNacional-sim"
+                                name="optanteSimplesNacional"
+                                formControlName="optanteSimplesNacional"
+                                class="custom-control-input"
+                                [value]="true"
+                              />
+                              <label class="custom-control-label" for="optanteSimplesNacional-sim"
+                                >Sim</label
+                              >
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input
+                                type="radio"
+                                id="optanteSimplesNacional-nao"
+                                name="optanteSimplesNacional"
+                                formControlName="optanteSimplesNacional"
+                                class="custom-control-input"
+                                [value]="false"
+                              />
+                              <label class="custom-control-label" for="optanteSimplesNacional-nao"
+                                >Não</label
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col">
+                          <label for="observacao"> Observação </label>
+                          <textarea
+                            class="form-control"
+                            type="text"
+                            rows="1"
+                            name="observacao"
+                            formControlName="observacao"
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="divisor">
+                    <div class="title">Informações Gerais</div>
+                  </div>
+                  <div class="form-row">
+                    <div
+                      class="form-group required col-md-6"
+                      required
+                      *permissionsOnly="'Administrador'"
+                    >
+                      <label for="idUsuarioPrincipal"> Usuário principal </label>
+                      <ng-select
+                        class="full-width"
+                        [items]="usuarios$ | async"
+                        bindValue="idUsuario"
+                        [loading]="usuariosLoading"
+                        [loadingText]="'buscando...'"
+                        formControlName="idUsuarioPrincipal"
+                        [searchFn]="usuarioCustomSearchFn"
+                      >
+                        <ng-template ng-label-tmp let-item="item">
+                          {{ item?.pessoaFisica?.nome }} - {{ item?.email }}
+                        </ng-template>
+                        <ng-template ng-option-tmp let-item="item">
+                          <p class="mb-0">{{ item?.pessoaFisica?.nome }}</p>
+                          <span
+                            ><small>{{ item?.email }}</small></span
+                          >
+                        </ng-template>
+                      </ng-select>
+                      <span
+                        class="invalid"
+                        *ngIf="
+                          form.controls.idUsuarioPrincipal.invalid &&
+                          form.controls.idUsuarioPrincipal.dirty
+                        "
+                      >
+                        Preenchimento obrigatório
+                      </span>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="homepage"> Site Institucional </label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        name="homepage"
+                        formControlName="homePage"
+                      />
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="logo"> Logo </label>
+                      <input-file
+                        [multiple]="false"
+                        accept=".png,.jpeg,.jpg"
+                        (select)="imagenSelecionada($event)"
+                      >
+                      </input-file>
+                      <img
+                        [src]="logo"
+                        *ngIf="logo?.length > 0"
+                        class="img-thumbnail mt-2"
+                        alt="Logo institucional"
+                      />
+                    </div>
+                  </div>
+                  <div class="divisor">
+                    <div class="title">
+                      <label for="enderecos" class="required">Endereços</label>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col-xl-12">
+                      <input-enderecos formControlName="enderecos"></input-enderecos>
+                      <span
+                        class="invalid"
+                        *ngIf="form.controls.enderecos.invalid && form.controls.enderecos.dirty"
+                      >
+                        Preenchimento obrigatório
+                      </span>
+                    </div>
+                  </div>
+                  <div *ngIf="idPessoaJuridica && pessoaJuridica?.idPessoa">
+                    <div class="divisor">
+                      <div class="title">Informações Bancárias</div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-xl-12">
+                        <div class="card card-collapse">
+                          <a
+                            class="card-header bg-white collapsed"
+                            data-toggle="collapse"
+                            href="#collapseDomiciliosBancarios"
+                            (click)="permitirExibirDomicilios()"
+                          >
+                            Domicílios Bancários
+                          </a>
+                          <div class="card-body bg-white collapse" id="collapseDomiciliosBancarios">
+                            <listar-domicilios-bancarios
+                              [id-pessoa]="pessoaJuridica?.idPessoa"
+                              *ngIf="exibirDomicilios"
+                            >
+                            </listar-domicilios-bancarios>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="divisor">
+                      <div class="title">CNAEs</div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-xl-12">
+                        <div class="card card-collapse">
+                          <a
+                            class="card-header bg-white collapsed"
+                            data-toggle="collapse"
+                            href="#collapsedCnae"
+                          >
+                            CNAEs
+                          </a>
+                          <div class="card-body bg-white collapse" id="collapsedCnae">
+                            <manter-pessoa-cnae
+                              [id-pessoa]="pessoaJuridica?.idPessoa"
+                              [idPessoaJuririca]="pessoaJuridica?.idPessoaJuridica"
+                            ></manter-pessoa-cnae>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="row bg-white py-3">
+              <div class="col">
+                <button type="button" class="btn btn-primary float-right" (click)="salvar()">
+                  <i class="fas fa-save"></i> Salvar
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary float-right mx-2"
+                  (click)="voltar()"
+                >
+                  <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- #endregion -->
+  </div>
+</div>

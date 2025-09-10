@@ -1,0 +1,29 @@
+<div class="shopping-cart nav-item dropdown">
+  <a
+    *ngIf="!atualizando"
+    class="nav-link dropdown-toggle"
+    data-toggle="dropdown"
+    href="#"
+    role="button"
+    aria-haspopup="true"
+    aria-expanded="false">
+    <i class="fas fa-shopping-cart"></i>
+  </a>
+  <div
+    *ngIf="!atualizando && (resumo?.quantidadeItensCatalogo > 0 || resumo?.quantidadeItensRequisicao > 0 || resumo?.quantidadeItensRegularizacao > 0)"
+    class="badge-nav dropdown-toggle"
+    data-toggle="dropdown"
+    href="#"
+    role="button"
+    aria-haspopup="true"
+    aria-expanded="false">
+    {{ resumo.quantidadeItensCatalogo + resumo.quantidadeItensRequisicao + resumo.quantidadeItensRegularizacao }}
+  </div>
+  <div class="spinner" *ngIf="atualizando"></div>
+  <div class="dropdown-menu dropdown-nav-menu dropdown-menu-center">
+    <div class="subtotal">Subtotal</div>
+    <div class="valor font-weight-bold">{{ (resumo?.valor ? resumo?.valor : 0) | currency:'BRL':'symbol':'1.2':'pt-BR'
+      }}</div>
+    <button class="btn btn-primary btn-block mt-2" (click)="irCarrinho()">VISUALIZAR CARRINHO</button>
+  </div>
+</div>

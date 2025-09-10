@@ -1,0 +1,37 @@
+.mfa-pin-code {
+  .title {
+    font-size: 18px;
+  }
+
+  .instructions {
+    padding-left: 8px;
+  }
+
+  .pin-code {
+    max-width: 140px;
+
+    .pin-code-input {
+      text-align: center;
+    }
+  }
+}
+
+.modal-recovery-codes {
+  .modal-body {
+    border-bottom: 1px solid #ccc;
+
+    .icon {
+      color: #27ade4;
+    }
+
+    .container-recovery-codes {
+      font-size: 18px;
+    }
+  }
+
+  .modal-footer {
+    .close-btn {
+      width: 50%;
+    }
+  }
+}

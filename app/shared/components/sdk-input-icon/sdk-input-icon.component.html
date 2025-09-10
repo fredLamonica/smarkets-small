@@ -1,0 +1,17 @@
+<div [formGroup]="form" [ngClass]="inputClass">
+  <label *ngIf="label" class="control-label" [for]="name"> {{ label }} </label>
+  <div class="d-flex">
+    <i *ngIf="IconIsVisible" [class]="icon"></i>
+    <input
+      (ngModelChange)="emitEvent()"
+      (focus)="hidenIcon()"
+      (blur)="showIcon()"
+      [placeholder]="placeHolder ? placeHolder : ''"
+      [type]="type ? type : 'text'"
+      [class]="'input-field'"
+      [name]="name"
+      [id]="name"
+      formControlName="valueInput"
+    />
+  </div>
+</div>

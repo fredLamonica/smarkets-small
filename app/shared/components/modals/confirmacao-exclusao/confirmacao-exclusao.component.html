@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">Atenção</div>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <i class="fas fa-times"></i>
+    </button>
+</div>
+<div class="modal-body">
+    <p>Tem certeza que deseja excluir?</p>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="activeModal.dismiss('Cross click')"><i class="fas fa-times"></i> Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="activeModal.close('Salvar')"><i class="fas fa-check"></i> Confirmar</button>
+</div>

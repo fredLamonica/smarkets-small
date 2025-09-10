@@ -1,0 +1,35 @@
+collapse-footer {
+  width: 100%;
+
+  #collapseAction {
+    position: absolute;
+    top: -21px;
+    left: calc(50% - 20px);
+    margin: 0 auto;
+    background-color: $smarkets-lighter;
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
+    padding: 0 1rem;
+
+    &:after {
+      @include fa-icon;
+      @extend .fas;
+      font-size: 14px;
+      font-weight: 900;
+      content: fa-content($fa-var-chevron-up);
+      color: $new-ux-smarkets-gray;
+      vertical-align: unset;
+    }
+    
+    &.collapsed {
+      top: -20px;
+      &:after {
+        @include fa-icon;
+        @extend .fas;
+        font-weight: 900;
+        content: fa-content($fa-var-chevron-down);
+        vertical-align: unset;
+      }
+    }
+  }
+}

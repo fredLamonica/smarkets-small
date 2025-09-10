@@ -1,0 +1,14 @@
+<sdk-modal title="OBSERVAÇÕES" [show-footer]="true" title-button-cancel="Fechar" [show-button-confirm]="false">
+  <div class="bg-white border-bottom row py-4"
+    *ngIf="comentarios?.length == 0 && readOnly; else hasComents">
+    <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+  </div>
+  <ng-template #hasComents>
+    <comentarios
+    titulo=""
+    prefixoSubTitulo="Última observação"
+    [comentarios]="comentarios"
+    [readOnly]="readOnly"
+    placeholder="Adicione uma nova observação..." (enviar)="enviarObservacao($event)"></comentarios>
+  </ng-template>
+</sdk-modal>

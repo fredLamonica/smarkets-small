@@ -1,0 +1,278 @@
+<div class="listar-contratos">
+  <smk-listar-funcionalidade
+    [titulo]="'Contratos'"
+    tooltipExportar="Exportar um período de 30 dias"
+    [configuracaoFiltrosUsuario]="configuracaoFiltrosUsuario"
+    [configuracaoDaTable]="configuracaoDaTable"
+    [itensDaTable]="paginacaoPesquisaConfigurada?.itens"
+    [colunasDisponiveis]="colunasDisponiveis"
+    [configuracaoColunasUsuario]="paginacaoPesquisaConfigurada?.configuracaoColunasUsuario"
+    (filtrosChange)="filtre()"
+    (filtrosClear)="limpeFiltro()"
+    (export)="exporte()"
+    (colunasChange)="obterContratos(true)"
+    (colunasReset)="obterContratos(true)"
+    (selectedChange)="selecione($event)"
+    (pageChange)="pagine($event)">
+    <ng-container filtros>
+      <form class="filtros" [formGroup]="formBuscaAvancada">
+        <div class="row">
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="cnpj">Cnpj</label>
+              <input
+                id="dataCriacaoInicio"
+                class="campo-data form-control"
+                type="text"
+                formControlName="cnpj"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="razaoSocial">Razão Social</label>
+              <input
+                id="dataCriacaoFim"
+                class="campo-data form-control"
+                type="text"
+                formControlName="razaoSocial"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataInicio">Data Inicio</label>
+              <input
+                id="dataInicio"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataInicio"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataFim">Data Fim</label>
+              <input
+                id="dataFim"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataFim"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="situacao">Situação</label>
+              <ng-select
+                labelForId="situacao"
+                bindValue="index"
+                bindLabel="name"
+                appendTo="body"
+                formControlName="situacao"
+                [clearAllText]="textoLimpar"
+                [items]="opcoesSituacao"
+                [searchFn]="situacoesSearchFn"
+                (keyup.enter)="filtre()">
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="idContratoCatalogo">ID Contrato </label>
+              <input
+                id="idContratoCatalogo"
+                class="form-control"
+                type="number"
+                formControlName="idContratoCatalogo"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="tipoContratoCatalogo">Tipo Contrato</label>
+              <ng-select
+                labelForId="tipoContratoCatalogo"
+                bindValue="index"
+                bindLabel="name"
+                appendTo="body"
+                formControlName="tipoContratoCatalogo"
+                [clearAllText]="textoLimpar"
+                [items]="opcoesTipoCatalogo"
+                [searchFn]="situacoesSearchFn"
+                (keyup.enter)="filtre()">
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="responsavel">Responsável</label>
+              <input
+                id="responsavel"
+                class="form-control"
+                type="text"
+                formControlName="responsavel"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="gestor">Gestor</label>
+              <input
+                id="gestor"
+                class="form-control"
+                type="text"
+                formControlName="gestor"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="codigo">Código</label>
+              <input
+                id="codigo"
+                class="form-control"
+                type="text"
+                formControlName="codigo"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="objeto">Objeto</label>
+              <input
+                id="objeto"
+                class="form-control"
+                type="text"
+                formControlName="objeto"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="uf">UF</label>
+              <ng-select
+                name="uf"
+                labelForId="idEstado"
+                bindLabel="nome"
+                appendTo="body"
+                formControlName="uf"
+                [items]="estados"
+                (keyup.enter)="filtre()"
+              >
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="faturamentoMinimo">Fat. Mínimo</label>
+              <input
+                id="faturamentoMinimo"
+                class="form-control"
+                type="text"
+                [textMask]="{ mask: maskValor, guide: false }"
+                formControlName="faturamentoMinimo"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="validade">Válidade Contrato</label>
+              <ng-select
+                labelForId="validade"
+                bindValue="index"
+                bindLabel="name"
+                appendTo="body"
+                formControlName="validade"
+                [clearAllText]="textoLimpar"
+                [items]="opcoesValidade"
+                [searchFn]="situacoesSearchFn"
+                (keyup.enter)="filtre()">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+    <ng-container column-templates>
+      <ng-template customColumn="situacao" let-item="item">
+        <span> {{ situacaoContratoCatalogo[item.situacao] }}
+        </span>
+      </ng-template>
+      <ng-template customColumn="validade" let-item="item">
+        <span> {{ validadeContratoCatalogo[item.validade] }}
+        </span>
+      </ng-template>
+      <ng-template customColumn="tipoContratoCatalogo" let-item="item">
+        <span> {{ tipoContratoCatalogo[item.tipoContratoCatalogo] }}
+        </span>
+      </ng-template>
+      <ng-template customColumn="clonagem" let-item="item">
+        <span
+          class="coluna origem-clone"
+          smkOrigemClonagem
+          [clonagem]="item.clonagem">
+          {{ item.clonagem == true ? 'Clonado'  : 'Original' }}
+      </span>
+      </ng-template>
+      <ng-template customColumn="possuiAlteracao" let-item="item">
+        <span
+          class="coluna possui-alteracao"
+          smkAlteracao
+          [possuiAlteracao]="item.possuiAlteracao">
+          {{ item.possuiAlteracao ? 'Pendente' : ''}}
+      </span>
+      </ng-template>
+    </ng-container>
+    <ng-container acoes-table>
+      <button
+        class="btn btn-outline-primary"
+        ngbTooltip="Incluir"
+        [routerLink]="['novo']">
+        <i class="fas fa-plus"></i>
+      </button>
+      <button
+        *ngIf="contratoCatalogoSelecionado "
+        class="btn btn-outline-primary"
+        ngbTooltip="Editar"
+        [routerLink]="[contratoCatalogoSelecionado.idContratoCatalogo]">
+        <i class="fas fa-edit"></i>
+      </button>
+      <button
+        *ngIf="contratoCatalogoSelecionado && contratoCatalogoSelecionado.situacao != situacaoContratoCatalogo.Ativo"
+        class="btn btn-outline-primary"
+        ngbTooltip="Ativar"
+        (click)="ativar(contratoCatalogoSelecionado)">
+        <i class="fas fa-check"></i>
+      </button>
+      <button
+        *ngIf="contratoCatalogoSelecionado && contratoCatalogoSelecionado.situacao != situacaoContratoCatalogo.Inativo"
+        class="btn btn-outline-danger"
+        ngbTooltip="Inativar"
+        (click)="inativar(contratoCatalogoSelecionado)">
+        <i class="fas fa-times"></i>
+      </button>
+      <button
+        *ngIf="contratoCatalogoSelecionado "
+        class="btn btn-outline-primary"
+        ngbTooltip="Auditoria"
+        (click)="auditar(contratoCatalogoSelecionado.idContratoCatalogo)">
+        <i class="fas fa-history"></i>
+      </button>
+      <button
+        *ngIf="contratoCatalogoSelecionado"
+        class="btn btn-outline-danger"
+        ngbTooltip="Excluir"
+        (click)="solicitarExclusao(contratoCatalogoSelecionado.idContratoCatalogo)">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+      <button
+        *ngIf="contratoCatalogoSelecionado && contratoCatalogoSelecionado.idContratoCatalogoPai == 0"
+        class="btn btn-outline-primary"
+        ngbTooltip="Clonar"
+        (click)="cloneCatalogo(contratoCatalogoSelecionado.idContratoCatalogo)">
+        <i class="fas fa-clone"></i>
+      </button>
+    </ng-container>
+  </smk-listar-funcionalidade>
+</div>

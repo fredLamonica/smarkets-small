@@ -1,0 +1,43 @@
+<div class="listar-historico-compras">
+  <smk-listar-funcionalidade
+    [titulo]="'Área do Usuário / Notificações'"
+    [configuracaoFiltrosUsuario]="configuracaoFiltrosUsuario"
+    [filtroInformado]="filtroInformado"
+    [configuracaoDaTable]="configuracaoDaTable"
+    [itensDaTable]="paginacaoPesquisaConfigurada?.itens"
+    [colunasDisponiveis]="colunasDisponiveis"
+    [configuracaoColunasUsuario]="paginacaoPesquisaConfigurada?.configuracaoColunasUsuario"
+    (filtrosChange)="filtre()"
+    (filtrosClear)="limpeFiltro()"
+    (export)="exporte()"
+    (colunasChange)="obterNotificoes(true)"
+    (colunasReset)="obterNotificoes(true)"
+    (pageChange)="pagine($event)"
+  >
+    <ng-container filtros>
+      <form class="filtros" [formGroup]="formFiltro">
+        <div class="row">
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="titulo">Título</label>
+              <input id="titulo" class="form-control" type="text" formControlName="titulo" (keyup.enter)="filtre()" />
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="mensagem">Descrição</label>
+              <input id="mensagem" class="form-control" type="text" formControlName="mensagem" (keyup.enter)="filtre()" />
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataCriacao">Data</label>
+              <input id="dataCriacao" class="form-control" type="date" formControlName="dataCriacao" (keyup.enter)="filtre()" />
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+  </smk-listar-funcionalidade>
+</div>

@@ -1,0 +1,65 @@
+<div>
+  <a
+    type="button"
+    class="btn btn-icon d-flex align-items-center text-primary"
+    (click)="abrirModalDePlanoDeAcao()"
+  >
+    <i class="fas fa-plus-circle"></i>
+    <span class="d-inline-block mb-0 ml-2"> Incluir novo plano de ação</span>
+  </a>
+  <div class="container-fluid no-bounds">
+    <div class="bg-lighter border-bottom row py-2 d-none d-md-flex">
+      <div class="col-md-4">
+        <label class="font-weight-bold">Nome do Plano de Ação:</label>
+      </div>
+      <div class="col-md-2">
+        <label class="font-weight-bold">Status:</label>
+      </div>
+      <div class="col-md-3">
+        <label class="font-weight-bold">Prazo:</label>
+      </div>
+      <div class="col-md-3">
+        <label class="font-weight-bold">Ações:</label>
+      </div>
+    </div>
+    <div class="bg-white border-bottom row py-2" *ngIf="!planos?.length">
+      <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+    </div>
+
+    <div class="bg-white border-bottom row py-2" *ngFor="let plano of planos; let i = index">
+      <div class="col-md-4 col-sm-3 align-self-center">
+        <label for="" class="font-weight-bold d-block d-md-none">Nome do Plano de Ação:</label>
+        <p class="mb-3 mb-lg-0">{{ plano.nome }}</p>
+      </div>
+      <div class="col-md-2 col-sm-3 align-self-center">
+        <label for="" class="font-weight-bold d-block d-md-none">Status:</label>
+        <p class="mb-3 mb-lg-0">
+          {{ StatusPlanoAcaoFornecedor[plano?.status?.valueOf()] }}
+        </p>
+      </div>
+      <div class="col-md-3 col-sm-3 align-self-center">
+        <label for="" class="font-weight-bold d-block d-md-none">Prazo:</label>
+        <p class="mb-3 mb-lg-0">{{ plano.prazo | date: 'dd/MM/yyyy' }}</p>
+      </div>
+      <div class="col-md-3 d-flex justify-content-between align-self-center">
+        <label for="" class="font-weight-bold d-block d-md-none">Ações:</label>
+        <button
+          class="btn btn-icon"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Editar"
+          (click)="abrirModalDePlanoDeAcao(plano)"
+        >
+          <i class="far fa-edit"></i>
+        </button>
+      </div>
+    </div>
+    <pager
+      size="sm"
+      [page]="pagina"
+      [total-pages]="totalPaginas"
+      [records-per-page]="itensPorPagina"
+      (pagination)="paginacao($event)"
+    ></pager>
+  </div>
+</div>

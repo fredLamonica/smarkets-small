@@ -1,0 +1,35 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Motivo de encerramento</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="form-row">
+    <div class="form-group required col-lg-12">
+      <textarea
+        style="resize: none"
+        class="form-control"
+        type="text"
+        name="motivoEncerramentoAntecipado"
+        autofocus
+        [(ngModel)]="motivoEncerramentoAntecipado"
+        [class.invalid]="isEmpty(motivoEncerramentoAntecipado)"
+      ></textarea>
+      <span class="invalid" *ngIf="isEmpty(motivoEncerramentoAntecipado)">
+        Preenchimento obrigatório
+      </span>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-danger" (click)="cancelar()">Cancelar</button>
+  <button
+    type="button"
+    [class.disabled]="isEmpty(motivoEncerramentoAntecipado)"
+    class="btn btn-outline-primary"
+    (click)="confirmar()"
+  >
+    Confirmar
+  </button>
+</div>

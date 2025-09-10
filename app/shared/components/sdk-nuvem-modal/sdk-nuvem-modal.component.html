@@ -1,0 +1,19 @@
+<sdk-modal
+  title="{{ title }}"
+  [show-footer]="true"
+  [title-button-confirm]="'Salvar'"
+  [title-button-cancel]="'Cancelar'"
+  (on-confirm)="onConfirm()"
+>
+  <sdk-nuvem
+    (pagedEvent)="page($event)"
+    (onSelectedTagsChanged)="updateSelectedTags($event)"
+    [tags]="tags"
+    [label]="label"
+    [key]="key"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [totalPages]="totalPages"
+  >
+  </sdk-nuvem>
+</sdk-modal>

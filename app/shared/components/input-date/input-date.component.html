@@ -1,0 +1,7 @@
+<div class="input-group">
+  <input class="form-control" [placeholder]="placeholder" [class.disabled]="disabled" [textMask]="{mask: mask, guide: true, pipe: autoCorrectedDatePipe}" [ngModel]="value" (ngModelChange)="changeDateInput($event)">
+  <input class="d-none" type="text" ngbDatepicker #dp="ngbDatepicker" (dateSelect)="changeDatePicker($event)" [minDate]="minDate" [maxDate]="maxDate"/>
+  <div class="input-group-append">
+    <button class="btn" [class.disabled]="disabled" type="button" (click)="dp.toggle()"><i class="far fa-calendar-alt"></i></button>
+  </div>
+</div>

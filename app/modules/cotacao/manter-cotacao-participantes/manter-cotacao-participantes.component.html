@@ -1,0 +1,486 @@
+<div class="card-header">
+  <div class="row">
+    <div class="col-12 col-md-6 pl-0 font-weight-bold" [class.col-12]="readonly">
+      FORNECEDORES PARTICIPANTES
+    </div>
+    <div class="col-12 col-md-6 font-weight-bold" *ngIf="!readonly">
+      FORNECEDORES NÃO PARTICIPANTES
+    </div>
+  </div>
+</div>
+
+<div class="row bg-white py-3">
+  <!-- REGION FORNECEDORES PARTICIPANTES  -->
+  <div
+    class="col-12 col-md-6 border-right"
+    [class.border-right]="!readonly"
+    *ngIf="!this.cotacao || this.cotacao.situacao == situacaoCotacao['Em configuração']">
+    <div class="row">
+      <div class="col-8 col-lg-9">
+        <input-busca
+          placeholder="Buscar por fornecedores..."
+          (buscar)="buscarParticipantesIncluidos($event)"></input-busca>
+      </div>
+      <div class="col-4 col-lg-3">
+        <ng-select
+          [multiple]="true"
+          [items]="estados"
+          bindLabel="abreviacao"
+          bindValue="abreviacao"
+          (click)="obterEstados()"
+          [(ngModel)]="estadosBuscaIncluidos"></ng-select>
+      </div>
+    </div>
+
+    <div class="row px-3 mt-3 mb-1">
+      <div class="col">
+        <div class="row" *ngIf="!readonly">
+          <div class="col-1">
+            <div class="custom-control custom-checkbox" (click)="selecionarTodosIncluidos()">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="selectAllIncluidos"
+                [checked]="todosParticipantesIncluidosSelecionados" />
+              <label
+                class="custom-control-label"
+                style="position: absolute; pointer-events: none"
+                for="selectAllIncluidos"></label>
+            </div>
+          </div>
+          <div class="col-11 align-self-center">
+            <p class="mb-0">Selecionar todas</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row px-3 mb-3">
+      <div class="col border rounded" style="height: 250px; overflow-y: auto">
+        <div class="row py-1 bg-lighter-dark">
+          <div class="col-1" *ngIf="!readonly"></div>
+          <div class="col-8 col-lg-9" [class.col-10]="readonly">
+            <p class="font-weight-bold mb-0">Fornecedores</p>
+          </div>
+          <div class="col-2">
+            <p class="font-weight-bold mb-0">UF</p>
+          </div>
+        </div>
+
+        <div
+          class="row"
+          *ngIf="
+            (!participantesIncluidos?.length && !participantesRemovidos?.length) ||
+            (participantesIncluidosBusca && !participantesIncluidosBusca.length)
+          ">
+          <p class="col no-content text-align-center" translate>GENERAL.NO_RECORDS_FOUND</p>
+        </div>
+        <ng-container
+          *ngFor="let participante of participantesIncluidos; let indexIncluidos = index">
+          <div
+            class="row pt-1 border-bottom"
+            [class.bg-lighter]="indexIncluidos % 2 != 0"
+            *ngIf="exibirParticipanteIncluido(participante)">
+            <div class="col-1" *ngIf="!readonly">
+              <div
+                class="custom-control custom-checkbox"
+                (click)="selecionarParticipanteIncluido(participante)">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="select{{ indexIncluidos }}"
+                  [checked]="participanteIncluidoSelecionado(participante)" />
+                <label
+                  class="custom-control-label"
+                  style="position: absolute; pointer-events: none"
+                  for="select{{ indexIncluidos }}"></label>
+              </div>
+            </div>
+            <div class="col-8 col-lg-9 align-self-center" [class.col-10]="readonly">
+              <p class="mb-0">{{ participante.pessoaJuridica.razaoSocial }}</p>
+            </div>
+            <div class="col-2 align-self-center">
+              <p class="mb-0">{{ participante.pessoaJuridica.abreviacaoUnidadeFederativa }}</p>
+            </div>
+            <div class="col-12 mt-4">
+              <collapse-footer>
+                <div class="row bg-lighter-dark border-bottom border-top py-1">
+                  <div class="col-12">
+                    <label data-toggle="tooltip" data-placement="bottom" title="Categorias">Categorias:</label>
+                    <p
+                      class="font-weight-bold mb-1"
+                      *ngFor="let categoria of participante.categoriasProduto"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="{{ categoria.nome }}">
+                      {{ categoria.nome }}
+                    </p>
+                  </div>
+                </div>
+              </collapse-footer>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="!readonly">
+      <div class="col-md-6">
+        <button class="btn btn-primary" (click)="abrirModalSelecaoFornecedor()">
+          Incluir Fornecedor
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button class="btn btn-light float-right" (click)="remover()">
+          <i class="fas fa-arrow-right text-primary"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- END REGION FORNECEDORES PARTICIPANTES  -->
+
+  <!-- REGION FORNECEDORES NÃO PARTICIPANTES  -->
+  <div class="col-12 col-md-6" *ngIf="!readonly">
+    <div class="row">
+      <div class="col-8 col-lg-9">
+        <input-busca
+          placeholder="Buscar fornecedores..."
+          (buscar)="buscarparticipantesRemovidos($event)"></input-busca>
+      </div>
+      <div class="col-4 col-lg-3">
+        <ng-select
+          [multiple]="true"
+          [items]="estados"
+          bindLabel="abreviacao"
+          bindValue="abreviacao"
+          (click)="obterEstados()"
+          [(ngModel)]="estadosBuscaRemovidos"></ng-select>
+      </div>
+    </div>
+
+    <div class="row px-3 mt-3 mb-1">
+      <div class="col">
+        <div class="row">
+          <div class="col-1">
+            <div class="custom-control custom-checkbox" (click)="selecionarTodosDisponiveis()">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="selectAllDisponiveis"
+                [checked]="todosparticipantesRemovidosSelecionados" />
+              <label
+                class="custom-control-label"
+                style="position: absolute; pointer-events: none"
+                for="selectAllDisponiveis"></label>
+            </div>
+          </div>
+          <div class="col-11 align-self-center">
+            <p class="mb-0">Selecionar todas</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row px-3 mb-3">
+      <div class="col border rounded" style="height: 250px; overflow-y: auto">
+        <div class="row py-1 bg-lighter-dark">
+          <div class="col-1"></div>
+          <div class="col-8 col-lg-9">
+            <p class="font-weight-bold mb-0">Fornecedores</p>
+          </div>
+          <div class="col-2">
+            <p class="font-weight-bold mb-0">UF</p>
+          </div>
+        </div>
+
+        <div
+          class="row"
+          *ngIf="
+            (!participantesRemovidos?.length && !participantes?.length) ||
+            (participantesRemovidosBusca && !participantesRemovidosBusca.length)
+          ">
+          <p class="col no-content text-align-center" translate>GENERAL.NO_RECORDS_FOUND</p>
+        </div>
+        <ng-container
+          *ngFor="let participante of participantesRemovidos; let indexDisponiveis = index">
+          <div
+            class="row pt-1 border-bottom"
+            [class.bg-lighter]="indexDisponiveis % 2 != 0"
+            *ngIf="exibirParticipanteDisponivel(participante)">
+            <div class="col-1">
+              <div
+                class="custom-control custom-checkbox"
+                (click)="selecionarParticipanteDisponivel(participante)">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="select{{ indexDisponiveis }}"
+                  [checked]="participanteDisponivelSelecionado(participante)" />
+                <label
+                  class="custom-control-label"
+                  style="position: absolute; pointer-events: none"
+                  for="select{{ indexDisponiveis }}"></label>
+              </div>
+            </div>
+            <div
+              class="col-8 col-lg-9 align-self-center"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{ participante.pessoaJuridica?.razaoSocial }}">
+              <p class="mb-0 text-truncate">{{ participante.pessoaJuridica?.razaoSocial }}</p>
+            </div>
+            <div class="col-2 align-self-center">
+              <p class="mb-0">{{ participante.pessoaJuridica.abreviacaoUnidadeFederativa }}</p>
+            </div>
+            <div class="col-12 mt-4">
+              <collapse-footer>
+                <div class="row bg-lighter-dark border-bottom border-top py-1">
+                  <div class="col-12">
+                    <label data-toggle="tooltip" data-placement="bottom" title="Categorias">Categorias:</label>
+                    <p
+                      class="font-weight-bold mb-1"
+                      *ngFor="let categoria of participante.categoriasProduto"
+                      data-toggle="tooltip"
+                      data-placement="bottom"
+                      title="{{ categoria.nome }}">
+                      {{ categoria.nome }}
+                    </p>
+                  </div>
+                </div>
+              </collapse-footer>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="!readonly">
+      <div class="col">
+        <button class="btn btn-light float-left" (click)="adicionar()">
+          <i class="fas fa-arrow-left text-danger"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- END REGION FORNECEDORES NÃO PARTICIPANTES  -->
+
+  <!-- REGION FORNECEDORES PARTICIPANTES DEPOIS QUE A COTAÇÃO FOI CONFIGURADA -->
+  <div
+    class="col-12 col-md-12 text-small border-right"
+    [class.border-right]="!readonly"
+    *ngIf="idCotacao && this.cotacao && this.cotacao.situacao != situacaoCotacao['Em configuração']">
+    <div class="row">
+      <div class="col-4 col-lg-4">
+        <input
+          class="form-control"
+          placeholder="Buscar por fornecedores..."
+          [(ngModel)]="termoFornecedorCotacaoConfigurada"
+          (change)="buscarParticipantesIncluidosCotacaoConfigurada()" />
+      </div>
+      <div class="col-3 col-lg-3">
+        <ng-select
+          [multiple]="true"
+          [items]="estados"
+          bindLabel="abreviacao"
+          bindValue="abreviacao"
+          (click)="obterEstados()"
+          (change)="buscarParticipantesIncluidosCotacaoConfigurada()"
+          [(ngModel)]="estadosBuscaIncluidos"></ng-select>
+      </div>
+      <div class="col-3 col-lg-3">
+        <ng-select
+          (click)="buscarParticipantesIncluidosCotacaoConfigurada()"
+          [(ngModel)]="tipoVisualizacao">
+          <ng-option [value]="1">Não Visualizado</ng-option>
+          <ng-option [value]="2">Visualizado/Sem Proposta</ng-option>
+          <ng-option [value]="3">Cotado/Com Proposta</ng-option>
+        </ng-select>
+      </div>
+      <div class="col-2">
+        <button
+          class="btn btn-outline-primary btn-block"
+          (click)="buscarParticipantesIncluidosCotacaoConfigurada()">
+          <i class="fas fa-filter"></i> Filtrar
+        </button>
+      </div>
+    </div>
+
+    <div class="row px-2 mb-3 mt-3">
+      <div class="col border rounded" style="height: 250px; overflow-y: auto;">
+        <div class="row py-1 text-white bg-info">
+          <div class="row col-4">
+            <div class="col-9 col-lg-9">
+              <p class="font-weight-bold mb-0">Fornecedores</p>
+              <p class="font-weight-bold mb-0">CNPJ</p>
+            </div>
+            <div class="col-3 col-lg-3">
+              <p class="font-weight-bold mb-0">UF</p>
+            </div>
+          </div>
+
+          <div class="col-2 col-lg-2 pl-0">
+            <p class="font-weight-bold mb-0">Endereço</p>
+          </div>
+
+          <div class="col-1 col-lg-1 pl-0">
+            <p class="font-weight-bold mb-0">Contato</p>
+          </div>
+
+          <div class="col-1 col-lg-1">
+            <p class="font-weight-bold mb-0">Telefone</p>
+          </div>
+          <div class="col-2 col-lg-2">
+            <p class="font-weight-bold mb-0">Email</p>
+          </div>
+          <div class="container col-2 px-0">
+            <div class="row px-0">
+              <div class="col-5 pl-0">
+                <p class="font-weight-bold mb-0">Anexo Enviado</p>
+              </div>
+              <div class="col-7 px-0">
+                <p class="font-weight-bold mb-0">Visualizado/Cotado</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="row"
+          *ngIf="
+            (!participantesIncluidos?.length && !participantesRemovidos?.length) ||
+            (participantesIncluidosBusca && !participantesIncluidosBusca.length)
+          ">
+          <p class="col no-content text-align-center" translate>GENERAL.NO_RECORDS_FOUND</p>
+        </div>
+        <ng-container
+          *ngFor="let participante of participantesIncluidos; let indexIncluidos = index">
+          <div
+            class="row pt-1 border-bottom"
+            [class.bg-lighter]="indexIncluidos % 2 != 0"
+            *ngIf="exibirParticipanteIncluido(participante)">
+            <div class="row col-4 mt-1 mb-1">
+              <div class="col-9 col-lg-9 align-self-center">
+                <p class="mb-0">{{ participante.pessoaJuridica.razaoSocial }}</p>
+                <p class="mb-0">{{ participante.pessoaJuridica.cnpj }}</p>
+              </div>
+              <div class="col-3 col-lg-3 align-self-center">
+                <p class="mb-0">
+                  {{ participante.pessoaJuridica.abreviacaoUnidadeFederativa | noContent }}
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="col-2 col-lg-2 pl-0 align-self-center"
+              *ngIf="participante.enderecoInstitucional; else naoTemEndereco">
+              {{ participante.enderecoInstitucional?.logradouro }},
+              {{ participante.enderecoInstitucional?.numero }} -
+              {{ participante.enderecoInstitucional?.bairro }},
+              {{ participante.enderecoInstitucional?.cidade?.nome }} -
+              {{ participante.enderecoInstitucional?.cidade?.estado?.abreviacao }},
+              {{ participante.enderecoInstitucional?.cep }}
+            </div>
+            <ng-template #naoTemEndereco>
+              <div class="col-2 col-lg-2 pl-0 align-self-center">--</div>
+            </ng-template>
+
+            <div class="col-1 col-lg-1 pl-0 align-self-center">
+              <p class="mb-0">{{ participante?.pessoaJuridica?.contato | noContent }}</p>
+            </div>
+
+            <div class="col-1 col-lg-1 align-self-center">
+              <p class="mb-0">{{ participante?.pessoaJuridica?.telefone | noContent }}</p>
+            </div>
+
+            <div class="col-2 col-lg-2 align-self-center">
+              <p class="mb-0">{{ participante?.pessoaJuridica?.email | noContent }}</p>
+            </div>
+
+            <div class="container col-2 px-0 align-self-center">
+              <div class="row px-0">
+                <div class="col-5 pl-0">
+                  <sdk-chip
+                    icon="<i class='fa fa-paperclip'></i>"
+                    icon-color="{{
+                      participante?.quantidadeArquivoAnexado > 0 ? '#00BBF3' : '#969B98'
+                    }}"
+                    content-color="{{
+                      participante?.quantidadeArquivoAnexado > 0 ? '#31D0FF' : '#B4B4B4'
+                    }}"
+                    content-text-color="#FFFFFF"
+                    [shadow]="true"
+                    [is-button]="participante?.quantidadeArquivoAnexado > 0"
+                    [disabled]="participante?.quantidadeArquivoAnexado <= 0"
+                    content="{{ participante?.quantidadeArquivoAnexado }}"
+                    (on-click)="visualizarAnexos(participante?.pessoaJuridica)"></sdk-chip>
+                </div>
+                <div class="col-7 px-0">
+                  <div class="row col justify-content-between">
+                    <!-- Visualizado -->
+                    <div
+                      class="pr-2 pr-xl-1"
+                      data-placement="bottom"
+                      title="Não Visualizado"
+                      *ngIf="
+                        !participante.nomeUsuarioVisualizouCotacaoRodadaAtual;
+                        else visualizado
+                      ">
+                      <i class="fas fa-eye"></i>
+                    </div>
+                    <ng-template #visualizado>
+                      <div
+                        class="text-info pr-2 pr-xl-1"
+                        data-placement="bottom"
+                        title="{{
+                          participante.nomeUsuarioVisualizouCotacaoRodadaAtual
+                        }} Visualizou em {{
+                          participante.dataVisualizacaoCotacaoRodadaAtual | date: 'dd/MM/yyyy'
+                        }} às {{ participante.dataVisualizacaoCotacaoRodadaAtual | date: 'HH:mm' }}">
+                        <i class="fas fa-eye"></i>
+                      </div>
+                    </ng-template>
+
+                    <!-- Cotado -->
+                    <div
+                      class="pr-2 pr-xl-1"
+                      data-placement="bottom"
+                      title="Não Cotado"
+                      *ngIf="!participante.nomeUsuarioCotouCotacaoRodadaAtual; else cotadado">
+                      <i class="fas fa-gavel"></i>
+                    </div>
+                    <ng-template #cotadado>
+                      <div
+                        class="text-info pr-2 pr-xl-1"
+                        data-placement="bottom"
+                        title="{{ participante.nomeUsuarioCotouCotacaoRodadaAtual }} Cotou em {{
+                          participante.dataEnvioPropostaCotacaoRodadaAtual | date: 'dd/MM/yyyy'
+                        }} às {{
+                          participante.dataEnvioPropostaCotacaoRodadaAtual | date: 'HH:mm'
+                        }}">
+                        <i class="fas fa-gavel"></i>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="!readonly">
+      <div class="col-md-6">
+        <button class="btn btn-primary" (click)="abrirModalSelecaoFornecedor()">
+          Incluir Fornecedor
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button class="btn btn-light float-right" (click)="remover()">
+          <i class="fas fa-arrow-right text-primary"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- END REGION FORNECEDORES PARTICIPANTES QUE A COTAÇÃO FOI CONFIGURADA--->
+</div>

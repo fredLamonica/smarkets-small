@@ -1,0 +1,33 @@
+<div class="notification nav-item dropdown">
+  <a
+    class="nav-link"
+    data-toggle="dropdown"
+    href="#"
+    role="button"
+    aria-haspopup="true"
+    aria-expanded="false">
+    <i class="fas fa-bell"></i>
+    <p *ngIf="qtdNaoLidas > 0 && qtdNaoLidas <= 9" class="circle">{{qtdNaoLidas}}</p>
+    <p *ngIf="qtdNaoLidas > 9" class="circle">{{qtdNaoLidas}} +</p>
+  </a>
+  <div class="dropdown-menu dropdown-nav-menu dropdown-menu-right">
+    <div class="border-bottom mb-3">
+      <span class="titulo">Notificações</span>
+    </div>
+    <div class="content-notifications">
+      <div class="mb-3">
+        <span *ngIf="notificacoes.length === 0 " class="mensagem">Não existem notificações!</span>
+      </div>
+      <div *ngFor="let notificacao of notificacoes" class="mb-3" (click)="selectNotification($event, notificacao)">
+        <h5 class="titulo" [ngClass]="{'lido': notificacao.situacao === 2}">{{notificacao.titulo}}</h5>
+        <span class="mensagem" [ngClass]="{'lido': notificacao.situacao === 2}">{{notificacao.mensagem}}</span>
+        <span *ngIf="naoLida(notificacao)" [ngClass]="{'lido': notificacao.situacao === 2}"><i class="circle"></i></span>
+        <br/>
+        <span class="data">{{notificacao.dataCriacao | dataAlteracao}} </span>
+      </div>
+    </div>
+    <div class="footer-notifications">
+
+    </div>
+  </div>
+</div>

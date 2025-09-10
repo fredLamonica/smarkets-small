@@ -1,0 +1,285 @@
+<div class="tab-content container-fluid dashboard-fornecedor">
+  <div class="row pt-3">
+    <div class="col col-12 col-xl-5 d-flex align-items-stretch">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase font-weight-bold">Fornecedores por Status</h4>
+          <div
+            class="col my-5 d-flex justify-content-center"
+            *ngIf="!indicadoresFornecedorDto; else hasIndicadoresPorStatus"
+          >
+            <div class="spinner spinner-secondary"></div>
+          </div>
+          <ng-template #hasIndicadoresPorStatus>
+            <dashboard-fornecedor-status
+              *ngIf="indicadoresFornecedorDto"
+              [fornecedoresInteressados]="
+                indicadoresFornecedorDto?.qtdTotalTotalFornecedoresInteressados
+              "
+              [fornecedoresNaoHomologados]="
+                indicadoresFornecedorDto?.qtdTotalFornecedoresNaoHomologados
+              "
+              [fornecedoresHomologados]="indicadoresFornecedorDto?.qtdTotalFornecedoresHomologados"
+              [totalFornecedores]="indicadoresFornecedorDto?.qtdTotalFornecedores"
+            ></dashboard-fornecedor-status>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-7 d-flex align-items-stretch">
+      <div class="card col-12">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase font-weight-bold">
+            Nº Fornecedores Ativos X Categorias
+          </h4>
+          <div
+            class="col my-5 d-flex justify-content-center"
+            *ngIf="
+              !indicadoresFornecedorDto?.indicadorFornecedorHomologadoCategoriaDto;
+              else hasIndicadoresHomologadosPorCategorias
+            "
+          >
+            <div class="spinner spinner-secondary"></div>
+          </div>
+          <ng-template #hasIndicadoresHomologadosPorCategorias>
+            <div class="row">
+              <dashboard-fornecedor-categoria
+                *ngIf="indicadoresFornecedorDto"
+                [indicadorFornecedorHomologadoCategoria]="
+                  indicadoresFornecedorDto.indicadorFornecedorHomologadoCategoriaDto
+                "
+                [totalFornecedoresHomologadosComCategoria]="
+                  indicadoresFornecedorDto.qtdTotalFornecedoresComCategoria
+                "
+              ></dashboard-fornecedor-categoria>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row pt-3">
+    <div class="col-12 col-xl-9">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase font-weight-bold">Documentos</h4>
+          <div class="row">
+            <div
+              class="col my-5 d-flex justify-content-center"
+              *ngIf="!indicadorArea; else hasInidicadorDocumentos"
+            >
+              <div class="spinner spinner-secondary"></div>
+            </div>
+            <ng-template #hasInidicadorDocumentos>
+              <div class="col-12 col-xl-6">
+                <sdk-chart-area
+                  [height]="'210px'"
+                  [indicador]="indicadorArea"
+                  [lineTension]="0"
+                  [colors]="['#01B0F1']"
+                  *ngIf="indicadoresFornecedorDocumentosDto"
+                ></sdk-chart-area>
+              </div>
+              <div class="col-12 col-xl-6">
+                <div class="row">
+                  <div
+                    class="col-6 pl-0 clickable_area"
+                    (click)="redirect('statusDocumento', 'Aprovados')"
+                  >
+                    <indicador-documento
+                      [value]="indicadoresFornecedorDocumentosDto?.totalDocumentosValidos"
+                      [maxValue]="indicadoresFornecedorDocumentosDto?.totalDocumentos"
+                      [color]="'#00BBF3'"
+                      [label]="'Documentos Válidos'"
+                    >
+                    </indicador-documento>
+                  </div>
+                  <div
+                    class="col-6 pl-0 clickable_area"
+                    (click)="redirect('statusDocumento', 'Recusados')"
+                  >
+                    <indicador-documento
+                      [value]="indicadoresFornecedorDocumentosDto?.totalDocumentosInvalidos"
+                      [maxValue]="indicadoresFornecedorDocumentosDto?.totalDocumentos"
+                      [color]="'#E38888'"
+                      [label]="'Documentos Recusados'"
+                    >
+                    </indicador-documento>
+                  </div>
+                  <div
+                    class="col-6 pl-0 clickable_area"
+                    (click)="redirect('statusDocumento', 'A vencer em 30 dias')"
+                  >
+                    <indicador-documento
+                      [value]="indicadoresFornecedorDocumentosDto?.totalDocumentosAVencer"
+                      [maxValue]="indicadoresFornecedorDocumentosDto?.totalDocumentos"
+                      [color]="'#81CBE2'"
+                      [label]="'Documentos a Vencer'"
+                    >
+                    </indicador-documento>
+                  </div>
+                  <div
+                    class="col-6 pl-0 clickable_area"
+                    (click)="redirect('statusDocumento', 'Não enviados')"
+                  >
+                    <indicador-documento
+                      [value]="indicadoresFornecedorDocumentosDto?.totalDocumentosNaoEnviados"
+                      [maxValue]="indicadoresFornecedorDocumentosDto?.totalDocumentos"
+                      [color]="'#6E6E72'"
+                      [label]="'Documentos não Enviados'"
+                    >
+                    </indicador-documento>
+                  </div>
+                  <div
+                    class="col-6 pl-0 clickable_area"
+                    (click)="redirect('statusDocumento', 'Vencidos')"
+                  >
+                    <indicador-documento
+                      [value]="indicadoresFornecedorDocumentosDto?.totalDocumentosVencidos"
+                      [maxValue]="indicadoresFornecedorDocumentosDto?.totalDocumentos"
+                      [color]="'#CB4545'"
+                      [label]="'Documentos Vencidos'"
+                    >
+                    </indicador-documento>
+                  </div>
+                  <div class="col-6 pl-0">
+                    <indicador-documento
+                      [value]="indicadoresFornecedorDocumentosDto?.totalDocumentos"
+                      [maxValue]="indicadoresFornecedorDocumentosDto?.totalDocumentos"
+                      [color]="'#B9E08C'"
+                      [label]="'Total de Documentos'"
+                    >
+                    </indicador-documento>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-12 col-xl-3 d-flex align-items-stretch">
+      <div class="card col-12">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase font-weight-bold">Questionários</h4>
+          <div
+            class="col my-5 d-flex justify-content-center"
+            *ngIf="!indicadorPie; else showContent"
+          >
+            <div class="spinner spinner-secondary"></div>
+          </div>
+
+          <ng-template #showContent>
+            <sdk-chart-pie
+              class="clickable_area"
+              [indicador]="indicadorPie"
+              [colors]="indicadorPie.colors"
+              *ngIf="
+                indicadorPie &&
+                IndicadoresFornecedorQuestionariosPorStatusDto &&
+                indicadorPie?.dataSets[0].data.length > 0
+              "
+              (event)="redirect('situacaoQuestionario', $event)"
+            ></sdk-chart-pie>
+            <div
+              *ngIf="indicadorPie && indicadorPie?.dataSets[0].data.length <= 0"
+              style="color: #cfd8dc; text-align: center"
+            >
+              <i class="fas fa-2x fa-ban"></i>
+              <p>Não há indicadores no momento</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row pt-3">
+    <div class="col-12 col-xl-4">
+      <div class="card col-12">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase font-weight-bold">Pendências Status</h4>
+          <div
+            class="col my-5 d-flex justify-content-center"
+            *ngIf="!indicadoresPendenciaDto; else hasIndicadoresPendencia"
+          >
+            <div class="spinner spinner-secondary"></div>
+          </div>
+          <ng-template #hasIndicadoresPendencia>
+            <indicador-pendencia-status
+              class="clickable_area"
+              [value]="indicadoresPendenciaDto.pendentes"
+              [label]="'Pendências não resolvidas'"
+              [color]="'#E38888'"
+              (event)="redirect('statusPendencia', 'Pendentes')"
+            >
+            </indicador-pendencia-status>
+
+            <indicador-pendencia-status
+              class="clickable_area"
+              [value]="indicadoresPendenciaDto.resolvidas"
+              [label]="'Pendências Resolvidas'"
+              [color]="'#66CFF6'"
+              (event)="redirect('statusPendencia', 'Resolvidas')"
+            >
+            </indicador-pendencia-status>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-8 d-flex align-items-stretch">
+      <div class="card col-12">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase font-weight-bold">
+            Total de Pendências com interações Nas últimas 24h
+          </h4>
+          <div
+            class="col my-5 d-flex justify-content-center"
+            *ngIf="
+              !indicadoresPendenciaDto?.pendenciasPorHorasDto;
+              else hasIndicadoresPendenciaPorHora
+            "
+          >
+            <div class="spinner spinner-secondary"></div>
+          </div>
+          <ng-template #hasIndicadoresPendenciaPorHora>
+            <sdk-chart-area
+              [fill]="false"
+              [displayDatalabels]="false"
+              [height]="'130px'"
+              [indicador]="indicadorPendenciaPorHora"
+              [colors]="['#01B0F1']"
+              *ngIf="indicadoresPendenciaDto.pendenciasPorHorasDto"
+            ></sdk-chart-area>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row pt-3">
+    <div class="col-12 col-xl-5">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase font-weight-bold">Plano de Ação</h4>
+          <div
+            class="col my-5 d-flex justify-content-center"
+            *ngIf="!indicadorFornecedorPlanoAcao; else hasIndicadoresPlanoAcao"
+          >
+            <div class="spinner spinner-secondary"></div>
+          </div>
+          <ng-template #hasIndicadoresPlanoAcao>
+            <sdk-chart-bar
+              class="clickable_area"
+              [indicador]="indicadorFornecedorPlanoAcao"
+              [colors]="['#E38888', '#01B0F1', '#6D8CA8', '#B9E08C']"
+              *ngIf="indicadorFornecedorPlanoAcao"
+              (event)="redirect('statusPlanoAcao', $event)"
+            ></sdk-chart-bar>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

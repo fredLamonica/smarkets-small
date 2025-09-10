@@ -1,0 +1,28 @@
+.progress-bar {
+  background-color: #01b0f1;
+  // width: 70%; /* Valor a ser preenchido de progresso*/
+}
+
+.progress-value-right {
+  line-height: unset;
+  font-size: x-small;
+  color: #6e6e72;
+  opacity: 1;
+  padding-left: 1%;
+  padding-right: 2px;
+  vertical-align: center;
+}
+
+.rounded-right {
+  border-top-right-radius: 0.4rem !important;
+  border-bottom-right-radius: 0.4rem !important;
+}
+
+.bar {
+  height: 100%;
+}
+
+.progress {
+  border-top-left-radius: 0px 0px;
+  border-bottom-left-radius: 0px 0px;
+}

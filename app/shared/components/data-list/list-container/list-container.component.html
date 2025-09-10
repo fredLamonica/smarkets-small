@@ -1,0 +1,49 @@
+<div class="smk-list-container">
+  <smk-component-container [componentSelector]="componentSelector" [compromisedConsistency]="compromisedConsistency">
+    <div
+      class="smk-list-inner-container"
+      [style.max-height]="maxHeight"
+      [ngClass]="{
+        expandable: expandable,
+        expanded: isExpanded
+      }">
+      <div class="header">
+        <p class="text-truncate" [title]="config?.header">{{ config?.header }}</p>
+      </div>
+      <div
+        #list
+        [id]="idList"
+        class="list"
+        [style.max-height]="listMaxHeight"
+        [ngClass]="{ 'overflow-y-scroll pr-2': isExpanded }">
+        <smk-list
+          [config]="config?.listConfig"
+          [items]="items"
+          [clearSelectionObserver]="clearSelectionObserver"
+          [selectItemsObserver]="selectItemsObserver"
+          [loading]="listLoading"
+          (totalSelectableItemsChange)="listTotalSelectableItemsChange($event)"
+          (selectedChange)="selectedChange.emit($event)"
+          (selectedSynchronizer)="listSelectedSynchronizer($event)">
+        </smk-list>
+      </div>
+      <div
+        class="footer d-flex"
+        (click)="toggleMaxHeight()"
+        [ngClass]="{
+          'justify-content-between': expandable,
+          'justify-content-start': !expandable && config?.listConfig?.multiSelection
+        }">
+        <p
+          class="selected-quantity mb-0"
+          [ngClass]="{active: selectedQuantity && selectedQuantity > 0}"
+          [title]="'Selecionados: ' + selectedQuantity + ' / Total: ' + totalQuantity">
+          Sel.: {{ selectedQuantity }}/{{ totalQuantity }}
+        </p>
+        <p *ngIf="expandable" class="label-footer mb-0" [class.pr-2]="isExpanded">
+          {{ isExpanded ? config?.labelCollapse : config?.labelExpand }}
+        </p>
+      </div>
+    </div>
+  </smk-component-container>
+</div>

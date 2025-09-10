@@ -1,0 +1,13 @@
+<sdk-modal title="ATENÇÃO!" show-footer="{{ true }}" title-button-cancel="Cancelar" title-button-confirm="Confirmar"
+  (on-confirm)="confirme()">
+  <form [formGroup]="form">
+    <p>Deseja confirmar o cancelamento de solicitação de cadastro de produto?</p>
+    <label class="font-weight-bold required">Motivo:</label>
+    <textarea [class.invalid]="form.controls.motivoCancelamento.invalid && form.controls.motivoCancelamento.dirty"
+      class="mt-2 w-100 form-control motivo-cancelamento" maxlength="450"
+      formControlName="motivoCancelamento"></textarea>
+    <span class="invalid" *ngIf="form.controls.motivoCancelamento.invalid && form.controls.motivoCancelamento.dirty">
+      Preenchimento obrigatório
+    </span>
+  </form>
+</sdk-modal>

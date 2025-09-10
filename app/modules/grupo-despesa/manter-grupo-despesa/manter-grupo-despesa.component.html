@@ -1,0 +1,45 @@
+<ul class="nav bg-gray">
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="salvar()"><i class="fas fa-save"></i> Salvar</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="cancelar()"><i class="fas fa-ban"></i> Cancelar</a>
+  </li>
+  <li class="nav-item" *ngIf="idGrupo">
+    <a class="nav-link" role="button" [routerLink]="['../', 'novo']"><i class="fas fa-plus"></i> Incluir novo</a>
+  </li>
+</ul>
+<header>
+  <h1 class="title" translate>{{ idGrupo?'Alterar':'Incluir' }} grupo de despesa</h1>
+</header>
+<div class="container-fluid no-bounds">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <form [formGroup]="form">
+            <div class="form-row" *ngIf="idGrupo">
+              <div class="form-group col-12 col-md-1">
+                <label for="idGrupoDespesa" translate> Id </label>
+                <input class="form-control" type="text" readonly name="idGrupoDespesa" formControlName="idGrupoDespesa">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label for="descricao" translate> Código </label>
+                <input class="form-control" type="text" name="codigo" formControlName="codigo">
+              </div>
+              <div class="form-group required col-8">
+                <label for="descricao" translate> Descrição </label>
+                <input class="form-control" [class.invalid]="form.controls.descricao.invalid && form.controls.descricao.dirty"
+                  type="text" name="descricao" formControlName="descricao">
+                <span class="invalid" *ngIf="form.controls.descricao.invalid && form.controls.descricao.dirty">Preenchimento
+                  obrigatório</span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

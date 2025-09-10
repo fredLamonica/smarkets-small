@@ -1,0 +1,113 @@
+<div class="infinite-scroll" infinite-scroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
+  [scrollWindow]="false" (scrolled)="onScroll()">
+
+  <div class="header">
+    <div class="header-search row">
+      <div class="col-12 align-self-center">
+        <h3 class="mb-0 text-uppercase text-primary font-weight-bold">
+          Condições de Pagamento
+        </h3>
+      </div>
+      <div class="col-lg-8">
+        <input-busca label="O que você procura?" placeholder="Buscar por descrição ou código" (buscar)="buscar($event)"
+          (campoVazio)="limparFiltro()">
+        </input-busca>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-nav-tabs">
+    <ul class="nav nav-tabs row bounds" id="condicaoTab" role="tablist">
+      <li class="nav-item col-lg-3">
+        <a class="nav-link nav-link-block active" id="condicoesPagamento-tab" data-toggle="tab"
+          href="#condicoesPagamento" role="tab" aria-controls="condicoesPagamento" aria-selected="false">Condições de
+          Pagamento</a>
+      </li>
+    </ul>
+
+    <div class="tab-content bounds" id="condicaoTabContent">
+      <div class="tab-pane fade active show" id="condicoesPagamento" role="tabpanel"
+        aria-labelledby="condicoesPagamento-tab">
+        <div #condicaoPagamento>
+          <div class="card card-tab-content">
+            <div class="card-header">
+              <a (click)="editarItem()" class="btn btn-icon d-flex align-items-center text-primary p-0">
+                <i class="fas fa-plus-circle"></i>
+                <p class="d-inline-block mb-0 ml-2"> Inserir nova Condição de Pagamento</p>
+              </a>
+            </div>
+            <div class="card-body">
+              <div class="container-fluid">
+                <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+                  <div class="col-md-1">
+                    <label class="font-weight-bold">ID:</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Código:</label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="font-weight-bold">Condição de Pagamento:</label>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="font-weight-bold">Situação:</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Ações:</label>
+                  </div>
+                </div>
+                <div class="bg-white border-bottom row py-4" *ngIf="!condicoesPagamento?.length">
+                  <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+                </div>
+  
+                <div class="bg-white border-bottom row py-4"
+                  *ngFor="let condicaoPagamento of condicoesPagamento; let i=index;">
+                  <div class="col-md-1 col-sm-3 align-self-center">
+                    <label for="" class="font-weight-bold d-block d-md-none">ID:</label>
+                    <p class="mb-3 mb-lg-0"> {{ condicaoPagamento.idCondicaoPagamento }} </p>
+                  </div>
+                  <div class="col-md-2 col-sm-3 align-self-center">
+                    <label for="" class="font-weight-bold d-block d-md-none">Código:</label>
+                    <p class="mb-3 mb-lg-0"> {{ condicaoPagamento.codigo }} </p>
+                  </div>
+                  <div class="col-md-4 col-sm-3 align-self-center">
+                    <label for="" class="font-weight-bold d-block d-md-none">Condição de Pagamento:</label>
+                      <div *ngIf="idTenantUsuario != condicaoPagamento.idTenant; else naoMostrarBadge">
+                          <p class="mb-3 mb-lg-0"> {{ condicaoPagamento.descricao }} <span class="badge badge-primary badge-strong">[SMARKETS]</span></p>
+                      </div>
+                      <ng-template #naoMostrarBadge>
+                          <p class="mb-3 mb-lg-0"> {{ condicaoPagamento.descricao }} </p>
+                      </ng-template>
+                  </div>
+                  <div class="col-md-3 col-sm-3 align-self-center">
+                    <label for="" class="font-weight-bold d-block d-md-none">Situação:</label>
+                    <p class="mb-3 mb-lg-0"> {{ Situacao[condicaoPagamento.situacao] }} </p>
+                  </div>
+                  <div class="col-md-2 d-flex justify-content-between align-self-center">
+                    <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Editar"
+                      [class.disabled]="idTenantUsuario != condicaoPagamento.idTenant"
+                      (click)="editarItem(condicaoPagamento.idCondicaoPagamento)">
+                      <i class="far fa-edit"></i>
+                    </button>
+                    <button class="btn btn-icon" 
+                              data-toggle="tooltip" 
+                              data-placement="bottom" 
+                              title="Auditoria"
+                              [class.disabled]="idTenantUsuario != condicaoPagamento.idTenant"
+                              (click)="onAuditoriaClick(condicaoPagamento.idCondicaoPagamento)">
+                              <i class="fas fa-history"></i>
+                    </button>
+                    <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Excluir"
+                      [class.disabled]="idTenantUsuario != condicaoPagamento.idTenant"
+                      (click)="onExcluirClick(condicaoPagamento.idCondicaoPagamento)">
+                      <i class="far fa-trash-alt text-danger"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

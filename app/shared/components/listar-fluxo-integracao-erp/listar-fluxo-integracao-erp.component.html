@@ -1,0 +1,115 @@
+<div class="listar-fluxo-integracao-erp" *blockUI="blockUIComponentBodyName">
+  <div *ngIf="modoModal" class="modal-header">
+    <div class="modal-title">Fluxo de Integração ERP</div>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="fecheModal()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div [ngClass]="{ 'modal-body p-3': modoModal }">
+    <div class="row">
+      <div class="col">
+        <div class="table-responsive">
+          <table class="table table-striped table-sm">
+            <thead>
+              <tr class="text-uppercase">
+                <th scope="col"> Data e Hora </th>
+                <th scope="col"> Situação </th>
+                <th scope="col"> Tipo </th>
+                <th scope="col"> Ações </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="!fluxos?.length">
+                <td class="no-content" [attr.colspan]="3"> Nenhum fluxo de integração ERP encontrado </td>
+              </tr>
+              <tr *ngFor="let fluxo of fluxos">
+                <td>{{ fluxo.dataHora | date: 'dd/MM/yyyy \'às\' HH:mm:ss' }}</td>
+                <td
+                  class="situacao"
+                  [appSituacaoFluxoIntegracaoErpClass]="fluxo.situacao"
+                  [appSituacaoFluxoIntegracaoErpText]="fluxo.situacao">
+                </td>
+                <td class="tipo" [appTipoFluxoIntegracaoErpText]="fluxo.tipo"></td>
+                <td>
+                  <button
+                    *ngIf="fluxo.mensagem"
+                    class="btn btn-outline-primary mr-3 btn-visualizar"
+                    data-toggle="tooltip"
+                    ngbTooltip="Visualizar"
+                    (click)="visualizar(modalMotivoErro, fluxo.mensagem)">
+                    <i class="fas fa-eye m-0"></i>
+                  </button>
+                  <button
+                    *ngIf="fluxo.permiteReenvio"
+                    class="btn btn-outline-primary btn-reenviar"
+                    data-toggle="tooltip"
+                    ngbTooltip="Reenviar"
+                    (click)="reenviarParaIntegracao(fluxo)">
+                    <i class="fas fa-sync m-0"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <pager
+            [page]="pagina"
+            [total-pages]="totalPaginas"
+            [records-per-page]="itensPorPagina"
+            [size]="'sm'"
+            (pagination)="paginacao($event)">
+          </pager>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr [ngClass]="{ 'mt-0 mb-2': modoModal }">
+  <ng-container *ngIf="!modoModal; then botaoRecarregarLista"></ng-container>
+  <div *ngIf="modoModal" class="modal-footer justify-content-between">
+    <ng-container *ngTemplateOutlet="botaoRecarregarLista"></ng-container>
+    <button type="button" class="btn btn-outline-primary btn-fechar" ngbAutofocus (click)="fecheModal()">
+      <i class="fas fa-times mr-2"></i>
+      Fechar
+    </button>
+  </div>
+</div>
+
+<ng-template #botaoRecarregarLista>
+  <button
+    type="button"
+    class="btn btn-outline-primary btn-recarregar"
+    [class.disabled]="!recargaHabilitada"
+    (click)="recarregueFluxos()">
+    <i class="fas fa-redo mr-2" [class.fa-spin]="!recargaHabilitada"></i>
+    Recarregar lista
+  </button>
+</ng-template>
+
+<ng-template #modalMotivoErro let-modal>
+  <div class="modal-motivo-erro">
+    <div class="modal-header">
+      <div class="modal-title">Motivo</div>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body p-3">
+      <textarea class="form-control motivo-erro" [ngModel]="motivoErro" rows="4" disabled></textarea>
+    </div>
+    <hr *ngIf="modoModal" class="mb-2 mt-0">
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-voltar"
+        ngbAutofocus
+        (click)="modal.close()">Voltar</button>
+    </div>
+  </div>
+</ng-template>

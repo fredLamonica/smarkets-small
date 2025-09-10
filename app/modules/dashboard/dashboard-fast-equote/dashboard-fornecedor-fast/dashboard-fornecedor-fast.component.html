@@ -1,0 +1,30 @@
+<div class="col-pers">
+  <div class="card none-box-shadow">
+    <div class="card-body-user">
+      <div class="col-12 px-0 text-center">
+        <div class="col d-flex justify-content-center" *ngIf="IsLoading; else hasIndicadoresForn">
+          <div class="spinner spinner-secondary"></div>
+        </div>
+        <ng-template #hasIndicadoresForn>
+          <H1 class="align">{{ IndicadorFornecedorFast?.totalFornecedorQueVenderamMes }}</H1>
+        </ng-template>
+        <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0">Total Fornecedores que venderam (Por periodo)</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-pers">
+  <div class="card none-box-shadow">
+    <div class="card-body-user">
+      <div class="col-12 px-0 text-center">
+        <div class="col d-flex justify-content-center" *ngIf="IsLoading; else hasIndicadoresFornTotal">
+          <div class="spinner spinner-secondary"></div>
+        </div>
+        <ng-template #hasIndicadoresFornTotal>
+          <H1 class="align">{{ IndicadorFornecedorFast?.totalFornecedor }}</H1>
+        </ng-template>
+        <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0">Total Fornecedores</span>
+      </div>
+    </div>
+  </div>
+</div>

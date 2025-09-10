@@ -1,0 +1,29 @@
+<div class="listar-funcionalidade" [ngClass]="class">
+  <smk-funcionalidade [rotaVoltar]="rotaVoltar" [titulo]="titulo" [tituloComplementar]="tituloComplementar">
+    <ng-content select="[acoes-barra]" ngProjectAs="[acoes-barra]"></ng-content>
+    <ng-content select="[titulo-customizado]" ngProjectAs="[titulo-customizado]"></ng-content>
+    <smk-filtro-funcionalidade
+      class="mb-4"
+      [configuracaoFiltrosUsuario]="configuracaoFiltrosUsuario"
+      [filtroInformado]="filtroInformado"
+      (filtrosChange)="filtrosChange.emit()"
+      (filtrosClear)="filtrosClear.emit()">
+      <ng-content select="[filtros]"></ng-content>
+    </smk-filtro-funcionalidade>
+    <smk-table-funcionalidade
+      [configuracaoDaTable]="configuracaoDaTable"
+      [itensDaTable]="itensDaTable"
+      [configuracaoFerramentasDaTable]="configuracaoFerramentasDaTable"
+      [colunasDisponiveis]="colunasDisponiveis"
+      [configuracaoColunasUsuario]="configuracaoColunasUsuario"
+      [tooltipExportar]="tooltipExportar"
+      (export)="export.emit()"
+      [ferramentas]="ferramentas"
+      (colunasChange)="colunasChange.emit($event)"
+      (colunasReset)="colunasReset.emit()"
+      (selectedChange)="selectedChange.emit($event)"
+      (pageChange)="pageChange.emit($event)">
+      <ng-content select="[acoes-table]"></ng-content>
+    </smk-table-funcionalidade>
+  </smk-funcionalidade>
+</div>

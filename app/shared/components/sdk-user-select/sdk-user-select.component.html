@@ -1,0 +1,33 @@
+<div class="input-group">
+  <ng-select
+    #userSelect
+    id="user-select"
+    [placeholder]="placeholder"
+    [items]="users"
+    bindValue="idUsuario"
+    [(ngModel)]="value"
+    (search)="getSearchText($event)"
+    [isOpen]="isOpen"
+    [clearable]="false"
+    (change)="onChangeUser($event)"
+    [searchFn]="userCustomSearchFn"
+    (keyup.enter)="buttonClick()"
+    (blur)="blur()"
+  >
+    <ng-template ng-label-tmp let-item="item">
+      <a>{{ item.nome + ' - ' + item.email }}</a>
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item" let-index="index">
+      <i class="far fa-circle pr-2" [ngClass]="{ 'text-primary': item.idUsuario == value }"></i>
+      <a [ngClass]="{ 'text-primary': item.idUsuario == value }">{{
+        item.nome + ' - ' + item.email
+      }}</a>
+    </ng-template>
+  </ng-select>
+  <div class="input-group-append" *ngIf="!wasSearched || value">
+    <button class="btn mr-2" [class.disabled]="disabled" type="button" (click)="buttonClick()">
+      <i *ngIf="!wasSearched" class="icon-font-size fas fa-search icon-color-gray"></i>
+      <i *ngIf="wasSearched" class="icon-font-size fas fa-trash-alt icon-color-blue"></i>
+    </button>
+  </div>
+</div>

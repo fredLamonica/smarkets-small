@@ -1,0 +1,23 @@
+<div class="row mb-3">
+  <div class="col-lg-6">
+    <input-file [multiple]="true" accept=".csv,.tiff,.txt,.pdf,.xlsx,.xls,.pptx,.ppt,.docx,.doc,.odt,.ods,.odp,.png,.jpeg,.jpg" (select)="arquivosSelecionados($event)"></input-file>
+  </div>
+</div>
+<div class="row justify-content-start mb-3">
+  <div class="col-0 pad-lef">
+    <button role=button ngbTooltip="Download" class="btn btn-block btn-primary" [class.disabled]="!anexosSelecionados?.length" (click)="download()">
+      <i class="fas fa-download"></i>
+    </button>
+  </div>
+  <div class="col-0 pad-lef">
+    <button role=button ngbTooltip="Remover"  class="btn btn-block btn-danger" [class.disabled]="!anexosSelecionados?.length" (click)="solicitarExclusao()">
+      <i class="fas fa-trash-alt"></i>
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <custom-table classes="table-striped table-sm" [settings]="settings" [source]="anexos" (select)="selecaoExclusao($event)"></custom-table>
+    <pager [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="itensPorPagina" (pagination)="paginacao($event)"></pager>
+  </div>
+</div>

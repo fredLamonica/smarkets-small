@@ -1,0 +1,10 @@
+@import "./../../../../styles.scss";
+
+.top-bar {
+	background: $primary;
+	height: $navbar-height;
+}
+
+img {
+  max-height: 100px;
+}

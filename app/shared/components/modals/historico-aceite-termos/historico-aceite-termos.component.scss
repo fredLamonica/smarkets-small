@@ -1,0 +1,15 @@
+@import "../../../../../styles.scss";
+
+#historicoDeAceite {
+    height: calc(60vh - 4rem);
+    overflow-y: auto;
+  }
+
+.border-bottom{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.row.dados-historico{
+    min-height: 100px;
+}

@@ -1,0 +1,436 @@
+<div class="bg-white border-bottom row pt-4 text-small">
+  <div class="col-2 d-flex d-lg-none align-self-center justify-content-center">
+    <div class="custom-control custom-checkbox mb-4">
+      <input
+        type="checkbox"
+        class="custom-control-input"
+        id="selecionado{{ item.idItemSolicitacaoCompra }}"
+        [(ngModel)]="selecionado"
+        (change)="onSelecionar($event)" />
+      <label
+        class="custom-control-label mb-1"
+        for="selecionado{{ item.idItemSolicitacaoCompra }}"></label>
+    </div>
+  </div>
+
+  <div class="col-10 col-lg-12">
+    <div class="row">
+      <ng-template #checkbox>
+        <div class="col-6 col-lg-4 px-1">
+          <div class="row">
+            <div class="col-lg-4 d-none d-lg-flex">
+              <div class="custom-control custom-checkbox mb-4">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="selecionado{{ item.idItemSolicitacaoCompra }}"
+                  [(ngModel)]="selecionado"
+                  (change)="onSelecionar($event)" />
+                <label
+                  class="custom-control-label mb-1"
+                  for="selecionado{{ item.idItemSolicitacaoCompra }}"></label>
+              </div>
+            </div>
+            <div class="col-6 col-lg-6 px-1">
+              <label>Item RC</label>
+              <p class="font-weight-bold mb-lg-0">{{ item.idItemSolicitacaoCompra }}</p>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <div class="col-lg-2">
+        <div class="row">
+          <div class="col-6 col-lg-4 px-1" *ngIf="!emSelecao || permitirSelecao(); else checkbox">
+            <label>Item RC</label>
+            <p class="font-weight-bold mb-lg-0">{{ item.idItemSolicitacaoCompra }}</p>
+          </div>
+          <div class="col-6 col-lg-4 px-1">
+            <label>Item</label>
+            <p class="font-weight-bold mb-lg-0">{{ item.codigo }}</p>
+          </div>
+          <div class="col-6 col-lg-4 px-1">
+            <label>Cód Prod</label>
+            <p class="font-weight-bold mb-lg-0">{{ item?.codigoProduto }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-2 px-1">
+        <label>Produto</label>
+        <p class="font-weight-bold mb-lg-0 text-primary">{{ item?.nomeProduto ? item?.nomeProduto : item?.descricao }}</p>
+      </div>
+
+      <div class="col-lg-2">
+        <div class="row">
+          <div class="col-4 col-lg-4 px-1">
+            <label>UM</label>
+            <p class="font-weight-bold mb-lg-0">{{ item?.siglaUnidadeMedida }}</p>
+          </div>
+          <div class="col-4 col-lg-4 px-1">
+            <label>$</label>
+            <p class="font-weight-bold mb-lg-0" title="{{ Moeda[item?.moeda] }}">
+              {{ Moeda[item?.moeda] }}
+            </p>
+          </div>
+          <div class="col-4 col-lg-4 px-1">
+            <label>VR</label>
+            <p class="font-weight-bold mb-lg-0" title="{{ item?.valorReferencia }}">
+              <!-- {{ (item.valorReferencia ? item.valorReferencia : 0) | currency:(item.moeda|moedaCodigo):'symbol':'1.2':(item.moeda|moedaLocale) }} -->
+              {{ item.valorReferencia }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 px-1">
+        <div class="row">
+          <div class="col-6 col-lg-2 px-1">
+            <label>Qtde</label>
+            <p class="font-weight-bold mb-lg-0" title="{{ item?.quantidade }}">
+              {{ item?.quantidade | number: '1.0-10':'pt-BR' }}
+            </p>
+          </div>
+          <div class="col-6 col-lg-2 px-1">
+            <label>CC</label>
+            <p class="font-weight-bold mb-lg-0">{{ item?.codigoClassificacaoContabil }}</p>
+          </div>
+          <div class="col-6 col-lg-2 px-1">
+            <label>TpDoc</label>
+            <p class="font-weight-bold mb-lg-0">{{ solicitacao?.tipoDocumento }}</p>
+          </div>
+          <div class="col-6 col-md-2 px-1">
+            <label>Forn</label>
+            <p class="font-weight-bold mb-lg-0">{{ item?.fornecedorFixo }}</p>
+          </div>
+
+          <div class="col-lg-4 px-1">
+            <label>Situação</label>
+            <p
+              class="font-weight-bold mb-lg-0"
+              [class.text-danger]="item?.situacao == SituacaoSolicitacaoItemCompra.Cancelada">
+              {{ SituacaoSolicitacaoItemCompra[item?.situacao] }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 px-2">
+        <div class="row px-2">
+          <div class="col-lg-12 d-flex justify-content-around align-self-center">
+            <a
+              class="btn btn-icon px-2 text-primary btn-small"
+              data-toggle="collapse"
+              href="#comentarios-{{ item.idItemSolicitacaoCompra }}"
+              role="button"
+              aria-expanded="false"
+              aria-controls="comentarios"
+              (click)="obterComentarios()">
+              <i class="far fa-comments"></i>
+            </a>
+            <button
+              class="btn btn-icon text-primary btn-small"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Anexar"
+              (click)="anexarArquivo()">
+              <i class="fas fa-paperclip"></i>
+            </button>
+            <button
+              class="btn btn-icon text-primary btn-small"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Visualizar"
+              (click)="visualizar()">
+              <i class="far fa-eye"></i>
+            </button>
+            <button
+              class="btn btn-icon text-primary btn-small"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Associar a um produto existente"
+              (click)="vincularProduto()"
+              *ngIf="permitirVinculo">
+              <i class="fas fa-project-diagram"></i>
+            </button>
+            <button
+              class="btn btn-icon text-primary btn-small"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Cadastrar um item para este vínculo"
+              (click)="cadastrarProduto()"
+              *ngIf="permitirVinculo">
+              <i class="fas fa-link"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 mt-4">
+        <collapse-footer *ngIf="item?.tipoItem != '9'; else hasSubItens" (open)="carregarCatalogo()">
+          <!-- #region Dados da empresa -->
+          <!--<div class="row bg-lighter border-bottom py-3">
+            <div class="col-lg-12">
+              <h5 class="text-uppercase font-weight-bold">Empresa:</h5>
+            </div>
+            <div class="col-12 col-lg-3 align-self-center">
+              <label>CNPJ:</label>
+              <p
+                class="font-weight-bold text-truncate"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.pessoaJuridica?.cnpj }}"
+              >
+                {{ item?.pessoaJuridica?.cnpj }}
+              </p>
+            </div>
+            <div class="col-12 col-lg-6 align-self-center">
+              <label>Razão Social:</label>
+              <p
+                class="font-weight-bold"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.pessoaJuridica?.razaoSocial }}"
+              >
+                {{ item?.pessoaJuridica?.razaoSocial }}
+              </p>
+            </div>
+            <div class="col-12 col-lg-3 align-self-center">
+              <label>Nome Fantasia:</label>
+              <p
+                class="font-weight-bold"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.pessoaJuridica?.nomeFantasia }}"
+              >
+                {{ item?.pessoaJuridica?.nomeFantasia }}
+              </p>
+            </div>
+          </div>-->
+          <!-- #endregion -->
+
+          <!-- #region Dados do produto -->
+          <div class="row bg-lighter border-bottom py-3">
+            <div class="col-12">
+              <h5 class="text-uppercase font-weight-bold">Dados do produto:</h5>
+            </div>
+            <div class="col-12">
+              <label>Descrição Completa:</label>
+              <p
+                class="font-weight-bold"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.nomeProduto }}">
+                {{ item?.descricaoProduto }}
+              </p>
+            </div>
+
+            <div class="col-6 col-lg-3">
+              <label>Categoria:</label>
+              <p
+                class="font-weight-bold"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.nomeCategoria }}">
+                {{ item?.nomeCategoria }}
+              </p>
+            </div>
+
+            <div class="col-6 col-lg-3">
+              <label>NCM:</label>
+              <p
+                class="font-weight-bold"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.ncm }}">
+                {{ item?.ncm }}
+              </p>
+            </div>
+
+            <div class="col-6 col-lg-3">
+              <label>Código Depósito:</label>
+              <p
+                class="font-weight-bold"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.codigoDeposito }}">
+                {{ item?.codigoDeposito }}
+              </p>
+            </div>
+
+            <div class="col-6 col-lg-3">
+              <label>Ordem:</label>
+              <p
+                class="font-weight-bold"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.ordem }}">
+                {{ item?.ordem }}
+              </p>
+            </div>
+
+            <div class="col-6 col-lg-3">
+              <label>Nome Imobilizado:</label>
+              <p
+                class="font-weight-bold"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.nomeImobilizado }}">
+                {{ item?.nomeImobilizado }}
+              </p>
+            </div>
+
+            <div class="col-6 col-lg-3">
+              <label>Elemento Ped:</label>
+              <p
+                class="font-weight-bold"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.elementoPep }}">
+                {{ item?.elementoPep }}
+              </p>
+            </div>
+            <div class="col-6 col-lg-3">
+              <label>Data Remessa:</label>
+              <p
+                class="font-weight-bold"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.dataRemessa | date: 'dd/MM/yyyy' }}">
+                {{ item?.dataRemessa | date: 'dd/MM/yyyy' }}
+              </p>
+            </div>
+            <div class="col-6 col-lg-3">
+              <label>Previsão de Entrega:</label>
+              <p
+                class="font-weight-bold"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ getPrevisaoEntrega() | date: 'dd/MM/yyyy' }}">
+                {{ getPrevisaoEntrega() | date: 'dd/MM/yyyy' }}
+              </p>
+            </div>
+          </div>
+
+          <div class="row bg-lighter border-bottom py-3" *ngIf="item?.pedidoItem">
+            <div class="col-12">
+              <h5 class="text-uppercase font-weight-bold">Pedido Vinculado:</h5>
+            </div>
+            <div class="col-md-4 align-self-center text-truncate">
+              <label>ID Pedido:</label>
+              <p
+                class="font-weight-bold text-truncate"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.pedidoItem?.idPedido }}">
+                {{ item?.pedidoItem?.idPedido }}
+              </p>
+            </div>
+            <div class="col-md-8 pr-0 align-self-center">
+              <div class="row">
+                <div class="col text-truncate">
+                  <label>Usuário Responsável: </label>
+                  <p
+                    class="font-weight-bold mb-1"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="{{ item?.pedidoItem?.usuario?.pessoaFisica?.nome }}">
+                    {{ item?.pedidoItem?.usuario?.pessoaFisica?.nome }}
+                  </p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col text-truncate">
+                  <p
+                    class="font-weight-bold mb-1"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="{{ item?.pedidoItem?.usuario?.email }}">
+                    {{ item?.pedidoItem?.usuario?.email }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row bg-lighter border-bottom py-3" *ngIf="item?.requisicaoItem">
+            <div class="col-12">
+              <h5 class="text-uppercase font-weight-bold">Requisição Vinculada:</h5>
+            </div>
+            <div class="col-md-4 align-self-center text-truncate">
+              <label>ID Requisição:</label>
+              <p
+                class="font-weight-bold text-truncate"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ item?.requisicaoItem?.idRequisicaoItem }}">
+                {{ item?.requisicaoItem?.idRequisicaoItem }}
+              </p>
+            </div>
+            <div class="col-md-8 pr-0 align-self-center">
+              <div class="row">
+                <div class="col text-truncate">
+                  <label>Usuário Responsável: </label>
+                  <p
+                    class="font-weight-bold mb-1"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="{{ item?.requisicaoItem?.usuarioResponsavel?.pessoaFisica?.nome }}">
+                    {{ item?.requisicaoItem?.usuarioResponsavel?.pessoaFisica?.nome }}
+                  </p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col text-truncate">
+                  <p
+                    class="font-weight-bold mb-1"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="{{ item?.requisicaoItem?.usuarioResponsavel?.email }}">
+                    {{ item?.requisicaoItem?.usuarioResponsavel?.email }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- #endregion -->
+
+          <ng-container *ngIf='visualizarCatalogo && !ocultarCardVinculoManual'>
+            <vincular-produto-item
+              [descricao]="item.descricao"
+              [tipo-documento]="tipoDocumento"
+              [item]="item"
+              (vincular-requisicao)="criarRequisicao($event)"
+              (vincular-pedido)="vincularPedido($event)"
+              *ngIf="permitirVinculo"></vincular-produto-item>
+          </ng-container>
+
+        </collapse-footer>
+        <ng-template #hasSubItens>
+          <collapse-footer (click)="carregarSubItens()">
+            <sub-item-solicitacao-compra
+              [item-solicitacao]="item"
+              [tipo-documento]="tipoDocumento"
+              [sub-item]="subItem"
+              [id-fornecedor]="idFornecedor"
+              [id-itemSolicitacao]="item.idItemSolicitacaoCompra"
+              [id-pedido]="idPedido"
+              [id-requisicao]="idRequisicao"
+              [tipo-vinculo-sub-item]="tipoVinculoSubItens"
+              [id-solicitacao-compra]="item.idSolicitacaoCompra"
+              (atualizar-situacao)="atualizarSituacao($event)"
+              (item-desvinculado)="obterDadosVinculoSubItem()"
+              (sub-item-vinculado-requisicao)="obterDadosRequisicaoSubItem()"
+              *ngFor="let subItem of item?.subItens">
+            </sub-item-solicitacao-compra>
+          </collapse-footer>
+        </ng-template>
+      </div>
+      <comentarios
+        class="collapse col-12"
+        id="comentarios-{{ item.idItemSolicitacaoCompra }}"
+        [comentarios]="item.comentarios"
+        (enviar)="enviarComentario($event)">
+      </comentarios>
+    </div>
+  </div>
+</div>

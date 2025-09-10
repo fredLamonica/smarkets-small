@@ -1,0 +1,145 @@
+<div class="input-group">
+  <ng-select
+    [items]="produtos$ | async"
+    bindValue="idProduto"
+    [hideSelected]="true"
+    [loading]="loading"
+    loadingText="buscando..."
+    [typeahead]="input$"
+    typeToSearchText="Digite para buscar"
+    [(ngModel)]="idProduto"
+    [searchFn]="productSearchFn"
+    (clear)="buscarProdutosPorDescricao()">
+    <ng-template ng-label-tmp let-item="item">
+      <span>{{
+        includeCodeInSearch && item.codigo ? item.codigo + ' - ' + item.descricao : item.descricao
+        }}</span>
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item">
+      <span>{{
+        includeCodeInSearch && item.codigo ? item.codigo + ' - ' + item.descricao : item.descricao
+        }}</span>
+    </ng-template>
+  </ng-select>
+  <div class="input-group-append">
+    <button
+      class="btn btn-primary"
+      type="button"
+      id="button-addon2"
+      (click)="abriModal(selecaoProdutoModal)">
+      <i class="fas fa-search"></i>
+    </button>
+  </div>
+</div>
+
+<ng-template #selecaoProdutoModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">Selecionar produto</div>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <form class="col-12" [formGroup]="form">
+        <div class="form-row">
+          <div class="form-group col-xl-6">
+            <label for="descricao" translate> Descrição </label>
+            <input class="form-control" type="text" name="descricao" formControlName="descricao" />
+          </div>
+          <div class="form-group col-xl-6">
+            <label for="codigo" translate> Código </label>
+            <input class="form-control" type="text" name="codigo" formControlName="codigo" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-xl-6">
+            <label for="idProduto" translate> Id Smarkets </label>
+            <input class="form-control" type="text" name="idProduto" formControlName="idProduto" />
+          </div>
+          <div class="form-group col-xl-6">
+            <label for="codigoNcm" translate> NCM </label>
+            <input class="form-control" type="text" name="codigoNcm" formControlName="codigoNcm" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="idCategoria" translate> Categoria </label>
+            <input-tree
+              [source]="categorias"
+              value-property="nome"
+              key-property="idCategoriaProduto"
+              children-property="filhos"
+              name="idCategoria"
+              formControlName="idCategoria"></input-tree>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label for="tipoCatalogo" translate> Selecione um Catálogo </label>
+            <ng-select #catalogoSelect
+              placeholder="Selecione um catálogo"
+              [items]="opcoesTipoCatalogo"
+              [searchable]="true"
+              [clearable]="true"
+              clearAllText="Limpar"
+              formControlName="tipoCatalogo"
+              bindValue="index"
+              class="empresaSelect">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <span [title]="item.name">
+                  {{ item.name }}<br />
+                </span>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="col-md-4 col-xl-2">
+            <button role="button" class="btn btn-block btn-primary" (click)="buscar()">
+              <i class="fas fa-search"></i> Pesquisar
+            </button>
+          </div>
+          <div class="col-md-4 col-xl-2">
+            <button role="button" class="btn btn-block btn-danger" (click)="limpar()">
+              <i class="fas fa-trash-alt"></i> Limpar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+            <custom-table
+              classes="table-striped table-sm"
+              [settings]="settings"
+              [source]="produtos"
+              (select)="selecao($event)"
+              (sort)="ordenar($event)"></custom-table>
+            <pager
+              size="sm"
+              [page]="pagina"
+              [total-pages]="totalPaginas"
+              [records-per-page]="registrosPorPagina"
+              (pagination)="paginacao($event)"></pager>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="c()">Cancelar</button>
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      [class.disabled]="!selecionado"
+      (click)="confirmar()">
+      Confirmar
+    </button>
+  </div>
+</ng-template>

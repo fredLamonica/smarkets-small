@@ -1,0 +1,242 @@
+<div class="listar-contratos">
+  <smk-liste-funcionalidade-produto-catalogo
+    tooltipExportar="Exportar um período de 30 dias"
+    [configuracaoFiltrosUsuario]="configuracaoFiltrosUsuario"
+    [filtroInformado]="filtroInformado"
+    [configuracaoDaTable]="configuracaoDaTable"
+    [ferramentas]="ferramentas"
+    [itensDaTable]="paginacaoPesquisaConfigurada?.itens"
+    [colunasDisponiveis]="colunasDisponiveis"
+    [configuracaoColunasUsuario]="paginacaoPesquisaConfigurada?.configuracaoColunasUsuario"
+    (filtrosChange)="filtre()"
+    (filtrosClear)="limpeFiltro()"
+    (export)="exporte()"
+    (colunasChange)="filtreContratos(true)"
+    (colunasReset)="filtreContratos(true)"
+    (selectedChange)="selecione($event)"
+    (pageChange)="pagine($event)">
+    <ng-container filtros>
+      <form class="filtros" [formGroup]="formFiltro">
+        <div class="row">
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="idCatalogo">Id Contrato</label>
+              <input
+                id="idCatalogo"
+                class="form-control"
+                type="text"
+                formControlName="idCatalogo"
+                [textMask]="mascaraSomenteNumeros"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="idProduto">Id Produto</label>
+              <input
+                id="idProduto"
+                class="form-control"
+                type="text"
+                formControlName="idProduto"
+                [textMask]="mascaraSomenteNumeros"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="descricao">Descrição Produto</label>
+              <input
+                id="descricao"
+                class="form-control"
+                type="text"
+                formControlName="descricao"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="codigo">Código</label>
+              <input
+                id="codigo"
+                class="form-control"
+                type="text"
+                formControlName="codigo"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="situacaoCatalogo">Situação Cátalogo</label>
+              <ng-select
+                labelForId="situacaoCatalogo"
+                bindValue="index"
+                bindLabel="name"
+                appendTo="body"
+                formControlName="situacaoCatalogo"
+                [clearAllText]="textoLimpar"
+                [items]="opcoesSituacaoCatalogo"
+                [searchFn]="situacoesSearchFn"
+                (keyup.enter)="filtre()">
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="situacaoitem">Situação Item</label>
+              <ng-select
+                labelForId="situacaoItem"
+                bindValue="index"
+                bindLabel="name"
+                appendTo="body"
+                formControlName="situacaoItem"
+                [clearAllText]="textoLimpar"
+                [items]="opcoesSituacaoItem"
+                [searchFn]="situacoesSearchFn"
+                (keyup.enter)="filtre()">
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="titulo">Titulo</label>
+              <input
+                id="titulo"
+                class="form-control"
+                type="text"
+                formControlName="titulo"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="cliente">Cliente</label>
+              <input
+                id="cliente"
+                class="form-control"
+                type="text"
+                formControlName="cliente"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="responsavel">Responsável</label>
+              <input
+                id="responsavel"
+                class="form-control"
+                type="text"
+                formControlName="responsavel"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataInicio">Data Inicio</label>
+              <input
+                id="dataInicio"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataInicio"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataFim">Data Fim</label>
+              <input
+                id="dataFim"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataFim"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="preco">Preço</label>
+              <input
+                id="preco"
+                class="form-control"
+                type="text"
+                [textMask]="{ mask: maskValor, guide: false }"
+                formControlName="preco"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="quantidadeMinima">Quantidade Mínima</label>
+              <input
+                id="quantidadeMinima"
+                class="form-control"
+                min="1"
+                type="number"
+                formControlName="quantidadeMinima"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="prazoEntrega">Prazo de entrega (Dias úteis)</label>
+              <input
+                id="prazoEntrega"
+                class="form-control"
+                min="1"
+                type="number"
+                formControlName="prazoEntrega"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+    <ng-container acoes-table>
+      <button
+        *ngIf="contratoSelecionado"
+        class="btn btn-outline-primary"
+        ngbTooltip="Editar"
+        [routerLink]="[contratoSelecionado.idContratoCatalogo]">
+        <i class="fas fa-edit"></i>
+      </button>
+    </ng-container>
+    <ng-container column-templates>
+      <ng-template customColumn="situacaoContratoCatalogo" let-item="item">
+        <span> {{ situacaoContratoCatalogo[item.situacaoContratoCatalogo] }}
+        </span>
+      </ng-template>
+      <ng-template customColumn="situacaoContratoCatalogoItem" let-item="item">
+        <span> {{ situacaoContratoCatalogoItem[item.situacaoContratoCatalogoItem] }}
+        </span>
+      </ng-template>
+      <ng-template customColumn="contratoCatalogoItemEstado" let-item="item">
+        <i class="fas fa-info-circle" [ngbTooltip]="tipContent" tooltipClass="tooltip-light"></i>
+        <ng-template #tipContent>
+          <div style="text-align: left">
+            <strong>Prazo por estado:</strong>
+            <p
+              *ngIf="!item?.contratoCatalogoItemEstado || item?.contratoCatalogoItem?.Lengh > 0">
+              Nenhum estado definido
+            </p>
+            <div *ngFor="let estadoDeAtendimento of item?.contratoCatalogoItemEstado">
+              <span class="abreviacao-estado">{{ estadoDeAtendimento.estado.abreviacao }}:&nbsp;</span>
+              <strong>
+                {{ estadoDeAtendimento.prazoEntregaDias }}
+                {{ (estadoDeAtendimento.prazoEntregaDias > 1 ? 'dias úteis' : 'dia útil') }}
+              </strong>
+            </div>
+          </div>
+        </ng-template>
+      </ng-template>
+      <ng-template customColumn="justificativaRecusa" let-item="item">
+        <i class="fas fa-comment-dots" [ngbTooltip]="item.justificativaRecusa" tooltipClass="tooltip-light"></i>
+      </ng-template>
+    </ng-container>
+  </smk-liste-funcionalidade-produto-catalogo>
+</div>
+
+<input-file
+  class="d-none"
+  accept=".xlsx,.xls,.xlsm"
+  (select)="selecionarArquivo($event)"
+  id="inputFile">
+</input-file>

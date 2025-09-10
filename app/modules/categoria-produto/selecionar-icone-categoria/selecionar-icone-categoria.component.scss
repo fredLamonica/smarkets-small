@@ -1,0 +1,47 @@
+@import "./../../../../styles.scss";
+
+.header{
+  margin-bottom: 20px;
+  padding: 0px;
+  color: $primary;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: lighter;
+  display: inline-block;
+}
+
+a.icone {
+  display: block;
+  text-decoration: none;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  line-height: 1.8em;
+  height: 27px;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  padding: 0 0 10px 5px;
+  
+  i {
+    vertical-align: sub;
+    padding: 0 10px 0 0;
+  }
+    
+  &.selecionado {
+    background-color: #D9D9D9;
+    border-radius: 2px;
+  }
+}
+
+    
+.preview-icone {
+  margin: 0 15px 0 40px;
+  padding: 3px 8px 3px 8px;
+  border: #DADADA solid 1px;
+  vertical-align: sub;
+  color: $primary;
+  font-size: 23px;
+}

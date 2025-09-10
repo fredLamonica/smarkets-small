@@ -1,0 +1,166 @@
+<div class="table-responsive">
+  <table id="table" class="table {{ classes }}">
+    <thead>
+      <tr>
+        <!-- checkbox -->
+        <th *ngIf="settings?.selection == 'check'" (click)="selectAll()" style="width: 10px">
+          <div class="custom-control custom-checkbox">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="selectAll{{ componentId }}"
+              checked="{{ isAllSelected() ? true : null }}" />
+            <label class="custom-control-label" for="selectAll{{ componentId }}"></label>
+          </div>
+        </th>
+        <!-- radio -->
+        <th *ngIf="settings?.selection == 'radio'" class="col-sm-1" style="width: 10px"></th>
+        <th
+          scope="col"
+          *ngFor="let column of settings?.columns; let i = index"
+          (click)="column.sortProperty ? sort(column.sortProperty) : null">
+          <div
+            class="d-inline-block align-top"
+            [ngStyle]="{ 'max-width': settings?.sortBy ? '95%' : '100%' }"
+            [class.w-95]="settings?.sortBy">
+            {{ column.title }}
+          </div>
+          <div class="d-inline-block ml-2" *ngIf="column.sortProperty">
+            <i
+              class="fas fa-caret-up"
+              [ngClass]="{
+                'd-block':
+                  column.sortProperty &&
+                  (settings?.sortBy != column.sortProperty || settings?.order == Ordenacao.ASC),
+                'd-none':
+                  column.sortProperty &&
+                  (settings?.sortBy != column.sortProperty || settings?.order == Ordenacao.DESC)
+              }"
+              style="height: 6.25px"></i>
+            <i
+              class="fas fa-caret-down"
+              [ngClass]="{
+                'd-block':
+                  column.sortProperty &&
+                  (settings?.sortBy != column.sortProperty || settings?.order == Ordenacao.DESC),
+                'd-none':
+                  column.sortProperty &&
+                  (settings?.sortBy != column.sortProperty || settings?.order == Ordenacao.ASC)
+              }"
+              style="height: 6.25px"></i>
+          </div>
+        </th>
+        <th scope="col" *ngFor="let coluna of colunasComBotoes">
+          <div
+            class="d-inline-block align-top"
+            [ngStyle]="{ 'max-width': settings?.sortBy ? '95%' : '100%' }">
+            {{ coluna.titulo }}
+          </div>
+        </th>
+        <th scope="col" *ngFor="let coluna of colunasComIcone">
+          <div
+            class="d-inline-block align-top"
+            [ngStyle]="{ 'max-width': settings?.sortBy ? '95%' : '100%' }">
+            {{ coluna.title }}
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="!items?.length">
+        <td
+          class="no-content"
+          [attr.colspan]="settings?.columns?.length + 1"
+          *ngIf="!notFound"
+          translate>
+          GENERAL.NO_RECORDS_FOUND
+        </td>
+        <td
+          class="no-content"
+          [attr.colspan]="settings?.columns?.length + 1"
+          *ngIf="notFound"
+          translate>
+          {{ notFound }}
+        </td>
+      </tr>
+
+      <tr
+        *ngFor="let item of items; let i = index"
+        (click)="settings?.selection == 'check' ? select(i) : selectRadio(i)">
+        <!-- checkbox -->
+        <td *ngIf="settings?.selection == 'check'">
+          <div class="custom-control custom-checkbox">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="select{{ i + componentId }}"
+              [checked]="item.checked" />
+            <label class="custom-control-label" for="select{{ i + componentId }}"></label>
+          </div>
+        </td>
+        <!-- radio -->
+        <td *ngIf="settings?.selection == 'radio'">
+          <div class="custom-control custom-radio">
+            <input
+              type="radio"
+              id="select{{ i + componentId }}"
+              class="custom-control-input"
+              [checked]="item.checked" />
+            <label class="custom-control-label" for="select{{ i + componentId }}"></label>
+          </div>
+        </td>
+        <ng-container *ngFor="let column of settings?.columns" [ngSwitch]="column.pipe">
+          <td *ngSwitchCase="'date'">{{ item[column.property] | date: column.pipeFormat }}</td>
+          <td *ngSwitchCase="'decimal'">
+            {{ item[column.property] | number: column.pipeFormat.split(':')[0] : column.pipeFormat.split(':')[1] }}
+          </td>
+          <td *ngSwitchCase="'currency'">
+            {{
+            item[column.property]
+            | currency
+            : column.pipeFormat.split(':')[0]
+            : column.pipeFormat.split(':')[1]
+            : column.pipeFormat.split(':')[2]
+            : column.pipeFormat.split(':')[3]
+            }}
+          </td>
+          <td *ngSwitchCase="'lowercase'">{{ item[column.property] | lowercase }}</td>
+          <td *ngSwitchCase="'uppercase'">{{ item[column.property] | uppercase }}</td>
+          <td *ngSwitchCase="'json'">{{ item[column.property] | json }}</td>
+          <td *ngSwitchCase="'percent'">
+            {{ item[column.property] | percent: column.pipeFormat }}
+          </td>
+          <td *ngSwitchCase="'titlecase'">{{ item[column.property] | titlecase }}</td>
+          <td *ngSwitchCase="'situacaoPedido'">{{ item[column.property] | situacaoPedido }}</td>
+          <td *ngSwitchCase="'cnpjCpf'">{{ item[column.property] | cnpjCpf }}</td>
+          <td *ngSwitchDefault>{{ item[column.property] }}</td>
+        </ng-container>
+        <ng-container *ngFor="let coluna of colunasComBotoes; let indexColunaExtra = index">
+          <td>
+            <a
+              class="btn btn-icon"
+              *ngFor="let botao of coluna.botoes; let indexBotao = index"
+              [ngClass]="{ 'ml-2': indexBotao != 0 }"
+              role="button"
+              [title]="botao.title"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              (click)="buttonClick(indexColunaExtra, indexBotao, i)">
+              <i
+                [ngClass]="
+                  botao.colunaValidacao && item[botao.colunaValidacao] == botao.valorComparacao
+                    ? botao.iconeCondicional
+                    : botao.icone
+                "></i>
+            </a>
+          </td>
+        </ng-container>
+        <ng-container *ngFor="let coluna of colunasComIcone; let indexColunaExtra = index">
+          <td>
+            <i class="botao-tamanho" [ngClass]="coluna.icone" [ngbTooltip]="source[i][coluna.textoTooltip]" [tooltipClass]="coluna.tooltipClass"></i>
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>

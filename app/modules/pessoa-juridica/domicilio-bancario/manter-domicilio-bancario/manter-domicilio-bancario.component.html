@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">{{ idDomicilio?'Alterar':'Incluir' }} domicílio bancário</div>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group required col">
+        <label for="idBanco"> Banco </label>
+        <ng-select name="idBanco" formControlName="idBanco" [class.invalid]="form.controls.idBanco.invalid && form.controls.idBanco.dirty">
+          <ng-option [value]="banco.idBanco" *ngFor="let banco of bancos">{{ banco.codigo }} -
+            {{ banco.descricao }}</ng-option>
+        </ng-select>
+        <span class="invalid" *ngIf="form.controls.idBanco.invalid && form.controls.idBanco.dirty">Preenchimento
+          obrigatório</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group required col-lg-6">
+        <label for="agencia"> Agência </label>
+        <input type="text" class="form-control" name="agencia" formControlName="agencia" [class.invalid]="form.controls.agencia.invalid && form.controls.agencia.dirty">
+        <span class="invalid" *ngIf="form.controls.agencia.invalid && form.controls.agencia.dirty">Preenchimento
+          obrigatório</span>
+      </div>
+      <div class="form-group required col-lg-6">
+        <label for="contaCorrente"> Conta </label>
+        <input type="text" class="form-control" name="contaCorrente" formControlName="contaCorrente" [class.invalid]="form.controls.contaCorrente.invalid && form.controls.contaCorrente.dirty">
+        <span class="invalid" *ngIf="form.controls.contaCorrente.invalid && form.controls.contaCorrente.dirty">Preenchimento
+            obrigatório</span>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Fechar</button>
+  <button type="button" class="btn btn-outline-primary" (click)="salvar()">Salvar</button>
+</div>

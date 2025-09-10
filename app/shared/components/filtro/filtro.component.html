@@ -1,0 +1,61 @@
+<div class="card">
+  <a class="card-header collapsed" data-toggle="collapse" href="#filtroAvancado" translate>
+    PAGES.FILTER.ADVANCED_FILTER
+  </a>
+  <div class="card-body">
+    <div class="collapse" id="filtroAvancado">
+      <div class="form-row">
+        <div class="col"><label for="propriedade" translate>PAGES.FILTER.PROPERTY</label></div>
+        <div class="col-2"><label for="operadorRelacional" translate>PAGES.FILTER.COMPARATION</label></div>
+        <div class="col"><label for="termo" translate>PAGES.FILTER.WORD</label></div>
+        <div class="col-1"><label for="operadorLogico" translate>PAGES.FILTER.RELATION</label></div>
+        <div class="col-1"><label for="operadorLogico" translate></label></div>
+      </div>
+      <form *ngFor="let filtro of filtros; let i = index">
+        <div class="form-row mb-2" [formGroup]="filtro">
+          <div class="col">
+            <select id="propriedade" class="form-control" name="propriedade" formControlName="propriedade">
+              <option [ngValue]="null"></option>
+              <option *ngFor="let propriedade of propriedades" [ngValue]="propriedade">{{ propriedade }}</option>
+            </select>
+          </div>
+          <div class="col-2">
+            <select id="operadoresRelacionais" class="form-control text-lowercase" name="operadorRelacional"
+              formControlName="operadorRelacional">
+              <option class="text-lowercase" [ngValue]="OperadorRelacional.igual" selected translate>PAGES.FILTER.IS_EQUAL</option>
+              <option class="text-lowercase" [ngValue]="OperadorRelacional.diferente" translate>PAGES.FILTER.IS_DIFFERENT</option>
+              <option class="text-lowercase" [ngValue]="OperadorRelacional.maior" translate>PAGES.FILTER.IS_BIGGER</option>
+              <option class="text-lowercase" [ngValue]="OperadorRelacional.maiorIgual" translate>PAGES.FILTER.IS_BIGGER_EQUAL</option>
+              <option class="text-lowercase" [ngValue]="OperadorRelacional.menor" translate>PAGES.FILTER.IS_SMALLER</option>
+              <option class="text-lowercase" [ngValue]="OperadorRelacional.menorIgual" translate>PAGES.FILTER.IS_SMALLER_EQUAL</option>
+              <option class="text-lowercase" [ngValue]="OperadorRelacional.comecaCom" translate>PAGES.FILTER.STARTS_WITH</option>
+              <option class="text-lowercase" [ngValue]="OperadorRelacional.naoComecaCom" translate>PAGES.FILTER.DO_NOT_STARTS_WITH</option>
+              <option class="text-lowercase" [ngValue]="OperadorRelacional.terminaCom" translate>PAGES.FILTER.TERMINATES_WITH</option>
+              <option class="text-lowercase" [ngValue]="OperadorRelacional.naoTerminaCom" translate>PAGES.FILTER.DO_NOT_TERMINATES_WITH</option>
+              <option class="text-lowercase" [ngValue]="OperadorRelacional.contem" translate>PAGES.FILTER.CONTAINS</option>
+              <option class="text-lowercase" [ngValue]="OperadorRelacional.naoContem" translate>PAGES.FILTER.DO_NOT_CONTAINS</option>
+            </select>
+          </div>
+          <div class="col">
+            <input id="termo" type="text" class="form-control" name="termo" formControlName="termo">
+          </div>
+          <div class="col-1">
+            <select id="operadoresLogicos" class="form-control text-lowercase" name="operadorLogico" formControlName="operadorLogico">
+              <option [ngValue]="null"></option>
+              <option class="text-lowercase" [ngValue]="OperadorLogico.e" translate>PAGES.FILTER.AND</option>
+              <option class="text-lowercase" [ngValue]="OperadorLogico.ou" translate>PAGES.FILTER.OR</option>
+            </select>
+          </div>
+          <div class="col-1">
+            <button role=button class="btn btn-fab btn-danger" (click)="removerFiltro(i)" *ngIf="filtros.length != 1">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+      <button role=button class="btn btn-fab btn-primary" (click)="adicionarFiltro()">
+        <i class="fas fa-plus"></i>
+      </button>
+    </div>
+  </div>
+</div>

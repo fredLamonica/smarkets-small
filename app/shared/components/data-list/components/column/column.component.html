@@ -1,0 +1,7 @@
+<ng-container
+  *ngTemplateOutlet="column.type !== ColumnTypeEnum.CustomTemplate ? defaultTmp : template; context: { item: item, column: column }">
+</ng-container>
+
+<ng-template #defaultTmp let-item="item" let-column="column">
+  <span> {{ item[column.name] | column:column.type }} </span>
+</ng-template>

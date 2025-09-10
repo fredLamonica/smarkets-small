@@ -1,0 +1,74 @@
+@mixin highlightedText($color, $text-shadow-color) {
+  color: $color;
+  text-shadow: 0px 0px 1px $text-shadow-color;
+}
+
+@mixin highlightedTextHover {
+  @include highlightedText(#303030, #7c7c7c);
+  text-decoration: underline;
+}
+
+@mixin highlightedTextSelected {
+  @include highlightedText(#303030, #7c7c7c);
+}
+
+.smk-list {
+  cursor: default;
+  accent-color: #1d9ed3;
+  color: #616161;
+
+  .select-all {
+    margin-bottom: 14px;
+
+    .select-all-check {
+      cursor: pointer;
+    }
+
+    .select-all-label {
+      cursor: pointer;
+      text-decoration: underline;
+      font-style: italic;
+
+      &:hover {
+        @include highlightedTextHover;
+      }
+    }
+  }
+
+  .list-container {
+    .list-item {
+      .list-item-check {
+        cursor: pointer;
+      }
+
+      .list-item-label-container {
+        cursor: pointer;
+        font-size: 14px;
+
+        &:hover {
+          @include highlightedTextHover;
+        }
+
+        .list-item-label {
+          margin-right: 8px;
+        }
+      }
+
+      &.selected {
+        .list-item-label-container {
+          @include highlightedTextSelected;
+        }
+      }
+
+      &.parent {
+        &.parent-unselectable {
+          pointer-events: none;
+        }
+      }
+
+      &.child {
+        padding-left: 20px;
+      }
+    }
+  }
+}

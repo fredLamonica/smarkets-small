@@ -1,0 +1,23 @@
+<div class="modal-header sdk-modal-header">
+  <div class="sdk-modal-title" id="sdk-modal-title">{{title}} <a>{{subtitle}}</a></div>
+  <button type="button" class="sdk-modal-close" aria-label="Close" (click)="cancel()">
+    <i class="fas fa-times" style="font-size: 24px;"></i>
+  </button>
+</div>
+
+<div class="sdk-modal-body">
+  <ng-content>
+
+  </ng-content>
+</div>
+
+<div *ngIf="content" class="sdk-modal-body" [innerHTML]=" content | safe: 'html'"></div>
+
+<div *ngIf="hasFooter" class="sdk-modal-footer">
+  <button *ngIf="showButtonCancel" type="button" class="btn btn-outline-primary" (click)="cancel()">
+    <i *ngIf="iconButtonCancel" [ngClass]="iconButtonCancel"></i> {{titleButtonCancel}}
+  </button>
+  <button *ngIf="showButtonConfirm" type="button" class="btn btn-primary" (click)="confirm()">
+    <i *ngIf="iconButtonConfirm" [ngClass]="iconButtonConfirm"></i> {{titleButtonConfirm}}
+  </button>
+</div>

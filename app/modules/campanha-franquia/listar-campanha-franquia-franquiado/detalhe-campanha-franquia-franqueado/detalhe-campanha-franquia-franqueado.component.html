@@ -1,0 +1,175 @@
+
+<div class="content">
+  <div class="w-100" [ngStyle]="{ 'padding-bottom': '64px' }">
+    <div
+      class="col-12 identification-bar-fixed w-100"
+      [ngStyle]="{ top: '80px', background: '#ffffff' }"
+    >
+      <div class="col-1 d-flex" style="height: 100%"></div>
+      <div class="col-11 d-flex align-items-center" style="height: 100%">
+        <span class="identification-font identification-color"> Gestão de Contratos </span>
+        <i class="fas fa-greater-than identification-color mx-2"></i>
+        <span class="identification-font identification-color"> Campanha Franquia </span>
+        <i class="fas fa-greater-than identification-color mx-2"></i>
+        <span class="current-page-font">Dados Campanha Franquia</span>
+      </div>
+    </div>
+  </div>
+
+  <sdk-header [heightValue]="'64px'" [topValue]="'144px'">
+    <span>
+      {{ participanteFranquia?.titulo}}
+    </span>
+  </sdk-header>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="col-12 title-hr pt-0">
+        Dados Gerais
+        <hr />
+      </div>
+        <div class="col-12 pt-0 detalhe-campanha-franqueado">
+          <div class="row">
+            <div class="col-9">
+              <label class="title">Titulo:</label><br>
+              <span class="text"> {{participanteFranquia.titulo}} </span>
+            </div>
+            <div class="col-3">
+              <label class="title">Status:</label><br>
+              <span class="text" [ngClass]="getClass()"> {{participanteFranquia.status}} </span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <label class="title">Ano:</label><br>
+              <span class="text"> {{participanteFranquia.ano}} </span>
+            </div>
+            <div class="col-3">
+              <label class="title">Semestre:</label><br>
+              <span class="text"> {{participanteFranquia.semestre}} </span>
+            </div>
+            <div class="col-3">
+              <label class="title">Ínicio do Ciclo:</label><br>
+              <a class="text">{{ participanteFranquia.dataInicio | date: 'dd/MM/yyyy' }}</a>
+            </div>
+            <div class="col-3">
+              <label class="title">Encerramento do Ciclo:</label><br>
+              <a class="text">{{ participanteFranquia.dataFim | date: 'dd/MM/yyyy' }}</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <label class="title">Limite para Aceite:</label><br>
+              <a class="text">{{ participanteFranquia.dataLimiteAceite | date: 'dd/MM/yyyy' }}</a>
+            </div>
+
+            <div class="col-3">
+              <label class="title">Limite para Comprovações:</label><br>
+              <a class="text">{{ participanteFranquia.dataLimiteComprovacao | date: 'dd/MM/yyyy' }}</a>
+            </div>
+            <div class="col-3">
+              <label class="title">Limite para Aprovação:</label><br>
+              <a class="text">{{ participanteFranquia.dataLimiteAprovacao | date: 'dd/MM/yyyy' }}</a>
+            </div>
+            <div class="col-3">
+              <label class="title">Limite para Nota de Débito:</label><br>
+              <a class="text">{{ participanteFranquia.dataLimiteNotaDebito | date: 'dd/MM/yyyy' }}</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <label class="title">Limite para Pagamento:</label><br>
+              <a class="text">{{ participanteFranquia.dataLimitePagamento | date: 'dd/MM/yyyy' }}</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <label class="title">Valor a ser investido pela Kroton:</label><br>
+              <span class="text"> {{participanteFranquia.vcpHolding | customCurrency}} </span><br>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <label class="title">Valor a ser investido pelo Franqueado:</label><br>
+              <span class="text"> {{participanteFranquia.vcpFranquia | customCurrency}} </span><br>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <label class="title"><b>Valor total de investimento a ser comprovado pelo Franqueado:</b></label><br>
+              <span class="text-green"><b> {{participanteFranquia.vcpTotal | customCurrency}} </b></span><br>
+            </div>
+          </div>
+        </div>
+      <div class="col-12 title-hr pt-0">
+        Para participar é muito simples! Veja:
+        <hr />
+      </div>
+      <div class="info">
+        <div class="row">
+          <div class="col-12">
+            <label class="title">1) Baixe a Política de Utilização de Verba Comercial logo a baixo.</label><br><br>
+            <label class="title">2) Leia a <b>Política de Utilização de Verba Comercial</b> com muita atenção, pois nela estão detalhadas as ações comerciais que poderão ser realizadas, as formas de utilização da verba e as maneiras de comprovar a execução das ações realizadas.</label><br><br>
+            <label class="title">3) Abaixo, clique em "Termo de Aceite" e confirme sua participação na Verba <span><b>Nome da Campanha Exemplo.</b></span></label><br><br>
+            <label class="text-red">
+              <b>Atenção!</b><br>
+              A não adesão à Verba Comercial através da Plataforma impossibilitará sua participação na campanha e as conseguintes comprovações e reembolsos relacionados a quaisquer ações comerciais que vierem a ser realizadas.
+            </label><br><br>
+          </div>
+          <div class="col-12">
+            <label class="title"><b>Download da Política:</b></label><br>
+            <button class="button-download" (click)="download(participanteFranquia.urlArquivoPolitica)"><span class="text-white"><b>Download</b></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="termo-aceite">
+    <div class="card">
+      <div class="card-body">
+        <label class="title-termo">Termo de Aceite</label><br><br>
+          <div [innerHTML]="participanteFranquia?.termoCondicoes | safe: 'html'"></div>
+      </div>
+      <div class="col-12 title-hr pt-0">
+        <hr />
+      </div>
+      <div class="radio-aceite">
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="termo"
+            id="radio-aceito"
+            (change)="changeAcceptedTerm(1)"
+            [disabled]="disableTermoAceite"
+            [checked]="participanteFranquia.aceiteTermo == 1">
+          <label
+            class="form-check-label title"
+            for="radio-aceito">
+            Eu declaro que lí e <span class="text-green"><b>ACEITO OS TERMOS</b></span> descrito acima.
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="termo"
+            id="radio-recusado"
+            (change)="changeAcceptedTerm(2)"
+            [disabled]="disableTermoAceite"
+            [checked]="participanteFranquia.aceiteTermo == 2">
+          <label
+            class="form-check-label title"
+            for="radio-recusado">
+            Eu declaro que lí e <span class="text-red"><b>NÃO ACEITO OS TERMOS</b></span> descrito acima.
+          </label>
+        </div>
+      </div>
+      <div class="div-button-aceite">
+        <button class="button-voltar" (click)="return()"><span class="text-blue"><b>Voltar</b></span></button>
+        <button class="button-aceite" (click)="requestActivation()" [ngClass]="{ disabled: disableTermoAceite}"><span class="text-white"><b>Confirmar</b></span></button>
+      </div>
+    </div>
+  </div>
+</div>

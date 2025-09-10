@@ -1,0 +1,84 @@
+.table {
+    th,
+    td {
+        border-top: none;
+        padding-bottom: 1.5rem;
+        padding-top: 1.5rem;
+        vertical-align: middle;
+        color: $gray;
+    }
+    td.no-content {
+        text-align: center;
+    }
+    thead th {
+        padding: $table-cell-padding;
+        border-bottom: $table-border-width solid $table-border-color;
+        color: $smarkets-blue-dark;
+        text-transform: uppercase;
+    }
+
+    tr {
+        &.danger {
+            background-color: transparentize($danger, 0.75)!important;
+        }
+        &.success {
+            background-color: transparentize($success, 0.75)!important;
+        }
+    }
+}
+
+.table-striped {
+    tbody tr:nth-of-type(odd) {
+        background-color: transparent;
+    }
+    tbody tr:nth-of-type(even) {
+        background-color: $smarkets-lighter;
+    }
+}
+
+.table-sm {
+    th,
+    td {
+        padding: .5rem;
+        color: $cyan;
+        i {
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+        }
+    }
+    thead th {
+        vertical-align: middle;
+        padding: .45rem .5rem .25rem .5rem;
+        border: $table-border-width solid $table-border-color;
+        font-size: 12px;
+        color: $gray;
+        text-transform: uppercase;
+        font-weight: normal;
+    }
+}
+
+.table-new-ux {
+    thead {
+        tr {
+          th {
+            color: $new-ux-smarkets-gray;
+            text-transform: unset;
+            font-weight: normal;
+            font-size: 12px;
+            border-bottom: 2.5px solid $smarkets-light;
+          }
+        }
+      }
+      tbody {
+        tr {
+          td {
+            padding-bottom: .75rem;
+            padding-top: .75rem;
+            border-bottom: 1.5px solid $smarkets-light;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+          }
+        }
+      }
+}

@@ -1,0 +1,9 @@
+.selected-tag ::ng-deep div > span {
+  background-color: #81cbe2 !important;
+  border-color: #81cbe2 !important;
+  color: #ffffff !important;
+
+  & i {
+    color: #ffffff !important;
+  }
+}

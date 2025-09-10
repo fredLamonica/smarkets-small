@@ -1,0 +1,56 @@
+@import "src/themes/_smk-base.scss";
+
+::ng-deep block-ui-content {
+  [class*="component-body"] {
+    background: #0000002e;
+    border-radius: 7px;
+  }
+}
+
+.table {
+  cursor: default;
+
+  td {
+    height: 47.5px;
+
+    .btn-visualizar,
+    .btn-reenviar {
+      @include smk-button-outline($smk-primary-color);
+    }
+
+    &.situacao {
+      text-transform: uppercase;
+
+      &.sucesso {
+        color: #8bc34a;
+      }
+
+      &.erro {
+        color: #f44336;
+      }
+    }
+  }
+}
+
+.modal-motivo-erro {
+  .motivo-erro {
+    &:disabled {
+      background-color: transparent;
+    }
+  }
+}
+
+.btn-recarregar,
+.btn-fechar,
+.btn-voltar {
+  @include smk-button-outline($smk-primary-color);
+}
+
+.btn-recarregar,
+.btn-fechar {
+  width: 175px;
+}
+
+.btn-voltar {
+  width: 135px;
+}

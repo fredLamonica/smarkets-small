@@ -1,0 +1,267 @@
+<div class="bg-white border-top row">
+  <div class="col-md-1 bg-lighter-dark d-flex justify-content-center py-4">
+    <button class="btn btn-icon disabled"><i class="fas fa-network-wired text-light"></i></button>
+  </div>
+  <div class="col-md-2 align-self-center pr-0 py-4">
+    <label>ID Subitem:</label>
+    <p class="font-weight-bold mb-0">{{ subItem?.idSubItemSolicitacaoCompra }}</p>
+  </div>
+  <div class="col-md-4 pr-0 align-self-center py-4">
+    <label>SubItem:</label>
+    <p class="font-weight-bold mb-0 text-primary">{{ subItem?.nomeServico }}</p>
+  </div>
+  <div class="col-md-2 pr-0 align-self-center py-4">
+    <label>Situação:</label>
+    <p
+      class="font-weight-bold mb-0"
+      [class.text-danger]="subItem?.situacao == SituacaoSolicitacaoItemCompra.Cancelada"
+    >
+      {{ SituacaoSolicitacaoItemCompra[subItem?.situacao] }}
+    </p>
+  </div>
+  <div class="col-md-3 d-flex justify-content-between align-self-center py-4">
+    <a
+      class="btn btn-icon"
+      data-toggle="collapse"
+      href="#comentarios-{{ subItem.idItemSolicitacaoCompra }}-{{
+        subItem.idSubItemSolicitacaoCompra
+      }}"
+      role="button"
+      aria-expanded="false"
+      aria-controls="comentarios"
+      (click)="obterComentarios()"
+    >
+      <i class="far fa-comments text-primary"></i>
+    </a>
+    <button
+      class="btn btn-icon"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Anexar"
+      (click)="anexarArquivo()"
+    >
+      <i class="fas fa-paperclip text-primary"></i>
+    </button>
+    <button
+      class="btn btn-icon"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Visualizar"
+      (click)="visualizar()"
+    >
+      <i class="far fa-eye text-primary"></i>
+    </button>
+  </div>
+  <div class="col-md-12">
+    <collapse-footer>
+      <!-- #region Dados do serviço -->
+      <div class="row bg-lighter border-bottom py-3">
+        <div class="col-2 align-self-center text-truncate">
+          <label>Número Serviço:</label>
+          <p
+            class="font-weight-bold text-truncate"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ subItem?.numeroServico }}"
+          >
+            {{ subItem?.numeroServico }}
+          </p>
+        </div>
+        <div class="col-10 align-self-center text-truncate">
+          <label>Nome Serviço:</label>
+          <p
+            class="font-weight-bold text-truncate"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ subItem?.nomeServico }}"
+          >
+            {{ subItem?.nomeServico }}
+          </p>
+        </div>
+
+        <div class="col-2 align-self-center text-truncate">
+          <label>Quantidade:</label>
+          <p
+            class="font-weight-bold text-truncate"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ subItem?.quantidade | number: '1.0-10':'pt-BR' }}"
+          >
+            {{ subItem?.quantidade | number: '1.0-10':'pt-BR' }}
+          </p>
+        </div>
+        <div class="col-2 align-self-center text-truncate">
+          <label>Sigla Und. Medida:</label>
+          <p
+            class="font-weight-bold text-truncate"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ subItem?.siglaUnidadeMedida }}"
+          >
+            {{ subItem?.siglaUnidadeMedida }}
+          </p>
+        </div>
+        <div class="col-2 align-self-center text-truncate">
+          <label>Preço Bruto:</label>
+          <p
+            class="font-weight-bold text-truncate"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ subItem?.precoBruto | customCurrency: null:null }}"
+          >
+            {{ subItem?.precoBruto | customCurrency: null:null }}
+          </p>
+        </div>
+        <div class="col-2 align-self-center text-truncate">
+          <label>Preço Líquido:</label>
+          <p
+            class="font-weight-bold text-truncate"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ subItem?.precoLiquido | customCurrency: null:null }}"
+          >
+            {{ subItem?.precoLiquido | customCurrency: null:null }}
+          </p>
+        </div>
+        <div class="col-2 align-self-center text-truncate">
+          <label>Preço Referência:</label>
+          <p
+            class="font-weight-bold text-truncate"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ subItem?.valorReferencia | customCurrency: null:null }}"
+          >
+            {{ subItem?.valorReferencia | customCurrency: null:null }}
+          </p>
+        </div>
+        <div class="col-2 align-self-center text-truncate">
+          <label>Cod. Tarifa Fiscal:</label>
+          <p
+            class="font-weight-bold text-truncate"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ subItem?.codigoTarifaFiscal }}"
+          >
+            {{ subItem?.codigoTarifaFiscal }}
+          </p>
+        </div>
+      </div>
+      <!-- #endregion -->
+
+      <div class="row bg-lighter border-bottom py-3" *ngIf="subItem?.pedidoItem">
+        <div class="col-12">
+          <h5 class="text-uppercase font-weight-bold">Pedido Vinculado:</h5>
+        </div>
+        <div class="col-md-4 align-self-center text-truncate">
+          <label>ID Pedido:</label>
+          <p
+            class="font-weight-bold text-truncate"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ subItem?.pedidoItem?.idPedido }}"
+          >
+            {{ subItem?.pedidoItem?.idPedido }}
+          </p>
+        </div>
+        <div class="col-md-8 pr-0 align-self-center">
+          <div class="row">
+            <div class="col text-truncate">
+              <label>Usuário Responsável: </label>
+              <p
+                class="font-weight-bold mb-1"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ subItem?.pedidoItem?.usuario?.pessoaFisica?.nome }}"
+              >
+                {{ subItem?.pedidoItem?.usuario?.pessoaFisica?.nome }}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col text-truncate">
+              <p
+                class="font-weight-bold mb-1"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ subItem?.pedidoItem?.usuario?.email }}"
+              >
+                {{ subItem?.pedidoItem?.usuario?.email }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row bg-lighter border-bottom py-3" *ngIf="subItem?.requisicaoItem">
+        <div class="col-12">
+          <h5 class="text-uppercase font-weight-bold">Requisição Vinculada:</h5>
+        </div>
+        <div class="col-md-4 align-self-center text-truncate">
+          <label>ID Requisição:</label>
+          <p
+            class="font-weight-bold text-truncate"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ subItem?.requisicaoItem?.idRequisicaoItem }}"
+          >
+            {{ subItem?.requisicaoItem?.idRequisicaoItem }}
+          </p>
+        </div>
+        <div class="col-md-8 pr-0 align-self-center">
+          <div class="row">
+            <div class="col text-truncate">
+              <label>Usuário Responsável: </label>
+              <p
+                class="font-weight-bold mb-1"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ subItem?.requisicaoItem?.usuarioResponsavel?.pessoaFisica?.nome }}"
+              >
+                {{ subItem?.requisicaoItem?.usuarioResponsavel?.pessoaFisica?.nome }}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col text-truncate">
+              <p
+                class="font-weight-bold mb-1"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ subItem?.requisicaoItem?.usuarioResponsavel?.email }}"
+              >
+                {{ subItem?.requisicaoItem?.usuarioResponsavel?.email }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #endregion -->
+
+      <vincular-produto-sub-item
+        [descricao]="subItem.nomeServico"
+        [tipo-documento]="tipoDocumento"
+        [sub-item]="subItem"
+        [item-solicitacao]="itemSolicitacaoCompra"
+        [id-itemSolicitacao]="idItemSolicitacaoCompra"
+        [tipo-vinculo-sub-item]="tipoVinculoSubItens"
+        [id-pedido]="idPedido"
+        [id-fornecedor]="idFornecedor"
+        [id-requisicao]="idRequisicao"
+        (vincular-requisicao)="criarRequisicao($event)"
+        (vincular-pedido)="vincularPedido($event)"
+        *ngIf="permitirVinculo() && !emRegularizacao"
+      ></vincular-produto-sub-item>
+    </collapse-footer>
+  </div>
+  <div class="col-12">
+    <comentarios
+      class="collapse"
+      id="comentarios-{{ subItem.idItemSolicitacaoCompra }}-{{
+        subItem.idSubItemSolicitacaoCompra
+      }}"
+      [comentarios]="subItem.comentarios"
+      (enviar)="enviarComentario($event)"
+    >
+    </comentarios>
+  </div>
+</div>

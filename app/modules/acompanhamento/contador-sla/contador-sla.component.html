@@ -1,0 +1,7 @@
+<p class="mb-0" [class.text-danger]="isAfterEvent()">
+  <span class="text-small">
+    {{ duration?.days() | abs | number: '2.0' }}d{{ duration?.hours() | abs | number: '2.0' }}h{{
+      duration?.minutes() | abs | number: '2.0'
+    }}m{{ duration?.seconds() | abs | number: '2.0' }}s</span
+  >
+</p>

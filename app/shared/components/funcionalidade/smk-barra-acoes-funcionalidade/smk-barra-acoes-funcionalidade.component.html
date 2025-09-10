@@ -1,0 +1,11 @@
+<div class="barra-acoes-funcionalidade" [ngClass]="class">
+  <sdk-header-default [showShadow]="true">
+    <button class="voltar btn btn-outline-primary" ngbTooltip="Voltar" container="body" (click)="volte()">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <div *ngIf="acoes.hasChildNodes()" class="separador ml-2 mr-3">&nbsp;&nbsp;</div>
+    <div class="acoes" #acoes>
+      <ng-content></ng-content>
+    </div>
+  </sdk-header-default>
+</div>

@@ -1,0 +1,206 @@
+<div class="header">
+  <!--Aqui começa os filtros-->
+  <div class="header-search row align-items-center">
+    <div class="col-lg-8">
+      <input-busca
+        label="O que você procura?"
+        placeholder="Buscar por fornecedor, Nome do Plano de ação, status, entre outras informações..."
+        (buscar)="buscar($event)"
+        (campoVazio)="buscar('')"
+        [disabled]="buscaAvancada"
+      ></input-busca>
+    </div>
+    <div class="col-lg-3 pt-lg-4">
+      <button
+        class="btn btn-primary"
+        *ngIf="!buscaAvancada; else esconderBuscaAvancada"
+        (click)="exibirBuscaAvancada(true)"
+      >
+        <i class="fas fa-search-plus"></i> Busca Avançada
+      </button>
+      <ng-template #esconderBuscaAvancada>
+        <button class="btn btn-outline-primary" (click)="exibirBuscaAvancada(false)">
+          <i class="fas fa-search-minus"></i> Busca Avançada
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<div class="container-fluid" *ngIf="buscaAvancada">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group col-lg-4">
+        <label> Fornecedor </label>
+        <input
+          class="form-control with-shadow"
+          type="text"
+          id="termoFornecedor"
+          formControlName="termoFornecedor"
+          placeholder="Razão Social"
+          (keyup.enter)="buscarFiltroAvancado()"
+        />
+      </div>
+
+      <div class="form-group col-lg-4">
+        <label> Nome Plano de Ação </label>
+        <input
+          class="form-control with-shadow"
+          type="text"
+          id="termoPlanodeAcao"
+          formControlName="termoPlanodeAcao"
+          placeholder="Nome"
+          (keyup.enter)="buscarFiltroAvancado()"
+        />
+      </div>
+      <div class="form-group col-lg-4">
+        <label> Status </label>
+        <select id="termoStatus" class="form-control with-shadow" formControlName="termoStatus">
+          <option [value]="null"></option>
+          <option *ngFor="let key of statusPlanoAcaoFornecedor" [value]="key">
+            {{ enumStatusPlanoAcaoFornecedor[key] }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group col-lg-4">
+        <label for="termoPrazo"> Prazo Final: </label>
+        <input
+          name="termoPrazo"
+          id="termoPrazo"
+          type="date"
+          class="form-control with-shadow"
+          formControlName="termoPrazo"
+        />
+      </div>
+    </div>
+  </form>
+  <div class="row mb-3">
+    <div class="col">
+      <button class="btn btn-outline-primary float-right" (click)="buscarFiltroAvancado()">
+        <i class="fas fa-search"></i> Buscar
+      </button>
+    </div>
+  </div>
+</div>
+<!--Aqui Termina os filtros-->
+
+<div class="custom-nav-tabs">
+  <ul class="nav nav-tabs row bounds" id="planosAcaoTab" role="tablist">
+    <li class="nav-item col-lg-3">
+      <a
+        class="nav-link nav-link-block active"
+        id="planos-acao-tab"
+        data-toggle="tab"
+        href="#planos-acao"
+        role="tab"
+        aria-controls="planos-acao"
+        aria-selected="false"
+        >Planos de Ação</a
+      >
+    </li>
+  </ul>
+  <div class="tab-content bounds" id="planosacaoTabContent">
+    <div
+      class="tab-pane fade active show"
+      id="planos-acao"
+      role="tabpanel"
+      aria-labelledby="planos-acao-tab"
+    >
+      <div class="card card-tab-content tab-content">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <div class="row bg-white">
+              <div class="col">
+                <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+                  <div class="col-md-3">
+                    <label class="font-weight-bold">Fornecedor:</label>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="font-weight-bold">Nome do Plano de Ação:</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Status:</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Prazo:</label>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Ações:</label>
+                  </div>
+                </div>
+
+                <div
+                  class="bg-white border-bottom row py-4"
+                  *ngIf="!planosAcao?.length; else hasValue"
+                >
+                  <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+                </div>
+
+                <ng-template #hasValue>
+                  <div
+                    class="bg-white border-bottom row py-4"
+                    *ngFor="let planoAcao of planosAcao; let i = index"
+                  >
+                    <div class="col-md-3 align-self-center">
+                      <label for="" class="font-weight-bold d-block d-md-none">Fornecedor:</label>
+                      <p
+                        class="mb-3 mb-md-0 line-clamp line-clamp-2"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="{{ planoAcao?.fornecedor.razaoSocial }}"
+                      >
+                        {{ planoAcao?.fornecedor.razaoSocial }}
+                      </p>
+                    </div>
+
+                    <div class="col-md-3 align-self-center">
+                      <label for="" class="font-weight-bold d-block d-md-none"
+                        >Nome do Plano de Ação:</label
+                      >
+                      <p
+                        class="mb-3 mb-md-0 line-clamp line-clamp-2"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="{{ planoAcao?.nome }}"
+                      >
+                        {{ planoAcao?.nome }}
+                      </p>
+                    </div>
+
+                    <div class="col-md-2 align-self-center">
+                      <label for="" class="font-weight-bold d-block d-md-none">Status:</label>
+                      <p class="mb-3 mb-md-0">
+                        {{ enumStatusPlanoAcaoFornecedor[planoAcao?.status] }}
+                      </p>
+                    </div>
+
+                    <div class="col-md-2 align-self-center">
+                      <label for="" class="font-weight-bold d-block d-md-none">Prazo:</label>
+                      <p class="mb-3 mb-md-0">
+                        {{ planoAcao?.prazo | date: 'dd/MM/yyyy' }}
+                      </p>
+                    </div>
+
+                    <div class="col-md-2 align-self-center d-flex justify-content-between">
+                      <label for="" class="font-weight-bold d-block d-md-none">Ações:</label>
+                      <button
+                        class="btn btn-icon"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Editar"
+                        (click)="acompanharPlanoAcao(planoAcao)"
+                      >
+                        <i class="far fa-edit"></i>
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

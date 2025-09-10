@@ -1,0 +1,46 @@
+::ng-deep manter-usuario-modal div.sdk-modal-body {
+  input.form-control {
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 8px !important;
+    border: 1px solid #cfdce0 !important;
+    .ng-placeholder {
+      color: #588394 !important;
+      font-weight: bold;
+    }
+  }
+
+  ng-select.ng-select-opened.ng-select-bottom > .ng-select-container,
+  ng-select.ng-select .ng-select-container,
+  ng-dropdown-panel.ng-dropdown-panel.ng-select-bottom {
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 8px !important;
+    border: 1px solid #cfdce0 !important;
+    .ng-placeholder {
+      color: #588394 !important;
+      font-weight: bold;
+    }
+
+    color: #417185 !important;
+    font-family: Open Sans !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+
+    div.ng-option {
+      color: #588394 !important;
+    }
+  }
+
+  label {
+    color: #296075;
+  }
+}
+
+.required-field::after {
+  display: inline-block;
+  font-family: 'Font Awesome 5 Free';
+  content: '\f06a';
+  font-size: 1rem;
+  margin-left: 0.3rem;
+  color: #e74b37;
+}

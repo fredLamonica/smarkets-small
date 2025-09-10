@@ -1,0 +1,118 @@
+<div class="card card-tab-content">
+  <div class="card-header" *permissionsExcept="'Fornecedor'">
+    <a
+      [routerLink]="['cotacoes', 'novo']"
+      class="btn btn-icon d-flex align-items-center text-primary p-0"
+    >
+      <i class="fas fa-plus-circle"></i>
+      <p class="d-inline-block mb-0 ml-2">Inserir nova cotação</p>
+    </a>
+  </div>
+  <div class="card-body">
+    <div class="container-fluid no-bounds text-small">
+      <div class="bg-white border-bottom row py-4" *ngIf="!cotacoes?.length; else hasCotacao">
+        <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+      </div>
+
+      <ng-template #hasCotacao>
+        <div class="bg-lighter border-bottom row d-none d-lg-flex py-2">
+          <div class="col-lg-1">
+            <label class="font-weight-bold" data-placement="bottom" title="Cotação">Cotação</label>
+          </div>
+          <div class="col-lg-1 pr-lg-0" *ngIf="getPerfilUsuarioLogado != PerfilUsuario.Fornecedor">
+            <label class="font-weight-bold" data-placement="bottom" title="Participantes">
+              <span class="d-sm-none d-xl-inline-block"> Participantes </span>
+              <span class="d-sm-inline-block d-xl-none"> Particip. </span>
+            </label>
+          </div>
+          <div
+            [ngClass]="{
+              'col-lg-2': getPerfilUsuarioLogado != PerfilUsuario.Fornecedor,
+              'col-lg-3': getPerfilUsuarioLogado == PerfilUsuario.Fornecedor
+            }"
+          >
+            <label class="font-weight-bold" data-placement="bottom" title="Descrição"
+              >Descrição</label
+            >
+          </div>
+          <div class="col-lg-1">
+            <label class="font-weight-bold" data-placement="bottom" title="Abertura"
+              >Abertura</label
+            >
+          </div>
+          <div class="col-lg-1">
+            <label class="font-weight-bold" data-placement="bottom" title="Encerramento">
+              <span class="d-sm-none d-xl-inline-block">Encerramento</span>
+              <span class="d-sm-inline-block d-xl-none">Encerram.</span>
+            </label>
+          </div>
+          <div
+            [ngClass]="{ 'col-lg-1': flagPermitirExibirSla, 'col-lg-2': !flagPermitirExibirSla }"
+          >
+            <label class="font-weight-bold" data-placement="bottom" title="Responsável">
+              <span class="d-sm-none d-xl-inline-block"> Comprador </span>
+              <span class="d-sm-inline-block d-xl-none"> Comp. </span></label
+            >
+          </div>
+          <div
+            [ngClass]="{ 'col-lg-1': !flagPermitirExibirSla }"
+            *ngIf="getPerfilUsuarioLogado == PerfilUsuario.Fornecedor"
+          >
+            <label class="font-weight-bold" data-placement="bottom" title="Responsável"
+              >Cliente</label
+            >
+          </div>
+
+          <div class="col-lg-1">
+            <div class="row">
+              <div
+                [ngClass]="{
+                  'col-lg-12 pl-lg-0': getPerfilUsuarioLogado == PerfilUsuario.Fornecedor,
+                  'col-lg-5 pl-lg-0': getPerfilUsuarioLogado != PerfilUsuario.Fornecedor
+                }"
+              >
+                <label class="font-weight-bold" data-placement="bottom" title="Rodada"
+                  >Rodada</label
+                >
+              </div>
+              <div class="col-lg-7" *ngIf="getPerfilUsuarioLogado != PerfilUsuario.Fornecedor">
+                <label
+                  class="font-weight-bold"
+                  data-placement="bottom"
+                  title="Nº itens cotados/Nº itens fechados"
+                  >IC/IF</label
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-1 pl-md-2" *ngIf="flagPermitirExibirSla">
+            <label class="font-weight-bold" data-placement="bottom" title="SLA">SLA</label>
+          </div>
+          <div class="col-lg-1 pr-lg-0">
+            <label class="font-weight-bold" data-placement="bottom" title="Situação"
+              >Situação</label
+            >
+          </div>
+          <div
+            [ngClass]="{
+              'col-lg-2': getPerfilUsuarioLogado != PerfilUsuario.Fornecedor,
+              'col-lg-1': getPerfilUsuarioLogado == PerfilUsuario.Fornecedor
+            }"
+          >
+            <label class="font-weight-bold" data-placement="bottom" title="Ações">Ações</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <cotacao
+            class="col-12"
+            [cotacao]="cotacao"
+            *ngFor="let cotacao of cotacoes; let cotacaoIndex = index"
+            [envelopeFechadoHabilitado]="envelopeFechadoHabilitado"
+          ></cotacao>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

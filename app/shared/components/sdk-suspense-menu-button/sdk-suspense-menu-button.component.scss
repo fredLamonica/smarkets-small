@@ -1,0 +1,42 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  .suspense-menu {
+    position: absolute;
+    //border: 1px solid #ccc;
+    background: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-height: 20px;
+    top: 40px;
+    border-radius: 20px;
+    padding: 3px 3px 3px 15px;
+    box-shadow: 0px 2px 8px #00000029;
+
+    button:last-child {
+      margin-left: 20px;
+    }
+  }
+
+  .icon-custom {
+    i {
+      background: #d4effa !important;
+
+      color: #417185 !important;
+
+      padding: 0.6rem !important;
+
+      border-radius: 49% !important;
+    }
+    &:hover {
+      i {
+        background: #a3e4fd !important;
+      }
+    }
+  }
+}

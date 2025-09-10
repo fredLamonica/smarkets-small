@@ -1,0 +1,345 @@
+<div class="listar-pedidos">
+  <smk-listar-funcionalidade
+    [titulo]="integracaoRequisicaoErp ? 'Requisições ERP' : 'Pedidos'"
+    tooltipExportar="Exportar um período de 30 dias"
+    [configuracaoFiltrosUsuario]="configuracaoFiltrosUsuario"
+    [filtroInformado]="filtroInformado"
+    [configuracaoDaTable]="configuracaoDaTable"
+    [itensDaTable]="paginacaoPesquisaConfigurada?.itens"
+    [colunasDisponiveis]="colunasDisponiveis"
+    [configuracaoColunasUsuario]="paginacaoPesquisaConfigurada?.configuracaoColunasUsuario"
+    (filtrosChange)="filtre()"
+    (filtrosClear)="limpeFiltro()"
+    (export)="exporte()"
+    (colunasChange)="filtrePedidos(true)"
+    (colunasReset)="filtrePedidos(true)"
+    (selectedChange)="selecione($event)"
+    (pageChange)="pagine($event)">
+    <ng-container filtros>
+      <form class="filtros" [formGroup]="formFiltro">
+        <div class="row">
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="idPedido">ID Pedido</label>
+              <input
+                id="idPedido"
+                class="form-control"
+                type="text"
+                formControlName="idPedido"
+                [textMask]="mascaraSomenteNumeros"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="situacao">Situação</label>
+              <ng-select
+                labelForId="situacao"
+                bindValue="index"
+                bindLabel="name"
+                appendTo="body"
+                formControlName="situacao"
+                [clearAllText]="textoLimpar"
+                [items]="opcoesSituacao"
+                [searchFn]="situacoesSearchFn"
+                (keyup.enter)="filtre()">
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataCriacaoInicio">Início Criação</label>
+              <input
+                id="dataCriacaoInicio"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataCriacaoInicio"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataCriacaoFim">Fim Criação</label>
+              <input
+                id="dataCriacaoFim"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataCriacaoFim"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataAprovacaoInicio">Início Aprovação</label>
+              <input
+                id="dataAprovacaoInicio"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataAprovacaoInicio"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataAprovacaoFim">Fim Aprovação</label>
+              <input
+                id="dataAprovacaoFim"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataAprovacaoFim"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataUltimaAtualizacaoInicio">Início Última Atualização</label>
+              <input
+                id="dataUltimaAtualizacaoInicio"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataUltimaAtualizacaoInicio"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataUltimaAtualizacaoFim">Fim Última Atualização</label>
+              <input
+                id="dataUltimaAtualizacaoFim"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataUltimaAtualizacaoFim"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataAprovacaoFornecedorInicio">Início Aprov. Fornecedor</label>
+              <input
+                id="dataAprovacaoFornecedorInicio"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataAprovacaoFornecedorInicio"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataAprovacaoFornecedorFim">Fim Aprov. Fornecedor</label>
+              <input
+                id="dataAprovacaoFornecedorFim"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataAprovacaoFornecedorFim"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataEntregaInicio">Início Entrega</label>
+              <input
+                id="dataEntregaInicio"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataEntregaInicio"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="dataEntregaFim">Fim Entrega</label>
+              <input
+                id="dataEntregaFim"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataEntregaFim"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="origem">Origem</label>
+              <ng-select
+                labelForId="origem"
+                bindValue="index"
+                bindLabel="name"
+                appendTo="body"
+                formControlName="origem"
+                [clearAllText]="textoLimpar"
+                [items]="opcoesOrigem"
+                [searchFn]="origensSearchFn"
+                (keyup.enter)="filtre()">
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="idOrigem">Id Origem</label>
+              <input
+                id="idOrigem"
+                class="form-control"
+                type="text"
+                formControlName="idOrigem"
+                [textMask]="mascaraSomenteNumeros"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="cliente">Cliente</label>
+              <input
+                id="cliente"
+                class="form-control"
+                type="text"
+                formControlName="cliente"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="fornecedor">Fornecedor</label>
+              <input
+                id="fornecedor"
+                class="form-control"
+                type="text"
+                formControlName="fornecedor"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="usuarioResponsavel">Responsável</label>
+              <input
+                id="usuarioResponsavel"
+                class="form-control"
+                type="text"
+                formControlName="usuarioResponsavel"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="usuarioAprovador">Usuário Aprovador</label>
+              <input
+                id="usuarioAprovador"
+                class="form-control"
+                type="text"
+                formControlName="usuarioAprovador"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="descricaoItem">Descrição</label>
+              <input
+                id="descricaoItem"
+                class="form-control"
+                type="text"
+                formControlName="descricaoItem"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div
+            *ngIf="integracaoRequisicaoErp && integracaoErpHabilitada"
+            class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="requisicaoErp">Requisição ERP</label>
+              <input
+                id="requisicaoErp"
+                class="form-control"
+                type="text"
+                formControlName="requisicaoErp"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div
+            *ngIf="mostrarFiltroErp()"
+            class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="pedidoErp">Pedido ERP</label>
+              <input
+                id="pedidoErp"
+                class="form-control"
+                type="text"
+                formControlName="pedidoErp"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div
+            *ngIf="integracaoErpHabilitada && habilitarIntegracaoSistemaChamado"
+            class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="idChamado">ID Chamado</label>
+              <input
+                id="idChamado"
+                class="form-control"
+                type="text"
+                formControlName="idChamado"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+    <ng-container acoes-table>
+      <button
+        *ngIf="pedidoSelecionado"
+        class="btn btn-outline-primary"
+        ngbTooltip="Visualizar"
+        (click)="visualize()">
+        <i class="fas fa-eye"></i>
+      </button>
+      <button
+        *ngIf="pedidoSelecionado"
+        class="btn btn-outline-primary"
+        ngbTooltip="Gerar PDF"
+        (click)="gerePdf()">
+        <i class="fas fa-print"></i>
+      </button>
+      <button
+        *ngIf="pedidoSelecionado && permiteAuditoria()"
+        class="btn btn-outline-primary"
+        ngbTooltip="Auditoria"
+        (click)="abrirAuditoria()">
+        <i class="fas fa-history"></i>
+      </button>
+    </ng-container>
+    <ng-container column-templates>
+      <ng-template customColumn="pedido" let-item="item">
+        <div class="coluna pedido text-truncate" [title]="item.pedido">{{ item.pedido }}</div>
+      </ng-template>
+      <ng-template customColumn="situacao" let-item="item">
+        <span
+          class="coluna situacao-pedido-item"
+          smkSituacaoPedidoItem
+          [situacaoPedidoItem]="item.situacao">
+          {{ item.situacao | situacaoPedido }}
+        </span>
+      </ng-template>
+      <ng-template customColumn="visualizacaoFornecedor" let-item="item">
+        <div
+          class="d-flex justify-content-center"
+          data-placement="bottom"
+          title="Não Visualizado"
+          *ngIf="!item.visualizacaoFornecedor; else visualizado">
+          <i class="fas fa-eye"></i>
+        </div>
+        <ng-template #visualizado>
+          <div
+            class="text-info d-flex justify-content-center"
+            data-placement="bottom"
+            title="{{item.visualizacaoFornecedor}}">
+            <i class="fas fa-eye"></i>
+          </div>
+        </ng-template>
+      </ng-template>
+      <ng-template customColumn="dataEntrega" let-item="item">
+        <span>{{ item.dataEntrega | date: 'dd/MM/yyyy' }}</span>
+        <span *ngIf="item.possuiItemComEntregaProgramada" class="coluna entrega-programada">
+          <i class="icone far fa-clock" ngbTooltip="Possui item com entrega programada" container="body"></i>
+        </span>
+      </ng-template>
+    </ng-container>
+  </smk-listar-funcionalidade>
+</div>

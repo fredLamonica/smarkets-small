@@ -1,0 +1,69 @@
+<div class="form-row" [formGroup]="form">
+  <div class="form-group required col-lg-2 col-6">
+    <label for="idEstado"> Estado </label>
+    <ng-select
+      [items]="estadosSelecionaveis"
+      bindLabel="nome"
+      bindValue="idEstado"
+      [hideSelected]="false"
+      name="idEstado"
+      formControlName="idEstado">
+    </ng-select>
+    <span class="invalid" *ngIf="form.controls.idEstado.invalid && form.controls.idEstado.dirty">Preenchimento
+      obrigatório</span>
+  </div>
+  <div class="form-group required col-lg-2 col-6">
+    <label for="valorMinimoPedido">Valor mínimo do pedido</label>
+    <input
+      type="text"
+      class="form-control"
+      [textMask]="{mask: maskValor, guide: false}"
+      formControlName="valorMinimoPedido">
+    <span class="invalid"
+      *ngIf="form.controls.valorMinimoPedido.invalid && form.controls.valorMinimoPedido.dirty">Preenchimento
+      obrigatório</span>
+  </div>
+   <div class="form-group mt-1 col-2">
+    <label for="idEstado"> </label>
+    <button *ngIf="!modoEdicao" role=button class="btn btn-block btn-primary include" [class.disabled]="form.invalid"
+      (click)="incluir()">
+      <i class="fas fa-plus"></i> Incluir
+    </button>
+    <button *ngIf="modoEdicao" role=button class="btn btn-block btn-primary save" [class.disabled]="form.invalid"
+      (click)="salvar()">
+      <i class="fas fa-save"></i> Salvar
+    </button>
+  </div>
+</div>
+<div class="row mb-3">
+  <div class="col-md-6">
+    <div class="row justify-content-start">
+      <div class="col-md-4 col-xl-3" *ngIf="getPermissaoEdicao">
+        <button
+          role=button
+          class="btn btn-block edition"
+          (click)="edite()">
+          <i class="fas fa-edit"></i> Editar
+        </button>
+      </div>
+      <div class="col-md-4 col-xl-3">
+        <button
+        role=button
+        class="btn btn-block btn-danger"
+        *ngIf="selecionados?.length > 0 "
+        (click)="solicitarExclusao()"
+        >
+          <i class="fas fa-trash-alt"></i> Remover
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <custom-table classes="table-striped table-sm" [settings]="settings" [source]="estados" (select)="selecao($event)" [colunasComIcone]="colunasComIcone"
+      not-found="Nenhum Estado foi configurado" [class.disabled]="modoEdicao"></custom-table>
+    <pager [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="itensPorPagina"
+      (pagination)="paginacao($event)" [class.disabled]="modoEdicao"></pager>
+  </div>
+</div>

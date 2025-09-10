@@ -1,0 +1,15 @@
+export enum SituacaoEmail {
+  Created = 1,
+  Processed,
+  Dropped,
+  Delivered,
+  Deferred,
+  Bounce,
+  Blocked,
+  Open,
+  Click,
+  'Spam Report',
+  Unsubscribe,
+  'Group Unsubscribe',
+  'Group Resubscribe',
+}

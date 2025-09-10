@@ -1,0 +1,7 @@
+<ng-template #t let-fill="fill">
+  <i *ngIf="fill === 100" class="fas fa-star"></i>
+  <i *ngIf="fill === 0" class="far fa-star"></i>
+  <i *ngIf="fill < 100 && fill > 0" class="fas fa-star-half-alt"></i>
+</ng-template>
+
+<ngb-rating [(rate)]="rating" [starTemplate]="t" [max]="max" [readonly]="readonly" (rateChange)="onClick($event)"></ngb-rating>

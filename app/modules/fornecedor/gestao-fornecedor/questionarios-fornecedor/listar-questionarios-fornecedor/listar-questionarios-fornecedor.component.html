@@ -1,0 +1,79 @@
+<div class="card card-tab-content">
+  <div class="card-header">
+    <a
+      class="btn btn-icon d-flex align-items-center text-primary p-0"
+      (click)="incluirQuestionario()"
+    >
+      <i class="fas fa-plus-circle"></i>
+      <p class="d-inline-block mb-0 ml-2">Incluir novo questionário</p>
+    </a>
+  </div>
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="bg-lighter border-bottom row py-4 d-none d-md-flex justify-content-end">
+        <div class="col-md-1 align-self-center">
+          <p class="font-weight-bold mb-0">ID:</p>
+        </div>
+        <div class="col-md-5 align-self-center">
+          <p class="font-weight-bold mb-0">Nome do Questionário:</p>
+        </div>
+        <div class="col-md-3 align-self-center">
+          <p class="font-weight-bold mb-0">Categorias:</p>
+        </div>
+        <div class="col-md-3 align-self-center">
+          <p class="font-weight-bold mb-0">Ações:</p>
+        </div>
+      </div>
+
+      <div class="bg-white border-bottom row py-4" *ngIf="!questionarios.length">
+        <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+      </div>
+
+      <div *ngFor="let questionario of questionarios" class="bg-white border-bottom row py-4">
+        <div class="col-md-1 align-self-center">
+          {{ questionario.idQuestionarioGestaoFornecedor }}
+        </div>
+        <div class="col-md-5 align-self-center">
+          {{ questionario.nome }}
+        </div>
+        <div class="col-md-3 align-self-center text-truncate">
+          {{
+            questionario.usaTodasCategorias
+              ? 'Todas as Categorias'
+              : ImprimeCategoria(questionario.categoriasFornecimento)
+          }}
+        </div>
+        <div class="col-md-3 d-flex justify-content-between align -self-center">
+          <label for="" class="font-weight-bold d-block d-md-none">Ações:</label>
+          <button
+            class="btn btn-icon"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Auditoria"
+            (click)="onAuditoriaClick(questionario.idQuestionarioGestaoFornecedor)"
+          >
+            <i class="fas fa-history"></i>
+          </button>
+          <button
+            class="btn btn-icon"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Editar"
+            (click)="editarQuestionario(questionario.idQuestionarioGestaoFornecedor)"
+          >
+            <i class="far fa-edit"></i>
+          </button>
+          <button
+            class="btn btn-icon"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Excluir"
+            (click)="solicitarExclusao(questionario)"
+          >
+            <i class="far fa-trash-alt text-danger"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

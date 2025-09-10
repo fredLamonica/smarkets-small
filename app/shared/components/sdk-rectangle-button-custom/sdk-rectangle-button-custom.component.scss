@@ -1,0 +1,37 @@
+:host {
+  width: auto;
+
+  button {
+    border: none;
+    border-radius: 8px !important;
+    font-size: 12px !important;
+    padding: 0 30px !important;
+    opacity: 1;
+    min-width: 4rem;
+    box-shadow: none !important;
+    display: flex !important;
+    width: 100%;
+    cursor: pointer;
+    margin: 8px 0px 8px 0px;
+    align-items: center !important;
+
+    height: 32px !important;
+    font-family: Open Sans !important;
+    line-height: 100% !important;
+
+    flex: none !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+
+    outline: none !important;
+
+    & .left-icon {
+      padding-right: 10px !important;
+    }
+
+    &:hover {
+      background-color: #114e66 !important;
+      color: #ffffff;
+    }
+  }
+}

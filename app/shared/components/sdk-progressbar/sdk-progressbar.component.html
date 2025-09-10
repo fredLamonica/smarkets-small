@@ -1,0 +1,19 @@
+<div class="row d-flex align-items-center pt-1">
+  <div [ngClass]="{'text-right' : alinharDireita}" class="col-4 text-truncate">
+    <span title="{{ label }}">{{ label }}</span>
+  </div>
+
+  <div class="col-8 bar">
+    <div class="progress">
+      <div
+        class="progress-bar rounded-right"
+        role="progressbar"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [style.width]="progress"
+        [style.height]="'100%'"
+      ></div>
+      <span class="progress-value-right">{{ value }}</span>
+    </div>
+  </div>
+</div>

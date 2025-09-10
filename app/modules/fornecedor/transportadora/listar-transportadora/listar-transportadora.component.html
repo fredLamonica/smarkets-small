@@ -1,0 +1,72 @@
+<ul class="nav bg-gray">
+  <li class="nav-item" *ngIf="adminSmarketsLogado || isRegisterProfile">
+    <a class="nav-link" role="button" [routerLink]="['nova']">
+      <i class="fas fa-plus"></i> Incluir
+    </a>
+  </li>
+  <li class="nav-item">
+    <a
+      class="nav-link"
+      role="button"
+      [class.disabled]="transportadorasSelecionadas?.length != 1"
+      [routerLink]="
+        transportadorasSelecionadas?.length
+          ? [transportadorasSelecionadas[0].idTransportadora]
+          : null
+      "><i class="fas fa-pencil-alt"></i> Editar
+    </a>
+  </li>
+  <li class="nav-item" *ngIf="adminSmarketsLogado || isRegisterProfile">
+    <a
+      class="nav-link"
+      role="button"
+      [class.disabled]="transportadorasSelecionadas?.length != 1"
+      (click)="
+        solicitarExclusao(
+          transportadorasSelecionadas[0].idTransportadora,
+          transportadorasSelecionadas[0].idPessoaJuridica
+        )
+      ">
+      <i class="fas fa-trash"></i> Excluir
+    </a>
+  </li>
+</ul>
+<header>
+  <h1 class="title text-capitalize" translate>
+    {{ 'Minhas Transportadoras' }}
+  </h1>
+</header>
+<div class="container-fluid no-bounds">
+  <div class="form-row" [formGroup]="form">
+    <div class="form-group col-lg-8">
+      <input-busca
+        placeholder="Buscar por CNPJ, Razão Social ou Nome Fantasia"
+        (buscar)="buscar($event)"
+        (campoVazio)="buscar('')"></input-busca>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <custom-table
+            classes="table-striped"
+            [settings]="settings"
+            [source]="transportadoras"
+            [colunasComBotoes]="colunasComBotoes"
+            (button-click)="realizarAcao($event)"
+            (select)="agruparSelecionados($event)"
+            (sort)="ordenar($event)">
+          </custom-table>
+          <pager
+            [page]="pagina"
+            [total-pages]="totalPaginas"
+            [records-per-page]="itensPorPagina"
+            (pagination)="paginacao($event)"></pager>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- (select)="agruparSelecionados($event)"
+ -->

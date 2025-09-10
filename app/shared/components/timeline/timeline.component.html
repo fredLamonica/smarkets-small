@@ -1,0 +1,18 @@
+<ul class="timeline {{classes}}" [class.canceled]="canceled">
+  <ng-container *ngIf="timeline?.length">
+    <li class="li" *ngFor="let timelineItem of timeline; let i = index;"
+      [ngClass]="{
+        'previous': i <= currentIndex,
+        'current': i == currentIndex && (i != timeline.length - 1),
+        'success': i <= currentIndex || timelineItem.status == timelineItemStatus.success,
+        'fail': timelineItem.status == timelineItemStatus.fail
+      }">
+      <div class="icon" [title]="timelineItem.title">
+        <i [class]="timelineItem.iconClass"></i>
+      </div>
+      <div class="status" [title]="timelineItem.title">
+        <p class="text-truncate title">{{ timelineItem.title }}</p>
+      </div>
+    </li>
+  </ng-container>
+</ul>

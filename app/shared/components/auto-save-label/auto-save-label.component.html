@@ -1,0 +1,6 @@
+<small class="pl-5" [ngSwitch]="ultimaAlteracao">
+  <ng-template ngSwitchCase="salvando"> <u>Salvando...</u></ng-template>
+  <ng-template ngSwitchCase="erro"> <u>Não foi possivel salvar as alterações mais recentes</u></ng-template>
+  <ng-template [ngSwitchCase]="null"> </ng-template>
+  <ng-template ngSwitchDefault> <u>Salvo automaticamente em {{ultimaAlteracao | date:"dd/MM/yyyy HH:mm:ss"}}</u></ng-template>
+</small>

@@ -1,0 +1,231 @@
+sdk-rectangle-button ::ng-deep {
+  width: auto;
+
+  button {
+    padding: 0 30px !important;
+    height: 32px !important;
+    font-family: Open Sans !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 12px !important;
+    line-height: 100% !important;
+    display: flex !important;
+    color: #ffffff !important;
+    flex: none !important;
+    border: none !important;
+
+    background: #588394 !important;
+    &:hover {
+      background-color: #588394 !important;
+      color: #ffffff;
+    }
+  }
+}
+
+::ng-deep div.cnaes-item {
+  a {
+    color: #417185;
+  }
+}
+
+.cursor {
+  cursor: default !important;
+}
+
+.circle-icon {
+  position: absolute;
+  color: #d4effa;
+}
+
+.delete-action {
+  background: transparent;
+  border-radius: 50%;
+  z-index: 1;
+  position: relative;
+  top: 1.5px;
+  right: 0.5px;
+
+  i {
+    color: #417185 !important;
+  }
+}
+
+.crop-text-1 {
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+::ng-deep sdk-item-card.style-cnae {
+  div.sdk-item-card {
+    cursor: default !important;
+  }
+  .style-card-icon {
+    div.sdk-item-card > div:nth-child(1) {
+      border: 1px solid #52bde9;
+      position: relative;
+      left: -1px;
+    }
+  }
+}
+
+::ng-deep ngb-modal-window.modal-border-radius {
+  div:nth-child(1):nth-child(1) {
+    border-radius: 8px;
+  }
+}
+
+.btn-trash {
+  span {
+    color: #d4effa;
+  }
+
+  i {
+    color: #417185;
+    position: relative;
+    top: -5px;
+    left: -20px;
+  }
+}
+
+.header {
+  display: flex;
+  color: #417185;
+  font-weight: bold;
+  padding-left: 10%;
+  margin-bottom: 0.5px;
+  p {
+    position: relative;
+  }
+
+  p:nth-child(2) {
+    left: 35%;
+  }
+  p:nth-child(3) {
+    left: 56.5%;
+  }
+
+  p:nth-child(4) {
+    left: 80%;
+  }
+}
+
+.listagem {
+  .header {
+    display: flex;
+    color: #417185;
+    font-weight: bold;
+  }
+
+  .header-margins {
+    margin-left: 3.7rem;
+    margin-right: 0rem;
+  }
+
+  a {
+    color: #417185;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .btn-trash {
+    span {
+      position: relative;
+      top: 11px;
+    }
+
+    i {
+      top: -15px;
+      left: 8px;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .header {
+    p:nth-child(1) {
+      left: 3%;
+    }
+
+    p:nth-child(3) {
+      left: 51%;
+    }
+
+    p:nth-child(4) {
+      left: 65%;
+    }
+  }
+}
+
+@media (min-width: 1140px) {
+  .header {
+    p:nth-child(1) {
+      left: 3%;
+    }
+
+    p:nth-child(3) {
+      left: 52%;
+    }
+
+    p:nth-child(4) {
+      left: 69%;
+    }
+  }
+}
+
+@media (min-width: 1280px) {
+  .header {
+    p:nth-child(3) {
+      left: 53.5%;
+    }
+
+    p:nth-child(4) {
+      left: 71%;
+    }
+  }
+}
+
+@media (min-width: 1366px) {
+  .header {
+    p:nth-child(3) {
+      left: 54%;
+    }
+
+    p:nth-child(4) {
+      left: 72.5%;
+    }
+  }
+}
+
+@media (min-width: 1400px) {
+  .header {
+    p:nth-child(3) {
+      left: 54%;
+    }
+
+    p:nth-child(4) {
+      left: 75%;
+    }
+  }
+}
+
+@media (min-width: 1920px) {
+  .header {
+    p:nth-child(2) {
+      left: 35%;
+    }
+    p:nth-child(3) {
+      left: 56.5%;
+    }
+
+    p:nth-child(4) {
+      left: 80%;
+    }
+  }
+}

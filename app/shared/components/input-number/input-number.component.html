@@ -1,0 +1,45 @@
+<input
+  type="text"
+  class="form-control"
+  [ngStyle]="{ 'text-align': text_align }"
+  [class.disabled]="disabled"
+  [class.invalid]="invalid"
+  [(ngModel)]="value"
+  [textMask]="{ mask: maskDecimal, guide: false }"
+  (blur)="blur()"
+  *ngIf="allowDecimal; else integer" />
+
+<ng-template #integer>
+  <div
+    class="input-group container-input"
+    [class.disabled]="disabled"
+    [class.invalid]="invalid">
+    <div class="input-group-prepend">
+      <button
+        class="btn"
+        type="button"
+        (click)="sub()"
+        [class.disabled]="disabled || valueAsNumber() <= min"
+        (blur)="blur()">
+        <i class="fas fa-angle-left"></i>
+      </button>
+    </div>
+    <input
+      type="text"
+      class="form-control"
+      [class.disabled]="disabled"
+      [(ngModel)]="value"
+      [textMask]="{ mask: maskPositiveInteger, guide: false }"
+      (blur)="blur()" />
+    <div class="input-group-append">
+      <button
+        class="btn"
+        type="button"
+        (click)="add()"
+        [class.disabled]="disabled || valueAsNumber() >= max"
+        (blur)="blur()">
+        <i class="fas fa-angle-right"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>

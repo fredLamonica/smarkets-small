@@ -1,0 +1,100 @@
+<div class="lim-larg">
+  <div class="form-row" [formGroup]="form">
+    <div class="form-group col col-10">
+      <input-busca
+          placeholder="Buscar por produto"
+          (buscar)="buscar($event)"
+          (campoVazio)="buscar('')"
+          [disabled]="buscaAvancada"
+      ></input-busca>
+    </div>
+    <div class="col-2">
+        <button
+          class="btn btn-primary"
+          *ngIf="!buscaAvancada; else esconderBuscaAvancada"
+          (click)="exibirBuscaAvancada(true)">
+          <i class="fas fa-search-plus"></i> Busca Avançada
+        </button>
+        <ng-template #esconderBuscaAvancada>
+          <button class="btn btn-outline-primary" (click)="exibirBuscaAvancada(false)">
+            <i class="fas fa-search-minus"></i> Busca Avançada
+          </button>
+        </ng-template>
+    </div>
+  </div>
+  <div *ngIf="buscaAvancada">
+    <div [formGroup]="form">
+      <div class="row">
+        <div class="form-group col-4">
+          <label> Descrição </label>
+          <input
+            class="form-control"
+            type="text"
+            formControlName="termo"
+            placeholder="Descrição"
+            />
+        </div>
+        <div class="form-group col-2">
+          <label> Código </label>
+          <input
+            class="form-control"
+            type="text"
+            formControlName="codigo"
+            placeholder="Código"
+            />
+        </div>
+        <div class="form-group col-3">
+          <label> Situação </label>
+          <ng-select
+                labelForId="situacao"
+                bindValue="index"
+                bindLabel="name"
+                formControlName="situacao"
+                [items]="opcoesSituacaoProduto"
+                [searchFn]="situacoesSearchFn"
+                >
+          </ng-select>
+        </div>
+        <div class="form-group col-3">
+          <label> Marca </label>
+          <input
+            class="form-control"
+            type="text"
+            formControlName="marca"
+            placeholder="Marca"
+            />
+        </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-12">
+        <button class="btn btn-outline-primary float-right" (click)="filtroAvancado()" >
+          <i class="fas fa-search"></i> Buscar
+        </button>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+<div class="row mb-3">
+  <div class="col-md-6">
+    <div class="row justify-content-start">
+      <div class="col-md-4 col-xl-3" *ngIf="itensSelecionados?.length == 1">
+        <button role=button class="btn btn-block btn-secondary" (click)="edite()">
+          <i class="fas fa-edit"></i> Editar
+        </button>
+      </div>
+      <div class="col-md-4 col-xl-3" *ngIf="itensSelecionados?.length == 1">
+        <button role=button class="btn btn-block btn-primary" (click)="prazoEntrega()">
+          <i class="fas fa-clock"></i> Prazo Entrega
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <custom-table classes="table-striped table-sm" [settings]="settings" [source]="itens" [colunasComIcone]="colunasComIcone"
+      (select)="selecao($event)" (sort)="ordenar($event)"></custom-table>
+    <pager [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="itensPorPagina" (pagination)="paginacao($event)"></pager>
+  </div>
+</div>

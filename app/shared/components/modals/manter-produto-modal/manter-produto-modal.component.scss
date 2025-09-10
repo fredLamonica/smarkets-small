@@ -1,0 +1,23 @@
+$gerar-codigo-unico-color: #88a6b2;
+
+.gerar-codigo-unico {
+  cursor: pointer;
+  accent-color: #1d9ed3;
+
+  &:hover {
+    .gerar-codigo-unico-label {
+      color: darken($gerar-codigo-unico-color, 20%);
+      text-decoration: none;
+    }
+  }
+
+  .gerar-codigo-unico-check {
+    cursor: pointer;
+    margin-top: 5px;
+  }
+
+  .gerar-codigo-unico-label {
+    cursor: pointer;
+    text-decoration: none;
+  }
+}

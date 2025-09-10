@@ -1,0 +1,57 @@
+<div class="input-group">
+  <ng-select [items]="fornecedores$ | async" bindLabel="razaoSocial" bindValue="idPessoaJuridica" [hideSelected]="true" [loading]="loading" (clear)="buscarFornecedoresPorDescricao()"
+    loadingText="buscando..." [typeahead]="input$" typeToSearchText="Digite para buscar" [(ngModel)]="idFornecedor">
+  </ng-select>
+  <div class="input-group-append">
+    <button class="btn btn-primary" type="button" id="button-addon2" (click)="abriModal(selecaoFornecedorModal)"><i class="fas fa-search"></i></button>
+  </div>
+</div>
+
+<ng-template #selecaoFornecedorModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">Selecionar fornecedor</div>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <form class="col-12" [formGroup]="form">
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="razaoSocial" translate> CNPJ, Razão Social, Nome Fantasia ou Código do ERP </label>
+            <input class="form-control" type="text" name="razaoSocial" formControlName="termo">
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="col-md-4 col-xl-2">
+            <button role=button class="btn btn-block btn-primary" (click)="buscar()">
+              <i class="fas fa-search"></i> Pesquisar
+            </button>
+          </div>
+          <div class="col-md-4 col-xl-2">
+            <button role=button class="btn btn-block btn-danger" (click)="limpar()">
+              <i class="fas fa-trash-alt"></i> Limpar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+            <custom-table classes="table-striped table-sm" [settings]="settings" [source]="fornecedores"
+             (select)="selecao($event)" (sort)="ordenar($event)"></custom-table>
+            <pager size="sm" [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="registrosPorPagina"
+              (pagination)="paginacao($event)"></pager>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Cancelar</button>
+    <button type="button" class="btn btn-outline-primary" [class.disabled]="!selecionado" (click)="confirmar()">Confirmar</button>
+  </div>
+</ng-template>

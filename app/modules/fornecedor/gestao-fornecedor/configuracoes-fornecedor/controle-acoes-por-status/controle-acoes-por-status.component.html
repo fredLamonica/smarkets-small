@@ -1,0 +1,137 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Controle de Ações por Status</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group col-12">
+        <label class="font-weight-bold">Status Em Análise</label>
+        <div class="pl-4 d-flex justify-content-between align-items-center">
+          <label class="font-weight-bold">Fornecedor pode ver e participar de Cotações</label>
+          <button
+            *ngIf="
+              this.form.value.emAnalisePodeParticiparCotacao;
+              else desativarEmAnalisePodeParticiparCotacao
+            "
+            class="btn btn-icon"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Desativar"
+            (click)="changeValue('emAnalisePodeParticiparCotacao')"
+          >
+            <i class="fas fa-toggle-on text-success"></i>
+          </button>
+          <ng-template #desativarEmAnalisePodeParticiparCotacao>
+            <button
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Ativar"
+              (click)="changeValue('emAnalisePodeParticiparCotacao')"
+            >
+              <i class="fas fa-toggle-off"></i>
+            </button>
+          </ng-template>
+        </div>
+        <div class="pl-4 d-flex justify-content-between align-items-center">
+          <label class="font-weight-bold">Fornecedor pode ter Pedidos gerados</label>
+          <button
+            *ngIf="this.form.value.emAnalisePodeTerPedido; else desativarEmAnalisePodeTerPedido"
+            class="btn btn-icon"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Desativar"
+            (click)="changeValue('emAnalisePodeTerPedido')"
+          >
+            <i class="fas fa-toggle-on text-success"></i>
+          </button>
+          <ng-template #desativarEmAnalisePodeTerPedido>
+            <button
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Ativar"
+              (click)="changeValue('emAnalisePodeTerPedido')"
+            >
+              <i class="fas fa-toggle-off"></i>
+            </button>
+          </ng-template>
+        </div>
+      </div>
+      <div class="form-group col-12">
+        <label class="font-weight-bold">Status Ativo com Pendências</label>
+        <div class="pl-4 d-flex justify-content-between align-items-center">
+          <label class="font-weight-bold">Fornecedor pode ter Pedidos gerados</label>
+          <button
+            *ngIf="
+              this.form.value.ativoComPendenciaPodeTerPedido;
+              else desativarAtivoComPendenciaPodeTerPedido
+            "
+            class="btn btn-icon"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Desativar"
+            (click)="changeValue('ativoComPendenciaPodeTerPedido')"
+          >
+            <i class="fas fa-toggle-on text-success"></i>
+          </button>
+          <ng-template #desativarAtivoComPendenciaPodeTerPedido>
+            <button
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Ativar"
+              (click)="changeValue('ativoComPendenciaPodeTerPedido')"
+            >
+              <i class="fas fa-toggle-off"></i>
+            </button>
+          </ng-template>
+        </div>
+      </div>
+      <div class="form-group col-12">
+        <label class="font-weight-bold">Status Ativo</label>
+        <div class="pl-4 d-flex justify-content-between align-items-center">
+          <label class="font-weight-bold"
+            >Mudar automaticamente o status para "Em Análise" quando um documento vencer</label
+          >
+          <button
+            *ngIf="
+              this.form.value.ativoRetornarStatusEmAnalise;
+              else desativarAtivoRetornarStatusEmAnalise
+            "
+            class="btn btn-icon"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Desativar"
+            (click)="changeValue('ativoRetornarStatusEmAnalise')"
+          >
+            <i class="fas fa-toggle-on text-success"></i>
+          </button>
+          <ng-template #desativarAtivoRetornarStatusEmAnalise>
+            <button
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Ativar"
+              (click)="changeValue('ativoRetornarStatusEmAnalise')"
+            >
+              <i class="fas fa-toggle-off"></i>
+            </button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="cancelar()">
+    <i class="fas fa-ban"></i> Cancelar
+  </button>
+
+  <button type="button" class="btn btn-primary" (click)="confirmar()">
+    <i class="fas fa-save"></i> Salvar
+  </button>
+</div>

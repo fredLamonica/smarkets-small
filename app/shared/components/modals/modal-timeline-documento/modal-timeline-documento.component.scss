@@ -1,0 +1,101 @@
+sdk-modal ::ng-deep > div.sdk-modal-body{
+    padding-top: 3rem;
+    padding-left: 2.5rem;
+}
+
+
+sdk-timeline ::ng-deep > div.timeline_container > div.timeline {
+    
+    div:first-child > sdk-timeline-entry { 
+        div.entry{
+            font-size: 1rem !important;    
+            div.body{
+                font-size: inherit;
+                width: 100% !important;
+                
+            }
+
+            div.timeline-bar-icon{
+                font-size: inherit;
+                
+                i{
+                    font-size: inherit;            
+                }
+                &::before{
+                    width: 1.5rem !important;
+                    height: 1.5rem !important;
+                }
+            }
+
+            div.timeline-bar{
+                &::before{
+                    margin-left: 7px !important;
+                    background: rgba(0, 0, 0, 0.1);
+                }
+
+                .icon{
+                    top: 0.05rem;
+                    left: 0.1rem;
+                    margin-left: 0px;
+                }
+            }
+        }
+    }
+
+    div:not(:nth-child(1)) > sdk-timeline-entry { 
+        div.entry{
+            font-size: 1rem !important;    
+            div.body{
+                font-size: inherit;
+                width: 100% !important;
+                
+            }
+
+            div.timeline-bar-icon{
+                font-size: inherit;
+                
+                i{
+                   display: none;
+                }
+                &::before{
+                    background: #F0F0F0 !important;
+                    border: 2px solid #6e6e72 !important;
+                    width: 1.4rem !important;
+                    height: 1.4rem !important;
+                }
+            }
+
+            div.timeline-bar{
+                &::before{
+                    margin-left: 7px !important;
+                    background: rgba(0, 0, 0, 0.1);
+                }
+
+                .icon{
+                    top: 0.05rem;
+                    left: 0.1rem;
+                    margin-left: 0px;
+                }
+            }
+        }
+    }
+}
+
+.btn-download{ 
+    position: absolute;   
+    bottom: 55%;
+    left:91%
+    
+}
+
+.mouse-hover{
+    i{
+      background: #F0F0F0;
+    padding: 0.8rem;
+    border-radius: 49%;
+    &:hover{
+      background:#00bbf3;
+      color: #fff;
+    }
+    }    
+} 

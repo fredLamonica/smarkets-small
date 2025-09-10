@@ -1,0 +1,16 @@
+<div
+  [attr.disabled]="disabled ? 'disabled' : null"
+  [ngClass]="{
+    primary: type === 'primary',
+    secondary: type === 'secondary',
+    sucess: type === 'sucess',
+    warning: type === 'warning',
+    danger: type === 'danger',
+    info: type === 'info',
+    light: type === 'light',
+    dark: type === 'dark'
+  }"
+  (click)="!disabled && buttonClick.emit($event)">
+  <i *ngIf="icon" class="{{ icon }}" [attr.disabled]="disabled ? 'disabled' : null"></i>
+  <button *ngIf="label" [attr.disabled]="disabled ? 'disabled' : null">{{ label }}</button>
+</div>

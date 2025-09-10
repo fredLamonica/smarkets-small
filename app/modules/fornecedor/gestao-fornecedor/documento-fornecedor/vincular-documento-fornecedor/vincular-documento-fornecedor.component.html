@@ -1,0 +1,51 @@
+<sdk-modal
+  title="Vincular Documento Fornecedor"
+  [show-footer]="hasDocumentos"
+  (on-confirm)="vincular()"
+>
+  <label for="documentos"> Documentos disponíveis </label>
+  <ng-select
+    [items]="documentos"
+    bindValue="idDocumentoFornecedor"
+    name="documentos"
+    [loading]="documentosLoading"
+    [loadingText]="'buscando...'"
+    [multiple]="true"
+    [closeOnSelect]="false"
+    [searchFn]="customSearch"
+    [hideSelected]="true"
+    [(ngModel)]="documentosSelecionados"
+  >
+    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+      <div class="ng-value" style="max-width: 70%" *ngFor="let item of items | slice: 0:1">
+        <span class="ng-value-label text-truncate align-middle" style="max-width: 90%">{{
+          item.descricaoDocumento
+        }}</span>
+        <span
+          class="ng-value-icon right"
+          style="max-width: 10%"
+          (click)="clear(item)"
+          aria-hidden="true"
+          >×</span
+        >
+      </div>
+      <div class="ng-value" *ngIf="items.length > 1">
+        <span class="ng-value-label">{{ items.length - 1 }} mais...</span>
+      </div>
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+      <div class="custom-control custom-checkbox mr-sm-2">
+        <input
+          type="checkbox"
+          class="custom-control-input"
+          id="item-{{ index }}"
+          [ngModel]="item$.selected"
+          [ngModelOptions]="{ standalone: true }"
+        />
+        <label class="custom-control-label pointer-events-none" for="item-{{ index }}">{{
+          item.descricaoDocumento
+        }}</label>
+      </div>
+    </ng-template>
+  </ng-select>
+</sdk-modal>

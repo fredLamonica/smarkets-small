@@ -1,0 +1,235 @@
+<div class="group-companies">
+  <sdk-item-card
+    [iconClass]="iconClass(item)"
+    [statusBarColor]="statusColor(item)"
+    [iconSpotColor]="iconSpotColor(item)"
+    [hasMarginBottom]="false"
+    (click)="editar($event, item.idPessoaJuridica)"
+    [ngClass]="{
+      'father-no-border': item.pessoasJuridicasFilho.length == 0,
+      shadow: item.pessoasJuridicasFilho.length == 0,
+      father: item.pessoasJuridicasFilho.length > 0
+    }">
+    <div class="d-flex w-100 justify-content-around align-items-center">
+      <div class="col-1">
+        <a>{{ item.idPessoaJuridica }}</a>
+      </div>
+      <div class="col-1">
+        <a data-toggle="tooltip" data-placement="bottom" title="{{ item.codigoFilialEmpresa }}">
+          {{ item.codigoFilialEmpresa }}
+        </a>
+      </div>
+      <div class="col-2">
+        <a>{{ item.cnpj }}</a>
+      </div>
+      <div class="col-3 crop-text-2">
+        <a data-toggle="tooltip" data-placement="bottom" title="{{ item.razaoSocial }}">{{
+          item.razaoSocial
+          }}</a>
+      </div>
+      <div class="col-3 crop-text-2">
+        <a data-toggle="tooltip" data-placement="bottom" title="{{ item.nomeFantasia }}">{{
+          item.nomeFantasia
+          }}</a>
+      </div>
+      <div class="col-1">
+        <span [ngStyle]="{ color: statusColor(item), 'font-weight': 'bold' }">{{
+          statusLabel(item)
+          }}</span>
+      </div>
+      <div class="col-1">
+        <sdk-suspense-menu-button class="suspense-menu-sdk-group-companies" [icon]="'fa fa-ellipsis-h'" title="...">
+          <ng-template sdkSuspenseMenu>
+            <button
+              class="btn btn-sm btn-icon text-dark"
+              title="Auditoria"
+              (click)="auditar($event, item.idPessoaJuridica)">
+              <i class="fa fa-history"></i> <a>Auditoria</a>
+            </button>
+            <button
+              class="btn btn-sm btn-icon"
+              title="Exportar"
+              (click)="exportUsers(item.idPessoaJuridica)">
+              <i class="fa fa-users"></i> <a>Exportar</a>
+            </button>
+            <button
+              *ngIf="item.situacao === 1"
+              title="Desativar"
+              class="btn btn-sm btn-icon"
+              (click)="inativar(item.idPessoaJuridica)">
+              <i class="fas fa-toggle-on text-success"></i> <a>Inativar</a>
+            </button>
+            <button
+              *ngIf="item.situacao === 2 || item.situacao === 3"
+              title="Ativar"
+              class="btn btn-sm btn-icon"
+              (click)="ativar(item.idPessoaJuridica)">
+              <i class="fas fa-toggle-off"></i> <a>Ativar</a>
+            </button>
+            <button
+              title="Excluir"
+              class="btn btn-sm btn-icon"
+              (click)="solicitarExclusao(item.idPessoaJuridica)"
+              *ngIf="item.pessoasJuridicasFilho.length === 0 && item.situacao == situacaoItem.Pendente">
+              <i class="far fa-trash-alt text-danger"></i> <a>Excluir</a>
+            </button>
+          </ng-template>
+        </sdk-suspense-menu-button>
+      </div>
+    </div>
+  </sdk-item-card>
+  <div class="childs" *ngFor="let child of item.pessoasJuridicasFilho; let last = last">
+    <sdk-item-card
+      [iconClass]="iconClass(child)"
+      [statusBarColor]="statusColor(child)"
+      [iconSpotColor]="iconSpotColor(child)"
+      [hasMarginBottom]="false"
+      (click)="editar($event, child.idPessoaJuridica)"
+      [ngClass]="{
+        last: last && child.pessoasJuridicasFilho.length == 0,
+        shadow: last && child.pessoasJuridicasFilho.length == 0
+      }">
+      <div class="d-flex w-100 justify-content-around align-items-center">
+        <div class="col-1">
+          <a>{{ child.idPessoaJuridica }}</a>
+        </div>
+        <div class="col-1">
+          <a>{{ child.codigoFilialEmpresa }}</a>
+        </div>
+        <div class="col-2">
+          <a>{{ child.cnpj }}</a>
+        </div>
+        <div class="col-3 crop-text-2">
+          <a data-toggle="tooltip" data-placement="bottom" title="{{ child.razaoSocial }}">{{
+            child.razaoSocial
+            }}</a>
+        </div>
+        <div class="col-3 crop-text-2">
+          <a data-toggle="tooltip" data-placement="bottom" title="{{ child.nomeFantasia }}">{{
+            child.nomeFantasia
+            }}</a>
+        </div>
+        <div class="col-1">
+          <span [ngStyle]="{ color: statusColor(child), 'font-weight': 'bold' }">{{
+            statusLabel(child)
+            }}</span>
+        </div>
+        <div class="col-1">
+          <sdk-suspense-menu-button class="suspense-menu-sdk-group-companies" [icon]="'fa fa-ellipsis-h'" title="...">
+            <ng-template sdkSuspenseMenu>
+              <button
+                class="btn btn-sm btn-icon text-dark"
+                title="Auditoria"
+                (click)="auditar($event, child.idPessoaJuridica)">
+                <i class="fa fa-history"></i> <a>Auditoria</a>
+              </button>
+              <button
+                class="btn btn-sm btn-icon"
+                title="Exportar"
+                (click)="exportUsers(child.idPessoaJuridica)">
+                <i class="fa fa-users"></i> <a>Exportar</a>
+              </button>
+              <button
+                *ngIf="child.situacao === 1"
+                title="Desativar"
+                class="btn btn-sm btn-icon"
+                (click)="inativar(child.idPessoaJuridica)">
+                <i class="fas fa-toggle-on text-success"></i> <a>Inativar</a>
+              </button>
+              <button
+                *ngIf="child.situacao === 2 || child.situacao === 3"
+                title="Ativar"
+                class="btn btn-sm btn-icon"
+                (click)="ativar(child.idPessoaJuridica)">
+                <i class="fas fa-toggle-off"></i> <a>Ativar</a>
+              </button>
+              <button
+                title="Excluir"
+                class="btn btn-sm btn-icon"
+                (click)="solicitarExclusao(child.idPessoaJuridica)"
+                *ngIf="child.pessoasJuridicasFilho.length === 0 && child.situacao == situacaoItem.Pendente">
+                <i class="far fa-trash-alt text-danger"></i> <a>Excluir</a>
+              </button>
+            </ng-template>
+          </sdk-suspense-menu-button>
+        </div>
+      </div>
+    </sdk-item-card>
+    <div *ngIf="child.pessoasJuridicasFilho.length > 0">
+      <sdk-item-card
+        *ngFor="let child1 of child.pessoasJuridicasFilho; let lastNeto = last"
+        [iconClass]="iconClass(child1)"
+        [statusBarColor]="statusColor(child1)"
+        [iconSpotColor]="iconSpotColor(child1)"
+        [hasMarginBottom]="false"
+        (click)="editar($event, child1.idPessoaJuridica)"
+        [ngClass]="{ last: last && lastNeto, shadow: last && lastNeto }">
+        <div class="d-flex w-100 justify-content-around align-items-center">
+          <div class="col-1">
+            <a>{{ child1.idPessoaJuridica }}</a>
+          </div>
+          <div class="col-1">
+            <a>{{ child1.codigoFilialEmpresa }}</a>
+          </div>
+          <div class="col-2">
+            <a>{{ child1.cnpj }}</a>
+          </div>
+          <div class="col-3 crop-text-2">
+            <a data-toggle="tooltip" data-placement="bottom" title="{{ child1.razaoSocial }}">{{
+              child1.razaoSocial
+              }}</a>
+          </div>
+          <div class="col-3 crop-text-2">
+            <a data-toggle="tooltip" data-placement="bottom" title="{{ child1.nomeFantasia }}">{{
+              child1.nomeFantasia
+              }}</a>
+          </div>
+          <div class="col-1">
+            <span [ngStyle]="{ color: statusColor(child1), 'font-weight': 'bold' }">{{
+              statusLabel(child1)
+              }}</span>
+          </div>
+          <div class="col-1">
+            <sdk-suspense-menu-button class="suspense-menu-sdk-group-companies" [icon]="'fa fa-ellipsis-h'" title="...">
+              <ng-template sdkSuspenseMenu>
+                <button
+                  class="btn btn-sm btn-icon text-dark"
+                  title="Auditoria"
+                  (click)="auditar($event, child1.idPessoaJuridica)">
+                  <i class="fa fa-history"></i> <a>Auditoria</a>
+                </button>
+                <button
+                  class="btn btn-sm btn-icon"
+                  title="Exportar"
+                  (click)="exportUsers(child1.idPessoaJuridica)">
+                  <i class="fa fa-users"></i> <a>Exportar</a>
+                </button>
+                <button
+                  *ngIf="child1.situacao === 1"
+                  title="Desativar"
+                  class="btn btn-sm btn-icon"
+                  (click)="inativar(child1.idPessoaJuridica)">
+                  <i class="fas fa-toggle-on text-success"></i> <a>Inativar</a>
+                </button>
+                <button
+                  *ngIf="child1.situacao === 2 || child1.situacao === 3"
+                  title="Ativar"
+                  class="btn btn-sm btn-icon"
+                  (click)="ativar(child1.idPessoaJuridica)">
+                  <i class="fas fa-toggle-off"></i> <a>Ativar</a>
+                </button>
+                <button
+                  title="Excluir"
+                  class="btn btn-sm btn-icon"
+                  (click)="solicitarExclusao(child1.idPessoaJuridica)"
+                  *ngIf="child1.pessoasJuridicasFilho.length === 0 && child1.situacao == situacaoItem.Pendente">
+                  <i class="far fa-trash-alt text-danger"></i> <a>Excluir</a>
+                </button>
+              </ng-template>
+            </sdk-suspense-menu-button>
+          </div>
+        </div>
+      </sdk-item-card>
+    </div>
+  </div>
+</div>

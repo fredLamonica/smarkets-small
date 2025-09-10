@@ -1,0 +1,18 @@
+<sdk-item-card
+  *ngIf="showMenu"
+  [showIcon]="true"
+  [iconClass]="menuIcon"
+  [iconSpotColor]="menuIconColor"
+  [showStatusBar]="showStatusBar"
+  [statusBarColor]="statusBarColor"
+  [isLastNestingItem]="true"
+  [class.menuClickable]="isClickableMenu"
+>
+  <ng-content> </ng-content>
+</sdk-item-card>
+
+<sdk-list-view [items]="itens">
+  <ng-template sdkListViewItem let-item>
+    <sdk-menu-item [item]="item" [isNavigationOn]="isNavigationOn" (onClick)="menuItemClicked($event)" (itemClicked)="itemClicked($event)"> </sdk-menu-item>
+  </ng-template>
+</sdk-list-view>

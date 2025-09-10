@@ -1,0 +1,55 @@
+@import "./../../../../styles.scss";
+
+.shopping-cart {
+  height: $navbar-height;
+  justify-content: center;
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    i {
+      font-size: 24px;
+    }
+    height: 4rem;
+    line-height: 4rem;
+    color: $white;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  .dropdown-menu {
+    text-transform: uppercase;
+    text-align: center;
+    width: 17.5rem !important;
+    .subtotal {
+      color: $new-ux-smarkets-gray;
+      font-size: 16px;
+    }
+
+    .valor {
+      color: $primary;
+      font-size: 24px;
+    }
+  }
+
+  .btn {
+    box-shadow: none;
+  }
+
+  .badge-nav {
+    &:after {
+      display: none;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .shopping-cart {
+    .nav-link {
+      height: $navbar-height;
+      line-height: $navbar-height;
+    }
+  }
+}

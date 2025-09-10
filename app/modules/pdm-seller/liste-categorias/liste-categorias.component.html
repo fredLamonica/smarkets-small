@@ -1,0 +1,55 @@
+<div class="listar-categorias">
+  <smk-listar-funcionalidade
+    [titulo]="'Liste Categorias'"
+    [configuracaoFiltrosUsuario]="configuracaoFiltrosUsuario"
+    [filtroInformado]="filtroInformado"
+    [configuracaoDaTable]="configuracaoDaTable"
+    [itensDaTable]="paginacaoPesquisaConfigurada?.itens"
+    [colunasDisponiveis]="colunasDisponiveis"
+    [configuracaoColunasUsuario]="paginacaoPesquisaConfigurada?.configuracaoColunasUsuario"
+    (filtrosChange)="filtre()"
+    (filtrosClear)="limpeFiltro()"
+    (colunasChange)="filtreCategorias(true)"
+    (colunasReset)="filtreCategorias(true)"
+    (selectedChange)="selecione($event)"
+    (pageChange)="pagine($event)">
+    <ng-container filtros>
+      <form class="filtros" [formGroup]="formFiltro">
+        <div class="row">
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="idCategoriaProduto">ID Categoria</label>
+              <input
+                id="idCategoriaProduto"
+                class="form-control"
+                type="text"
+                formControlName="idCategoriaProduto"
+                [textMask]="mascaraSomenteNumeros"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="descricao">Descrição Categoria</label>
+              <input
+                id="descricao"
+                class="form-control"
+                type="text"
+                formControlName="descricao"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+    <ng-container acoes-table>
+      <button
+        *ngIf="categoriaSelecionado"
+        class="btn btn-outline-primary"
+        ngbTooltip="Visualizar"
+        [routerLink]="[categoriaSelecionado.idCategoriaProduto] + '/' + [categoriaSelecionado.idTenant] ">
+        <i class="fas fa-eye"></i>
+      </button>
+    </ng-container>
+  </smk-listar-funcionalidade>
+</div>

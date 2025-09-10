@@ -1,0 +1,116 @@
+:host {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: flex-start;
+    border-radius: 8px 0px 0px 8px;
+    align-self: stretch;
+    width: 100%;
+    flex-direction: column;
+  }
+ 
+  .item-documento {
+    display: flex;
+    align-self: stretch;    
+    min-height: 85px;
+    margin-bottom: 1em;
+    border-radius: 8px;
+    cursor: pointer; 
+    background-color: #FFFFFF;   
+  
+    &:hover {
+      box-shadow: 0px 2px 8px #00000029;
+
+
+      .rotated{
+        visibility: visible;
+      }
+
+      
+    }
+
+    .item {
+      cursor: pointer;
+    }      
+    
+    .mouse-hover{
+      i{
+        background: #F0F0F0;
+      padding: 0.8rem;
+      border-radius: 49%;
+      &:hover{
+        background:#00bbf3;
+        color: #fff;
+      }
+      }
+      
+    }  
+
+    .content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 2rem;     
+      width: 100%;
+    }
+
+    .label-menu-suspenso {
+      color: #00bbf3;
+      margin-right: 10px;    
+    } 
+
+  }
+
+  .icon {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    align-items: center;
+    justify-content: center;
+    font-size: large;
+    color:#F1F1F1; 
+    border-radius: 8px 0 0 8px;
+    background-color:#FFFFFF;
+    width: 4rem;     
+  }  
+
+  .ativo{
+    color: #98BE6D;    
+  } 
+
+  .novo{
+    color: #00BBF3;    
+  }  
+
+  .avencer{
+    color: #FAB248;
+  }
+  
+  .nao-enviado{
+    color: #FAB248;
+  }
+  
+  .recusado{
+    color: #C2200B;
+  }
+
+  .vencido{
+    color: #E74B37;
+  }
+
+.hoverActive:hover{
+  color: #98BE6D;
+}
+
+.hoverRecusado:hover{
+  color: #C2200B;
+}
+    
+.crop-text-2 {
+  -webkit-line-clamp: 2;
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}

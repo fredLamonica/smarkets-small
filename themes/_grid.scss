@@ -1,0 +1,29 @@
+.bounds {
+  max-width: $page-max-width !important;
+  margin: 0 auto;
+}
+
+.no-bounds {
+  max-width: unset !important;
+}
+
+.container-fluid {
+  max-width: $page-max-width;
+  margin: 0 auto;
+}
+
+//Custom columns number rows
+@if $enable-grid-classes {
+  @for $columns-number from 8 through 10 {
+    .row-#{$columns-number}-col {
+      $grid-columns: $columns-number;
+  
+      @include make-row();
+      > {
+          @if $enable-grid-classes {
+              @include make-grid-columns();
+          }
+      }
+    }
+  }
+}

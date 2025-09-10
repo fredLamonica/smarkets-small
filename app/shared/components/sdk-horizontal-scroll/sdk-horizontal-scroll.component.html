@@ -1,0 +1,21 @@
+<div class="row" [ngStyle]="{ background: contentColor }">
+  <div class="col-12 d-flex justify-content-between align-self-center">
+    <i
+      *ngIf="leftArrowVisible"
+      class="fas fa-chevron-circle-left icon-clickable {{ iconSize }} align-self-center icon"
+      (click)="scrollLeft()"
+    ></i>
+
+    <div class="col align-self-center">
+      <div #widgetsContent class="custom-slider-main">
+        <ng-content></ng-content>
+      </div>
+    </div>
+
+    <i
+      *ngIf="rightArrowVisible"
+      class="fas fa-chevron-circle-right icon-clickable {{ iconSize }} align-self-center icon"
+      (click)="scrollRight()"
+    ></i>
+  </div>
+</div>

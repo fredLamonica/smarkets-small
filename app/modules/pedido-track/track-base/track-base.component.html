@@ -1,0 +1,263 @@
+<div class="listar">
+  <smk-listar-funcionalidade
+    titulo="Pedidos Track"
+    [tituloComplementar]="'/ ' + descricaoFuncionalidade"
+    tooltipExportar="Exportar um período de 30 dias"
+    [configuracaoFiltrosUsuario]="configuracaoFiltrosUsuario"
+    [filtroInformado]="filtroInformado"
+    [configuracaoDaTable]="configuracaoDaTable"
+    [itensDaTable]="paginacaoPesquisaConfigurada?.itens"
+    [colunasDisponiveis]="colunasDisponiveis"
+    [configuracaoColunasUsuario]="paginacaoPesquisaConfigurada?.configuracaoColunasUsuario"
+    (filtrosChange)="filtreResetePagina()"
+    [ferramentas]="ferramentas"
+    (export)="exportar(false)"
+    (filtrosClear)="limpeFiltro()"
+    (colunasChange)="filtreItens(true)"
+    (colunasReset)="filtreItens(true)"
+    (selectedChange)="selecione($any($event))"
+    (pageChange)="pagine($any($event))">
+    <ng-container filtros>
+      <form class="filtros" [formGroup]="formFiltro">
+        <div class="row">
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="numerosPedidos">Número do Pedido</label>
+              <select-multiple
+                [itensPreCarregados]="false"
+                formControlName="numerosPedidos"
+                [apenasNumeros]="true"
+                [multiplasLinhasPorInput]="true"
+              ></select-multiple>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="dataRecebimento">Data de Recebimento</label>
+              <input
+                id="dataRecebimento"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataRecebimento"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label >Situação</label>
+              <select-multiple
+                descricao="name"
+                valor="index"
+                [itens]="opcoesSituacao"
+                formControlName="situacoes"
+              ></select-multiple>
+            </div>
+          </div>
+           <div class="col-md-6 col-lg-4 col-xxxl-2" *ngIf="idTenant === 1">
+            <div class="form-group">
+              <label for="empresa">Empresa</label>
+              <input
+                id="empresa"
+                class="form-control"
+                placeholder="Razão Social"
+                type="text"
+                formControlName="empresa"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="dataCriacaoInicio">Data Inicio Pedido </label>
+              <input
+                id="dataInicio"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataInicio"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="dataFim">Data Fim Pedido</label>
+              <input
+                id="dataFim"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataFim"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label >Origem Pedido</label>
+              <ng-select
+                labelForId="origemPedido"
+                bindValue="index"
+                bindLabel="name"
+                appendTo="body"
+                formControlName="origemPedido"
+                [clearAllText]="textoLimpar"
+                [items]="opcoesOrigem"
+                [searchFn]="situacoesSearchFn"
+                (keyup.enter)="filtreResetePagina()">
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="dataEntrega">Data de Entrega</label>
+              <input
+                id="dataEntrega"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataEntrega"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="cnpj">Cnpj Fornecedor</label>
+              <input
+                id="cnpj"
+                class="form-control"
+                placeholder="Cnpj"
+                type="text"
+                formControlName="cnpj"
+                [textMask]="{ mask: maskCnpj, guide: false }"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="fornecedor">Fornecedor</label>
+              <input
+                id="fornecedor"
+                class="form-control"
+                placeholder="Fornecedor"
+                type="text"
+                formControlName="fornecedor"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="dataColetaImportacao">Data Coleta Importação</label>
+              <input
+                id="dataColetaImportacao"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataColetaImportacao"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="responsavel">Responsável</label>
+              <input
+                id="responsavel"
+                class="form-control"
+                placeholder="Responsável"
+                type="text"
+                formControlName="responsavel"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="descricaoPedido">Descrição</label>
+              <input
+                id="descricaoPedido"
+                class="form-control"
+                placeholder="Descrição"
+                type="text"
+                formControlName="descricaoPedido"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="dataRemessaInicio">Data Remessa Inicio <i [ngbTooltip]="DataRemessa" tooltipClass="tooltip-light"  class="fas fa-info-circle"></i></label>
+              <input
+                id="dataRemessaInicio"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataRemessaInicio"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="dataRemessaFim">Data Remessa Fim <i [ngbTooltip]="DataRemessa" tooltipClass="tooltip-light"  class="fas fa-info-circle"></i></label>
+              <input
+                id="dataRemessaFim"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataRemessaFim"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+    <ng-template #DataRemessa>
+      <div style="text-align: left">
+        <p>Caso o campo data remessa 2 esteja vazio, será utilizado o campo data remessa</p>
+      </div>
+    </ng-template>
+
+    <ng-container acoes-table>
+      <button
+        *ngIf="permiteEditar"
+        class="btn btn-outline-primary"
+        ngbTooltip="Editar"
+        (click)="editeItem()">
+        <i class="fas fa-edit"></i>
+      </button>
+      <button
+        *ngIf="permiteAvancarStatus"
+        class="btn btn-outline-primary"
+        ngbTooltip="Avance Status"
+        (click)="avanceCampos()">
+        <i class="fas fa-rocket"></i>
+      </button>
+      <button
+        *ngIf="permiteReenviarNotificacao"
+        class="btn btn-outline-primary"
+        ngbTooltip="Reenviar Notificação"
+        (click)="reenvieNotificacao()"
+        >
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </ng-container>
+
+    <ng-container column-templates>
+      <ng-template customColumn="situacaoPedido" let-item="item">
+        <span>
+          {{ situacaoPedidoEnum[item.situacaoPedido] }}
+        </span>
+      </ng-template>
+      <ng-template customColumn="origemPedido" let-item="item">
+        <span>
+          {{ origemPedidoTrackEnum[item.origemPedido] }}
+        </span>
+      </ng-template>
+      <ng-template customColumn="aceitePedido" let-item="item">
+        <span>
+          {{ situacaoAceitePedidoEnum[item.aceitePedido] }}
+        </span>
+      </ng-template>
+      <ng-template customColumn="notificacao" let-item="item">
+        <span>
+          {{ situacaoNotificacaoEnum[item.notificacao] }}
+        </span>
+      </ng-template>
+    </ng-container>
+  </smk-listar-funcionalidade>
+</div>
+
+<input-file
+  class="d-none"
+  accept=".xlsx,.xls,.xlsm"
+  (select)="selecionarArquivo($event)"
+  id="inputFile">
+</input-file>

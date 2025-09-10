@@ -1,0 +1,48 @@
+<div
+  class="sdk-item-card"
+  [class.disabled]="disabled"
+  [ngClass]="{
+    'border-radius-8': !isNested,
+    'border-radius-top-right-8': isFirstNestingItem,
+    'border-radius-bottom-8': isLastNestingItem,
+    'margin-bottom-1': hasMarginBottom,
+    'box-shadow-last-item': isLastNestingItem,
+    'shadow-hover': isHover
+  }"
+  [ngStyle]="{
+    'border-color': isHover ? borderColorHover : borderColor,
+    'border-style': borderStyle && (isHover ? borderStyle : 'none'),
+    'border-width': borderWidth && (isHover ? borderWidth : '0px'),
+    'box-shadow': borderWidth && 'inset 0px 0px 0px ' + borderWidth + ' ' + borderColor
+  }"
+  (click)="onClick()"
+  (mouseover)="onHover()"
+  (mouseout)="isHover = false">
+  <div
+    *ngIf="showStatusBar"
+    class="status-bar"
+    [ngClass]="{
+      'border-radius-left-8': !isNested,
+      'border-radius-bottom-left-8': isLastNestingItem
+    }"
+    [ngStyle]="{
+      background: statusBarColor,
+      position: repositionOnHover && isHover && 'relative',
+      left: repositionOnHover && isHover ? '-1px' : '0px'
+    }"></div>
+  <div
+    *ngIf="showIconSpot"
+    class="icon-spot"
+    [ngClass]="{
+      'border-radius-left-8': !isNested && !showStatusBar,
+      'border-radius-bottom-left-8': isLastNestingItem && !showStatusBar
+    }"
+    [ngStyle]="{
+      background: isHover && iconSpotColorHover ? iconSpotColorHover : iconSpotColor,
+      position: repositionOnHover && isHover && 'relative',
+      left: repositionOnHover && isHover ? '-1px' : '0px'
+    }">
+    <i *ngIf="showIcon" [ngClass]="iconClass"></i>
+  </div>
+  <ng-content> </ng-content>
+</div>

@@ -1,0 +1,199 @@
+@import './../../../../../styles.scss';
+
+.content {
+  background-color: #E5E5E5;
+  padding-bottom: 50px;
+}
+
+.row{
+  margin-bottom: 30px;
+}
+.info{
+  margin-left: 15px;
+}
+
+.title{
+  position: static;
+  font-family: Open Sans;
+  font-size: 14px;
+  color: #296075;
+}
+
+.title-termo{
+  position: static;
+  font-family: Open Sans;
+  font-size: 24px;
+  color: #417185;
+  justify-content: center;
+  font-weight: bold;
+  margin-left: 45%;
+}
+
+.text{
+  position: static;
+  font-family: Open Sans;
+  font-weight: bold;
+  font-size: 14px;
+  color: #417185;
+}
+.text-green{
+  position: static;
+  font-family: Open Sans;
+  font-size: 14px;
+  color: #8BC34A;
+}
+.text-red{
+  position: static;
+  font-family: Open Sans;
+  font-size: 14px;
+  color: #F44336;
+}
+.text-white{
+  position: static;
+  font-family: Open Sans;
+  font-size: 14px;
+  color: #ffffff;
+}
+.text-blue{
+  position: static;
+  font-family: Open Sans;
+  font-size: 14px;
+  color: #27ADE4;
+}
+
+.button-download{
+  justify-content: center;
+  align-items: center;
+  padding: 5px 44px;
+  background: #588394;
+  border-radius: 8px;
+  border: none!important;
+}
+
+.button-voltar{
+  justify-content: center;
+  align-items: center;
+  padding: 5px 44px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  border-color: #27ADE4;
+}
+
+.button-aceite{
+  justify-content: center;
+  align-items: center;
+  padding: 5px 44px;
+  background: #27ADE4;
+  border-radius: 8px;
+  border-color: #27ADE4;
+  margin-left: 15px;
+}
+
+.radio-aceite{
+  margin: 0px auto 0px auto;
+}
+
+.div-button-aceite{
+  margin: 50px auto 30px auto;
+}
+
+.card {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border-radius: 8px;
+  margin: 20px 20px 20px 20px;
+}
+
+.card-body {
+  box-shadow: none;
+}
+
+.card-body > .is-active {
+  box-shadow: none;
+}
+
+.hr {
+  position: absolute !important;
+  height: 0px !important;
+  left: 0px !important;
+  right: 0px !important;
+  top: 0px !important;
+  border: 1px solid #cfdce0 !important;
+}
+
+.title-hr {
+  padding-top: 10px;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  color: #417185;
+}
+
+.identification-bar-fixed {
+  position: fixed;
+  z-index: 102;
+  display: flex;
+  height: 64px;
+  align-items: center;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.identification-color {
+  color: #88a6b2;
+}
+
+.identification-font {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 100%;
+}
+
+.current-page-font {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 100%;
+  color: #27ade4;
+}
+::ng-deep .termo-franqueado-confirmacao > div.modal-dialog > div.modal-content {
+  width: 80%;
+  margin-left: 10%;
+
+  & > modal-confirmacao-termo-franqueado {
+    button.btn-outline-primary {
+      border-radius: 8px;
+      width: 9.7rem;
+    }
+
+    button.btn-primary {
+      border-radius: 8px;
+      width: 9.7rem;
+      margin-left: 1rem !important;
+      margin-right: 1rem !important;
+    }
+  }
+}
+
+.status-in-configuration{
+  font-weight: bold;
+  color: #ff9800;
+}
+
+.status-inactive {
+  font-weight: bold;
+  color: #f44336;
+}
+
+.status-terminated {
+  font-weight: bold;
+  color: #88A6B2;
+}
+
+.status-active {
+  font-weight: bold;
+  color: #8bc34a;
+}

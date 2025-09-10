@@ -1,0 +1,9 @@
+.info-catalogo {
+  @media (max-width: 767.98px) {
+    text-align: center;
+  }
+
+  @media (min-width: 767.99px) {
+    text-align: right;
+  }
+}

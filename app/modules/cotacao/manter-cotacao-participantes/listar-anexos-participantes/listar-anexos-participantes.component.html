@@ -1,0 +1,64 @@
+<div class="modal-header" style="background-color: #00bbf3">
+  <div class="modal-title" style="font-size: 22px; color: #ffffff" id="modal-basic-title">
+    Histórico de recebimentos
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="voltar()">
+    <i class="fas fa-times" style="color: #dedede; size: 24px"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col">
+      <h4 style="color: #00bbf3; font-weight: bold">{{ razaoSocial + ' | ' + cnpj }}</h4>
+    </div>
+  </div>
+  <sdk-timeline *ngIf="cotacaoRodadaArquivos && cotacaoRodadaArquivos.length > 0; else empty">
+    <div *ngFor="let cotacaoRodadaArquivo of cotacaoRodadaArquivos; let index1 = index">
+      <sdk-timeline-entry
+        *ngFor="let arquivo of cotacaoRodadaArquivo.arquivos; let index2 = index"
+        title="{{ index2 === 0 ? 'Rodada ' + cotacaoRodadaArquivo.ordem : '' }}"
+        icon="{{ index2 === 0 && index1 == 0 ? 'fas fa-paperclip' : '' }}"
+      >
+        <p title="{{ arquivo.obterNomeArquivo() }}" data-toggle="tooltip" data-placement="bottom">
+          {{
+            arquivo.obterNomeArquivo().length > 30
+              ? (arquivo.obterNomeArquivo().toUpperCase() | slice: 0:30) + '..'
+              : arquivo.obterNomeArquivo().toUpperCase()
+          }}
+          <button class="btn btn-link">
+            <i
+              data-toggle="tooltip"
+              title="Baixar arquivo {{ arquivo.nome }}"
+              (click)="download(arquivo.url)"
+              class="{{ arquivo.obterIcone() }} "
+              [style.color]="arquivo.obterCorIcone()"
+              style="size: 24px"
+            ></i>
+          </button>
+        </p>
+
+        <div *ngIf="arquivo.dataInclusao; else semDataInclusao">
+          <span style="color: #00bbf3; font-weight: bold"
+            >{{ arquivo.dataInclusao | date: 'dd/MM/yyyy' }}
+          </span>
+          <span> às </span>
+
+          <span style="color: #00bbf3; font-weight: bold">
+            {{ arquivo.dataInclusao | date: 'HH:mm' }}</span
+          >
+        </div>
+
+        <ng-template #semDataInclusao
+          ><span style="color: #00bbf3; font-weight: bold">Sem Informação</span></ng-template
+        >
+        <hr *ngIf="index2 == cotacaoRodadaArquivo.arquivos.length - 1" />
+      </sdk-timeline-entry>
+    </div>
+  </sdk-timeline>
+  <ng-template #empty> <h3>Sem dados</h3> </ng-template>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary btn-fechar" (click)="voltar()">
+    Fechar
+  </button>
+</div>

@@ -1,0 +1,30 @@
+.btn-adicionar {
+    outline: none;
+    color: #00BBF3;
+    font-size: 30px;
+    &:hover, &:active, &:focus {
+        color: #00BBF3;
+    }
+    i {
+        color: #00BBF3;
+    }
+}
+
+.btn-remover {
+    outline: none;
+    color: #E74B37;
+    font-size: 24px;
+    &:hover, &:active, &:focus {
+        color: #E74B37;
+    }
+    i {
+        color: #E74B37;
+    }
+}
+
+button.btn-adicionar, button.btn-remover {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+}

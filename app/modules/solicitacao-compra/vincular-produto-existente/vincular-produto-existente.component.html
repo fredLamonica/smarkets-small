@@ -1,0 +1,31 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Associar a um Produto Existente</div>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form>
+    <div class="form-row">
+      <div class="form-group col-12">
+        Inclua um produto que você deseja vincular, que já exista na base.
+      </div>
+      <div class="form-group col-12 required">
+        <input-produto
+          id="codigo"
+          name="codigo"
+          [(ngModel)]="codigo"
+        ></input-produto>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="fechar()">Fechar</button>
+  <button type="button" class="btn btn-primary" (click)="vincular()">Vincular</button>
+</div>

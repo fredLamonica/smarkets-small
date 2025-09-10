@@ -1,0 +1,126 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title" translate>
+    {{ contratoCatalogoParticipanteItem ? 'Editar' : 'Incluir' }} item
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group required col-lg-12">
+        <label for="descricao">Produto</label>
+        <ng-select
+          [items]="itens"
+          bindLabel="descricao"
+          bindValue="idContratoCatalogoItem"
+          name="descricaoProduto"
+          formControlName="idContratoCatalogoItem"
+          [class.invalid]="
+            form.controls.idContratoCatalogoItem.invalid &&
+            form.controls.idContratoCatalogoItem.dirty
+          "
+          [compareWith]="compareContratoCatalogoItem"
+          (change)="onChange($event)">
+        </ng-select>
+        <span
+          class="invalid"
+          *ngIf="
+            form.controls.idContratoCatalogoItem.invalid &&
+            form.controls.idContratoCatalogoItem.dirty
+          ">Preenchimento obrigatório</span>
+      </div>
+      <div *ngIf="this.tipoAlcadaAprovacao === this.tipoAlcadaAprovacaoEnum.desmembrada"
+        class="form-group required col-lg-8">
+        <label for="centroCusto">Centro de Custo</label>
+        <ng-select
+          [items]="centroCusto"
+          bindLabel="descricao"
+          bindValue="idCentroCusto"
+          name="descricaoCentroCusto"
+          formControlName="idCentroCusto"
+          [class.invalid]="form.controls.idCentroCusto.invalid && form.controls.idCentroCusto.dirty">
+        </ng-select>
+        <span
+          class="invalid"
+          *ngIf="form.controls.idCentroCusto.invalid && form.controls.idCentroCusto.dirty">Preenchimento
+          obrigatório</span>
+      </div>
+      <div *ngIf="this.tipoAlcadaAprovacao === this.tipoAlcadaAprovacaoEnum.unificada"
+        class="form-group required col-lg-8">
+        <label for="alcadas">Alçada de Aprovação</label>
+        <ng-select
+          [items]="alcadas"
+          bindLabel="descricao"
+          bindValue="idAlcada"
+          name="descricaoAlcada"
+          formControlName="idAlcada"
+          [class.invalid]="form.controls.idAlcada.invalid && form.controls.idAlcada.dirty">
+        </ng-select>
+        <span
+          class="invalid"
+          *ngIf="form.controls.idCentroCusto.invalid && form.controls.idCentroCusto.dirty">Preenchimento
+          obrigatório</span>
+      </div>
+      <div class="form-group required col-lg-4">
+        <label for="quantidadeTotal">Quantidade Mensal</label>
+        <input
+          type="number"
+          class="form-control"
+          id="quantidadeTotal"
+          name="quantidadeTotal"
+          formControlName="quantidadeTotal"
+          [class.invalid]="
+            form.controls.quantidadeTotal.invalid && form.controls.quantidadeTotal.dirty
+          " />
+        <span
+          class="invalid"
+          *ngIf="form.controls.quantidadeTotal.invalid && form.controls.quantidadeTotal.dirty">Preenchimento
+          obrigatório</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-lg-4">
+        <label for="quantidadeSolicitada">Quantidade solicitada</label>
+        <input
+          type="number"
+          class="form-control"
+          id="quantidadeSolicitada"
+          name="quantidadeSolicitada"
+          formControlName="quantidadeSolicitada"
+          readonly />
+      </div>
+      <div class="form-group col-lg-4">
+        <label for="quantidadeDisponivel">Quantidade disponível</label>
+        <input
+          type="number"
+          class="form-control"
+          id="quantidadeDisponivel"
+          name="quantidadeDisponivel"
+          formControlName="quantidadeDisponivel"
+          readonly />
+      </div>
+      <div class="form-group required col-lg-4">
+        <label for="situacao">Situação</label>
+        <select
+          class="form-control"
+          name="situacao"
+          id="situacao"
+          formControlName="situacao"
+          [class.invalid]="form.controls.situacao.invalid && form.controls.situacao.dirty">
+          <option [ngValue]="Situacao.Ativo">Ativo</option>
+          <option [ngValue]="Situacao.Inativo">Inativo</option>
+        </select>
+        <span class="invalid" *ngIf="form.controls.situacao.invalid && form.controls.situacao.dirty">Preenchimento
+          obrigatório</span>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">
+    Fechar
+  </button>
+  <button type="button" class="btn btn-outline-primary" (click)="salvar()">Salvar</button>
+</div>

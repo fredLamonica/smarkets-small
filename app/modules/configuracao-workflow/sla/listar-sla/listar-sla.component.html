@@ -1,0 +1,77 @@
+<div class="card card-default">
+  <div class="card-header">
+    <a (click)="inserir()" class="btn btn-icon">
+      <i class="fas fa-plus-circle text-primary"></i>
+      <p class="d-inline-block mb-0 ml-2"> Inserir uma nova SLA à empresa - <span
+          class="font-weight-bold">{{ empresa?.nomeFantasia }}</span></p>
+    </a>
+  </div>
+  <div class="card-body">
+    <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+      <div class="col-md-1 align-self-center pr-md-0">
+        <p class="font-weight-bold mb-0">ID:</p>
+      </div>
+      <div class="col-md-3 align-self-center pr-md-0">
+        <p class="font-weight-bold mb-0">Sla:</p>
+      </div>
+      <div class="col-md-2 align-self-center pr-md-0">
+        <p class="font-weight-bold mb-0">Classificação:</p>
+      </div>
+      <div class="col-md-1 align-self-center pr-md-0">
+        <p class="font-weight-bold mb-0">Tempo:</p>
+      </div>
+      <div class="col-md-2 align-self-center pr-md-0">
+        <p class="font-weight-bold mb-0">Categorias:</p>
+      </div>
+      <div class="col-md-3 align-self-center">
+        <p class="font-weight-bold mb-0">Ações:</p>
+      </div>
+    </div>
+
+    <div class="bg-white border-bottom row py-4" *ngIf="!slaItens?.length; else hasValue">
+      <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+    </div>
+    <ng-template #hasValue>
+      <div *ngFor="let item of slaItens; let i = index;" class="bg-white border-bottom row py-4">
+        <div class="col-md-1 align-self-center pr-md-0">
+          <label for="" class="font-weight-bold d-block d-md-none">ID:</label>
+          <p class="mb-3 mb-md-0">{{ item.idSlaItem }}</p>
+        </div>
+        <div class="col-md-3 align-self-center pr-md-0">
+          <label for="" class="font-weight-bold d-block d-md-none">Sla:</label>
+          <p class="mb-3 mb-md-0 line-clamp line-clamp-2" data-toggle="tooltip" data-placement="bottom"
+            title="{{ TipoSla[item.tipoSla] + ' - ' + item.sla?.descricao }}">
+            {{ TipoSla[item.tipoSla] + ' - ' + item.sla?.descricao }}</p>
+        </div>
+        <div class="col-md-2 align-self-center pr-md-0">
+          <label for="" class="font-weight-bold d-block d-md-none">Classificação:</label>
+          <p class="mb-3 mb-md-0">{{ item.classificacao?.descricao }}</p>
+        </div>
+        <div class="col-md-1 align-self-center pr-md-0 text-truncate">
+          <label for="" class="font-weight-bold d-block d-md-none text-truncate">Tempo:</label>
+          <p class="mb-3 mb-md-0 text-truncate">{{ item.tempo + ' ' + UnidadeMedidaTempo[item.unidadeMedidaTempo] + '(s)' }}</p>
+        </div>
+        <div class="col-md-2 align-self-center pr-md-0">
+          <label for="" class="font-weight-bold d-block d-md-none">Categorias:</label>
+          <p class="mb-3 mb-md-0" *ngIf="!item.categoriasProduto?.length; else hasCategorias">Todas as Categorias</p>
+          <ng-template #hasCategorias>
+            <p class="mb-3 mb-md-0" *ngFor="let categoria of item.categoriasProduto">
+              {{ categoria.nome }}</p>
+          </ng-template>
+        </div>
+        <div class="col-md-3 d-flex justify-content-between align-self-center">
+          <a class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Auditoria" (click)="auditar(i)">
+            <i class="fas fa-history"></i>
+          </a>
+          <a class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Editar" (click)="editar(i)">
+            <i class="far fa-edit"></i>
+          </a>
+          <a class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Excluir"
+            (click)="solicitarDelecao(i)">
+            <i class="far fa-trash-alt text-danger"></i>
+          </a>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

@@ -1,0 +1,336 @@
+label {
+    margin-bottom: 0.25rem;
+    color: $new-ux-smarkets-gray;
+    &.required {
+        &:after {
+            color: $danger;
+            content: " *";
+        }
+    }
+}
+
+.divisor {
+    margin: 1rem 0 1rem 0;
+    padding-bottom: 2px;
+    border-bottom: 1px solid $secondary;
+
+    .title {
+        color: $new-ux-smarkets-gray;
+        font-weight: bold;
+    }
+}
+
+.label-value {
+    margin-bottom: 1rem;
+    label {
+        color: $gray;
+        font-size: 11px;
+        text-transform: uppercase;
+    }
+    .value {
+        color: $cyan;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+}
+
+form, .form {
+    .form-group {
+        label {
+            font-weight: bold;
+        }
+    }
+}
+
+.form-group {
+    &.required {
+        label:not(.custom-control-label) {
+            &:after {
+                color: $danger;
+                content: " *";
+            }
+        }
+        .form-control {
+            &.invalid {
+                border-color: transparentize($danger, 0.3) !important;
+                box-shadow: $input-box-shadow, 0 0 0 $input-btn-focus-width transparentize($danger, 0.9);
+            }
+        }
+        .invalid {
+            .form-control {
+                border-color: transparentize($danger, 0.3);
+                box-shadow: $input-box-shadow, 0 0 0 $input-btn-focus-width transparentize($danger, 0.9);
+            }
+        }
+        span.invalid {
+            font-size: 10px;
+            color: $danger;
+        }
+    }
+}
+
+.form-control {
+    border-color: $new-ux-smarkets-gray !important;
+
+    &.invalid {
+        border-color: transparentize($danger, 0.3) !important;
+        box-shadow: $input-box-shadow, 0 0 0 $input-btn-focus-width transparentize($danger, 0.9);
+    }
+
+    &.form-control-lighter {
+        background-color: $smarkets-lighter;
+        border: none;
+
+        &[readonly], &:disabled {
+            background-color: $smarkets-light;
+        }
+
+        &.invalid {
+            border: 1px solid transparentize($danger, 0.3) !important;
+            box-shadow: $input-box-shadow, 0 0 0 $input-btn-focus-width transparentize($danger, 0.9);
+        }
+    }
+}
+
+span.invalid {
+    font-size: 10px;
+    color: $danger;
+}
+
+input,
+select,
+textarea {
+    &.disabled {
+        pointer-events: none;
+        background-color: #e9ecef;
+        opacity: 1;
+    }
+
+    &::placeholder {
+        color: lighten($input-color, 40) !important;
+    }
+}
+.disabled{
+    pointer-events: none;
+    background-color: #e9ecef;
+    opacity: 1;
+}
+
+input[type="date"] {
+    padding-right: 0;
+}
+
+textarea {
+    &.resize-none{
+        resize: none
+    }
+}
+
+ng-select {
+    &.font-weight-bold{
+        .ng-select-container{
+            .ng-value-container{
+                .ng-placeholder{
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+    &.ng-select-focused {
+        &:not(.ng-select-opened) > .ng-select-container {
+            box-shadow: $input-focus-box-shadow !important;
+        }
+    }
+
+    .ng-select-container {
+        color: $input-color !important;
+        border-color: $input-border-color !important;
+        height: $input-height !important;
+
+        .ng-input {
+            input {
+                color: $input-color !important;
+            }
+        }
+
+        .ng-value-container {
+            .ng-placeholder {
+                color: lighten($input-color, 40) !important;
+                font-weight: normal;
+            }
+        }
+    }
+
+    ng-dropdown-panel {
+        .ng-dropdown-panel-items {
+            .ng-option {
+                color: $input-color !important;
+                font-weight: normal;
+            }
+        }
+
+        border-color: $input-border-color;
+    }
+
+    &.full-width {
+        ng-dropdown-panel {
+            min-width: 100% !important;
+            width: auto !important;
+        }
+    }
+
+    &.invalid {
+        .ng-select-container {
+            border-color: transparentize($danger, 0.3) !important;
+            box-shadow: $input-box-shadow, 0 0 0 $input-btn-focus-width transparentize($danger, 0.9) !important;
+        }
+    }
+    &.ng-select-disabled {
+        .ng-select-container {
+            background-color: #e9ecef !important;
+        }
+    }
+
+    &.form-control-lighter {
+        .ng-select-container {
+            background-color: $smarkets-lighter !important;
+            border: none !important;
+        }
+
+        &[readonly], &:disabled {
+            .ng-select-container {
+                background-color: $smarkets-lighter !important;
+                border: none;
+            }
+        }
+
+        &.ng-select-disabled {
+            .ng-select-container {
+                background-color: $smarkets-lighter !important;
+            }
+        }
+
+        ng-dropdown-panel {
+            border-color: none !important;
+        }
+    }
+
+    &.with-shadow  {
+        .ng-select-container {
+            border: none;
+            -webkit-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25) !important;
+            -moz-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25) !important;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25) !important;
+        }
+    }
+}
+
+input-number, input-number-min-value {
+    &.form-control-sm {
+        padding: 0;
+
+        input {
+            height: calc(1.8125rem + 2px);
+        }
+    }
+
+    &.form-control-lighter {
+        .input-group {
+            background-color: $smarkets-lighter !important;
+            border: none !important;
+        }
+
+        &.invalid {
+            .input-group {
+                border: $input-border-width solid transparentize($danger, 0.3) !important;
+                box-shadow: $input-box-shadow, 0 0 0 $input-btn-focus-width transparentize($danger, 0.9) !important;
+            }
+        }
+    }
+
+    &.font-weight-bold {
+        input {
+            font-weight: bold;
+        }
+    }
+
+    .input-group {
+        border-radius: 0.25rem;
+        border: 1px solid $new-ux-smarkets-gray;
+        background-color: $white;
+
+        &.disabled {
+            background-color: #e9ecef !important;
+            opacity: 1;
+        }
+    }
+
+    &.border-0 {
+        .input-group {
+            border: none !important;
+        }
+    }
+
+    &.with-shadow {
+        .input-group {
+            -webkit-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25) !important;
+            -moz-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25) !important;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25) !important;
+        }
+    }
+    .input-group {
+        input {
+            padding-left: .25rem !important;
+            padding-right: .25rem !important;
+            border: none !important;
+            border-color: $new-ux-smarkets-gray;
+            background-color: transparent !important;
+            text-align: center;
+            color: $input-color !important;
+            box-shadow: none !important;
+
+            &.form-control:focus {
+                box-shadow: none !important;
+                background-color: $white;
+            }
+        }
+
+        button {
+            padding: 0 .25rem !important;
+            border: none !important;
+            min-width: unset !important;
+            background-color: transparent !important;
+            -webkit-box-shadow: none !important;
+            -moz-box-shadow: none !important;
+            box-shadow: none !important;
+            i {
+                color: $new-ux-smarkets-gray;
+            }
+
+            &:active, &:hover, &:focus {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+        }
+    }
+}
+
+.form-control {
+    &.with-shadow {
+        border: none;
+        -webkit-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25) !important;
+        -moz-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25) !important;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25) !important;
+    }
+}
+
+input-bookmark {
+    .btn {
+        &.active {
+            i {
+                color: $primary;
+            }
+        }
+    }
+}

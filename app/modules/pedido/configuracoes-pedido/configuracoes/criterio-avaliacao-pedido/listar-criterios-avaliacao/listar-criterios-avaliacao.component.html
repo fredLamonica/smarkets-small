@@ -1,0 +1,95 @@
+ <div class="header">
+    <div class="header-search row">
+      <div class="col-12 align-self-center">
+        <h3 class="mb-0 text-uppercase text-primary font-weight-bold">
+          Configurações de Critério de Avaliação por Pedido
+        </h3>
+      </div>
+      <div class="col-lg-8">
+        <input-busca label="O que você procura?" placeholder="Buscar por descrição" (buscar)="buscar($event)"
+          (campoVazio)="limparFiltro()">
+        </input-busca>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-nav-tabs">
+    <ul class="nav nav-tabs row bounds" id="configuracaoTab" role="tablist">
+      <li class="nav-item col-lg-3">
+        <a class="nav-link nav-link-block active text-truncate" id="configuracoesCriterioAvaliacao-tab"
+          data-toggle="tab" data-toggle="tooltip" data-placement="bottom" title="Critérios de Avaliação por Pedido"
+          role="tab" aria-controls="configuracoesCriterioAvaliacao" aria-selected="false">Critérios de Avaliação por
+          Pedido</a>
+      </li>
+    </ul>
+
+    <div class="tab-content bounds line" id="configuracaoTabContent">
+      <div class="tab-pane fade active show" id="configuracoesCriterioAvaliacao" role="tabpanel"
+        aria-labelledby="configuracoesCriterioAvaliacao-tab">
+        <div #configuracaoCriterioAvaliacao>
+          <div class="card card-tab-content">
+            <div class="card-header">
+              <a (click)="inserir()" class="btn btn-icon p-0">
+                <i class="fas fa-plus-circle text-primary"></i>
+                <p class="d-inline-block mb-0 ml-2 align-top">Inserir novo critério de avaliação</p>
+              </a>
+            </div>
+            <div class="card-body">
+              <div class="container-fluid">
+                <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+                  <div class="col-md-1">
+                    <label class="font-weight-bold">ID:</label>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="font-weight-bold">Descrição:</label>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="font-weight-bold">Vigência:</label>
+                  </div>
+                  <div class="col-md-3">
+                    <p class="font-weight-bold">Categorias:</p>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="font-weight-bold">Ações:</label>
+                  </div>
+                </div>
+
+                <div class="bg-white border-bottom row py-4" *ngIf="!criteriosAvalicaoList?.length">
+                  <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+                </div>
+                <div class="bg-white border-bottom row py-4"
+                  *ngFor="let criterioAvaliacao of criteriosAvalicaoList; let i = index;">
+                  <div class="col-md-1 col-sm-1 align-self-center">
+                    <label for="" class="font-weight-bold d-block d-md-none">ID:</label>
+                    <p class="mb-1 mb-md-0"> {{ criterioAvaliacao?.idCriterioAvaliacaoPedido }} </p>
+                  </div>
+                  <div class="col-md-3 col-sm-3 align-self-center">
+                    <label for="" class="font-weight-bold d-block d-md-none">Descrição:</label>
+                    <p class="mb-3 mb-md-0"> {{ criterioAvaliacao?.descricao }} </p>
+                  </div>
+                  <div class="col-md-3 col-sm-3 align-self-center">
+                    <label for="" class="font-weight-bold d-block d-md-none">Vigência:</label>
+                    <p class="mb-3 mb-md-0"> {{ criterioAvaliacao?.dataInicioVigencia | date: "dd/MM/yyyy" }} à
+                      {{ criterioAvaliacao?.dataFimVigencia | date: "dd/MM/yyyy" }} </p>
+                  </div>
+                  <div class="col-md-3 col-sm-3 align-self-center">
+                    {{ImprimeCategoria(criterioAvaliacao.categoriasProduto)}}
+                  </div>
+                  <div class="col-md-2 d-flex justify-content-between align-self-center">
+                    <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Editar"
+                      (click)="editarItem(criterioAvaliacao)">
+                      <i class="far fa-edit"></i>
+                    </button>
+                    <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Excluir"
+                      (click)="onExcluirClick(criterioAvaliacao.idCriterioAvaliacaoPedido)">
+                      <i class="far fa-trash-alt text-danger"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

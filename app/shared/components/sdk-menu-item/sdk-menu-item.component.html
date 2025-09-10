@@ -1,0 +1,40 @@
+<div
+  class="menu-item"
+  [routerLink]="!item.locked ? [item.url] : null"
+  [routerLinkActive]="item.locked ? 'locked' : 'active'"
+  routerLinkActive="active"
+  #rla="routerLinkActive"
+  (click)="menuItemClicked(item)"
+  *ngIf="isNavigationOn"
+>
+  <ng-container [ngTemplateOutlet]="menuItemTemplate" [ngTemplateOutletContext]="{ isActive: rla.isActive, item: item }"> </ng-container>
+</div>
+
+<div
+  class="menu-item"
+  [ngClass]="{'locked': item.locked, 'active': !item.locked && item.isActive}"
+  (click)="onClickMenuItem(item)"
+  *ngIf="!isNavigationOn"
+>
+  <ng-container [ngTemplateOutlet]="menuItemTemplate" [ngTemplateOutletContext]="{ isActive: item.isActive, item: item }"> </ng-container>
+</div>
+
+<ng-template #menuItemTemplate let-isActive="isActive" let-item="item">
+  <div [class.bar]="isActive && !item.locked"></div>
+    <div class="content">
+      <div class="col-11">
+        <a> {{ item.label }}</a>
+      </div>
+
+      <div class="col-1 d-flex justify-content-end">
+        <i
+          class="fas"
+          [ngClass]="{
+            'fa-chevron-right': isActive,
+            'fa-chevron-left': !isActive,
+            'fa-lock': item.locked
+          }"
+        ></i>
+      </div>
+    </div>
+</ng-template>

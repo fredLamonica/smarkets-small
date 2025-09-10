@@ -1,0 +1,139 @@
+<div
+  class="infinite-scroll"
+  infinite-scroll
+  [infiniteScrollDistance]="1"
+  [infiniteScrollThrottle]="50"
+  [scrollWindow]="false"
+  (scrolled)="onScroll()"
+>
+  <div class="header">
+    <div class="header-search row">
+      <div class="col-12 align-self-center">
+        <h3 class="mb-0 text-uppercase text-primary font-weight-bold">Workflow</h3>
+      </div>
+      <div class="col-lg-8">
+        <input-busca
+          label="O que você procura?"
+          placeholder="Buscar por nome, sigla ou tipo de documento"
+          (buscar)="buscar($event)"
+        ></input-busca>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-nav-tabs">
+    <ul class="nav nav-tabs row bounds" id="configuracaoTab" role="tablist">
+      <li class="nav-item col-md-6 col-lg-3" *ngIf="habilitarModuloCotacao">
+        <a
+          class="nav-link nav-link-block"
+          [class.active]="tabAtiva == 'tipo-requisicao'"
+          id="tipo-requisicao-tab"
+          data-toggle="tab"
+          href="#tipo-requisicao"
+          role="tab"
+          aria-controls="tipo-requisicao"
+          aria-selected="false"
+          (click)="selectTab('tipo-requisicao')"
+        >
+          Tipos de Requisição
+        </a>
+      </li>
+
+      <li class="nav-item col-md-6 col-lg-3" *ngIf="habilitarModuloCotacao">
+        <a
+          class="nav-link nav-link-block"
+          [class.active]="tabAtiva == 'sla'"
+          id="sla-tab"
+          data-toggle="tab"
+          href="#sla"
+          role="tab"
+          aria-controls="sla"
+          aria-selected="false"
+          (click)="selectTab('sla')"
+        >
+          SLA
+        </a>
+      </li>
+
+      <li class="nav-item col-md-6 col-lg-3">
+        <a
+          class="nav-link nav-link-block"
+          [class.active]="tabAtiva == 'tipo-pedido'"
+          id="tipo-pedido-tab"
+          data-toggle="tab"
+          href="#tipo-pedido"
+          role="tab"
+          aria-controls="tipo-pedido"
+          aria-selected="false"
+          (click)="selectTab('tipo-pedido')"
+        >
+          Tipos de Pedido
+        </a>
+      </li>
+
+      <li class="nav-item col-md-6 col-lg-3">
+        <a
+          class="nav-link nav-link-block text-truncate"
+          [class.active]="tabAtiva == 'motivo-desclassificacao'"
+          id="motivo-desclassificacao-tab"
+          data-toggle="tab"
+          href="#motivo-desclassificacao"
+          role="tab"
+          aria-controls="motivo-desclassificacao"
+          aria-selected="false"
+          (click)="selectTab('motivo-desclassificacao')"
+        >
+          <span data-toggle="tooltip" data-placement="bottom" title="Motivos de Desclassificação"
+            >Motivos de Desclassificação</span
+          >
+        </a>
+      </li>
+    </ul>
+    <div class="tab-content bounds" id="configuracaoTabContent">
+      <div
+        class="tab-pane fade"
+        [ngClass]="{ 'active show': tabAtiva == 'tipo-requisicao' }"
+        id="tipo-requisicao"
+        role="tabpanel"
+        aria-labelledby="tipo-requisicao-tab"
+      >
+        <listar-tipos-requisicao
+          #tipoRequisicao
+          *ngIf="tabAtiva == 'tipo-requisicao'"
+        ></listar-tipos-requisicao>
+      </div>
+      <div
+        class="tab-pane fade"
+        [ngClass]="{ 'active show': tabAtiva == 'sla' }"
+        id="sla"
+        role="tabpanel"
+        aria-labelledby="sla-tab"
+      >
+        <listar-sla #sla *ngIf="tabAtiva == 'sla'"></listar-sla>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        [ngClass]="{ 'active show': tabAtiva == 'tipo-pedido' }"
+        id="tipo-pedido"
+        role="tabpanel"
+        aria-labelledby="tipo-pedido-tab"
+      >
+        <listar-tipos-pedido #tipoPedido *ngIf="tabAtiva == 'tipo-pedido'"></listar-tipos-pedido>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        [ngClass]="{ 'active show': tabAtiva == 'motivo-desclassificacao' }"
+        id="motivo-desclassificacao"
+        role="tabpanel"
+        aria-labelledby="motivo-desclassificacao-tab"
+      >
+        <listar-motivo-desclassificacao
+          #motivoDesclassificacao
+          *ngIf="tabAtiva == 'motivo-desclassificacao'"
+        ></listar-motivo-desclassificacao>
+      </div>
+    </div>
+  </div>
+</div>

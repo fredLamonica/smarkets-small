@@ -1,0 +1,243 @@
+<div class="top-bar"></div>
+<div class="py-4">
+  <img [src]="logo" alt="Logo da Empresa" class="mx-autod-block" />
+</div>
+
+<div [innerHTML]="textoCustomizavel | safe: 'html'" class="container"></div>
+
+<div class="container my-5 pb-5">
+  <div class="row justify-content-md-center">
+    <form name="form" [formGroup]="form" novalidate>
+      <div class="form-group" *ngIf="configuracaoFornecedorInteressado?.idTenant == tenantMaster">
+        <label for="clienteInteresse"> Clientes de Interesse</label>
+        <ng-select
+          formControlName="clienteInteresse"
+          [items]="clientesInteresse"
+          bindLabel="razaoSocial"
+          (change)="obterCategoriasFornecimento($event)"
+        >
+          <ng-template ng-option-tmp let-item="item">
+            <div
+              title="{{ item.cnpj + ' - ' + item.razaoSocial }}"
+              class="align-self-center text-truncate"
+            >
+              {{ item.razaoSocial }}
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+
+      <div class="form-group required">
+        <label for="cnpj"> CNPJ </label>
+        <input
+          class="form-control"
+          [textMask]="{ mask: maskCnpj, guide: false }"
+          type="text"
+          name="cnpj"
+          formControlName="cnpj"
+          [class.invalid]="form.controls.cnpj.invalid && form.controls.cnpj.dirty"
+        />
+        <div *ngIf="form.controls.cnpj.invalid && form.controls.cnpj.dirty">
+          <span class="invalid" *ngIf="form.controls.cnpj.errors.required"
+            >Preenchimento obrigatório</span
+          >
+          <span class="invalid" *ngIf="form.controls.cnpj.errors.invalidCnpj">CNPJ inválido</span>
+        </div>
+      </div>
+
+      <div class="form-group required">
+        <label for="razaoSocial" translate> Razão Social </label>
+        <input
+          class="form-control"
+          [class.invalid]="form.controls.razaoSocial.invalid && form.controls.razaoSocial.dirty"
+          type="text"
+          name="razaoSocial"
+          formControlName="razaoSocial"
+        />
+        <span
+          class="invalid"
+          *ngIf="form.controls.razaoSocial.invalid && form.controls.razaoSocial.dirty"
+        >
+          Preenchimento obrigatório
+        </span>
+      </div>
+
+      <div class="form-group required">
+        <label for="nomeFantasia" translate> Nome Fantasia </label>
+        <input
+          class="form-control"
+          [class.invalid]="form.controls.nomeFantasia.invalid && form.controls.nomeFantasia.dirty"
+          type="text"
+          name="nomeFantasia"
+          formControlName="nomeFantasia"
+        />
+        <span
+          class="invalid"
+          *ngIf="form.controls.nomeFantasia.invalid && form.controls.nomeFantasia.dirty"
+        >
+          Preenchimento obrigatório
+        </span>
+      </div>
+
+      <div class="form-group required">
+        <label for="contato" translate> Usuário responsável </label>
+        <input
+          class="form-control"
+          [class.invalid]="form.controls.contato.invalid && form.controls.contato.dirty"
+          type="text"
+          name="contato"
+          formControlName="contato"
+        />
+        <span class="invalid" *ngIf="form.controls.contato.invalid && form.controls.contato.dirty">
+          Preenchimento obrigatório
+        </span>
+      </div>
+
+      <div class="form-group required">
+        <label for="email" translate> Email </label>
+        <input
+          class="form-control"
+          [class.invalid]="form.controls.email.invalid && form.controls.email.dirty"
+          type="text"
+          name="email"
+          formControlName="email"
+        />
+        <span
+          class="invalid"
+          *ngIf="
+            form.controls.email.invalid &&
+            form.controls.email.errors.email &&
+            form.controls.email.dirty
+          "
+        >
+          Email inválido
+        </span>
+        <span
+          class="invalid"
+          *ngIf="
+            form.controls.email.invalid &&
+            form.controls.email.errors.required &&
+            form.controls.email.dirty
+          "
+        >
+          Preenchimento obrigatório
+        </span>
+      </div>
+
+      <div class="form-group required">
+        <label for="categoriasFornecimento"> Categorias de Fornecimento</label>
+        <ng-select
+          name="categoriasFornecimento"
+          formControlName="categoriasFornecimento"
+          [multiple]="true"
+          [items]="categoriasFornecimento"
+          #ngSelectCategoriaFornecimento
+          [class.invalid]="
+            form.controls.categoriasFornecimento.invalid &&
+            form.controls.categoriasFornecimento.dirty
+          "
+        >
+          <ng-option *ngFor="let item of categoriasFornecimento" [value]="item"
+            >{{ item.descricao }}
+          </ng-option>
+          <!-- <ng-option [value]="outrasCategoriasFornecimentoOption">Outras</ng-option> -->
+
+          <ng-template ng-option-tmp let-item="item">
+            <div title="{{ item.descricao }}" class="align-self-center text-truncate">
+              {{ item.descricao }}
+            </div>
+          </ng-template>
+        </ng-select>
+        <span
+          class="invalid"
+          *ngIf="
+            form.controls.categoriasFornecimento.invalid &&
+            form.controls.categoriasFornecimento.dirty
+          "
+        >
+          Preenchimento obrigatório
+        </span>
+      </div>
+
+      <div class="form-group required" *ngIf="outrasCategoriaSelected()">
+        <label for="outasCategoriasFornecimento"> Informe quais categorias deseja</label>
+        <div class="form-row">
+          <div class="input-group mb-3 col-md-12">
+            <input
+              type="text"
+              class="form-control"
+              (keyup.enter)="adicionarCagoriaFornecimento()"
+              formControlName="CategoriaFornecimentoInteresse"
+            />
+
+            <div class="input-group-prepend">
+              <button
+                class="btn btn-block btn-primary"
+                type="button"
+                (click)="adicionarCagoriaFornecimento()"
+              >
+                <i class="fas fa-plus"></i> Incluir
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="outrasCategoriaSelected()">
+        <div class="container-fluid no-bounds">
+          <div class="bg-lighter border-bottom row py-2 d-none d-md-flex">
+            <div class="col-md-8">
+              <label class="font-weight-bold">Descrição:</label>
+            </div>
+            <div class="col-md-2">
+              <label class="font-weight-bold">Ações:</label>
+            </div>
+          </div>
+          <div
+            class="bg-white border-bottom row py-4"
+            *ngIf="!categoriasFornecimentoInteresse || categoriasFornecimentoInteresse.size == 0"
+          >
+            <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+          </div>
+          <div
+            class="row border-bottom py-2"
+            *ngFor="let categoria of categoriasFornecimentoInteresse; let i = index"
+          >
+            <div class="col-md-8 col-sm-8 align-self-center">
+              <label for="" class="font-weight-bold d-block d-md-none">Resposta:</label>
+              <p
+                class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="{{ categoria }}"
+              >
+                {{ categoria }}
+              </p>
+            </div>
+            <div class="col-md-2 d-flex justify-content-between align-self-center">
+              <label for="" class="font-weight-bold d-block d-md-none">Ações:</label>
+              <button
+                class="btn btn-icon"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Excluir"
+                (click)="removerCategoriaFornecimentoInteresse(categoria)"
+              >
+                <i class="far fa-trash-alt text-danger"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        class="btn btn-primary btn-block py-2"
+        type="submit"
+        (click)="registrarInteresse()"
+        translate
+      >
+        Registrar Interesse
+      </button>
+    </form>
+  </div>
+</div>

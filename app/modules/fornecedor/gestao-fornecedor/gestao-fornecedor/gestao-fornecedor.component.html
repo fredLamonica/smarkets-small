@@ -1,0 +1,151 @@
+<div
+  id="configuracao"
+  infinite-scroll
+  [infiniteScrollDistance]="1"
+  [infiniteScrollThrottle]="50"
+  [scrollWindow]="false"
+  (scrolled)="onScroll()"
+>
+  <div class="header">
+    <div class="header-search row">
+      <div class="col-12 align-self-center">
+        <h3 class="mb-0 text-uppercase text-primary font-weight-bold">
+          Configurações de Fornecedores
+        </h3>
+      </div>
+      <div class="col-lg-8">
+        <input-busca
+          label="O que você procura?"
+          placeholder="Buscar por nome, sigla ou tipo de documento"
+          (buscar)="buscar($event)"
+        ></input-busca>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-nav-tabs">
+    <ul class="nav nav-tabs row bounds" id="configuracaoTab" role="tablist">
+      <li class="nav-item col-md-6 col-lg-3">
+        <a
+          class="nav-link nav-link-block"
+          [class.active]="tabAtiva == 'configuracoes-fornecedor'"
+          id="configuracoes-fornecedor-tab"
+          data-toggle="tab"
+          href="#configuracoesFornecedor"
+          role="tab"
+          aria-controls="configuracoes-fornecedor"
+          aria-selected="false"
+          (click)="selectTab('configuracoes-fornecedor')"
+        >
+          Configurações
+        </a>
+      </li>
+
+      <li class="nav-item col-md-6 col-lg-3" *ngIf="habilitarDocumentosFornecedor">
+        <a
+          class="nav-link nav-link-block"
+          [class.active]="tabAtiva == 'documentos-fornecedor'"
+          id="documentos-fornecedor-tab"
+          data-toggle="tab"
+          href="#documentosFornecedor"
+          role="tab"
+          aria-controls="documentos-fornecedor"
+          aria-selected="false"
+          (click)="selectTab('documentos-fornecedor')"
+        >
+          Documentos
+        </a>
+      </li>
+
+      <li class="nav-item col-md-6 col-lg-3">
+        <a
+          class="nav-link nav-link-block"
+          [class.active]="tabAtiva == 'solicitacao-documentos-fornecedor'"
+          id="solicitacao-documentos-fornecedor-tab"
+          data-toggle="tab"
+          href="#solicitacaoDocumentosFornecedor"
+          role="tab"
+          aria-controls="solicitacao-documentos-fornecedor"
+          aria-selected="false"
+          (click)="selectTab('solicitacao-documentos-fornecedor')"
+        >
+          Solicitação Documentos
+        </a>
+      </li>
+
+      <li class="nav-item col-md-6 col-lg-3">
+        <a
+          class="nav-link nav-link-block"
+          [class.active]="tabAtiva == 'questionarios-fornecedor'"
+          id="questionarios-fornecedor-tab"
+          data-toggle="tab"
+          href="#questionariosFornecedor"
+          role="tab"
+          aria-controls="questionarios-fornecedor"
+          aria-selected="false"
+          (click)="selectTab('questionarios-fornecedor')"
+        >
+          Questionários
+        </a>
+      </li>
+    </ul>
+
+    <div class="tab-content bounds" id="configuracaoTabContent">
+      <div
+        class="tab-pane fade"
+        [ngClass]="{ 'active show': tabAtiva == 'configuracoes-fornecedor' }"
+        id="configuracoes-fornecedor"
+        role="tabpanel"
+        aria-labelledby="configuracoes-fornecedor-tab"
+      >
+        <configuracoes-fornecedor
+          #configuracoesFornecedor
+          *ngIf="tabAtiva == 'configuracoes-fornecedor'"
+        >
+        </configuracoes-fornecedor>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        [ngClass]="{ 'active show': tabAtiva == 'solicitacao-documentos-fornecedor' }"
+        id="solicitacao-documentos-fornecedor"
+        role="tabpanel"
+        aria-labelledby="solicitacao-documentos-fornecedor-tab"
+      >
+        <list-document-request
+          #solicitacaoDocumentosFornecedor
+          *ngIf="tabAtiva == 'solicitacao-documentos-fornecedor'"
+        >
+        </list-document-request>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        [ngClass]="{ 'active show': tabAtiva == 'documentos-fornecedor' }"
+        id="documentos-fornecedor"
+        role="tabpanel"
+        aria-labelledby="documentos-fornecedor-tab"
+      >
+        <listar-documento-fornecedor
+          #documentosFornecedor
+          *ngIf="tabAtiva == 'documentos-fornecedor'"
+        >
+        </listar-documento-fornecedor>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        [ngClass]="{ 'active show': tabAtiva == 'questionarios-fornecedor' }"
+        id="questionarios-fornecedor"
+        role="tabpanel"
+        aria-labelledby="questionarios-fornecedor-tab"
+      >
+        <listar-questionarios-fornecedor
+          #questionariosFornecedor
+          *ngIf="tabAtiva == 'questionarios-fornecedor'"
+        >
+        </listar-questionarios-fornecedor>
+      </div>
+    </div>
+  </div>
+</div>

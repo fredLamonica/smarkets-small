@@ -1,0 +1,19 @@
+:host{
+    width: 100%;      
+    display: flex;
+    align-items: stretch;     
+}
+
+:host > nav > h5{
+    margin: 0;
+}
+
+
+.navbar{
+    height: 7rem;
+    width: 100%; 
+    padding: 0 30px;
+    margin: 0;
+    background-color: #FFFFFF; 
+    z-index: 99;
+}

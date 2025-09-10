@@ -1,0 +1,76 @@
+@import "src/themes/_smk-base.scss";
+
+.table-funcionalidade {
+  .opcoes {
+    min-height: 54.5px;
+
+    .ferramentas {
+      display: flex;
+      column-gap: 1rem;
+
+      .configurar-colunas {
+        @include smk-button($smk-primary-color);
+      }
+
+      .exportar {
+        @include smk-button-outline($smk-success-color, lg);
+      }
+    }
+  }
+}
+
+::ng-deep smk-table-funcionalidade .table-funcionalidade {
+  .opcoes {
+    .acoes {
+      @include smk-button-styles;
+    }
+  }
+}
+
+.modal-config-colunas {
+  .modal-body {
+    border-bottom: $smk-border;
+    max-height: 550px;
+
+    .remover-coluna {
+      cursor: pointer;
+      color: $smk-danger-color;
+      font-size: 18px;
+
+      &:hover {
+        color: darken($smk-danger-color, 15%);
+      }
+    }
+
+    .info-uma-coluna {
+      font-size: 18px;
+      color: $smk-primary-color;
+
+      &:hover {
+        color: darken($smk-primary-color, 15%);
+      }
+    }
+  }
+
+  .modal-footer {
+    .adicionar-coluna {
+      @include smk-button-outline($smk-success-color);
+    }
+
+    .resetar-colunas {
+      @include smk-button-outline($smk-primary-color);
+    }
+
+    .salvar {
+      @include smk-button($smk-primary-color, lg);
+    }
+
+    .cancelar {
+      @include smk-button-outline($smk-primary-color, lg);
+    }
+
+    .separador {
+      @include smk-separador;
+    }
+  }
+}

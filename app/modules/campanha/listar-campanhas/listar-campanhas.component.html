@@ -1,0 +1,103 @@
+<div class="infinite-scroll" infinite-scroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="50"
+  [scrollWindow]="false" (scrolled)="onScroll()">
+
+  <div class="header">
+    <div class="header-search row">
+      <div class="col-12 align-self-center">
+        <h3 class="mb-0 text-uppercase text-primary font-weight-bold">
+          Campanhas
+        </h3>
+      </div>
+      <div class="col-lg-8">
+        <input-busca label="O que você procura?" placeholder="Buscar por ID ou descrição" (buscar)="buscar($event)">
+        </input-busca>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-nav-tabs">
+    <ul class="nav nav-tabs row bounds" id="campanhasTab" role="tablist">
+      <li class="nav-item col-lg-3">
+        <a class="nav-link nav-link-block active" id="campanhas-tab" data-toggle="tab" href="#campanhasTab" role="tab"
+          aria-controls="campanhas" aria-selected="false">Campanhas</a>
+      </li>
+    </ul>
+
+    <div class="tab-content bounds" id="campanhasTab">
+      <div class="tab-pane fade active show" id="campanhas" role="tabpanel" aria-labelledby="campanhas-tab">
+        <div class="card card-tab-content">
+          <div class="card-header">
+            <a [routerLink]="'novo'" class="btn btn-icon d-flex align-items-center text-primary p-0">
+              <i class="fas fa-plus-circle"></i>
+              <p class="d-inline-block mb-0 ml-2"> Inserir nova campanha</p>
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="container-fluid">
+              <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+                <div class="col-md-1">
+                  <label class="font-weight-bold">ID:</label>
+                </div>
+                <div class="col-md-3">
+                  <label class="font-weight-bold">Nome:</label>
+                </div>
+                <div class="col-md-2">
+                  <label class="font-weight-bold">Data Início:</label>
+                </div>
+                <div class="col-md-2">
+                  <label class="font-weight-bold">Data Fim:</label>
+                </div>
+                <div class="col-md-2">
+                  <label class="font-weight-bold">Situação:</label>
+                </div>
+                <div class="col-md-2">
+                  <label class="font-weight-bold">Ações:</label>
+                </div>
+              </div>
+              <div class="bg-white border-bottom row py-4" *ngIf="!campanhas?.length">
+                <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+              </div>
+
+              <div class="bg-white border-bottom row py-4" *ngFor="let campanha of campanhas; let i=index;">
+                <div class="col-md-1 col-sm-3 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">ID</label>
+                  <p class="mb-3 mb-lg-0"> {{ campanha.idCampanha }} </p>
+                </div>
+                <div class="col-md-3 col-sm-3 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">Nome:</label>
+                  <p class="mb-3 mb-lg-0"> {{ campanha.nome }} </p>
+                </div>
+                <div class="col-6 col-md-2 col-sm-3 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">Data Início:</label>
+                  <p class="mb-3 mb-lg-0"> {{ campanha.dataInicio | date: "dd/MM/yyyy" }} </p>
+                </div>
+                <div class="col-6 col-md-2 col-sm-3 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">Data Fim:</label>
+                  <p class="mb-3 mb-lg-0"> {{ campanha.dataFim | date: "dd/MM/yyyy"}} </p>
+                </div>
+                <div class="col-md-2 col-sm-3 align-self-center">
+                  <label for="" class="font-weight-bold d-block d-md-none">Situação:</label>
+                  <p class="mb-3 mb-lg-0"> {{ SituacaoCampanha[campanha.situacao] }} </p>
+                </div>
+                <div class="col-md-2 d-flex justify-content-between align-self-center">
+                  <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Auditoria"
+                    (click)="auditar(campanha.idCampanha)">
+                    <i class="fas fa-history"></i>
+                  </button>
+                  <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Editar"
+                    [routerLink]="[campanha.idCampanha]">
+                    <i class="far fa-edit"></i>
+                  </button>
+                  <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Excluir"
+                    (click)="solicitarExclusao(campanha.idCampanha)">
+                    <i class="far fa-trash-alt text-danger"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

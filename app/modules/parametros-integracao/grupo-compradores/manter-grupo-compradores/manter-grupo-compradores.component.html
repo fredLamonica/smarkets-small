@@ -1,0 +1,45 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">{{ grupoCompradores?.idGrupoCompradores ? 'Alterar ' : 'Inserir ' }}
+    Grupo de Compradores</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="form-group required col-lg-3">
+        <label>Código:</label>
+        <input type="text" class="form-control" formControlName="codigoGrupoCompradores"
+          [class.invalid]="form.controls.codigoGrupoCompradores.invalid && form.controls.codigoGrupoCompradores.dirty">
+        <span class="invalid"
+          *ngIf="form.controls.codigoGrupoCompradores.invalid && form.controls.codigoGrupoCompradores.dirty">
+          Preenchimento obrigatório
+        </span>
+      </div>
+      <div class="form-group required col-lg-9">
+        <label>Nome:</label>
+        <input type="text" class="form-control" formControlName="nomeGrupoCompradores"
+          [class.invalid]="form.controls.nomeGrupoCompradores.invalid && form.controls.nomeGrupoCompradores.dirty">
+        <span class="invalid"
+          *ngIf="form.controls.nomeGrupoCompradores.invalid && form.controls.nomeGrupoCompradores.dirty">
+          Preenchimento obrigatório
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-12">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" (change)="onDefaultChange($event)" id="default"
+            [checked]="form?.controls?.codigoDefault?.value">
+          <label class="custom-control-label" for="default"> Definir como padrão </label>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary"><i class="fas fa-ban"></i>
+    Cancelar</button>
+  <button type="button" (click)="salvar()" class="btn btn-primary"><i class="fas fa-save"></i> Salvar</button>
+</div>

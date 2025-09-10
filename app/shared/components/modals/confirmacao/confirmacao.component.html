@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">{{ titulo }}</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <p *ngIf="!html; else isHtml">{{ confirmacao }}</p>
+  <ng-template #isHtml>
+    <div [innerHTML]="confirmacao"></div>
+  </ng-template>
+</div>
+<div class="modal-footer">
+  <button type="button" [class]="'btn ' + cancelarBtnClass" (click)="cancelar()" *ngIf="cancelarLabel != 'none'">
+    {{ cancelarLabel }}
+  </button>
+  <button type="button" class="btn btn-primary" (click)="botaoOpcional()" *ngIf="opcionalLabel">
+    {{ opcionalLabel }}
+  </button>
+  <button type="button" [class]="'btn ' + confirmarBtnClass" (click)="confirmar()" *ngIf="confirmarLabel != 'none'">
+    {{ confirmarLabel }}
+  </button>
+</div>

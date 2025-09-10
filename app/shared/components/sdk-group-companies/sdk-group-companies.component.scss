@@ -1,0 +1,114 @@
+::ng-deep div.group-companies {
+  a {
+    color: #417185 !important;
+  }
+  sdk-item-card:hover {
+    a {
+      font-weight: bolder;
+    }
+  }
+
+  padding-bottom: 20px;
+
+  .suspense-menu-sdk-group-companies {
+    &::ng-deep > div.suspense-menu {
+      z-index: 2;
+      flex-direction: column !important;
+      border-radius: 10px !important;
+      align-items: flex-start !important;
+      padding: 3px 5px 3px 5px !important;
+      left: -5rem;
+      
+      strong.label-menu-suspenso {
+        white-space: nowrap;
+      }
+
+      button {
+        border-bottom: 1px solid #ccc;
+        width: 100%;
+        padding: 3px 4px;
+        font-size: 14px;
+  
+        :hover {
+          color: #27ade4 !important;
+        }
+  
+        a {
+          color: #588394;
+          padding-left: 10px;
+          padding-right: 15px;
+          font-weight: bolder;
+        }
+        i {
+          color: #588394;
+          .fas .fa-toggle-on .text-success {
+            position: relative;
+            left: -10px;
+          }
+          .btn.btn-icon.btn-sm i,
+          .btn-group-sm > .btn.btn-icon i {
+            position: relative;
+            left: -10px;
+          }
+        }
+      }
+
+    }
+  }
+
+  .father {
+    div.border-radius-8 {
+      padding-top: 1px;
+      border-radius: 8px 8px 0px 0px;
+      border-bottom: 2px solid #c4c4c4;
+    }
+    div.border-radius-left-8 {
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+  }
+
+  .father-no-border {
+    div.border-radius-8 {
+      padding-top: 1px;
+      border-radius: 8px 8px 8px 8px;
+    }
+    div.border-radius-left-8 {
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+  }
+
+  .childs {
+    div.border-radius-8 {
+      padding-top: 1px;
+      border-radius: 8px 0px 0px 0px;
+      border-bottom: 2px solid #c4c4c4;
+    }
+
+    div.border-radius-left-8 {
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+
+    .last {
+      div.border-radius-8 {
+        padding-top: 1px;
+        border-radius: 0px 0px 8px 8px;
+        border-bottom: none;
+      }
+      div.border-radius-left-8 {
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+      }
+    }
+  }
+
+  .crop-text-2 {
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+}

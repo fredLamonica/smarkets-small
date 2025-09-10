@@ -1,0 +1,212 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    {{ idItem ? 'Alterar item do' : 'Incluir item ao' }} contrato
+  </div>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="row row-line">
+      <label> <strong>Dados do Item</strong> </label>
+    </div>
+    <div class="form-row">
+      <div class="form-group required col">
+        <label for="idProduto"> Produto </label>
+        <input-produto
+          name="idProduto"
+          formControlName="idProduto"
+          [includeCodeInSearch]="true"
+          [class.invalid]="form.controls.idProduto.invalid && form.controls.idProduto.dirty"></input-produto>
+        <span
+          class="invalid"
+          *ngIf="form.controls.idProduto.invalid && form.controls.idProduto.dirty">Preenchimento obrigatório</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-lg-6">
+        <label for="idUnidadeMedida"> Unidade de medida </label>
+        <ng-select name="idUnidadeMedida" formControlName="idUnidadeMedida">
+          <ng-option [value]="unidade.idUnidadeMedida" *ngFor="let unidade of unidadesMedida">{{ unidade.sigla }} - {{
+            unidade.descricao }}</ng-option>
+        </ng-select>
+      </div>
+      <div class="form-group col-lg-6">
+        <label for="idMarca"> Marca </label>
+        <ng-select name="idMarca" formControlName="idMarca">
+          <ng-option [value]="marca.idMarca" *ngFor="let marca of marcas">{{
+            marca.nome
+            }}</ng-option>
+        </ng-select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group required col-lg-4">
+        <label for="loteMinimo"> Lote mínimo </label>
+
+        <input-number
+          name="loteMinimo"
+          formControlName="loteMinimo"
+          [disabled]="form.controls.loteMinimo.disabled"
+          [class.invalid]="form.controls.loteMinimo.invalid && form.controls.loteMinimo.dirty"
+          [min]="min"
+          [allowDecimal]="permitirLoteMinimoFracionado"
+          [max]="max">
+        </input-number>
+
+        <div *ngIf="form.controls.loteMinimo.dirty && form.controls.loteMinimo.invalid">
+          <span class="invalid" *ngIf="form.controls.loteMinimo.errors.required">Preenchimento obrigatório</span>
+          <span class="invalid" *ngIf="form.controls.loteMinimo.errors.min">Menor valor permitido é {{ min }}</span>
+          <span class="invalid" *ngIf="form.controls.loteMinimo.errors.max">Maior valor permitido é {{ max }}</span>
+        </div>
+      </div>
+      <div class="form-group required col-lg-4">
+        <label for="moeda"> Moeda </label>
+        <ng-select
+          name="moeda"
+          formControlName="moeda"
+          [class.invalid]="form.controls.moeda.invalid && form.controls.moeda.dirty">
+          <ng-option [value]="Moeda.Real">Real</ng-option>
+        </ng-select>
+        <span class="invalid" *ngIf="form.controls.moeda.invalid && form.controls.moeda.dirty">Preenchimento
+          obrigatório</span>
+      </div>
+      <div class="form-group required col-lg-4">
+        <label for="valor"> Valor </label>
+        <input
+          class="form-control"
+          [textMask]="{ mask: maskValor, guide: false }"
+          type="text"
+          name="valor"
+          formControlName="valor"
+          [class.invalid]="form.controls.valor.invalid && form.controls.valor.dirty" />
+        <span class="invalid" *ngIf="form.controls.valor.invalid && form.controls.valor.dirty">Preenchimento
+          obrigatório</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-lg-4">
+        <label for="garantia"> Garantia </label>
+        <ng-select name="garantia" formControlName="garantia">
+          <ng-option [value]="Garantia['1 ano']">1 ano</ng-option>
+          <ng-option [value]="Garantia['2 anos']">2 anos</ng-option>
+          <ng-option [value]="Garantia['3 anos']">3 anos</ng-option>
+          <ng-option [value]="Garantia['4 anos']">4 anos</ng-option>
+          <ng-option [value]="Garantia['5 anos']">5 anos</ng-option>
+          <ng-option [value]="Garantia['10 anos']">10 anos</ng-option>
+          <ng-option [value]="Garantia['Vitalícia']">Vitalícia</ng-option>
+        </ng-select>
+      </div>
+      <div class="form-group required col-lg-4">
+        <label for="frete"> Frete </label>
+        <ng-select
+          name="frete"
+          formControlName="frete"
+          [class.invalid]="form.controls.frete.invalid && form.controls.frete.dirty">
+          <ng-option [value]="TipoFrete.Cif">CIF</ng-option>
+          <ng-option [value]="TipoFrete.Fob">FOB</ng-option>
+          <ng-option [value]="TipoFrete['Fob Dirigido']">FOB Dirigido</ng-option>
+          <ng-option [value]="TipoFrete['Fob Redespacho']">FOB Redespacho</ng-option>
+        </ng-select>
+        <span class="invalid" *ngIf="form.controls.frete.invalid && form.controls.frete.dirty">Preenchimento
+          obrigatório</span>
+      </div>
+      <div class="form-group col-lg-4 required" *ngIf="impostosHabilitados">
+        <label for="ncm"> NCM: </label>
+        <ng-select
+          class="font-weight-bold"
+          [items]="ncm$ | async"
+          bindLabel="codigo"
+          bindValue="codigo"
+          typeToSearchText="Digite pelo menos 3 caracteres"
+          [typeahead]="ncmInput$"
+          [loadingText]="textoNgSelectLoading"
+          [loading]="ncmLoading"
+          formControlName="ncm">
+        </ng-select>
+      </div>
+    </div>
+    <div class="card-box-imp" *ngIf="impostosHabilitados">
+      <div class="row row-line">
+        <label> <strong>Impostos</strong> </label>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-lg-4">
+          <label for="icmsAliquota"> ICMS (%) </label>
+          <input
+            class="form-control"
+            [textMask]="{ mask: maskImposto, guide: false }"
+            type="text"
+            name="icmsAliquota"
+            formControlName="icmsAliquota" />
+        </div>
+        <div class="form-group col-lg-4">
+          <label for="stAliquota"> ST (%) </label>
+          <input
+            class="form-control"
+            [textMask]="{ mask: maskImposto, guide: false }"
+            type="text"
+            name="stAliquota"
+            formControlName="stAliquota" />
+        </div>
+        <div class="form-group col-lg-4">
+          <label for="difalAliquota"> DIFAL (%) </label>
+          <input
+            class="form-control"
+            [textMask]="{ mask: maskImposto, guide: false }"
+            type="text"
+            name="difalAliquota"
+            formControlName="difalAliquota" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-lg-4">
+          <label for="ipiAliquota"> IPI (%) </label>
+          <input
+            class="form-control"
+            [textMask]="{ mask: maskImposto, guide: false }"
+            type="text"
+            name="ipiAliquota"
+            formControlName="ipiAliquota" />
+        </div>
+        <div class="form-group col-lg-4">
+          <label for="pisAliquota"> PIS (%) </label>
+          <input
+            class="form-control"
+            [textMask]="{ mask: maskImposto, guide: false }"
+            type="text"
+            name="pisAliquota"
+            formControlName="pisAliquota" />
+        </div>
+        <div class="form-group col-lg-4">
+          <label for="cofinsAliquota"> COFINS (%) </label>
+          <input
+            class="form-control"
+            [textMask]="{ mask: maskImposto, guide: false }"
+            type="text"
+            name="cofinsAliquota"
+            formControlName="cofinsAliquota" />
+        </div>
+      </div>
+    </div>
+    <div class="card-box-imp">
+      <div class="row row-line">
+        <label> <strong>Estado de Atendimento</strong> </label>
+      </div>
+      <listar-estados-contrato
+          [id-contrato]="idContrato"
+          [id-contrato-item]="idItem"
+          (estadosItem)="atualizeEstados($event)"
+          ></listar-estados-contrato>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Fechar</button>
+  <button type="button" class="btn btn-outline-primary" (click)="salvar()">Salvar</button>
+</div>

@@ -1,0 +1,64 @@
+<div *ngIf="!isDropDown">
+  <input
+    [(ngModel)]="inputValue"
+    (blur)="onTextChanged($event.target.value)"
+    (keyup.enter)="onTextChanged($event.target.value)"
+    class="text-field"
+    placeholder="{{ dynamicFilter.placeholder }}"
+    #inputFilter
+    title="{{ dynamicFilter.placeholder }}"
+    placement="bottom"
+  />
+</div>
+
+<div
+  *ngIf="isDropDown"
+  id="dynamic-filter"
+  tabindex="100"
+  [ngClass]="{
+    'dropdown-check-list-selecionados': hasSelectedItems(),
+    visible: isVisibleDropdown,
+    'dropdown-check-list': isDropDown
+  }"
+>
+  <span
+    class="anchor"
+    [ngClass]="{
+      'dropdown-check-list-selecionados': hasSelectedItems(),
+      visible: isVisibleDropdown
+    }"
+    (click)="visibleDropdown()"
+    >{{ getDropdownTitle() }}
+    <i
+      style="margin-left: 0.5%"
+      class="fas"
+      [ngClass]="{
+        'fa-chevron-up': isVisibleDropdown,
+        'fa-chevron-down': !isVisibleDropdown
+      }"
+    ></i>
+  </span>
+  <hr class="hr-separator" *ngIf="isVisibleDropdown" />
+  <ul class="items">
+    <li
+      *ngFor="let option of dynamicFilter.listOptions"
+      class="text-list"
+      [ngClass]="{ 'sdk-select-dropDown-clickable': !isMultiSelect }"
+    >
+      <label (click)="onSelectedItem(option)" class="label-add-value" *ngIf="!isMultiSelect">
+        {{ getLabel(option) }}
+      </label>
+
+      <label class="label-add-value" *ngIf="isMultiSelect">
+        <input (click)="onSelectedItem(option)" type="checkbox" />
+        {{ getLabel(option) }}
+      </label>
+    </li>
+
+    <li *ngIf="isMultiSelect" style="padding: 0">
+      <button (click)="onApplyMultiselectClick()" class="btn-aplicar">
+        <span>{{ dropdownButtonName }}</span>
+      </button>
+    </li>
+  </ul>
+</div>

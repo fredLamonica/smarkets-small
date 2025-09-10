@@ -1,0 +1,19 @@
+<ng-container *ngIf="!compromisedConsistency; else compromisedConsistencyTmp">
+  <ng-container *ngIf="!loading; else loadingTmp">
+    <ng-content></ng-content>
+  </ng-container>
+</ng-container>
+<ng-template #compromisedConsistencyTmp>
+  <div class="compromised-consistency">
+    <pre class="mb-1"><code>&lt;{{ componentSelector }}&gt;</code></pre>
+    <p class="compromised-consistency-title mb-0" title="Configuração inconsistente">
+      Component inconsistente
+    </p>
+    <p class="compromised-consistency-text mb-0" title="Verifique o console do navegador">
+      Verifique o console do navegador para mais detalhes.
+    </p>
+  </div>
+</ng-template>
+<ng-template #loadingTmp>
+  <div class="spinner spinner-secondary mx-auto"></div>
+</ng-template>

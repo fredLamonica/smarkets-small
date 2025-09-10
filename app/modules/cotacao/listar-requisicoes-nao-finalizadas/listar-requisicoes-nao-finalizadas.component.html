@@ -1,0 +1,30 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Itens Não Finalizados</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-12">
+      <label
+        >Os itens abaixo não foram utilizados na geração do Pedido. Se desejar usá-los em outras
+        Cotações, por favor selecione quais deseja e, então, clique em Confirmar.</label
+      >
+      <custom-table
+        classes="table-striped"
+        [settings]="settings"
+        [source]="requisicoes"
+        (select)="selecao($event)"
+      ></custom-table>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+    <i class="fas fa-ban"></i> Cancelar
+  </button>
+  <button type="button" id="btnSalvar" (click)="confirmar()" class="btn btn-primary">
+    <i class="fas fa-save"></i> Confirmar
+  </button>
+</div>

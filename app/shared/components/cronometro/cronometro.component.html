@@ -1,0 +1,42 @@
+<ng-container *ngTemplateOutlet="inlineMode ? inlineTmp : defaultTmp"></ng-container>
+
+<ng-template #timeTmp>
+  <span class="mr-1"> {{ duration.days() | abs | number: '2.0' }}d</span>
+  <span class="mr-1"> {{ duration.hours() | abs | number: '2.0' }}h</span>
+  <span class="mr-1"> {{ duration.minutes() | abs | number: '2.0' }}m</span>
+  <span> {{ duration.seconds() | abs | number: '2.0' }}s</span>
+</ng-template>
+
+<ng-template #actionTmp>
+  <a
+    *ngIf="isWeekday() && allowActions"
+    class="acao btn btn-icon"
+    [class.p-0]="inlineMode"
+    [class.ml-3]="inlineMode"
+    (click)="pauseStart()">
+    <i
+      class="fas"
+      [ngClass]="{ 'fa-play-circle': paused, 'fa-pause-circle': !paused }"
+      [class.m-0]="inlineMode">
+    </i>
+  </a>
+</ng-template>
+
+<ng-template #defaultTmp>
+  <p class="text-right mb-0" [class.text-danger]="isAfterEvent()">
+    <a class="btn btn-icon disabled"><i class="fas fa-clock"></i></a>
+    <ng-container *ngTemplateOutlet="timeTmp"></ng-container>
+    <ng-container *ngTemplateOutlet="actionTmp"></ng-container>
+  </p>
+  <small *ngIf="!isWeekday()" class="text-danger float-right pr-3">{{ weekendDayMessage }}</small>
+</ng-template>
+
+<ng-template #inlineTmp>
+  <div
+    class="inline-mode d-inline text-nowrap"
+    [ngbTooltip]="!isWeekday() ? weekendDayMessage : ''"
+    [class.text-danger]="isAfterEvent()">
+    <ng-container *ngTemplateOutlet="timeTmp"></ng-container>
+    <ng-container *ngTemplateOutlet="actionTmp"></ng-container>
+  </div>
+</ng-template>

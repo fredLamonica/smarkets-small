@@ -1,0 +1,134 @@
+<nav>
+  <div class="row h-100">
+    <div class="col-4 col-lg-3 h-100">
+      <div
+        class="btn-wrapper nav-item dropdown ml-3"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Menu">
+        <button
+          role="button"
+          class="menu dropdown-toggle"
+          data-toggle="dropdown"
+          href="#"
+          role="button"
+          aria-haspopup="true"
+          aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="badge-nav"><i class="fas fa-chevron-up"></i></div>
+        <div class="dropdown-menu dropdown-nav-menu">
+          <div
+            class="nav-item d-block d-lg-none"
+            *ngFor="let itemMenu of menu.menuPrincipal; let i = index">
+            <a class="nav-link" [routerLink]="itemMenu.rota" role="button"><i class="{{ itemMenu.icone }}"></i>
+              {{ itemMenu.nome }}
+            </a>
+          </div>
+          <form>
+            <ngb-accordion #accordion="ngbAccordion" [closeOthers]="true">
+              <ngb-panel *ngFor="let itemMenu of menu.menuLateral; let i = index">
+                <ng-template ngbPanelTitle>
+                  <i class="{{ itemMenu.icone }}" aria-hidden="true"></i>
+                  <span translate>{{ itemMenu.nome }}</span>
+                </ng-template>
+                <ng-template ngbPanelContent>
+                  <div class="itens" *ngFor="let itemSubMenu of itemMenu.subItens">
+                    <a
+                      role="button"
+                      [class.disabled]="itemSubMenu?.subItens?.length"
+                      (click)="navigate(itemSubMenu)">
+                      <i [ngClass]="itemSubMenu.icone" *ngIf="itemSubMenu.icone"></i>
+                      <span>{{ itemSubMenu.nome }}</span>
+                    </a>
+                    <div class="sub-itens">
+                      <a
+                        role="button"
+                        (click)="navigate(subItem)"
+                        *ngFor="let subItem of itemSubMenu.subItens">
+                        <span>{{ subItem.nome }}</span>
+                      </a>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-panel>
+            </ngb-accordion>
+          </form>
+        </div>
+      </div>
+      <a role="button" class="navbar-brand ml-5" (click)="navigateHome()">
+        <img
+          [src]="usuario?.permissaoAtual?.pessoaJuridica?.logo"
+          alt="Smarkets"
+          *ngIf="usuario?.permissaoAtual?.pessoaJuridica?.logo" />
+        <div class="custom-brand" *ngIf="!usuario?.permissaoAtual?.pessoaJuridica?.logo">
+          <div class="initials">
+            {{ customBrand() }}
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 d-none d-lg-flex justify-content-start h-100 nav-item">
+      <div
+        *ngFor="let itemMenu of menu.menuPrincipal; let i = index"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        [title]="itemMenu.nome">
+        <a
+          class="nav-link pr-3 mr-xl-5"
+          [routerLink]="itemMenu.rota"
+          [routerLinkActive]="['active']"
+          [routerLinkActiveOptions]="{ exact: true }"
+          role="button">{{ itemMenu.nome }}
+          <div class="badge-nav"><i class="{{ itemMenu.icone }}"></i></div>
+        </a>
+      </div>
+    </div>
+    <div class="col-3 d-flex justify-content-end h-100">
+      <div class="pr-1 pr-md-2 pr-lg-3 pr-xl-4">
+        <resumo-carrinho
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Carrinho"
+          *ngIf="
+          usuario.permissaoAtual.perfil != PerfilUsuario.Fornecedor &&
+          usuario.permissaoAtual.perfil != PerfilUsuario.Aprovador &&
+          usuario.permissaoAtual.perfil != PerfilUsuario.Cadastrador &&
+          usuario.permissaoAtual.perfil != PerfilUsuario.GestorDeFornecedores">
+        </resumo-carrinho>
+      </div>
+      <div class="pr-1 pr-md-2 pr-lg-3 pr-xl-4">
+        <div class="suporte nav-item" title="Contato com o suporte" (click)="abrirFormularioDeSuporte()">
+          <div class="link nav-link">
+            <i class="icone fas fa-headset"></i>
+          </div>
+        </div>
+      </div>
+      <div class="pr-1 pr-md-2 pr-lg-3 pr-xl-4">
+        <smk-app-notificacao
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Notificação">
+        </smk-app-notificacao>
+      </div>
+      <div class="pr-1 pr-md-2 pr-lg-3 pr-xl-4">
+        <info-usuario
+          #infoUsuario
+          (troca-permissao)="obterDadosAutenticacao()"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Usuário">
+        </info-usuario>
+      </div>
+    </div>
+  </div>
+</nav>
+<div id="wrapper">
+  <!-- #region Page Content -->
+  <div id="page-content-wrapper">
+    <router-outlet></router-outlet>
+  </div>
+  <!-- #endregion page-content-wrapper -->
+</div>

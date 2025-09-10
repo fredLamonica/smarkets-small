@@ -1,0 +1,56 @@
+<div class="row mb-3">
+  <div class="col-md-4 col-lg-2">
+    <button role=button class="btn btn-block btn-primary" (click)="abrirIncluirMarcas(content)">
+      <i class="fas fa-plus"></i> Incluir
+    </button>
+  </div>
+  <div class="col-md-4 col-lg-2">
+    <button role=button class="btn btn-block btn-danger" [class.disabled]="!marcasExclusao?.length"
+      (click)="solicitarExclusao()">
+      <i class="fas fa-trash-alt"></i> Remover
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <custom-table classes="table-striped table-sm" [settings]="settings" [source]="marcas"
+      (select)="selecaoExclusao($event)"></custom-table>
+  </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">Marcas</div>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col">
+        <div class="form-row" [formGroup]="form">
+          <div class="form-group col">
+            <input type="text" class="form-control" id="termo" formControlName="termo"
+              placeholder="Buscar por nome ou código" (keyup.enter)="buscar()" (keyup)="campoBuscaChanged()">
+          </div>
+          <div class="form-group col">
+            <button class="btn btn-primary" (click)="buscar()"><i class="fas fa-search"></i> Buscar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <custom-table classes="table-striped table-sm" [settings]="settings" [source]="marcasLivres"
+          (select)="selecaoInclusao($event)"></custom-table>
+        <pager size="sm" [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="itensPorPagina"
+          (pagination)="paginacao($event)"></pager>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="fecharIncluirMarcas()">Voltar</button>
+    <button type="button" class="btn btn-outline-primary" [class.disabled]="!marcasInclusao?.length"
+      (click)="incluir()">Incluir</button>
+  </div>
+</ng-template>

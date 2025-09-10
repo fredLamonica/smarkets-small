@@ -1,0 +1,22 @@
+<div class="container-input">
+  <span
+    (click)="onTaginputClick()"
+    class="tag"
+    [ngClass]="{
+      'tag-input-clickable': isClickableTagInput,
+      'container-shadow': shadow
+    }"
+    [ngStyle]="tagStyle"
+    [ngStyle]="mouseOverStyle"
+    ><i class="{{ leftIconClass }} left-icon"></i>{{ getLabel() }}
+    <i
+      class="{{ rightIconClass }} right-icon"
+      [ngStyle]="rightIconStyle"
+      [ngClass]="{
+        'tag-input-clickable': isClickableTagInput
+      }"
+      (click)="onRightIconClick()"
+      *ngIf="hasRightIcon"
+    ></i
+  ></span>
+</div>

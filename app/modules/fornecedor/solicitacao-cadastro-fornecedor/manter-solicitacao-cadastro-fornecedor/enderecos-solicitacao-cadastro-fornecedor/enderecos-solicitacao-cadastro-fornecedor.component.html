@@ -1,0 +1,110 @@
+<div class="card">
+  <div class="card-body">
+    <div class="col-12 d-flex justify-content-end">
+      <sdk-rectangle-button-custom
+        [label]="'Incluir endereço'"
+        [leftIconClass]="'fas fa-plus'"
+        [colorBackground]="'#588394'"
+        (buttonClick)="IncludeAddress() "
+        [class.disabled]="!usuarioSolicitante">
+      </sdk-rectangle-button-custom>
+    </div>
+    <div class="col-12">
+      <div class="w-100">
+        <div class="bg-white border-bottom py-4" *ngIf="!enderecos?.length; else addressList">
+          <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+        </div>
+      </div>
+      <ng-template #addressList>
+        <div class="listagem">
+          <div class="row header-margins">
+            <div class="header">
+              <p class="col-1 pl-3">UF</p>
+              <div class="col-10">
+                <div class="row">
+                  <p class="col-3 pl-3">Cidade</p>
+                  <p class="col-3 pl-3">Bairro</p>
+                  <p class="col-3 pl-3">Logradouro</p>
+                  <p class="col-3 pl-3">Tipo</p>
+                </div>
+              </div>
+              <p class="col-1 pl-2">Ações</p>
+            </div>
+          </div>
+          <sdk-list-view [items]="enderecos">
+            <ng-template sdkListViewItem let-item>
+              <div class="address-item">
+                <sdk-item-card iconClass="fas fa-map-marker-alt"
+                  [showStatusBar]="false"
+                  [iconSpotColor]="iconSpotColor"
+                  [iconSpotColorHover]="iconSpotColorHover"
+                  [hasMarginBottom]="true"
+                  [borderColor]="borderColor"
+                  [borderWidth]="borderWidth"
+                  [borderStyle]="borderStyle"
+                  [borderColorHover]="borderColorHover"
+                  [repositionOnHover]="true"
+                  [disabled]="!usuarioSolicitante"
+                  (click)="usuarioSolicitante && edit(item)">
+                  <div class="d-flex w-100 justify-content-around align-items-center" style="margin-left: 1rem">
+                    <div class="col-1">
+                      <a>{{ item.cidade.estado.abreviacao }}</a>
+                    </div>
+                    <div class="col-10">
+                      <div class="row">
+                        <div class="col-3">
+                          <a>{{ item.cidade.nome }}</a>
+                        </div>
+                        <div class="col-3 crop-text-2">
+                          <a data-toggle="tooltip" data-placement="bottom" title="{{ item.bairro }}">{{ item.bairro
+                            }}</a>
+                        </div>
+                        <div class="col-3 crop-text-2">
+                          <a data-toggle="tooltip" data-placement="bottom" title="{{ item.logradouro }}">{{
+                            item.logradouro }}</a>
+                        </div>
+                        <div class="col-3 crop-text-2">
+                          <a data-toggle="tooltip" data-placement="bottom" title="{{ TipoEndereco[item.tipo] }}">{{
+                            TipoEndereco[item.tipo] }}</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-1">
+                      <i class="fas fa-2x fa-circle circle-icon" *ngIf="item.tipo != TipoEndereco.Institucional"></i>
+                      <button
+                        *ngIf="item.tipo != TipoEndereco.Institucional"
+                        class="btn btn-sm btn-icon delete-action"
+                        (click)="onClickDelete($event, item.idSolicitacaoFornecedorEndereco)"
+                        [class.disabled]="!usuarioSolicitante">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+                </sdk-item-card>
+              </div>
+            </ng-template>
+          </sdk-list-view>
+        </div>
+      </ng-template>
+    </div>
+
+    <ng-template #listarEnderecosFornecedor>
+
+      <div class="w-100">
+        <div class="bg-white border-bottom py-4" *ngIf="!enderecos?.length; else listaDeEnderecos">
+          <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+        </div>
+
+        <ng-template #listaDeEnderecos>
+          <sdk-list-view [items]="enderecos">
+            <ng-template sdkListViewItem let-item>
+              <item-endereco [endereco]="item" (obterEnderecos)="obterEnderecos($event)">
+              </item-endereco>
+            </ng-template>
+          </sdk-list-view>
+        </ng-template>
+      </div>
+    </ng-template>
+
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="smk-modal">
+  <div class="smk-modal-header">
+    <div class="smk-modal-title" id="modal-basic-title">{{ titulo }}</div>
+    <button type="button" class="smk-button-times" aria-label="Close" (click)="fechar()">
+      <i class="fas fa-times smk-times"></i>
+    </button>
+  </div>
+
+  <div class="smk-modal-body">
+    <ng-content></ng-content>
+  </div>
+  <div class="smk-modal-footer">
+    <button type="button" [class]="'btn ' + fecharBtnClass" (click)="fechar()">
+      {{ fecharLabel }}
+    </button>
+     <button type="button" [class]="'btn ' + salvarBtnClass" (click)="salvar()" *ngIf="botaoSalvarHabilitado">
+      <i class="fas fa-save me-2"></i>{{ salvarLabel }}
+    </button>
+    <button type="button" [class]="'btn ' + atualizarBtnClass" (click)="atualizar()" *ngIf="botaoAtualizarHabilitado">
+      <i [class]="classAtualizarIcon"></i>{{ atualizarLabel }}
+    </button>
+  </div>
+</div>

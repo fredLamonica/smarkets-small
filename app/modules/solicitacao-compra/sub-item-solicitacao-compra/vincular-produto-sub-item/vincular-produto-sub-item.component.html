@@ -1,0 +1,69 @@
+<div class="row">
+  <div class="col-12">
+    <div class="row bg-white py-3">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-12">
+            <h3 class="text-uppercase font-weight-bold text-center mb-0" describedBy="ngb-tooltip-0">Vincular a um
+              produto
+              <button class="btn btn-icon btn-sm" placement="right" tooltipClass="tooltip-light"
+                ngbTooltip="Um item de solicitação de compra sempre deve ser vinculado a um produto do marketplace, se o produto for de catálogo a solicitação se transformará em pedido. Mas se o item for do tipo requisição, a solicitação de compra se transformará em uma requisição de compra. Caso não exista o produto no marketplace, você poderá solicitar o cadastro do item.">
+                <i class="fas fa-question-circle"></i>
+              </button>
+            </h3>
+          </div>
+        </div>
+        <div class="row justify-content-center py-3">
+          <div class="col-lg-5" *ngIf="!itensCatalogoChunks?.length; else galeriaItens">
+            <p class="text-center">
+              Não existe nenhum produto para seguir a ser vinculado para Requisição de Compras ou Catálogo?
+            </p>
+          </div>
+          <ng-template #galeriaItens>
+            <div class="col-lg-10">
+              <ngb-carousel [interval]="10000000">
+                <ng-template ngbSlide *ngFor="let chunk of itensCatalogoChunks">
+                  <div class="row justify-content-center px-5 py-2">
+                    <div class="col-md-3 mb-3 mb-md-1 d-flex flex-column align-items-stretch"
+                      *ngFor="let itemCatalogo of chunk">
+                      <catalogo-item-grade class="d-flex flex-column align-items-stretch flex-fill"
+                        [item]="itemCatalogo" [quant]="subItem.quantidade" [valor-referencia]="subItem.valorReferencia" (add-carrinho)="confirmarVinculo($event)"></catalogo-item-grade>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-carousel>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="row bg-white pb-4 justify-content-center">
+      <div class="col-md-6 col-lg-4 mb-3 mb-md-0">
+        <p class="text-center mb-0">Não encontrou um produto para vincular?</p>
+        <button class="btn btn-primary btn-block" (click)="solicitarCadastro()">Clique aqui para Solicitar um
+          Cadastro</button>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <p class="text-center mb-0">Já sabe qual item vincular?</p>
+        <button class="btn btn-purple btn-block" (click)="vincularProduto()">Associar a um Produto
+          Existente</button>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <p class="text-center mb-0">Vamos cadastra-lo? É rapidinho.</p>
+        <button class="btn btn-success btn-block" (click)="cadastrarProduto()">Cadastrar um item para esse vínculo</button>
+      </div>
+    </div>
+    <div class="row bg-lighter justify-content-center py-2">
+      <div class="col-md-6 col-lg-4 text-center text-md-right mb-3 mb-md-0">
+        <span class="badge badge-icon badge-primary"><i class="fas fa-cart-arrow-down"></i></span>
+        Produto em <span class="font-weight-bold">Catálogo</span>
+      </div>
+      <div class="col-md-6 col-lg-4 text-center text-md-left">
+        <span class="badge badge-icon badge-primary-dark"><i class="fas fa-file-alt"></i></span>
+        Produto para <span class="font-weight-bold">Requisição</span>
+      </div>
+    </div>
+  </div>
+</div>

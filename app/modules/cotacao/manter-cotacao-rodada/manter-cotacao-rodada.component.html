@@ -1,0 +1,114 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Criar Nova Rodada</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+
+  <form class="row border-bottom" [formGroup]="form">
+    <div class="form-group col-12 col-md-2 pr-0">
+      <label>Cotação:</label>
+      <p>{{ cotacao?.idCotacao }}</p>
+    </div>
+    <div class="form-group col-12 col-md-4 pr-0">
+      <label>Responsável Comprador:</label>
+      <p>{{ cotacao?.usuarioResponsavel?.pessoaFisica?.nome }}</p>
+    </div>
+    <div class="form-group col-12 col-md-6">
+      <label>Descrição:</label>
+      <p>{{ cotacao?.descricao }}</p>
+    </div>
+    <div class="form-group col-12 col-md-4">
+      <label>Moeda:</label>
+      <p>{{ Moeda[cotacao?.moeda] }}</p>
+    </div>
+    <div class="form-group required col-lg-4">
+      <label for="dataInicio"> Data Inicial: </label>
+      <input class="form-control" type="datetime-local" [min]="currentDate" name="dataInicio"
+        formControlName="dataInicio"
+        [class.invalid]="form.controls.dataInicio.invalid && form.controls.dataInicio.dirty">
+      <span class="invalid" *ngIf="form.controls.dataInicio.invalid && form.controls.dataInicio.dirty">
+        Preenchimento obrigatório </span>
+    </div>
+    <div class="form-group required col-lg-4">
+      <label for="dataFim"> Data Final: </label>
+      <input class="form-control" type="datetime-local" [min]="currentDate" name="dataEncerramento"
+        formControlName="dataEncerramento"
+        [class.invalid]="form.controls.dataEncerramento.invalid && form.controls.dataEncerramento.dirty">
+      <span class="invalid" *ngIf="form.controls.dataEncerramento.invalid && form.controls.dataEncerramento.dirty">
+        Preenchimento obrigatório </span>
+    </div>
+  </form>
+
+  <div class="row py-3 border-top" [class.border-bottom]="!isLast"
+    *ngFor="let item of form.value.itens; let i = index; let isLast = last">
+    <div class="col-12 align-self-center">
+      <p class="font-weight-bold text-primary">{{ item.produto?.descricao }}</p>
+    </div>
+    <div class="col-6 col-md-3 pr-0">
+      <label>Marca:</label>
+      <p class="font-weight-bold">{{ item.marca ? item?.marca?.nome : "Sem preferência" }}</p>
+    </div>
+    <div class="col-6 col-md-2 pr-0">
+      <label>Tipo do Frete:</label>
+      <p class="font-weight-bold text-uppercase">{{ TipoFrete[item.incoterms] }}</p>
+    </div>
+    <div class="col-6 col-md-2 pr-0">
+      <label data-toggle="tooltip" data-placement="bottom" title="Quantidade Solicitada">Qtd. Solicitada:</label>
+      <p class="font-weight-bold">{{ item.quantidade }}</p>
+    </div>
+    <div class="col-6 col-md-3 pr-0">
+      <label>Valor Referência:</label>
+      <p class="font-weight-bold">{{ item.valorReferencia }}</p>
+    </div>
+    <div class="col-6 col-md-2">
+      <label>NCM:</label>
+      <p class="font-weight-bold">{{ item.produto?.codigoNcm }}</p>
+    </div>
+    <div class="col-6 col-md-3 pr-0">
+      <label>Razão Social - CNPJ:</label>
+      <p class="font-weight-bold mb-0">{{ cotacao?.razaoSocial }}</p>
+      <p class="font-weight-bold mb-md-0">{{ cotacao?.cnpj }}</p>
+    </div>
+    <div class="col-6 col-md-2 pr-0">
+      <label>Unidade de Medida:</label>
+      <p class="font-weight-bold">{{ item.produto?.unidadeMedida?.sigla }}</p>
+    </div>
+    <div class="col-6 col-md-2 pr-0">
+      <label>Último Valor Pago:</label>
+      <p class="font-weight-bold">{{ item.pedidoRecenteMenorValor?.valor }}</p>
+    </div>
+    <div class="col-6 col-md-3 pr-0">
+      <label data-toggle="tooltip" data-placement="bottom" title="Condição de Pagamento">Condição de
+        Pgto.:</label>
+      <p class="font-weight-bold">{{ item.condicaoPagamento?.descricao }}</p>
+    </div>
+    <div class="col-6 col-md-2">
+      <label data-toggle="tooltip" data-placement="bottom" title="Condição de Pagamento">Tipo de Requisição:</label>
+      <p class="font-weight-bold">{{ TipoRequisicao[item.tipoRequisicao] }}</p>
+    </div>
+    <div class="col-6 col-md-5 pr-0 pt-3">
+      <label>Endereço de Entrega:</label>
+      <p class="font-weight-bold mb-0">
+        {{ item.enderecoEntrega?.logradouro }}, {{ item.enderecoEntrega?.numero }} -
+        {{ item.enderecoEntrega?.bairro }}, {{ item.enderecoEntrega?.cidade?.nome }} -
+        {{ item.enderecoEntrega?.cidade?.estado?.abreviacao }}, CEP {{ item.enderecoEntrega?.cep }}
+      </p>
+    </div>
+    <div class="col-3 col-md-5 pt-3">
+      <label>Data Entrega Desejada:</label>
+      <p class="font-weight-bold">{{ obtenhaDataDeEntrega(item) }}</p>
+    </div>
+    <div class="col-3 col-md-2 pt-3">
+      <label>Target Price:</label>
+      <input [textMask]="{mask: maskValor, guide: false}" type="text" class="form-control" name="targetPrice"
+        [(ngModel)]="item.targetPrice">
+    </div>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Cancelar</button>
+  <button type="button" class="btn btn-outline-primary" (click)="confirmar()">Confirmar</button>
+</div>

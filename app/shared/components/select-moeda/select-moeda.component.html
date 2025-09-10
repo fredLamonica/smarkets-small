@@ -1,0 +1,5 @@
+<ng-select [(ngModel)]="moedaKey" class="font-weight-bold full-width" (change)="mudarMoeda($event)" [disabled]="readOnly">
+  <ng-option *ngFor="let tipoMoeda of moedaKeys" [value]="tipoMoeda">
+    {{ tipoMoeda }}
+  </ng-option>
+</ng-select>

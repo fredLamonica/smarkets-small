@@ -1,0 +1,88 @@
+<div class="table-component table-responsive cursor-default">
+  <table
+    class="table"
+    [class.table-striped]="style == TableStyleEnum.Striped"
+    [class.table-sm]="size === SizeEnum.Small"
+    [class.table-hover]="tableHover"
+    [class.table-bordered]="tableBordered">
+    <thead *ngIf="!hideHeader" class="thead-light">
+      <tr>
+        <ng-container *ngIf="selectionMode === SelectionModeEnum.Multiple">
+          <th class="selection text-center" (click)="toggleAll()">
+            <div class="form-check">
+              <input
+                class="form-check-input position-static"
+                type="checkbox"
+                aria-label="Selecionar todos"
+                [checked]="isAllSelected()">
+            </div>
+          </th>
+        </ng-container>
+        <ng-container *ngIf="selectionMode === SelectionModeEnum.Single">
+          <th class="selection text-center"></th>
+        </ng-container>
+        <ng-container *ngFor="let column of columns; let i = index">
+          <th>{{ column.title }}</th>
+        </ng-container>
+      </tr>
+    </thead>
+    <tbody [class.highlight-selected]="highlightSelected">
+      <ng-container *ngIf="!empty; else emptyTmp">
+        <ng-container *ngFor="let item of pagedItems; let i = index">
+          <tr [class.selected]="item.selected" (click)="toggle(i)">
+            <ng-container *ngIf="selectionMode === SelectionModeEnum.Multiple">
+              <td class="selection text-center">
+                <div class="form-check">
+                  <input
+                    class="form-check-input position-static"
+                    type="checkbox"
+                    aria-label="Seleção"
+                    [checked]="item.selected">
+                </div>
+              </td>
+            </ng-container>
+            <ng-container *ngIf="selectionMode === SelectionModeEnum.Single">
+              <td class="selection text-center">
+                <div class="form-check">
+                  <input
+                    class="form-check-input position-static"
+                    type="radio"
+                    name="select"
+                    aria-label="Seleção"
+                    [checked]="item.selected">
+                </div>
+              </td>
+            </ng-container>
+            <ng-container *ngFor="let column of columns">
+              <td>
+                <smk-column
+                  [item]="item"
+                  [column]="column"
+                  [template]="getTemplate(column.name)"></smk-column>
+              </td>
+            </ng-container>
+          </tr>
+        </ng-container>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+<ng-container *ngIf="usePagination">
+  <div class="mt-3">
+    <pager
+      [page]="page"
+      [total-pages]="totalPages"
+      [records-per-page]="pageSize"
+      [size]="config.size === SizeEnum.Small ? 'sm' : undefined"
+      (pagination)="setPage($event)">
+    </pager>
+  </div>
+</ng-container>
+
+<ng-template #emptyTmp>
+  <tr>
+    <td class="text-center" [attr.colspan]="emptyStateColspan()">
+      <span>{{ emptyStateText }}</span>
+    </td>
+  </tr>
+</ng-template>

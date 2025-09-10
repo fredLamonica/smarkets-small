@@ -1,0 +1,26 @@
+sdk-modal ::ng-deep > div.sdk-modal-header{
+    background: #E74B37;
+}
+
+
+sdk-modal ::ng-deep > div.sdk-modal-footer > button.btn.btn-primary{
+    background: #E74B37;
+    border-color: #E74B37 !important;
+    &:hover{
+        background-color:#E74B37 !important;
+    }
+}
+
+sdk-modal ::ng-deep > div.sdk-modal-footer > button.btn.btn-outline-primary{
+    color: #E74B37;
+    border-color: #E74B37 !important;
+    &:hover{
+        color: #fff;
+        background-color: #E74B37 !important;
+        border-color: #E74B37 !important;
+    }
+}
+
+text-area{
+    width: 90%;
+}

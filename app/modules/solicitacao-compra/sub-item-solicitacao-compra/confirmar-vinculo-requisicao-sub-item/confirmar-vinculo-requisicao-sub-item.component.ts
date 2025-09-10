@@ -1,0 +1,535 @@
+import { CurrencyPipe, DatePipe } from '@angular/common';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CatalogoItemGradeComponent, ConfirmacaoComponent } from '@shared/components';
+import { CatalogoItem, CentroCusto, CondicaoPagamento, Endereco, ItemSolicitacaoCompra, Marca, Moeda, Requisicao, RequisicaoItem, SituacaoRequisicao, SituacaoRequisicaoItem, SlaItem, SubItemSolicitacaoCompra, TipoEndereco, TipoRequisicao, UnidadeMedidaTempo, Usuario } from '@shared/models';
+import { AutenticacaoService, CentroCustoService, CondicaoPagamentoService, EnderecoService, MarcaService, MatrizResponsabilidadeService, SolicitacaoCompraService, TipoRequisicaoService, TranslationLibraryService } from '@shared/providers';
+import * as moment from 'moment';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { ToastrService } from 'ngx-toastr';
+import { Observable, of } from 'rxjs';
+import { catchError, shareReplay, tap } from 'rxjs/operators';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import { RequisicaoService } from '../../../../shared/providers/requisicao.service';
+import { SubItemSolicitacaoCompraComponent } from '../sub-item-solicitacao-compra.component';
+
+@Component({
+  selector: 'app-confirmar-vinculo-requisicao-sub-item',
+  templateUrl: './confirmar-vinculo-requisicao-sub-item.component.html',
+  styleUrls: ['./confirmar-vinculo-requisicao-sub-item.component.scss']
+})
+export class ConfirmarVinculoRequisicaoSubItemComponent implements OnInit {
+  @ViewChild(CatalogoItemGradeComponent) catalogoItemGrade: CatalogoItemGradeComponent;
+  @BlockUI() blockUI: NgBlockUI;
+
+  @Output('atualizar-situacao-item') atualizarSituacaoItemEmitter = new EventEmitter();
+
+  public tipoDocumento: string;
+
+  public idRequisicao: number;
+  public subItem: SubItemSolicitacaoCompra;
+  public idItemSolicitacaoCompra: number;
+  public itemSolicitacaoCompra: ItemSolicitacaoCompra;
+  public item: CatalogoItem;
+  public requisicao: Requisicao;
+  public UnidadeMedidaTempo = UnidadeMedidaTempo;
+  public TipoEndereco = TipoEndereco;
+  public quantidade: number;
+
+  public tipoRequisicao?: TipoRequisicao;
+
+  public usuario: Usuario;
+  public maxQuant: 999999999;
+
+  public maskValor = createNumberMask({
+    prefix: '',
+    suffix: '',
+    includeThousandsSeparator: true,
+    thousandsSeparatorSymbol: '.',
+    allowDecimal: true,
+    decimalSymbol: ',',
+    decimalLimit: 4,
+    requireDecimal: true,
+    allowNegative: false,
+    allowLeadingZeroes: false,
+    integerLimit: 12
+  });
+
+  constructor(
+    private translationLibrary: TranslationLibraryService,
+    public activeModal: NgbActiveModal,
+    private authService: AutenticacaoService,
+    private condicaoPagamentoService: CondicaoPagamentoService,
+    private enderecoService: EnderecoService,
+    private toastr: ToastrService,
+    private requisicaoService: RequisicaoService,
+    private centroCustoService: CentroCustoService,
+    private marcaService: MarcaService,
+    private tipoRequisicaoService: TipoRequisicaoService,
+    private currencyPipe: CurrencyPipe,
+    private matrizService: MatrizResponsabilidadeService,
+    private modalService: NgbModal,
+    private solicitacaoCompraService: SolicitacaoCompraService,
+    private datePipe: DatePipe
+  ) { }
+
+  ngOnInit() {
+    this.usuario = this.authService.usuario();
+
+    this.subListas();
+    if (this.idRequisicao) {
+      this.obterRequisicao();
+    } else {
+      this.instanciarRequisicao();
+    }
+  }
+
+  public min(requisicaoItem: RequisicaoItem): number {
+    if (
+      requisicaoItem &&
+      requisicaoItem.produto &&
+      requisicaoItem.produto.unidadeMedida &&
+      requisicaoItem.produto.unidadeMedida.permiteQuantidadeFracionada
+    ) {
+      return 1;
+    } else {
+      return 0.0001;
+    }
+  }
+
+  public max(requisicaoItem: RequisicaoItem): number {
+    if (
+      requisicaoItem &&
+      requisicaoItem.produto &&
+      requisicaoItem.produto.unidadeMedida &&
+      requisicaoItem.produto.unidadeMedida.permiteQuantidadeFracionada
+    ) {
+      return 999999999;
+    } else {
+      return 999999999.9999;
+    }
+  }
+
+  public obterRequisicao() {
+    this.blockUI.start(this.translationLibrary.translations.LOADING);
+    this.requisicaoService.obterPorId(this.idRequisicao).subscribe(
+      response => {
+        if (response) {
+          this.requisicao = response;
+          this.requisicao.itens.forEach(item => {
+            item.auxValorReferencia = this.adicionarMascaras(item.valorReferencia);
+            item.dataEntrega = moment(item.dataEntrega).format('YYYY-MM-DD');
+          });
+          this.requisicao.itens.push(this.instanciarRequisicaoItem());
+
+          this.preLoadEndereco();
+          this.preLoadTipoRequisicao();
+          this.preLoadCentroCusto();
+        }
+        this.blockUI.stop();
+      },
+      error => {
+        this.toastr.error(this.translationLibrary.translations.ALERTS.INTERNAL_SERVER_ERROR);
+        this.blockUI.stop();
+      }
+    );
+  }
+
+  private instanciarRequisicao() {
+    this.requisicao = new Requisicao();
+    this.requisicao.idRequisicao = 0;
+    this.requisicao.idUsuarioSolicitante = this.usuario.idUsuario;
+    this.requisicao.idTenant = this.usuario.permissaoAtual.idTenant;
+    this.requisicao.situacao = SituacaoRequisicao.PreRequisicao;
+    this.requisicao.moeda = this.item.produto.moeda ? this.item.produto.moeda : Moeda.Real;
+    this.requisicao.itens = [this.instanciarRequisicaoItem()];
+
+    this.preLoadEndereco();
+    this.preLoadTipoRequisicao();
+    this.preLoadCentroCusto();
+  }
+
+  private instanciarRequisicaoItem(): RequisicaoItem {
+    let requisicaoItem = new RequisicaoItem(
+      0,
+      0,
+      null,
+      null,
+      this.item.produto.idProduto,
+      this.item.produto,
+      null,
+      this.tipoRequisicao,
+      this.usuario.idUsuario,
+      this.usuario,
+      this.item.produto.moeda ? this.item.produto.moeda : Moeda.Real,
+      this.subItem.valorReferencia,
+      null,
+      null,
+      null,
+      null,
+      moment(this.itemSolicitacaoCompra.dataRemessa).format('YYYY-MM-DD'),
+      null,
+      SituacaoRequisicaoItem['Aguardando Pacote'],
+      this.quantidade,
+      null,
+      null,
+      null
+    );
+
+    if (this.subItem.quantidade) requisicaoItem.quantidade = this.subItem.quantidade;
+
+    if (!requisicaoItem.valorReferencia)
+      requisicaoItem.valorReferencia = requisicaoItem.valorReferencia;
+
+    requisicaoItem.auxValorReferencia = this.adicionarMascaras(requisicaoItem.valorReferencia);
+
+    requisicaoItem.idItemSolicitacaoCompra = this.idItemSolicitacaoCompra;
+    requisicaoItem.idSubItemSolicitacaoCompra = this.subItem.idSubItemSolicitacaoCompra;
+
+    if (requisicaoItem.dataEntrega) {
+      requisicaoItem.minDataEntrega = requisicaoItem.dataEntrega;
+    } else {
+      requisicaoItem.minDataEntrega = moment().format('YYYY-MM-DD');
+    }
+
+    return requisicaoItem;
+  }
+
+  public onModelChange(valor: string, index: number) {
+    this.requisicao.itens[index].auxValorReferencia = valor;
+    this.requisicao.itens[index].valorReferencia = Number(
+      valor.replace(/\./g, '').replace(',', '.')
+    );
+  }
+
+  public OnQuantidadeChange(valor: string, index: number) {
+    if (valor && valor.toString().includes(',')) {
+      this.requisicao.itens[index].quantidade = Number(valor.replace(/\./g, '').replace(',', '.'));
+    }
+  }
+
+  private adicionarMascaras(valor: number) {
+    let valorComMascara: string = this.currencyPipe
+      .transform(valor, undefined, '', '1.2-4', 'pt-BR')
+      .trim();
+    return valorComMascara;
+  }
+
+  public isRequisicaoValido(): boolean {
+    for (var itemRequisicao of this.requisicao.itens.filter(x => !x.idRequisicaoItem)) {
+      if (!itemRequisicao.idCentroCusto) {
+        var mensagemErro = 'É obrigatório selecionar um centro de custo no item "';
+        mensagemErro += itemRequisicao.produto.descricao + '" na requisição.';
+        this.toastr.warning(mensagemErro);
+        return false;
+      }
+
+      if (!itemRequisicao.idTipoRequisicao) {
+        var mensagemErro = 'É obrigatório selecionar um tipo de requisição no item "';
+        mensagemErro += itemRequisicao.produto.descricao + '" na requisição.';
+        this.toastr.warning(mensagemErro);
+        return false;
+      }
+
+      if (!itemRequisicao.idSlaItem) {
+        var mensagemErro = 'É obrigatório selecionar uma classificação no item "';
+        mensagemErro += itemRequisicao.produto.descricao + '" na requisição.';
+        this.toastr.warning(mensagemErro);
+        return false;
+      }
+
+      if (!itemRequisicao.idEnderecoEntrega) {
+        var mensagemErro = 'É obrigatório selecionar um endereço no item "';
+        mensagemErro += itemRequisicao.produto.descricao + '" na requisição.';
+        this.toastr.warning(mensagemErro);
+        return false;
+      }
+
+      if (!this.isDataEntregaValida(itemRequisicao)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private isDataEntregaValida(itemRequisicao: RequisicaoItem): boolean {
+    if (!itemRequisicao.dataEntrega) {
+      var mensagemErro = 'É obrigatório informar a data de entrega no item "';
+      mensagemErro += itemRequisicao.produto.descricao + '" na requisição.';
+      this.toastr.warning(mensagemErro);
+      return false;
+    }
+
+    var dataEntrega = moment(itemRequisicao.dataEntrega);
+
+    if (!dataEntrega.isSameOrAfter(itemRequisicao.minDataEntrega)) {
+      var mensagemErro = 'A data de entrega no item "';
+      mensagemErro += itemRequisicao.produto.descricao + '" deve ser igual ou posterior a ';
+      mensagemErro += this.datePipe.transform(itemRequisicao.minDataEntrega, 'dd/MM/yyyy') + '.';
+      this.toastr.warning(mensagemErro);
+
+      return false;
+    }
+
+    return true;
+  }
+
+  public itemDesabilitado(requisicaoItem: RequisicaoItem): boolean {
+    return (
+      this.subItem &&
+      requisicaoItem.idSubItemSolicitacaoCompra != this.subItem.idSubItemSolicitacaoCompra
+    );
+  }
+
+  public itemDesabilitadoClassificacao(requisicaoItem: RequisicaoItem): boolean {
+    return (
+      (this.subItem &&
+        requisicaoItem.idSubItemSolicitacaoCompra != this.subItem.idSubItemSolicitacaoCompra) ||
+      !requisicaoItem.idTipoRequisicao
+    );
+  }
+
+  public confirmar() {
+    if (this.isRequisicaoValido()) this.activeModal.close(this.requisicao);
+  }
+
+  public fechar() {
+    this.activeModal.close();
+  }
+
+  public excluirItemRequisicao(index: number) {
+    const modalRef = this.modalService.open(ConfirmacaoComponent, {
+      centered: true
+    });
+    modalRef.componentInstance.confirmacao = `Deseja excluir o item da requisição?`;
+    modalRef.componentInstance.confirmarLabel = 'Excluir';
+    modalRef.result.then(result => {
+      if (result) {
+        this.solicitacaoCompraService
+          .desvincularSubItemRequisicaoItem(
+            this.idItemSolicitacaoCompra,
+            this.requisicao.itens[index].idSubItemSolicitacaoCompra,
+            this.requisicao.itens[index]
+          )
+          .subscribe(
+            response => {
+              SubItemSolicitacaoCompraComponent.desvincularSubItem.next(
+                this.requisicao.itens[index].idSubItemSolicitacaoCompra
+              );
+              this.requisicao.itens.splice(index, 1);
+              if (this.requisicao.itens.length == 1) {
+                this.requisicao.idRequisicao = 0;
+                this.requisicao.itens[0].idRequisicao = 0;
+              }
+              this.toastr.success(this.translationLibrary.translations.ALERTS.SUCCESS);
+              this.blockUI.stop();
+            },
+            error => { }
+          );
+      }
+    });
+  }
+
+  // #region Listas
+  private subListas() {
+    this.subMarcas();
+    this.subEnderecos();
+    this.subCentrosCusto();
+    this.subTiposRequisicao();
+    this.subCondicoesPagamento();
+  }
+
+  public marcas$: Observable<Array<Marca>>;
+  public marcasLoading: boolean;
+
+  private subMarcas() {
+    this.marcasLoading = true;
+    this.marcas$ = this.marcaService.listar().pipe(
+      catchError(() => of([])),
+      tap(() => (this.marcasLoading = false)),
+      shareReplay()
+    );
+  }
+
+  public enderecos$: Observable<Array<Endereco>>;
+  public enderecos: Array<Endereco>;
+  public enderecosLoading: boolean;
+
+  private subEnderecos() {
+    this.enderecosLoading = true;
+    let idPessoa = this.authService.usuario().permissaoAtual.pessoaJuridica.idPessoa;
+    this.enderecos$ = this.enderecoService.listar(idPessoa).pipe(
+      catchError(() => of([])),
+      tap(enderecos => {
+        this.enderecos = enderecos;
+        this.preLoadEndereco();
+        this.enderecosLoading = false;
+      }),
+      shareReplay()
+    );
+  }
+
+  private preLoadEndereco() {
+    if (this.enderecos && this.enderecos.length) {
+      if (this.requisicao && this.requisicao.itens) {
+        this.requisicao.itens.forEach(item => {
+          if (!item.idEnderecoEntrega) {
+            if (this.enderecos && this.enderecos.length) {
+              let enderecosEntrega: Array<Endereco> = this.enderecos.filter(
+                endereco => endereco.tipo == TipoEndereco.Entrega
+              );
+
+              if (enderecosEntrega && enderecosEntrega.length) {
+                item.idEnderecoEntrega = enderecosEntrega[0].idEndereco;
+              } else {
+                item.idEnderecoEntrega = this.enderecos[0].idEndereco;
+              }
+            }
+          }
+        });
+      }
+    }
+  }
+
+  public centrosCusto$: Observable<Array<CentroCusto>>;
+  public centrosCusto: Array<CentroCusto>;
+  public centrosCustoLoading: boolean;
+
+  private subCentrosCusto() {
+    this.centrosCustoLoading = true;
+    this.centrosCusto$ = this.centroCustoService.listarAtivos().pipe(
+      catchError(() => of([])),
+      tap(centrosCusto => {
+        this.centrosCusto = centrosCusto;
+        this.preLoadCentroCusto();
+        this.centrosCustoLoading = false;
+      }),
+      shareReplay()
+    );
+  }
+
+  private preLoadCentroCusto() {
+    if (this.centrosCusto && this.centrosCusto.length) {
+      if (this.requisicao && this.requisicao.itens) {
+        this.requisicao.itens.forEach((item, index) => {
+          if (!item.idCentroCusto) {
+            if (this.itemSolicitacaoCompra.rateios && this.itemSolicitacaoCompra.rateios.length) {
+              let codigosCentroCusto = this.itemSolicitacaoCompra.rateios.map(rateio => {
+                return rateio.codigoCentroCusto;
+              });
+              if (codigosCentroCusto && codigosCentroCusto.length) {
+                let centroCusto = this.centrosCusto.find(cc =>
+                  codigosCentroCusto.includes(cc.codigo)
+                );
+
+                if (centroCusto) {
+                  item.idCentroCusto = centroCusto.idCentroCusto;
+                }
+              }
+            } else {
+              let centroCustoDefault = this.centrosCusto.filter(p => p.codigoDefault);
+              if (centroCustoDefault.length)
+                item.idCentroCusto = centroCustoDefault[0].idCentroCusto;
+              else if (this.centrosCusto.length == 1)
+                item.idCentroCusto = this.centrosCusto[0].idCentroCusto;
+            }
+          }
+        });
+      }
+    }
+  }
+
+  public tiposRequisicao$: Observable<Array<TipoRequisicao>>;
+  public tiposRequisicaoLoading: boolean;
+  public tiposRequisicao: Array<TipoRequisicao>;
+
+  private subTiposRequisicao() {
+    this.tiposRequisicaoLoading = true;
+    this.tiposRequisicao$ = this.tipoRequisicaoService.obterTodos().pipe(
+      catchError(() => of([])),
+      tap(tiposRequisicao => {
+        this.tiposRequisicao = tiposRequisicao;
+        this.preLoadTipoRequisicao();
+        this.tiposRequisicaoLoading = false;
+      }),
+      shareReplay()
+    );
+  }
+
+  private preLoadTipoRequisicao() {
+    if (this.tiposRequisicao && this.tiposRequisicao.length) {
+      if (this.requisicao && this.requisicao.itens) {
+        this.requisicao.itens.forEach((item, index) => {
+          if (!item.idTipoRequisicao) {
+            let tipoRequisicao = this.tiposRequisicao.find(
+              tr => tr.tipoDocumento == this.tipoDocumento
+            );
+
+            if (tipoRequisicao) {
+              item.idTipoRequisicao = tipoRequisicao.idTipoRequisicao;
+              this.onChangeTipoRequisicao(tipoRequisicao.idTipoRequisicao, index);
+            }
+          } else {
+            this.obterSlaItens(item.idTipoRequisicao, item);
+          }
+        });
+      }
+    }
+  }
+
+  public slaItens: Array<SlaItem>;
+  private obterSlaItens(idTipoRequisicao: number, requisicaoItem: RequisicaoItem) {
+    this.blockUI.start(this.translationLibrary.translations.LOADING);
+    this.matrizService
+      .obterPorCategoriaTipoRequisicao(requisicaoItem.produto.idCategoriaProduto, idTipoRequisicao)
+      .subscribe(
+        response => {
+          if (response) {
+            requisicaoItem.auxSlaItens = response.slaItens;
+            this.slaItens = response.slaItens;
+            this.preLoadSla();
+          } else {
+            requisicaoItem.auxSlaItens = new Array<SlaItem>();
+          }
+          this.blockUI.stop();
+        },
+        error => {
+          this.toastr.error(this.translationLibrary.translations.ALERTS.INTERNAL_SERVER_ERROR);
+          this.blockUI.stop();
+        }
+      );
+  }
+
+  private preLoadSla() {
+    if (this.slaItens && this.slaItens.length == 1) {
+      if (this.requisicao && this.requisicao.itens) {
+        this.requisicao.itens.forEach((item, index) => {
+          item.idSlaItem = this.slaItens[0].idSlaItem;
+        });
+      }
+    }
+  }
+
+  public onChangeTipoRequisicao(idTipoRequisicao: number, index: number) {
+    this.requisicao.itens[index].idTipoRequisicao = idTipoRequisicao;
+    this.requisicao.itens[index].idSlaItem = null;
+    this.slaItens = null;
+    if (idTipoRequisicao) {
+      this.obterSlaItens(idTipoRequisicao, this.requisicao.itens[index]);
+    } else {
+      this.slaItens = new Array<SlaItem>();
+    }
+  }
+
+  public condicoesPagamento$: Observable<Array<CondicaoPagamento>>;
+  public condicoesPagamentoLoading: boolean;
+
+  private subCondicoesPagamento() {
+    this.condicoesPagamentoLoading = true;
+    this.condicoesPagamento$ = this.condicaoPagamentoService.listarAtivos().pipe(
+      catchError(() => of([])),
+      tap(() => (this.condicoesPagamentoLoading = false)),
+      shareReplay()
+    );
+  }
+}

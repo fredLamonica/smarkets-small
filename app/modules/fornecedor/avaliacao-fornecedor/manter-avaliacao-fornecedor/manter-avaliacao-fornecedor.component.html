@@ -1,0 +1,228 @@
+<div class="header">
+  <div class="header-search row">
+    <div class="col-12 align-self-center">
+      <h3 class="mb-0 text-uppercase text-primary font-weight-bold">
+        {{ this.form.controls.idAvaliacaoFornecedor?.value ? 'Editar' : 'Nova' }} Avaliação
+      </h3>
+    </div>
+  </div>
+</div>
+
+<div class="custom-nav-tabs">
+  <ul class="nav nav-tabs row bounds" id="avaliacaoTab" role="tablist">
+    <li class="nav-item col-lg-3">
+      <a
+        class="nav-link nav-link-block text-truncate active"
+        id="dados-avaliacao-tab"
+        data-toggle="tab"
+        data-placement="bottom"
+        title="Dados Básicos"
+        role="tab"
+        href="#dados-avaliacao"
+        aria-controls="dados-avaliacao"
+        aria-selected="false"
+        >Dados Básicos</a
+      >
+    </li>
+    <li class="nav-item col-lg-3">
+      <a
+        class="nav-link nav-link-block text-truncate"
+        id="questoes-avaliacao-tab"
+        data-toggle="tab"
+        data-placement="bottom"
+        title="Questões"
+        role="tab"
+        href="#questoes-avaliacao"
+        aria-controls="questoes-avaliacao"
+        aria-selected="false"
+        >Questões</a
+      >
+    </li>
+  </ul>
+
+  <div class="tab-content bounds line" id="avaliacaoTabContent">
+    <div
+      class="tab-pane fade active show"
+      id="dados-avaliacao"
+      role="tabpanel"
+      aria-labelledby="dados-avaliacao-tab"
+    >
+      <div class="card card-tab-content">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <div class="row bg-white pt-4">
+              <div class="col">
+                <form [formGroup]="form">
+                  <div class="form-row">
+                    <div class="form-group required col-md-6">
+                      <label for="cnpj"> Nome da Avaliação: </label>
+                      <div class="input-group extended-button">
+                        <input
+                          class="form-control"
+                          type="text"
+                          name="nome"
+                          formControlName="nome"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group required col-md-3">
+                      <label for="cnpj"> Data Início: </label>
+                      <input-date type="date" name="dataInicio" formControlName="dataInicio">
+                      </input-date>
+                    </div>
+                    <div class="form-group required col-md-3">
+                      <label for="cnpj"> Data Fim: </label>
+                      <input-date type="date" name="dataFim" formControlName="dataFim">
+                      </input-date>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group required col">
+                      <label>Introdução:</label>
+                      <textarea
+                        name="introducao"
+                        formControlName="introducao"
+                        [rows]="3"
+                        class="form-control"
+                        [class.invalid]="
+                          form.controls.introducao.invalid && form.controls.introducao.dirty
+                        "
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group required col">
+                      <label>Categorias:</label>
+                      <ng-select
+                        name="categoriasFornecimento"
+                        formControlName="categoriasFornecimento"
+                        [items]="categorias"
+                        bindLabel="descricao"
+                        [multiple]="true"
+                        [class.invalid]="
+                          form.controls.categoriasFornecimento.invalid &&
+                          form.controls.categoriasFornecimento.dirty
+                        "
+                      >
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+                      <i class="fas fa-ban"></i> Cancelar
+                    </button>
+                    <button type="button" id="btnSalvar" (click)="salvar()" class="btn btn-primary">
+                      <i class="fas fa-save"></i> Salvar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="tab-pane fade"
+      id="questoes-avaliacao"
+      role="tabpanel"
+      aria-labelledby="questoes-avaliacao-tab"
+    >
+      <div class="card card-tab-content">
+        <div class="card-header">
+          <button
+            class="btn btn-icon p-0"
+            (click)="incluirQuestao(form.controls.idAvaliacaoFornecedor.value)"
+          >
+            <i class="fas fa-plus-circle text-primary"></i>
+            <p class="d-inline-block mb-0 ml-2 align-top">Incluir Questão</p>
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+              <div class="col-md-8">
+                <label class="font-weight-bold">Questão:</label>
+              </div>
+              <div class="col-md-2">
+                <label class="font-weight-bold">Peso:</label>
+              </div>
+              <div class="col-md-2">
+                <label class="font-weight-bold">Ações:</label>
+              </div>
+            </div>
+            <div
+              class="bg-white border-bottom row py-4"
+              *ngIf="form.controls.questoes.value?.length == 0"
+            >
+              <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+            </div>
+
+            <div
+              class="bg-white border-bottom row py-4"
+              *ngFor="let questao of form.controls.questoes.value"
+            >
+              <div class="col-md-8 align-self-center">
+                <label for="" class="font-weight-bold d-block d-md-none">Questão:</label>
+                <p
+                  class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="{{ questao.descricao }}"
+                >
+                  {{ questao.descricao }}
+                </p>
+              </div>
+              <div class="col-md-2 align-self-center">
+                <label for="" class="font-weight-bold d-block d-md-none">Peso:</label>
+                <p
+                  class="mb-3 mb-lg-0 line-clamp line-clamp-1"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="{{ questao.peso }}"
+                >
+                  {{ questao.peso }}
+                </p>
+              </div>
+              <div class="col-md-2 d-flex justify-content-between align-self-center">
+                <label for="" class="font-weight-bold d-block d-md-none">Ações:</label>
+                <button
+                  class="btn btn-icon"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Editar"
+                  (click)="editarQuestao(questao)"
+                >
+                  <i class="far fa-edit"></i>
+                </button>
+                <button
+                  class="btn btn-icon"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Excluir"
+                  (click)="solicitarExclusao(questao.idQuestaoAvaliacaoFornecedor)"
+                >
+                  <i class="far fa-trash-alt text-danger"></i>
+                </button>
+              </div>
+            </div>
+            <div class="bg-white border-bottom row">
+              <div class="col">
+                <div class="modal-footer">
+                  <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+                    <i class="fas fa-ban"></i> Cancelar
+                  </button>
+                  <button type="button" id="btnSalvar" (click)="salvar()" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Salvar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

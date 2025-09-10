@@ -1,0 +1,59 @@
+<form class="row align-items-end" [formGroup]="form">
+  <div class="form-group col-xl-4 required">
+    <label (click)="empresaCompradora.handleArrowClick()"> Para qual empresa está comprando? </label>
+    <ng-select
+      #empresaCompradora
+      placeholder="Selecione a empresa"
+      [items]="empresas"
+      bindValue="idPessoaJuridica"
+      [loading]="empresasLoading"
+      [searchable]="true"
+      [clearable]="false"
+      formControlName="empresaCompradora"
+      [searchFn]="empresaSearchFn"
+      required>
+      <ng-template ng-label-tmp let-item="item">
+        {{ item.cnpj }} - {{ item.nomeFantasia ? item.nomeFantasia : item.razaoSocial }}
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
+        <span title="{{ item.cnpj }} - {{ item.razaoSocial }}">
+          {{ item.nomeFantasia ? item.nomeFantasia : item.razaoSocial }}<br />
+          <div>
+            <small>CNPJ: {{ item.cnpj }}</small><br />
+          </div>
+          <div>
+            <small *ngIf="item.nomeFantasia">Razão social: {{ item.razaoSocial }}</small><br />
+          </div>
+        </span>
+      </ng-template>
+    </ng-select>
+  </div>
+  <div class="form-group col-xl-2">
+    <label for="descricao" (click)="tipoDeBusca.handleArrowClick()"> O que você procura? </label>
+    <ng-select
+      #tipoDeBusca
+      placeholder="Selecione o tipo"
+      [items]="tiposBusca"
+      [searchable]="true"
+      [clearable]="true"
+      formControlName="tipoBusca"
+      bindLabel="label"
+      bindValue="value">
+    </ng-select>
+  </div>
+  <div class="form-group col-xl-6">
+    <div class="input-group">
+      <label> </label>
+      <input type="text" class="form-control" formControlName="termo" placeholder="Buscar" (keyup.enter)="buscar()" />
+      <input type="checkbox" class="check-input" id="detalhada" formControlName="buscaDetalhada" />
+      <label for="detalhada" class="mt-2 mr-2 ml-2">Detalhado</label>
+
+      <div class="input-group-append">
+        <button class="btn btn-light" type="button" (click)="buscar()"><i class="fas fa-search"></i></button>
+      </div>
+
+
+
+    </div>
+  </div>
+</form>

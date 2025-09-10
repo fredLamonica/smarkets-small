@@ -1,0 +1,311 @@
+<div
+  class="infinite-scroll"
+  infinite-scroll
+  [infiniteScrollDistance]="1"
+  [infiniteScrollThrottle]="50"
+  [scrollWindow]="false"
+  (scrolled)="onScroll()"
+>
+  <div class="header">
+    <!-- <div class="header-search row">
+      <div class="col-12 align-self-center">
+        <h3 class="mb-0 text-uppercase text-primary font-weight-bold">Pendências</h3>
+      </div>
+    </div> -->
+    <div class="header-search row align-items-center">
+      <div class="col-lg-8">
+        <input-busca
+          label="O que você procura?"
+          placeholder="Buscar por fornecedor, descrição, responsável, entre outras informações..."
+          (buscar)="buscar($event)"
+          (campoVazio)="buscar('')"
+          [disabled]="buscaAvancada"
+        ></input-busca>
+      </div>
+      <div class="col-lg-3 pt-lg-4">
+        <button
+          class="btn btn-primary"
+          *ngIf="!buscaAvancada; else esconderBuscaAvancada"
+          (click)="exibirBuscaAvancada(true)"
+        >
+          <i class="fas fa-search-plus"></i> Busca Avançada
+        </button>
+        <ng-template #esconderBuscaAvancada>
+          <button class="btn btn-outline-primary" (click)="exibirBuscaAvancada(false)">
+            <i class="fas fa-search-minus"></i> Busca Avançada
+          </button>
+        </ng-template>
+      </div>
+    </div>
+    <div class="container-fluid" *ngIf="buscaAvancada">
+      <form [formGroup]="form">
+        <div class="form-row">
+          <div class="form-group col-lg-4">
+            <label> Fornecedor </label>
+            <input
+              class="form-control with-shadow"
+              type="text"
+              id="termoFornecedor"
+              formControlName="termoFornecedor"
+              placeholder="Razão Social"
+              (keyup.enter)="buscarFiltroAvancado()"
+            />
+          </div>
+          <div class="form-group col-lg-4">
+            <label> Tipo </label>
+            <select
+              id="termoTipoPendencia"
+              class="form-control with-shadow"
+              formControlName="termoTipoPendencia"
+            >
+              <option [value]="null"></option>
+              <option *ngFor="let key of opcoesTiposPendencia" [value]="key">
+                {{ tiposPendenciaFornecedor[key] }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group col-lg-4">
+            <label> Descrição </label>
+            <input
+              class="form-control with-shadow"
+              type="text"
+              id="termoDescricao"
+              formControlName="termoDescricao"
+              placeholder="Descrição"
+              (keyup.enter)="buscarFiltroAvancado()"
+            />
+          </div>
+          <div class="form-group col-lg-4">
+            <label for="termoDataCriacao"> Data de Criação: </label>
+            <input
+              name="termoDataCriacao"
+              id="termoDataCriacao"
+              type="date"
+              class="form-control with-shadow"
+              formControlName="termoDataCriacao"
+            />
+          </div>
+          <div class="form-group col-lg-4">
+            <label> Responsável </label>
+            <input
+              class="form-control with-shadow"
+              type="text"
+              id="termoResponsavel"
+              formControlName="termoResponsavel"
+              placeholder="Nome"
+              (keyup.enter)="buscarFiltroAvancado()"
+            />
+          </div>
+          <div class="form-group col-lg-4">
+            <label> Status </label>
+            <select id="termoStatus" class="form-control with-shadow" formControlName="termoStatus">
+              <option [value]="null"></option>
+              <option *ngFor="let key of opcoesStatusPendencia" [value]="key">
+                {{ StatusPendenciaFornecedor[key] }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </form>
+      <div class="row mb-3">
+        <div class="col">
+          <button class="btn btn-outline-primary float-right" (click)="buscarFiltroAvancado()">
+            <i class="fas fa-search"></i> Buscar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="custom-nav-tabs">
+    <ul class="nav nav-tabs row bounds" id="pendenciasTab" role="tablist">
+      <li class="nav-item col-lg-3">
+        <a
+          class="nav-link nav-link-block active"
+          id="pendencias-tab"
+          data-toggle="tab"
+          href="#pendencias"
+          role="tab"
+          aria-controls="pendencias"
+          aria-selected="false"
+          >Pendências</a
+        >
+      </li>
+    </ul>
+    <div class="tab-content bounds" id="pendenciasTabContent">
+      <div
+        class="tab-pane fade active show"
+        id="pendencias"
+        role="tabpanel"
+        aria-labelledby="pendencias-tab"
+      >
+        <div class="card card-tab-content tab-content">
+          <div class="card-header"></div>
+          <div class="card-body">
+            <div class="container-fluid">
+              <div class="row bg-white">
+                <div class="col">
+                  <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+                    <div class="col-md-2">
+                      <label class="font-weight-bold">Fornecedor:</label>
+                    </div>
+                    <div class="col-md-2">
+                      <label class="font-weight-bold">Tipo:</label>
+                    </div>
+                    <div class="col-md-2">
+                      <label class="font-weight-bold">Descrição:</label>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="row">
+                        <div class="col-md-6 px-md-2">
+                          <label class="font-weight-bold">Data e Hora:</label>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="font-weight-bold">Responsável:</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-1">
+                      <label class="font-weight-bold">Status:</label>
+                    </div>
+                    <div class="col-md-2">
+                      <label class="font-weight-bold">Ações:</label>
+                    </div>
+                  </div>
+
+                  <div
+                    class="bg-white border-bottom row py-4"
+                    *ngIf="!pendenciasFornecedor?.length; else hasValue"
+                  >
+                    <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+                  </div>
+
+                  <ng-template #hasValue>
+                    <div
+                      class="bg-white border-bottom row py-4"
+                      *ngFor="let pendenciaFornecedor of pendenciasFornecedor; let i = index"
+                    >
+                      <div class="col-md-2 align-self-center">
+                        <label for="" class="font-weight-bold d-block d-md-none">Fornecedor:</label>
+                        <p
+                          class="mb-3 mb-md-0 line-clamp line-clamp-2"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="{{ pendenciaFornecedor?.fornecedor?.razaoSocial }}"
+                        >
+                          {{ pendenciaFornecedor?.fornecedor?.razaoSocial }}
+                        </p>
+                      </div>
+
+                      <div class="col-md-2 align-self-center">
+                        <label for="" class="font-weight-bold d-block d-md-none">Tipo:</label>
+                        <p
+                          class="mb-3 mb-md-0 line-clamp line-clamp-2"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="{{ tiposPendenciaFornecedor[pendenciaFornecedor?.tipo] }}"
+                        >
+                          {{ tiposPendenciaFornecedor[pendenciaFornecedor?.tipo] }}
+                        </p>
+                      </div>
+
+                      <div class="col-md-2 align-self-center">
+                        <label for="" class="font-weight-bold d-block d-md-none">Descrição:</label>
+                        <p
+                          class="mb-3 mb-md-0 line-clamp line-clamp-2"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="{{ pendenciaFornecedor?.descricao }}"
+                        >
+                          {{ pendenciaFornecedor?.descricao }}
+                        </p>
+                      </div>
+
+                      <div class="col-md-3 align-self-center">
+                        <div class="row">
+                          <div class="col-md-6 align-self-center px-md-2">
+                            <label for="" class="font-weight-bold d-block d-md-none"
+                              >Data e Hora:</label
+                            >
+                            <p
+                              class="mb-3 mb-md-0 line-clamp line-clamp-2"
+                              data-toggle="tooltip"
+                              data-placement="bottom"
+                              title="{{
+                                pendenciaFornecedor?.dataCadastro | date: 'dd/MM/yyyy HH:mm'
+                              }}"
+                            >
+                              {{ pendenciaFornecedor?.dataCadastro | date: 'dd/MM/yyyy HH:mm' }}
+                            </p>
+                          </div>
+
+                          <div class="col-md-6 align-self-center">
+                            <label for="" class="font-weight-bold d-block d-md-none"
+                              >Responsável:</label
+                            >
+                            <p
+                              class="mb-3 mb-md-0 line-clamp line-clamp-2"
+                              data-toggle="tooltip"
+                              data-placement="bottom"
+                              title="{{ pendenciaFornecedor?.usuario?.pessoaFisica?.nome }}"
+                            >
+                              {{ pendenciaFornecedor?.usuario?.pessoaFisica?.nome }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-1 align-self-center">
+                        <label for="" class="font-weight-bold d-block d-md-none">Status:</label>
+                        <p
+                          class="mb-3 mb-md-0 line-clamp line-clamp-2"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="{{ StatusPendenciaFornecedor[pendenciaFornecedor?.status] }}"
+                        >
+                          {{ StatusPendenciaFornecedor[pendenciaFornecedor?.status] }}
+                        </p>
+                      </div>
+
+                      <div class="col-md-2 d-flex justify-content-between align-self-center">
+                        <label for="" class="font-weight-bold d-block d-md-none">Ações:</label>
+                        <button
+                          class="btn btn-icon"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="Visualizar Visita"
+                          (click)="vizualizarPendenciaFornecedor(pendenciaFornecedor)"
+                        >
+                          <i class="far fa-eye"></i>
+                        </button>
+                        <button
+                          class="btn btn-icon"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="Editar"
+                          *ngIf="pendenciaFornecedor.status != StatusPendenciaFornecedor.Resolvido"
+                          (click)="editarPendenciaFornecedor(pendenciaFornecedor)"
+                        >
+                          <i class="far fa-edit"></i>
+                        </button>
+                        <button
+                          class="btn btn-icon"
+                          *ngIf="pendenciaFornecedor.status != StatusPendenciaFornecedor.Resolvido"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="Excluir"
+                          (click)="solicitarExclusaoPendenciaFornecedor(pendenciaFornecedor)"
+                        >
+                          <i class="far fa-trash-alt text-danger"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

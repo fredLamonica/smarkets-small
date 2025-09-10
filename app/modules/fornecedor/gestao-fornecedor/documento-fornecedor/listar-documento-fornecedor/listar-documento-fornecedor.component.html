@@ -1,0 +1,121 @@
+<div class="card card-tab-content">
+  <div class="card-header">
+    <div *ngIf="podeInserirDocumentos; else vinculo">
+      <a (click)="inserir()" class="btn btn-icon d-flex align-items-center text-primary p-0">
+        <i class="fas fa-plus-circle"></i>
+        <p class="d-inline-block mb-0 ml-2">Inserir novo documento fornecedor</p>
+      </a>
+    </div>
+    <ng-template #vinculo>
+      <a (click)="vincular()" class="btn btn-icon d-flex align-items-center text-primary p-0">
+        <i class="fas fa-plus-circle"></i>
+        <p class="d-inline-block mb-0 ml-2">Vincular novo documento fornecedor</p>
+      </a>
+    </ng-template>
+  </div>
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+        <div class="col-md-2">
+          <label class="font-weight-bold">ID:</label>
+        </div>
+        <div class="col-md-4">
+          <label class="font-weight-bold">Descrição:</label>
+        </div>
+        <div class="col-md-2">
+          <label class="font-weight-bold">Doc. obrigatório:</label>
+        </div>
+        <div class="col-md-2">
+          <label class="font-weight-bold">Venc. obrigatório:</label>
+        </div>
+        <div class="col-md-2">
+          <label class="font-weight-bold">Ações:</label>
+        </div>
+      </div>
+
+      <div
+        class="bg-white border-bottom row py-4"
+        *ngIf="!documentosFornecedor?.length; else hasValue"
+      >
+        <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+      </div>
+
+      <!-- begin-list no-content mt-5-->
+      <ng-template #hasValue>
+        <div
+          class="bg-white border-bottom row py-4"
+          *ngFor="let documentoFornecedor of documentosFornecedor; let i = index"
+        >
+          <!-- begin-fields-->
+          <div class="col-md-2 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">ID:</label>
+            <p class="mb-3 mb-md-0">{{ documentoFornecedor?.idDocumentoFornecedorTenant }}</p>
+          </div>
+
+          <div class="col-md-4 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Descrição:</label>
+            <p class="mb-3 mb-md-0">{{ documentoFornecedor?.descricaoDocumento }}</p>
+          </div>
+
+          <div class="col-md-2 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Doc. obrigatório:</label>
+            <p class="mb-3 mb-md-0">
+              {{ documentoFornecedor?.documentoObrigatorio ? 'Sim' : 'Não' }}
+            </p>
+          </div>
+
+          <div class="col-md-2 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none"
+              >Vencimento do documento:</label
+            >
+            <p class="mb-3 mb-md-0">
+              {{ documentoFornecedor?.vencimentoObrigatorio ? 'Sim' : 'Não' }}
+            </p>
+          </div>
+          <div class="col-md-2 d-flex justify-content-between align-self-center">
+            <button
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Auditoria"
+              (click)="onAuditoriaClick(documentoFornecedor.idDocumentoFornecedorTenant)"
+            >
+              <i class="fas fa-history"></i>
+            </button>
+            <button
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Editar"
+              (click)="editar(documentoFornecedor)"
+            >
+              <i class="far fa-edit"></i>
+            </button>
+            <button
+              *ngIf="podeInserirDocumentos; else desvincular"
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Excluir"
+              (click)="solicitarExclusao(documentoFornecedor.idDocumentoFornecedorTenant)"
+            >
+              <i class="far fa-trash-alt text-danger"></i>
+            </button>
+            <ng-template #desvincular>
+              <button
+                class="btn btn-icon"
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Remover"
+                (click)="solicitarExclusao(documentoFornecedor.idDocumentoFornecedorTenant)"
+              >
+                <i class="fas fa-unlink text-warning"></i></button
+            ></ng-template>
+          </div>
+          <!-- end-list -->
+        </div>
+      </ng-template>
+      <!-- end-list -->
+    </div>
+  </div>
+</div>

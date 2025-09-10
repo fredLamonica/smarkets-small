@@ -1,0 +1,100 @@
+<div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+  <div class="col-md-3">
+    <label class="font-weight-bold">Nome do Documento:</label>
+  </div>
+  <div class="col-md-2">
+    <label class="font-weight-bold">Documento Obrigatório:</label>
+  </div>
+  <div class="col-md-3">
+    <label class="font-weight-bold">Status:</label>
+  </div>
+  <div class="col-md-2">
+    <label class="font-weight-bold">Data de Validade:</label>
+  </div>
+  <div class="col-md-2">
+    <label class="font-weight-bold">Ações:</label>
+  </div>
+</div>
+
+<div
+  class="bg-white border-bottom row py-4"
+  *ngIf="!solicitacaoDocumentosFornecedorArquivos?.length; else hasValue"
+>
+  <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+</div>
+
+<!-- begin-list no-content mt-5-->
+<ng-template #hasValue>
+  <div
+    class="bg-white border-bottom row py-4"
+    *ngFor="
+      let solicitacaoDocumentoFornecedorArquivo of solicitacaoDocumentosFornecedorArquivos;
+      let i = index
+    "
+  >
+    <div class="col-md-3 align-self-center">
+      <label for="" class="font-weight-bold d-block d-md-none">Nome do Documento:</label>
+      <p class="mb-3 mb-md-0">
+        {{ solicitacaoDocumentoFornecedorArquivo?.documentoFornecedor.descricaoDocumento }}
+      </p>
+    </div>
+
+    <div class="col-md-2 align-self-center">
+      <label for="" class="font-weight-bold d-block d-md-none">Documento Obrigatório:</label>
+      <p class="mb-3 mb-md-0">
+        {{
+          solicitacaoDocumentoFornecedorArquivo?.documentoFornecedor.documentoObrigatorio
+            ? 'Sim'
+            : 'Não'
+        }}
+      </p>
+    </div>
+
+    <div class="col-md-3 align-self-center">
+      <label for="" class="font-weight-bold d-block d-md-none">Status:</label>
+      <p class="mb-3 mb-md-0">
+        {{
+          StatusSolicitacaoDocumentoFornecedor[
+            solicitacaoDocumentoFornecedorArquivo?.statusSolicitacaoDocumentoFornecedor
+          ]
+        }}
+      </p>
+    </div>
+
+    <div class="col-md-2 align-self-center">
+      <label for="" class="font-weight-bold d-block d-md-none">Data de Validade:</label>
+      <p class="mb-3 mb-md-0" [ngStyle]="obterCor(solicitacaoDocumentoFornecedorArquivo)">
+        {{
+          solicitacaoDocumentoFornecedorArquivo?.dataVencimento
+            ? formatarData(solicitacaoDocumentoFornecedorArquivo?.dataVencimento)
+            : 'DD/MM/AAAA'
+        }}
+      </p>
+    </div>
+
+    <div class="col-md-2 align-self-center d-flex justify-content-between">
+      <label for="" class="font-weight-bold d-block d-md-none">Ações:</label>
+      <button
+        class="btn btn-icon"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Auditoria"
+        (click)="abrirModalDeAuditoria(solicitacaoDocumentoFornecedorArquivo)"
+      >
+        <i class="fas fa-history"></i>
+      </button>
+      <button
+        class="btn btn-icon"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Incluir/Histórico"
+        (click)="abrirModalDeEdicao(solicitacaoDocumentoFornecedorArquivo)"
+      >
+        <i class="far fa-edit"></i>
+      </button>
+    </div>
+
+    <!-- end-list -->
+  </div>
+</ng-template>
+<!-- end-list -->

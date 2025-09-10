@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">{{ tipoRequisicao?.idTipoRequisicao ? 'Alterar ' : 'Incluir ' }} Tipo de
+      Requisicao</div>
+    <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="form-group required col-lg-6">
+          <label>Nome do Tipo de Requisição:</label>
+          <input type="text" class="form-control" formControlName="nome"
+            [class.invalid]="form.controls.nome.invalid && form.controls.nome.dirty">
+          <span class="invalid" *ngIf="form.controls.nome.invalid && form.controls.nome.dirty">
+            Preenchimento obrigatório
+          </span>
+        </div>
+        <div class="form-group required col-lg-6">
+          <label>Sigla:</label>
+          <input type="text" class="form-control" formControlName="sigla"
+            [class.invalid]="form.controls.sigla.invalid && form.controls.sigla.dirty">
+          <span class="invalid" *ngIf="form.controls.sigla.invalid && form.controls.sigla.dirty">
+            Preenchimento obrigatório
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group required col-lg-12">
+          <label>Tipo de Documento (Código ERP):</label>
+          <input type="text" class="form-control" formControlName="tipoDocumento"
+            [class.invalid]="form.controls.tipoDocumento.invalid && form.controls.tipoDocumento.dirty">
+          <span class="invalid" *ngIf="form.controls.tipoDocumento.invalid && form.controls.tipoDocumento.dirty">
+            Preenchimento obrigatório
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="cancelar()" class="btn btn-outline-primary"><i class="fas fa-ban"></i> Cancelar</button>
+    <button type="button" (click)="salvar()" class="btn btn-primary"><i class="fas fa-save"></i> Salvar</button>
+  </div>

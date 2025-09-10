@@ -1,0 +1,47 @@
+@import "src/themes/_smk-base.scss";
+
+.anexos {
+  .rules {
+    margin-left: 3px;
+    font-size: 12px;
+  }
+
+  .lista-de-anexo {
+    .anexo {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      &:not(:last-of-type) {
+        margin-bottom: 1rem;
+      }
+
+      .dados-arquivo {
+        border-radius: 8px;
+        border-color: $smk-border-color !important;
+        font-size: 12px;
+
+        &:disabled {
+          background-color: $smk-background-color;
+        }
+      }
+
+      .download {
+        @include smk-button-outline($smk-success-color);
+      }
+
+      .exclusao {
+        @include smk-button-outline($smk-danger-color);
+      }
+    }
+  }
+
+  .texto-sem-anexo {
+    color: #a5a5a5;
+    font-style: italic;
+  }
+
+  .destaque {
+    color: #e7482c;
+  }
+}

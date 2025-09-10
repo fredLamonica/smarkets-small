@@ -1,0 +1,16 @@
+.tag_read_only {
+  background-color: #cfcfcf;
+  width: 100%;
+  height: 30px;
+  border-radius: 36px;
+  padding-right: 15px;
+  padding-left: 15px;
+  font: normal normal 600 14px/19px Open Sans;
+
+  .title {
+    padding-left: 0px;
+  }
+  .sub_title {
+    padding-left: 4px;
+  }
+}

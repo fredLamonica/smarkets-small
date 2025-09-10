@@ -1,0 +1,47 @@
+.bg-descricao-doc{
+    background: #F0F0F0;
+    padding:0.8rem 0;
+}
+
+sdk-modal ::ng-deep div.sdk-modal-body{
+    padding: 0 0 0 0;
+    margin: 0%;
+    
+    .col-12{
+        padding: 0 0.3rem;
+        margin: 0%;
+    }
+    
+    .custom-file{
+        display: block; 
+        border: none;               
+        .custom-file-label{
+            content: "Selecionar Arquivo" !important;
+            background-color: #00A1D7 !important;
+            color: #ffffff;
+            width: 100%;
+            text-align: center;
+            height: 2.29rem; 
+            &::after{
+                display: none;
+            }           
+        }
+
+    }   
+
+    .custom-file:hover{
+        display: block;                
+        .custom-file-label{
+            content: "Selecionar Arquivo" !important;
+            background-color: #058cb9 !important;
+            color: #ffffff;
+            width: 100%;
+            text-align: center;
+            height: 2.29rem; 
+            &::after{
+                display: none;
+            }           
+        }
+
+    }   
+}

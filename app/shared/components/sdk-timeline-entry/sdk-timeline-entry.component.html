@@ -1,0 +1,14 @@
+<div class="entry">
+  <div *ngIf="showTitle" class="title">
+    <div class="timeline-entry-title" [innerHTML]="title"></div>
+    <div class="timeline-entry-subtitle" *ngIf="subtitle" [innerHTML]="subtitle"></div>
+  </div>
+  <div class="timeline-bar">
+    <div [ngClass]="{ 'timeline-bar-icon': icon }">
+      <i [ngClass]="{ icon: icon, 'no-icon': !icon }" class="{{ icon }}"></i>
+    </div>
+  </div>
+  <div class="body">
+    <ng-content></ng-content>
+  </div>
+</div>

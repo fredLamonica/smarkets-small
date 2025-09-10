@@ -1,0 +1,8 @@
+<section>
+  <div class="card-funcionalidade cursor-default" [ngClass]="class" [ngStyle]="style">
+    <div *ngIf="titulo" class="titulo mb-3 text-uppercase">
+      {{ titulo }}
+    </div>
+    <ng-content></ng-content>
+  </div>
+</section>

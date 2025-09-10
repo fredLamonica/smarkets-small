@@ -1,0 +1,18 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Selecionar novo produto</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="card">
+    <div class="card-body">
+      <custom-table classes="table-striped table-sm" [settings]="settings" [source]="itens" (select)="selecao($event)"></custom-table>
+      <pager size="sm" [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="registrosPorPagina" (pagination)="paginacao($event)"></pager>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Cancelar</button>
+  <button type="button" class="btn btn-outline-primary" (click)="selecionar()">Selecionar</button>
+</div>

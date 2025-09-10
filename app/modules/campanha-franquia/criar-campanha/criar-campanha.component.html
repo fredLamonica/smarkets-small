@@ -1,0 +1,153 @@
+<div class="card">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="card-body">
+    <div class="col-12 d-flex justify-content-end">
+      <sdk-rectangle-button
+        [label]="'Salvar'"
+        [leftIconClass]="'fas fa-check'"
+        [leftIconColor]="'#FFFFFF'"
+      >
+      </sdk-rectangle-button>
+    </div>
+
+    <div class="col-12 title-hr pt-0">
+      Dados Gerais
+      <hr />
+    </div>
+      <div class="form-row">
+        <div class="col-8">
+          <div class="form-group required">
+            <label for="titulo">Título:</label>
+            <input 
+              class="form-control" 
+              type="text" 
+              name="titulo" 
+              formControlName="titulo" />
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group required">
+            <label for="status">Status:</label>
+         
+            <input class="form-control" 
+              disabled type="text"
+              name="status"                   
+              [value]="getStatus()"/> 
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="col-3">
+          <div class="form-group required">
+            <label for="status">Ano:</label>
+            <input 
+              class="form-control" 
+              type="number" 
+              maxlength="4" 
+              name="ano" 
+              formControlName="ano"  />
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="form-group required">
+            <label for="status">Semestre:</label>
+            <input 
+              class="form-control" 
+              type="number" 
+              maxlength="1" 
+              max="2"
+              min="1"
+              name="semestre" 
+              formControlName="semestre"
+             />
+          </div>
+        </div>
+        
+        <div class="col-3">
+          <div class="form-group required">
+            <label for="dataInicio">Início do Ciclo:</label>
+            <input-date 
+              formControlName="dataInicio" 
+              [min]="minDataInicio"
+              ></input-date>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="form-group required">
+            <label for="dataFim">Encerramento do Ciclo:</label>
+            <input-date 
+              formControlName="dataFim" 
+              [min]="minDataInicio"
+              ></input-date>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="col-3">
+          <div class="form-group required">
+            <label for="dataLimiteAceite">Limite para Aceite:</label>
+            <input-date 
+              formControlName="dataLimiteAceite" 
+              [min]="minDataInicio"></input-date>
+          </div>
+        </div>
+        
+        <div class="col-3">
+          <div class="form-group required">
+            <label for="dataLimiteComprovacao">Limite para Comprovações:</label>
+            <input-date 
+              formControlName="dataLimiteComprovacao" 
+              [min]="minDataInicio"></input-date>
+          </div>
+        </div>
+        
+        <div class="col-3">
+          <div class="form-group required">
+            <label for="dataLimiteAprovacao">Limite para Aprovação:</label>
+            <input-date 
+              formControlName="dataLimiteAprovacao" 
+              [min]="minDataInicio"></input-date>
+          </div>
+        </div>
+        
+        <div class="col-3">
+          <div class="form-group required">
+            <label for="dataLimiteNotaDebito">Limite para Nota de Débito:</label>
+            <input-date 
+              formControlName="dataLimiteNotaDebito" 
+              [min]="minDataInicio"></input-date>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="form-row">
+        <div class="col-3">
+          <div class="form-group required">
+            <label for="dataLimitePagamento">Limite para Pagamento:</label>
+            <input-date 
+              formControlName="dataLimitePagamento" 
+              [min]="minDataInicio"></input-date>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="col-12">
+          <div class="form-group required">
+            <label for="termoCondicoes">Termo de Aceite:</label>            
+            <ck-editor
+            formControlName="termoCondicoes"  
+            [readonly]="teveAceite || campanhaFranquia?.cicloEncerrado"          
+          >
+          </ck-editor>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

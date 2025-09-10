@@ -1,0 +1,42 @@
+<div class="modal-dialog modal-lg">
+  <div class="modal-content" style="height: 500px;">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-basic-title">Histórico de Aceite de Termo de boas práticas</div>
+      <button type="button" class="close" aria-label="Close" (click)="fechar()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body" id="historicoDeAceite" >
+      <div *ngIf="historicoDeAceitesDeTermos!=null">
+        <div class="row border-bottom">
+          <div class="col-lg-3">
+            <label class="font-weight-bold mb-3 mb-lg-0">Data</label>
+          </div>
+          <div class="col-lg-6">
+            <label class="font-weight-bold mb-3 mb-lg-0">Descrição</label>
+          </div>
+          <div class="col-lg-3">
+            <label class="font-weight-bold mb-3 mb-lg-0">Usuário</label>
+          </div>
+        </div>
+        <div class="row border-bottom dados-historico" *ngFor="let historicoDeAceite of historicoDeAceitesDeTermos">
+          <div class="col-lg-3 align-self-center">
+            <label class="mb-3 mb-lg-0">{{formatarData(historicoDeAceite.dataDaAcao)}}</label>
+          </div>
+          <div class="col-lg-6 align-self-center">
+            <label class="mb-3 mb-lg-0">{{obterDescricao(historicoDeAceite.aceitouTermo)}}</label>
+          </div>
+          <div class="col-lg-3 align-self-center">
+            <label class="mb-3 mb-lg-0">{{historicoDeAceite.nomeDoUsuario}}</label>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="historicoDeAceitesDeTermos==null">
+        <p>Não possui histórico!</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="fechar()">Fechar</button>
+    </div>
+  </div>
+</div>

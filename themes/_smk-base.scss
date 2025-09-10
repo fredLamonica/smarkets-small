@@ -1,0 +1,144 @@
+$smk-white-color: #fff;
+$smk-black-color: #000;
+$smk-primary-color: #27ade4;
+$smk-secondary-color: #9e9e9e;
+$smk-success-color: #24acb9;
+$smk-danger-color: #d73835;
+$smk-info-color: #0081bf;
+$smk-warning-color: #c3ab3c;
+$smk-dark-color: #212529;
+$smk-breakpoint-sm: 576px;
+$smk-red-color: #b55332;
+$smk-green-color: #2297a0;
+$smk-dark-green-color: #1a605f;
+$smk-box-shadow-sm: 0 0.125rem 0.25rem rgba($smk-black-color, 0.075);
+$smk-box-shadow-danger-color: 0 0 0 0.25rem
+  rgba(red($smk-danger-color), green($smk-danger-color), blue($smk-danger-color), 0.25);
+$smk-orange-color: #ff9800;
+$smk-background-color: #fafafa;
+$smk-accent-color: #1d9ed3;
+$smk-border-color: #e0e0e0;
+$smk-border: 1px solid $smk-border-color;
+$smk-header-background-color: $smk-border-color;
+$smk-disabled-color: #e9ecef;
+
+@mixin smk-card {
+  background: $smk-white-color;
+  border: $smk-border;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+@mixin smk-button-default($breakpoint: md) {
+  border-radius: 8px;
+  min-width: 42px;
+  box-shadow: $smk-box-shadow-sm;
+
+  @if $breakpoint == lg {
+    padding-left: 1.3rem;
+    padding-right: 1.3rem;
+  }
+
+  &:hover {
+    transform: none;
+  }
+}
+
+@mixin smk-button($color, $breakpoint: md) {
+  @include smk-button-default($breakpoint);
+
+  border-color: $color;
+  background-color: $color;
+
+  &:hover {
+    border-color: darken($color, 10%) !important;
+    background-color: darken($color, 10%) !important;
+  }
+
+  &:active {
+    border-color: darken($color, 15%) !important;
+    background-color: darken($color, 15%) !important;
+  }
+}
+
+@mixin smk-button-outline($outline-color, $breakpoint: md) {
+  @include smk-button-default($breakpoint);
+
+  color: $outline-color;
+  border-color: $outline-color;
+
+  &:hover {
+    color: $smk-white-color;
+    border-color: $outline-color !important;
+    background-color: $outline-color !important;
+  }
+
+  &:active {
+    color: $smk-white-color;
+    border-color: darken($outline-color, 15%) !important;
+    background-color: darken($outline-color, 15%) !important;
+  }
+}
+
+@mixin smk-separador {
+  border-right: $smk-border;
+}
+
+@mixin smk-button-styles {
+  .btn {
+    @include smk-button-default;
+    margin-right: 1rem;
+  }
+
+  .btn-primary {
+    @include smk-button($smk-primary-color);
+  }
+
+  .btn-outline-primary {
+    @include smk-button-outline($smk-primary-color);
+  }
+
+  .btn-secondary {
+    @include smk-button($smk-secondary-color);
+  }
+
+  .btn-outline-secondary {
+    @include smk-button-outline($smk-secondary-color);
+  }
+
+  .btn-success {
+    @include smk-button($smk-success-color);
+  }
+
+  .btn-outline-success {
+    @include smk-button-outline($smk-success-color);
+  }
+
+  .btn-danger {
+    @include smk-button($smk-danger-color);
+  }
+
+  .btn-outline-danger {
+    @include smk-button-outline($smk-danger-color);
+  }
+
+  .btn-warning {
+    @include smk-button($smk-warning-color);
+  }
+
+  .btn-outline-warning {
+    @include smk-button-outline($smk-warning-color);
+  }
+
+  .btn-info {
+    @include smk-button($smk-info-color);
+  }
+
+  .btn-outline-info {
+    @include smk-button-outline($smk-info-color);
+  }
+
+  .separador {
+    @include smk-separador;
+  }
+}

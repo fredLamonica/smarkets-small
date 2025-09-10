@@ -1,0 +1,81 @@
+$md-chip-height: 32px;
+
+.sdk-chip {
+  display: inline-block;
+  background: var(--data-color);
+  padding: 0 12px;
+  border-radius: 32px;
+  font-size: 13px;
+  &.sdk-chip-hover:hover {
+    background: #ccc;
+  }
+}
+
+.sdk-chip-clickable {
+  cursor: pointer;
+}
+
+.sdk-chip,
+.sdk-chip-icon {
+  height: $md-chip-height;
+  line-height: $md-chip-height;
+}
+
+.sdk-chip-icon {
+  display: block;
+  float: left;
+  width: $md-chip-height;
+  border-radius: 50%;
+  text-align: center;
+  color: var(--data-textcolor);
+  margin: 0 8px 0 -12px;
+}
+
+.sdk-chip-remove {
+  display: inline-block;
+  background: #aaa;
+  border: 0;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  padding: 0;
+  margin: 0 -4px 0 4px;
+  cursor: pointer;
+  font: inherit;
+  line-height: 20px;
+  &:after {
+    color: #e0e0e0;
+    content: 'X';
+  }
+  &:hover {
+    background: #999;
+  }
+  &:active {
+    background: #777;
+  }
+}
+
+.sdk-chips {
+  padding: 12px 0;
+  .sdk-chip {
+    margin: 0 5px 3px 0;
+  }
+}
+
+.sdk-chip-raised {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+}
+
+.sdk-chip-disabled {
+  opacity: 0.7;
+}
+
+// *************************************
+
+// *************************************
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}

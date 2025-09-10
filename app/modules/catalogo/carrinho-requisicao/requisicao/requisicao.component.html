@@ -1,0 +1,309 @@
+<div class="card card-default">
+  <div class="card-header text-truncate">
+    <div class="form-group mb-0 required row">
+      <div class="col-12 col-lg-6 mb-2 mb-lg-0">
+        <auto-save-label [ultima-alteracao]="requisicao.ultimaAlteracao"></auto-save-label>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="bg-white row py-2">
+      <div
+        class="form-group col-lg-6 col-xl-3"
+        [ngbTooltip]="tipContent"
+        #tooltipEmpresa="ngbTooltip"
+        placement="auto"
+        tooltipClass="tooltip-light">
+        <label>Empresa:</label>
+        <button
+          *ngIf="requisicao?.empresaSolicitante?.habilitarIntegracaoERP && !todasAsEmpresasPossuemIntegracaoErp"
+          type="button"
+          class="btn btn-icon btn-sm info-empresa-integracao-erp"
+          [ngbTooltip]="tooltipEmpresaIntegracaoErp"
+          (mouseover)="tooltipEmpresa.close()"
+          (mouseout)="tooltipEmpresa.open()"
+          placement="right"
+          tooltipClass="tooltip-light">
+          <i class="fas fa-info-circle"></i>
+        </button>
+
+        <ng-template #tooltipEmpresaIntegracaoErp>
+          <div style="text-align: left">
+            <p>Em caso de confirmação, essa requisição será enviada ao ERP.</p>
+          </div>
+        </ng-template>
+
+        <input
+          type="text"
+          name="empresa"
+          class="form-control"
+          disabled
+          value="{{ requisicao?.empresaSolicitante?.cnpj }} - {{
+            requisicao?.empresaSolicitante?.nomeFantasia
+              ? requisicao?.empresaSolicitante?.nomeFantasia
+              : requisicao?.empresaSolicitante?.razaoSocial
+          }}" />
+
+        <ng-template #tipContent>
+          <div style="text-align: left">
+            <p><b>CNPJ/CPF:</b> {{ requisicao?.empresaSolicitante?.cnpj }}</p>
+            <p><b>Razão Social:</b> {{ requisicao?.empresaSolicitante?.razaoSocial }}</p>
+            <p><b>Nome Fantasia:</b> {{ requisicao?.empresaSolicitante?.nomeFantasia }}</p>
+          </div>
+        </ng-template>
+      </div>
+      <div class="form-group required col-lg-6">
+        <label>Endereço:</label>
+        <ng-container *ngIf="isListaExtensaEnderecos; then enderecoListaExtensa; else enderecoListaSimples">
+        </ng-container>
+        <ng-template #enderecoListaExtensa>
+          <ng-select
+            class="font-weight-bold"
+            [disabled]="enderecoUnico"
+            [items]="enderecos$ | async"
+            typeToSearchText="Digite pelo menos 3 caracteres"
+            [typeahead]="enderecosInput$"
+            [loadingText]="textoNgSelectLoading"
+            [clearAllText]="textoNgSelectLimpar"
+            [placeholder]="textoNgSelectPlaceholder"
+            [loading]="enderecosLoading"
+            [(ngModel)]="enderecoSelecionado"
+            (change)="enderecoChange($event)">
+            <ng-template ng-label-tmp let-item="item">
+              {{ item?.logradouro }}, {{ item?.numero }} - {{ item?.bairro }},
+              {{ item?.cidade?.nome }} - {{ item?.cidade?.estado?.abreviacao }}, {{ item?.cep }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              {{ TipoEndereco[item?.tipo] }}<br />
+              <div>
+                <small>Logradouro: {{ item?.logradouro }}</small><br />
+              </div>
+              <div>
+                <small>Bairro: {{ item?.bairro }}</small>
+                <small style="margin-left: 10px">Número: {{ item?.numero }}</small>
+              </div>
+              <div>
+                <small>Cidade: {{ item?.cidade?.nome }} - Estado:
+                  {{ item?.cidade?.estado?.abreviacao }}</small>
+              </div>
+              <div>
+                <small>CEP: {{ item?.cep }}</small>
+              </div>
+            </ng-template>
+          </ng-select>
+        </ng-template>
+        <ng-template #enderecoListaSimples>
+          <ng-select
+            class="font-weight-bold"
+            [disabled]="enderecoUnico"
+            [items]="enderecos$ | async"
+            bindValue="idEndereco"
+            [loadingText]="textoNgSelectLoading"
+            [clearAllText]="textoNgSelectLimpar"
+            [placeholder]="textoNgSelectPlaceholder"
+            [loading]="enderecosLoading"
+            [(ngModel)]="requisicao.idEnderecoEntrega"
+            [searchFn]="enderecoSearchFn"
+            (change)="alterarRequisicao()">
+            <ng-template ng-label-tmp let-item="item">
+              {{ item?.logradouro }}, {{ item?.numero }} - {{ item?.bairro }},
+              {{ item?.cidade?.nome }} - {{ item?.cidade?.estado?.abreviacao }}, {{ item?.cep }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              {{ TipoEndereco[item?.tipo] }}<br />
+              <div>
+                <small>Logradouro: {{ item?.logradouro }}</small><br />
+              </div>
+              <div>
+                <small>Bairro: {{ item?.bairro }}</small>
+                <small style="margin-left: 10px">Número: {{ item?.numero }}</small>
+              </div>
+              <div>
+                <small>Cidade: {{ item?.cidade?.nome }} - Estado:
+                  {{ item?.cidade?.estado?.abreviacao }}</small>
+              </div>
+              <div>
+                <small>CEP: {{ item?.cep }}</small>
+              </div>
+            </ng-template>
+          </ng-select>
+        </ng-template>
+      </div>
+      <div class="form-group col-lg-6 col-xl-3"
+        [class.required]="tipoAlcadaAprovacao === tipoAlcadaAprovacaoEnum.unificada ||
+        usuarioAtual?.permissaoAtual?.pessoaJuridica?.habilitarIntegracaoERP">
+        <label>Centro de Custo:</label>
+        <ng-select
+          id="centroCusto"
+          name="centroCusto"
+          class="font-weight-bold"
+          [disabled]="centroDeCustoUnico"
+          [(ngModel)]="requisicao.idCentroCusto"
+          [items]="centrosDeCusto"
+          bindLabel="descricao"
+          bindValue="idCentroCusto"
+          [loadingText]="textoNgSelectLoading"
+          [placeholder]="textoNgSelectPlaceholder"
+          [clearAllText]="textoNgSelectLimpar"
+          [loading]="centrosDeCustoLoading"
+          (change)="alterarRequisicao()">
+        </ng-select>
+      </div>
+      <div class="form-group required col-lg-6 col-xl-3">
+        <label>Tipo de Requisição:</label>
+        <ng-select
+          id="tipo"
+          name="tipo"
+          class="font-weight-bold"
+          [disabled]="tipoRequisicaoUnico"
+          [items]="tiposRequisicao"
+          bindLabel="nome"
+          bindValue="idTipoRequisicao"
+          (change)="alterarRequisicao()"
+          [loadingText]="textoNgSelectLoading"
+          [placeholder]="textoNgSelectPlaceholder"
+          [clearAllText]="textoNgSelectLimpar"
+          [loading]="tiposRequisicaoLoading"
+          [(ngModel)]="requisicao.idTipoRequisicao"
+          (ngModelChange)="alterarTipoRequisicao($event)">
+        </ng-select>
+      </div>
+
+      <div class="form-group required col-lg-6 col-xl-3">
+        <label>Classificação:</label>
+        <ng-select
+          id="idSlaItem"
+          name="idSlaItem"
+          [(ngModel)]="requisicao.idSlaItem"
+          (change)="alterarRequisicao()"
+          [disabled]="!requisicao.idTipoRequisicao || slaItensUnico"
+          class="font-weight-bold"
+          [loadingText]="textoNgSelectLoading"
+          [placeholder]="textoNgSelectPlaceholder"
+          [clearAllText]="textoNgSelectLimpar"
+          [loading]="slaItensLoading">
+          <ng-option *ngFor="let slaItem of slaItens" [value]="slaItem.idSlaItem">
+            {{ slaItem.classificacao?.descricao }} - SLA {{ slaItem.tempo }}
+            {{ UnidadeMedidaTempo[slaItem.unidadeMedidaTempo] }}(s)</ng-option>
+        </ng-select>
+      </div>
+
+      <div class="form-group col-lg-6 col-xl-3">
+        <label>Condição de Pagamento:</label>
+        <ng-select
+          id="condicaoPagamento"
+          name="condicaoPagamento"
+          class="font-weight-bold"
+          [items]="condicoesPagamento"
+          (change)="alterarRequisicao()"
+          [loading]="condicoesPagamentoLoading"
+          bindLabel="descricao"
+          bindValue="idCondicaoPagamento"
+          [loadingText]="textoNgSelectLoading"
+          [placeholder]="textoNgSelectPlaceholder"
+          [clearAllText]="textoNgSelectLimpar"
+          [(ngModel)]="requisicao.idCondicaoPagamento">
+        </ng-select>
+      </div>
+      <div *ngIf="requisicao.empresaSolicitante.habilitarIntegracaoERP" class="form-group required col-lg-6 col-xl-3">
+        <label>Grupo de Compradores:</label>
+        <ng-select
+          class="font-weight-bold"
+          [disabled]="grupoCompradoresUnico"
+          (change)="alterarRequisicao()"
+          [items]="gruposCompradores"
+          bindLabel="nomeGrupoCompradores"
+          bindValue="idGrupoCompradores"
+          [loadingText]="textoNgSelectLoading"
+          [placeholder]="textoNgSelectPlaceholder"
+          [clearAllText]="textoNgSelectLimpar"
+          [loading]="gruposCompradoresLoading"
+          [(ngModel)]="requisicao.idGrupoCompradores">
+        </ng-select>
+      </div>
+      <div
+        *ngIf="tipoAlcadaAprovacao === tipoAlcadaAprovacaoEnum.unificada || requisicao.empresaSolicitante.habilitarIntegracaoERP"
+        class="form-group col-lg-6 col-xl-3"
+        [class.required]="usuarioAtual?.permissaoAtual?.pessoaJuridica?.habilitarIntegracaoERP">
+        <label>Conta Contábil:</label>
+        <ng-select
+          class="font-weight-bold"
+          [disabled]="contaContabilUnica"
+          (change)="contaContabilChange($event)"
+          [items]="contasContabeis$ | async"
+          bindLabel="descricao"
+          searchable="true"
+          typeToSearchText="Digite pelo menos 3 caracteres"
+          [typeahead]="contasContabeisInput$"
+          [loading]="contasContabeisLoading"
+          [loadingText]="textoNgSelectLoading"
+          [placeholder]="textoNgSelectPlaceholder"
+          [clearAllText]="textoNgSelectLimpar"
+          [(ngModel)]="contaContabilSelecionada">
+        </ng-select>
+      </div>
+      <div *ngIf="requisicao.imobilizado" class="form-group col-lg-6 col-xl-3">
+        <label>Imobilizado:</label>
+        <input name="inputImobilizado" class="form-control font-weight-bold" type="text" placeholder="Código"
+          [ngModel]="requisicao.codigoImobilizado" (change)="imobilizadoChange($event)">
+      </div>
+      <div class="form-group col-lg-6 col-xl-3" [ngClass]="{'required': departamentoRequired == true}" >
+        <label>Departamento:</label>
+        <ng-select
+          id="departamento"
+          name="departamento"
+          class="font-weight-bold"
+          [disabled]="departamentoUnico"
+          [(ngModel)]="requisicao.idDepartamento"
+          [items]="departamentos"
+          bindLabel="descricao"
+          bindValue="idDepartamento"
+          [loadingText]="textoNgSelectLoading"
+          [placeholder]="textoNgSelectPlaceholder"
+          [clearAllText]="textoNgSelectLimpar"
+          [loading]="departamentosLoading"
+          (change)="alterarRequisicao()">
+        </ng-select>
+      </div>
+    </div>
+    <div *ngIf="requisicao.empresaSolicitante.habilitarIntegracaoERP" class="row bg-white border-bottom pt-3 pb-2">
+      <div class="col-lg-6">
+        <div class="form-group">
+          <label>Anexos:</label>
+          <app-manter-anexos
+            [anexos]="requisicao?.anexos"
+            (anexarArquivos)="insiraAnexos($event)"
+            (excluirAnexo)="excluaAnexo($event)">
+          </app-manter-anexos>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white border-bottom row" *ngIf="requisicao && requisicao.itens && requisicao.itens.length > 0">
+      <div class="form-group required col-lg-3 pt-4 mt-1">
+        <input type="checkbox" class="list-item-check mr-3" (click)="selecionarTodos($event ,requisicao)"
+          [(ngModel)]="requisicao.selecionarTodos" name="selecionarItem{{i}}" placeholder="selecionarTodos" />
+        <button class="btn btn-outline-danger" (click)="removerItens(requisicao)"
+          [disabled]="!requisicao.habilitarBtnRemover">
+          <i class="fas fa-trash"></i>
+          Remover Itens
+        </button>
+      </div>
+    </div>
+
+    <requisicao-item
+      *ngFor="let item of requisicao?.itens; index as i"
+      (copiar)="addLista($event)"
+      [index]="indexPai + '-' + i"
+      (removerItem)="removerItem($event)"
+      (itemSelecionado)="itemSelecionado($event)"
+      (atualizar-carrinho)="atualizarResumoCarrinho()"
+      (item-alterado)="atualizarAlteracao($event)"
+      [requisicaoItem]="item"
+      [textoNgSelectLoading]="textoNgSelectLoading"
+      [textoNgSelectPlaceholder]="textoNgSelectPlaceholder"
+      [textoNgSelectLimpar]="textoNgSelectLimpar"
+      [empresaSolicitanteHabilitadaParaIntegracaoErp]="requisicao.empresaSolicitante.habilitarIntegracaoERP">
+    </requisicao-item>
+  </div>
+</div>

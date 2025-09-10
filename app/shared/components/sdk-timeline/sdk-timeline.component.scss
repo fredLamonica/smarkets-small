@@ -1,0 +1,131 @@
+$container-shadow: 0.5rem 0.5rem 2rem 0 rgba(black, 0.2);
+
+$gutter: 15px;
+$border-width: 2px;
+$dot-diameter: 23px;
+$dot-diameter-first: 29px;
+$cor-principal: #00bbf3;
+
+body {
+  box-sizing: border-box;
+  * {
+    box-sizing: border-box;
+  }
+}
+
+.timeline_container {
+  box-sizing: border-box;
+  * {
+    box-sizing: border-box;
+  }
+}
+
+.timeline {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0px 50px;
+  position: relative;
+  font-family: 'Open Sans';
+  font-size: 20px;
+  color: #6e6e72;
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+::ng-deep {
+  .entry {
+    clear: both;
+    text-align: left;
+    position: relative;
+    display: flex;
+    .title {
+      font-weight: bold;
+      margin-bottom: 0.5em;
+      float: left;
+      width: 30%;
+      padding-right: $gutter;
+      text-align: right;
+      position: relative;
+      .timeline-entry-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: bold;
+        font-size: 100%;
+      }
+      .timeline-entry-subtitle {
+        margin: 0;
+        font-size: 100%;
+      }
+    }
+    .timeline-bar {
+      float: left;
+      width: 25px;
+      height: 100%;
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0px;
+        margin-left: 13px;
+        bottom: 0px;
+        width: $border-width;
+        background: $cor-principal;
+      }
+      i.no-icon:before {
+        content: '';
+        position: absolute;
+        width: $dot-diameter;
+        height: $dot-diameter;
+        border: $border-width solid $cor-principal;
+        background-color: #fff;
+        border-radius: 100%;
+        top: 15%;
+        z-index: 99;
+        margin-left: 2px;
+      }
+      .timeline-bar-icon {
+        &:before {
+          font-family: 'Font Awesome 5 Free';
+          font-weight: 900;
+          font-size: 11px;
+          color: #fff;
+          content: attr(data-icon) !important;
+          width: $dot-diameter-first !important;
+          height: $dot-diameter-first !important;
+          border: $border-width solid $cor-principal !important;
+          background-color: $cor-principal !important;
+          border-radius: 100% !important;
+          top: -3px !important;
+          margin-left: -2px;
+          position: absolute !important;
+          display: block;
+          text-align: center;
+        }
+      }
+      .icon {
+        font-size: 19px;
+        color: #fff;
+        position: absolute;
+        top: 3px;
+        margin-left: 5px;
+        z-index: 110;
+      }
+    }
+    .body {
+      margin: 0 0 15px;
+      float: right;
+      width: 70%;
+      padding-left: $gutter;
+      font-size: 18px;
+      &:first-child {
+        line-height: 1.4em;
+        &:first-child {
+          margin-top: 0;
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}

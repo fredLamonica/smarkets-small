@@ -1,0 +1,96 @@
+<div class="header">
+  <div class="header-search row justify-content-center align-items-center">
+    <div class="col-6 col-md-6 col-lg-2">
+      <label class="p-0">Continuar compra?</label>
+      <button class="btn btn-primary btn-block" (click)="continuarComprando()">
+        <i class="fas fa-cart-plus"></i>
+        ADICIONAR
+      </button>
+    </div>
+    <div class="col-6 col-md-6 col-lg-2">
+      <label class="p-0">Esvaziar carrinho?</label>
+      <button
+        class="btn btn-danger btn-block"
+        [class.disabled]="!podeEsvaizarCarrinho()"
+        (click)="solicitarEsvaziarCarrinho()">
+        <i class="fas fa-trash"></i>
+        ESVAZIAR
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="custom-nav-tabs">
+  <ul class="nav nav-tabs row bounds" id="carrinhoTab" role="tablist">
+    <li class="nav-item col-lg-3">
+      <a
+        class="nav-link nav-link-block"
+        [class.active]="tabAtiva === tabCarrinho.catalogo"
+        id="catalogo-tab"
+        data-toggle="tab"
+        href="#catalogo" role="tab" aria-controls="catalogo" aria-selected="true"
+        (click)="onTabSelected(tabCarrinho.catalogo)">
+        Catálogo {{ resumo?.quantidadeItensCatalogo ? '(' + resumo?.quantidadeItensCatalogo + ')' : '' }}
+      </a>
+    </li>
+    <li class="nav-item col-lg-3" *ngIf="exibirRequisicoes()">
+      <a
+        class="nav-link nav-link-block"
+        [class.active]="tabAtiva === tabCarrinho.requisicao"
+        id="requisicao-tab"
+        data-toggle="tab"
+        href="#requisicao" role="tab" aria-controls="requisicao" aria-selected="false"
+        (click)="onTabSelected(tabCarrinho.requisicao)">
+        Requisição {{ resumo?.quantidadeItensRequisicao ? '(' + resumo?.quantidadeItensRequisicao + ')' : '' }}
+      </a>
+    </li>
+    <li class="nav-item col-lg-3" *ngIf="exibirRegularizacoes()">
+      <a
+        class="nav-link nav-link-block"
+        [class.active]="tabAtiva === tabCarrinho.regularizacao"
+        id="regularizacao-tab"
+        data-toggle="tab"
+        href="#regularizacao" role="tab" aria-controls="regularizacao" aria-selected="false"
+        (click)="onTabSelected(tabCarrinho.regularizacao)">
+        Regularização {{ resumo?.quantidadeItensRegularizacao ? '(' + resumo?.quantidadeItensRegularizacao + ')' : '' }}
+      </a>
+    </li>
+  </ul>
+  <div class="tab-content bounds" id="carrinhoTabContent">
+    <div
+      class="tab-pane fade"
+      [ngClass]="{ 'active show': tabAtiva === tabCarrinho.catalogo }"
+      id="catalogo"
+      role="tabpanel"
+      aria-labelledby="catalogo-tab">
+      <carrinho-catalogo
+        *ngIf="tabAtiva === tabCarrinho.catalogo"
+        (atualizar-carrinho)="obterResumo()">
+      </carrinho-catalogo>
+    </div>
+    <div
+      class="tab-pane fade"
+      [ngClass]="{ 'active show': tabAtiva === tabCarrinho.requisicao }"
+      id="requisicao"
+      role="tabpanel"
+      aria-labelledby="requisicao-tab" *ngIf="exibirRequisicoes()">
+      <carrinho-requisicao
+        *ngIf="tabAtiva === tabCarrinho.requisicao"
+        (atualizar-carrinho)="obterResumo()">
+      </carrinho-requisicao>
+    </div>
+    <div
+      *ngIf="exibirRegularizacoes()"
+      class="tab-pane fade"
+      [ngClass]="{ 'active show': tabAtiva === tabCarrinho.regularizacao }"
+      id="regularizacao"
+      role="tabpanel"
+      aria-labelledby="regularizacao-tab">
+      <smk-carrinho-regularizacao
+        *ngIf="tabAtiva === tabCarrinho.regularizacao"
+        [usuarioAtual]="usuarioAtual"
+        (atualizarCarrinho)="obterResumo()">
+      </smk-carrinho-regularizacao>
+    </div>
+  </div>
+</div>

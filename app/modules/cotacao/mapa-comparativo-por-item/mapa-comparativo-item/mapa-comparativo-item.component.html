@@ -1,0 +1,768 @@
+<!-- Itens -->
+<div class="bg-white border-bottom row pt-3 pb-0">
+  <div class="col-12 col-md-4 pr-0 align-self-center" *ngIf="!emBalisamento; else checkbox">
+    <p class="font-weight-bold text-primary" role="button" (click)="exibirDetalhesRequisicao(item.idProduto)">
+      <span class="badge badge-icon badge-sm badge-success px-3 mr-2"
+        *ngIf="item.situacao == SituacaoCotacaoItem.Finalizado"><i class="fas fa-check"></i>
+        Finalizado
+      </span>
+      ITEM {{index + 1}}: {{ item.produto?.descricao }}
+    </p>
+  </div>
+  <ng-template #checkbox>
+    <div class="col-12 col-md-4 pr-0 align-self-center">
+      <div class="smarkets-checkbox">
+        <input type="checkbox" class="smarkets-checkbox-input" id="select{{ item.idCotacaoItem }}"
+          [(ngModel)]="selecionado" (change)="onSelecionar($event)" />
+        <label role="button" class="smarkets-checkbox-label font-weight-bold text-primary"
+          (click)="exibirDetalhesRequisicao(item.idProduto)">
+          ITEM {{index + 1}}: {{ item.produto?.descricao }}
+        </label>
+      </div>
+    </div>
+  </ng-template>
+
+  <div class="col-6 col-md-4 pr-0 d-flex flex-row">
+    <div>
+      <label>Frete:</label>
+      <p class="font-weight-bold text-uppercase">{{ TipoFrete[item.incoterms] }}</p>
+    </div>
+    <div
+      class="ml-5"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Quantidade Solicitada: {{ item.produto?.unidadeMedida?.permiteQuantidadeFracionada ? (item.quantidade | number : '1.0-10' : 'pt-BR') : item.quantidade }}&#013;Quantidade Comprada: {{
+        item.produto?.unidadeMedida?.permiteQuantidadeFracionada ? (item.requisicaoItem.quantidadeComprada | number : '1.0-10' : 'pt-BR') : item.requisicaoItem.quantidadeComprada
+      }}&#013;Quantidade Restante: {{ item.produto?.unidadeMedida?.permiteQuantidadeFracionada ? (item.requisicaoItem.quantidadeRestante | number : '1.0-10' : 'pt-BR') : item.requisicaoItem.quantidadeRestante }}">
+      <label>Quantidade:&nbsp;</label>
+      <i class="far fa-eye"> </i>
+      <p class="font-weight-bold">
+        {{ item.produto?.unidadeMedida?.permiteQuantidadeFracionada ? (item.quantidade | number : "1.0-10" : "pt-BR") :
+        item.quantidade }}
+        {{ item.produto?.unidadeMedida?.sigla }}
+      </p>
+    </div>
+    <div class="ml-5">
+      <label>Valor Referência:</label>
+      <p
+        class="font-weight-bold btn btn-link pl-0 pt-0 mb-0"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        *ngIf="this.permiteAlterarValorReferencia() && item?.requisicaoItem?.idItemSolicitacaoCompra; else naoAlteraValorReferencia"
+        [class.text-primary]="item?.requisicaoItem?.idItemSolicitacaoCompra"
+        (click)="alterarValorReferencia(this.item)">
+        {{ item.valorReferencia | customCurrency : item.moeda : null : "symbol" | noContent }}
+      </p>
+
+      <ng-template #naoAlteraValorReferencia>
+        <p class="font-weight-bold" data-toggle="tooltip" data-placement="bottom">
+          {{ item.valorReferencia | customCurrency : item.moeda : null : "symbol" | noContent }}
+        </p>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 pr-0 d-flex flex-row">
+    <div>
+      <label>NCM:</label>
+      <p class="font-weight-bold">{{ item.produto?.codigoNcm }}</p>
+    </div>
+
+    <div class="ml-4"
+      *ngIf="item?.requisicaoItem?.itemSolicitacaoCompra?.tipoDocumento && (item?.requisicaoItem?.idItemSolicitacaoCompra || item?.requisicaoItem?.idSubItemSolicitacaoCompra)">
+      <label>Tp Doc:</label>
+      <p class="font-weight-bold">
+        {{ item?.requisicaoItem?.itemSolicitacaoCompra?.tipoDocumento }}
+      </p>
+    </div>
+
+    <div class="ml-5"
+      *ngIf="item?.requisicaoItem?.idItemSolicitacaoCompra || item?.requisicaoItem?.idSubItemSolicitacaoCompra">
+      <label>Requisição SAP:</label>
+      <p class="font-weight-bold">
+        {{ item?.requisicaoItem?.itemSolicitacaoCompra?.codigoSolicitacaoCompra }}
+      </p>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-2 pr-0">
+    <label>Marca:</label>
+    <p class="font-weight-bold">{{ item.marca ? item?.marca?.nome : "Sem preferência" }}</p>
+  </div>
+  <div class="col-6 col-md-2 pr-0">
+    <label>Data Entrega Desejada:</label>
+    <p class="font-weight-bold">{{ obtenhaDataDeEntrega() }}</p>
+  </div>
+  <div class="col-6 col-md-2 pr-0">
+    <label>Unidade de Medida:</label>
+    <p class="font-weight-bold">{{ item.produto?.unidadeMedida?.sigla }}</p>
+  </div>
+  <div class="col-6 col-md-2 pr-0">
+    <label>Último Valor Pago:</label>
+    <p class="font-weight-bold" *ngIf="item.pedidoRecenteMenorValor">
+      {{ item.pedidoRecenteMenorValor.valor | customCurrency : item.pedidoRecenteMenorValor.moeda : null : "symbol" }}
+      <button
+        type="button"
+        class="btn btn-icon btn-sm p-0"
+        [ngbTooltip]="ultimoPrecoTipContent"
+        placement="top"
+        tooltipClass="tooltip-light tooltip-ultimo-valor-pago">
+        <i class="icone-ultimo-valor-pago fas fa-info-circle"></i>
+      </button>
+    </p>
+  </div>
+  <div class="col-6 col-md-2">
+    <label data-toggle="tooltip" data-placement="bottom" title="Condição de Pagamento">Condição de Pgto.:</label>
+    <p class="font-weight-bold">{{ item.condicaoPagamento?.descricao }}</p>
+  </div>
+  <div class="col-6 col-md-2">
+    <label data-toggle="tooltip" data-placement="bottom" title="Condição de Pagamento">Tipo de Requisição:</label>
+    <p class="font-weight-bold">{{ item.tipoRequisicao?.nome }}</p>
+  </div>
+  <div class="col-12 col-md-6 pr-0" *ngIf="!item.filial; else dadosFilial">
+    <label>Razão Social - CNPJ:</label>
+    <p class="font-weight-bold mb-0">{{ item.requisicaoItem?.empresaSolicitante ?
+      item.requisicaoItem?.empresaSolicitante?.razaoSocial : cotacao?.razaoSocial }}</p>
+    <p class="font-weight-bold mb-md-0">{{ item.requisicaoItem?.empresaSolicitante ?
+      item.requisicaoItem?.empresaSolicitante?.cnpj : cotacao?.cnpj }}</p>
+  </div>
+  <ng-template #dadosFilial>
+    <div class="col-12 col-md-6 pr-0">
+      <label>Razão Social - CNPJ:</label>
+      <p class="font-weight-bold mb-0">{{ item?.filial.razaoSocial }}</p>
+      <p class="font-weight-bold mb-md-0">{{ item?.filial.cnpj }}</p>
+    </div>
+  </ng-template>
+  <div class="col-12 col-md-4" [class.col-md-6]="!emBalisamento">
+    <label>Endereço de Entrega:</label>
+    <p class="font-weight-bold mb-0">
+      {{ item.enderecoEntrega?.logradouro }}, {{ item.enderecoEntrega?.numero }} - {{ item.enderecoEntrega?.bairro }},
+      {{ item.enderecoEntrega?.cidade?.nome }} - {{ item.enderecoEntrega?.cidade?.estado?.abreviacao }},
+      CEP {{ item.enderecoEntrega?.cep }}
+    </p>
+  </div>
+  <div class="col-12 col-md-2" *ngIf="emBalisamento">
+    <label>Target Price:</label>
+    <input [textMask]="{ mask: maskValor, guide: false }" type="text" class="form-control" name="targetPrice"
+      [(ngModel)]="item.targetPrice" />
+  </div>
+
+  <!-- Propostas -->
+  <div class="col-12 mt-4">
+    <collapse-footer (open)="obterRodadas()">
+      <!-- Rodadas -->
+      <div class="row bg-white border-top">
+        <div class="col-12 px-0 border-bottom">
+          <ul class="nav nav-pills overflow-x-scroll pb-2 pt-3" id="rodadasTab" role="tablist">
+            <li class="nav-item" *ngFor="let rodada of item.rodadas; let i = index">
+              <a
+                class="nav-link nav-link-block text-nowrap"
+                [class.active]="rodadaSelecionada?.idCotacaoRodada == rodada.idCotacaoRodada"
+                id="rodada-{{ rodada.idCotacaoRodada }}-tab"
+                data-toggle="tab"
+                href="#rodada{{ rodada.idCotacaoRodada }}"
+                role="tab"
+                aria-controls="rodada"
+                aria-selected="false"
+                (click)="selecionarRodada(rodada)">
+                {{ rodada.ordem }}ª rodada
+              </a>
+            </li>
+            <li class="nav-item" *ngIf="item.rodadas">
+              <a
+                class="nav-link nav-link-block text-nowrap"
+                [class.active]="abaUltimosPrecos"
+                id="rodada-{{ 0 }}-tab"
+                data-toggle="tab"
+                href="#rodada{{ 0 }}"
+                role="tab"
+                aria-controls="rodada"
+                aria-selected="false"
+                (click)="obterUltimosPrecos()">
+                Últimos Preços
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-12" [class.px-0]="!rodadaSelecionada?.propostas.length">
+          <div class="tab-content" id="rodadasTabContent">
+            <div class="tab-pane fade" [ngClass]="{ 'active show': rodadaSelecionada }"
+              id="rodada{{ rodadaSelecionada?.idCotacaoRodada }}" role="tabpanel" aria-labelledby="rodada-tab">
+              <ng-container *ngIf="rodadaSelecionada">
+                <div class="row py-2" [class.px-3]="!rodadaSelecionada?.propostas.length" *ngIf="!abaUltimosPrecos">
+                  <div class="col-6 col-md-2 pr-0">
+                    <label>Data Inicial:</label>
+                    <p class="font-weight-bold mb-md-0">
+                      {{ rodadaSelecionada?.dataInicio | date : "dd/MM/yyyy HH:mm" }}
+                    </p>
+                  </div>
+                  <div class="col-6 col-md-2 pr-0">
+                    <label>Data Fim:</label>
+                    <p class="font-weight-bold mb-md-0">
+                      {{ rodadaSelecionada?.dataEncerramento | date : "dd/MM/yyyy HH:mm" }}
+                    </p>
+                  </div>
+                  <div class="col-12 col-md-2" *ngIf="rodadaSelecionada?.targetPrice">
+                    <label>Target Price:</label>
+                    <p class="font-weight-bold mb-md-0">
+                      {{ rodadaSelecionada?.targetPrice | currency : (item.moeda | moedaCodigo) : "symbol" : "1.2" :
+                      (item.moeda | moedaLocale) }}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="no-content bg-lighter py-3"
+                  *ngIf="!rodadaSelecionada.propostas?.length; else abaUltimosPrecos ? abaPropostasUltimosPrecos : propostas"
+                  translate>Nenhuma proposta realizada</div>
+
+                <ng-template #propostas>
+                  <div class="row bg-lighter border-bottom" [class.bg-lighter]="isEven"
+                    *ngFor="let proposta of rodadaSelecionada.propostas; let i = index; let isEven = even">
+                    <div class="col-12 border-top">
+                      <div class="row border py-3 py-md-0">
+                        <div class="col-12 col-md-8 align-self-center" [class.col-md-10]="podeAvaliar">
+                          <p class="font-weight-bold text-uppercase mb-0">
+                            <i
+                              [ngClass]="{
+                                ativo: proposta?.statusFornecedor?.status && proposta?.statusFornecedor?.status == 5,
+                                inativo: proposta?.statusFornecedor?.status && proposta?.statusFornecedor?.status == 6,
+                                bloqueado: proposta?.statusFornecedor?.status && proposta?.statusFornecedor?.status == 1,
+                                pendencia: proposta?.statusFornecedor?.status && proposta?.statusFornecedor?.status == 3,
+                                novo: proposta?.statusFornecedor?.status && proposta?.statusFornecedor?.status == 2,
+                                'em-analise': proposta?.statusFornecedor?.status && proposta?.statusFornecedor?.status == 4
+                              }"
+                              class="fa fa-circle point"
+                              [ngbTooltip]="StatusFornecedor[proposta?.statusFornecedor?.status]"></i>
+                            {{ proposta.fornecedor?.razaoSocial }}
+                          </p>
+                        </div>
+                        <div class="col-12 col-md-4 my-2" *ngIf="!podeAvaliar; else canInteract">
+                          <div class="row justify-content-end">
+                            <div class="col-12 col-md-6 align-self-center" *ngIf="proposta.vencedor">
+                              <span class="badge badge-icon badge-sm badge-warning text-uppercase w-100"><i
+                                  class="fas fa-medal"></i>
+                                Vencedor
+                              </span>
+                            </div>
+                            <div class="col-12 col-md-6 align-self-center" *ngIf="proposta.recomendado">
+                              <span class="badge badge-icon badge-sm badge-success text-uppercase w-100"><i
+                                  class="fas fa-star"></i> Recomendado</span>
+                            </div>
+                            <div class="col-12 col-md-6 align-self-center" *ngIf="proposta.desclassificado">
+                              <!-- <span class="badge badge-icon badge-sm badge-danger text-uppercase w-100">
+                                Desclassificado</span> -->
+                              <button class="btn btn-block btn-danger" data-toggle="tooltip" data-placement="bottom"
+                                title="Desclassificado" (click)="obterLogDesclassificado(proposta)">
+                                <i class="fas fa-thumbs-down"></i> Desclassificado
+                              </button>
+                            </div>
+                            <div class="col-12 col-md-6 align-self-center" *ngIf="proposta.desconsideradoPreco">
+                              <button class="btn btn-block btn-danger" data-toggle="tooltip" data-placement="bottom"
+                                title="Desconsiderada"><i class="fas fa-dollar-sign"></i> Desconsiderada</button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <ng-template #canInteract>
+                          <div
+                            class="col-12 col-md-2 d-flex justify-content-around justify-content-md-end align-self-center">
+                            <button class="btn btn-icon pointer-events-none" data-toggle="tooltip"
+                              data-placement="bottom" title="Recomendado" *ngIf="proposta.recomendado">
+                              <i class="fas fa-star text-success"></i>
+                            </button>
+
+                            <button
+                              class="btn btn-icon warning-hover"
+                              data-toggle="tooltip"
+                              data-placement="bottom"
+                              title="{{ !proposta.vencedor ? 'Marcar como vencedor' : 'Desmarcar vencedor' }}"
+                              (click)="!proposta.vencedor ? solicitarMarcarVencedor(proposta) : solicitarDesmarcarVencedor(proposta)">
+                              <i class="fas fa-medal" [ngClass]="{ 'text-warning': proposta.vencedor }"></i>
+                            </button>
+
+                            <button
+                              class="btn btn-icon danger-hover"
+                              data-toggle="tooltip"
+                              data-placement="bottom"
+                              title="{{ !proposta.desclassificado ? 'Marcar como desclassificado' : 'Desmarcar desclassificado' }}"
+                              (click)="!proposta.desclassificado ? marcarDesclassificado(proposta) : desmarcarDesclassificado(proposta)">
+                              <i class="fas fa-thumbs-down" [ngClass]="{ 'text-danger': proposta.desclassificado }"></i>
+                            </button>
+
+                            <button
+                              *ngIf="podeDesconsiderarPreco(rodadaSelecionada.ordem)"
+                              class="btn btn-icon danger-hover"
+                              data-toggle="tooltip"
+                              data-placement="bottom"
+                              title="{{ !proposta.desconsideradoPreco ? 'Desconsiderar pelo Preço.' : 'Desmarcar a Desconsideração pelo Preço.' }}"
+                              (click)="!proposta.desconsideradoPreco ? solicitarDesconsideradoPreco(proposta) : desmarcarDesconsideradoPreco(proposta)">
+                              <i class="fas fa-dollar-sign"
+                                [ngClass]="{ 'text-danger': proposta.desconsideradoPreco }"></i>
+                            </button>
+                          </div>
+                        </ng-template>
+                      </div>
+                      <div class="row">
+                        <div class="col-12 col-md-2 border">
+                          <label>Marca:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.marca }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label title="Preço Unitário">Preço Unitário:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.precoUnidade | customCurrency : item.moeda : "1.2-4" }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label data-toggle="tooltip" data-placement="bottom" title="Quantidade Disponível">Quantidade
+                            Disp.:</label>
+                          <p class="font-weight-bold mb-0"
+                            *ngIf="!item?.produto?.unidadeMedida?.permiteQuantidadeFracionada; else decimal">
+                            {{ proposta.quantidadeDisponivel }}
+                          </p>
+                          <ng-template #decimal>
+                            <p class="font-weight-bold mb-0">
+                              {{ proposta.quantidadeDisponivel | number : "1.0-10" : "pt-BR" }}
+                            </p>
+                          </ng-template>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label
+                            [ngClass]="{
+                              'text-success': proposta.classificacaoPreco == ClassificacaoPreco.Bom,
+                              'text-warning': proposta.classificacaoPreco == ClassificacaoPreco.Suspeito,
+                              'text-danger': proposta.classificacaoPreco == ClassificacaoPreco.Pessimo
+                            }">Preço Bruto:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.precoBruto | customCurrency : item.moeda }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label>Emb. Embarque:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.embalagemEmbarque }}
+                            {{ proposta.unidadeMedidaEmbalagemEmbarque?.sigla }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label>Dif. Preço:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.diferencaPrecoUltimaCompra| customCurrency : item.moeda }}
+                          </p>
+                        </div>
+
+                        <div class="col-6 col-md-2 border">
+                          <label>Tipo Frete:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ TipoFrete[proposta.incoterms] }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label>Valor do Frete:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.valorFrete | customCurrency : item.moeda }}
+                          </p>
+                        </div>
+                        <div class="col-12 col-md-2 border">
+                          <label data-toggle="tooltip" data-placement="bottom" title="Condição de Pagamento">Condição de
+                            Pgto.:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.condicaoPagamento?.descricao }}
+                          </p>
+                        </div>
+                        <div class="col-12 col-md-2 border">
+                          <label>Faturamento Mínimo:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.faturamentoMinimo | customCurrency : item.moeda }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label>Data Entrega Solic.:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.dataEntregaDisponivel | date : "dd/MM/yyyy" }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label>Prazo de Entrega:</label>
+                          <p class="font-weight-bold mb-0">{{ proposta.prazoEntrega }} dia(s) útil(eis)</p>
+                        </div>
+
+                        <div class="col-6 col-md-2 border" *ngIf="item.produto?.tipo === 1 ">
+                          <label for="ipiAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="IPI Alíquota (%)"> IPI Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.ipiAliquota }}</p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label for="pisAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="PIS Alíquota (%)"> PIS Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.pisAliquota }}</p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label for="confinsAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="COFINS Alíquota (%)"> COFINS Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.confinsAliquota }}</p>
+                        </div>
+                        <div class="col-6 col-md-2 border" *ngIf="item.produto?.tipo === 1 ">
+                          <label for="icmsAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="ICMS Alíquota (%)"> ICMS Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.icmsAliquota }}</p>
+                        </div>
+                        <div class="col-6 col-md-2 border" *ngIf="item.produto?.tipo === 1 ">
+                          <label for="difalAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="DIFAL Alíquota (%)"> DIFAL Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.difalAliquota }}</p>
+                        </div>
+                        <div class="col-6 col-md-2 border" *ngIf="item.produto?.tipo === 1 ">
+                          <label for="stAliquota" data-toggle="tooltip" data-placement="bottom" title="ST Alíquota (%)">
+                            ST Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.stAliquota }}</p>
+                        </div>
+
+                        <div class="col-6 col-md-2 border" *ngIf="item.produto?.tipo === 2 ">
+                          <label for="csllAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="COFINS Alíquota (%)"> CSLL Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.csllAliquota }}</p>
+                        </div>
+                        <div class="col-6 col-md-2 border" *ngIf="item.produto?.tipo === 2 ">
+                          <label for="issAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="ICMS Alíquota (%)"> ISS Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.issAliquota }}</p>
+                        </div>
+                        <div class="col-6 col-md-2 border" *ngIf="item.produto?.tipo === 2 ">
+                          <label for="irAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="DIFAL Alíquota (%)"> IR Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.irAliquota }}</p>
+                        </div>
+                        <div class="col-6 col-md-2 border" *ngIf="item.produto?.tipo === 2 ">
+                          <label for="inssAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="ST Alíquota (%)"> INSS Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.inssAliquota }}</p>
+                        </div>
+
+
+                        <div class="col-12 col-md-2 border">
+                          <label>NCM:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.ncm }}
+                          </p>
+                        </div>
+                        <div class="col-12 col-md-2 border">
+                          <label>CA:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.ca }}
+                          </p>
+                        </div>
+                        <div class="col-12 col-md-2 border">
+                          <label>Modelo:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.modelo }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label>Garantia:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.garantia }}
+                            {{ UnidadeMedidaTempo[proposta.unidadeMedidaGarantia] }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label data-toggle="tooltip" data-placement="bottom" title="Valor Liquído">Vl.
+                            Liquído:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.precoLiquido | customCurrency : item.moeda }}
+                          </p>
+                        </div>
+                        <div class="col-12 col-md-2 border"
+                          *ngIf="parametrosIntegracaoSapHabilitado && proposta.vencedor && emBalisamento">
+                          <label>IVA:</label>
+                          <ng-select
+                            id="iva{{ item.idCotacaoItem }}"
+                            class="font-weight-bold full-width mb-2"
+                            [items]="ivas"
+                            bindLabel="descricaoIva"
+                            bindValue="idIva"
+                            loadingText="buscando..."
+                            [hideSelected]="true"
+                            [(ngModel)]="proposta.idIva"
+                            (ngModelChange)="onSelecionarIVA($event, proposta)">
+                          </ng-select>
+                        </div>
+
+                        <div class="col-12 border">
+                          <label data-toggle="tooltip" data-placement="bottom" title="Observações e Anexos">Obs. e
+                            Anexos:</label>
+                          <p class="font-weight-bold mb-0">{{ proposta.observacao }}</p>
+                          <galeria-arquivos [arquivos]="proposta?.anexos" [disabled]="true"></galeria-arquivos>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+
+                <!-- REGION Últimos Preços Propostos -->
+                <ng-template #abaPropostasUltimosPrecos>
+                  <div class="row bg-lighter border-bottom" [class.bg-lighter]="isEven"
+                    *ngFor="let proposta of propostasUltimosPrecos; let i = index; let isEven = even">
+                    <div class="col-12 border-top">
+                      <div class="row border py-3 py-md-0">
+                        <div class="col-12 col-md-8 align-self-center">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input
+                                *ngIf="emBalisamento && !proposta.desclassificado && !proposta.desconsideradoPreco"
+                                type="checkbox"
+                                class="form-check-input"
+                                id="{{ proposta.idCotacaoRodadaProposta }}"
+                                value="proposta.idCotacaoRodadaProposta"
+                                (change)="selecionarProposta(proposta)" />
+                              <a class="font-weight-bold text-uppercase mb-0">
+                                <i
+                                  [ngClass]="{
+                                    ativo: proposta?.statusFornecedor?.status && proposta?.statusFornecedor?.status == 5,
+                                    inativo: proposta?.statusFornecedor?.status && proposta?.statusFornecedor?.status == 6,
+                                    bloqueado: proposta?.statusFornecedor?.status && proposta?.statusFornecedor?.status == 1,
+                                    pendencia: proposta?.statusFornecedor?.status && proposta?.statusFornecedor?.status == 3,
+                                    novo: proposta?.statusFornecedor?.status && proposta?.statusFornecedor?.status == 2,
+                                    'em-analise': proposta?.statusFornecedor?.status && proposta?.statusFornecedor?.status == 4
+                                  }"
+                                  class="fa fa-circle point"
+                                  [ngbTooltip]="StatusFornecedor[proposta?.statusFornecedor?.status]"></i>
+                                {{ proposta.fornecedor?.razaoSocial }}
+                              </a>
+                            </label>
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-md-4 my-2">
+                          <div class="row justify-content-end d-flex align-items-center">
+                            <a class="font-weight-bold text-uppercase pr-2">
+                              {{ encontrarRodada(proposta.idCotacaoRodadaProposta) }}
+                            </a>
+                            <a [routerLink]="" class="badge badge-icon badge-sm badge-success px-3 mr-2 btn btn-link"
+                              *ngIf="proposta?.idPedidoGerado"
+                              (click)="navegarOrigemPedido(proposta?.idPedidoGerado)">Pedido: {{
+                              proposta?.idPedidoGerado }}
+                            </a>
+                            <div class="col-12 col-md-6 align-self-center"
+                              *ngIf="proposta.recomendado && !proposta?.idPedidoGerado">
+                              <span class="badge badge-icon badge-sm badge-success text-uppercase w-100"><i
+                                  class="fas fa-star"></i> Recomendado</span>
+                            </div>
+                            <div class="col-12 col-md-6 align-self-center" *ngIf="proposta.desclassificado">
+                              <button class="btn btn-block btn-danger" data-toggle="tooltip" data-placement="bottom"
+                                title="Desclassificado" (click)="obterLogDesclassificado(proposta)">
+                                <i class="fas fa-thumbs-down"></i> Desclassificado
+                              </button>
+                            </div>
+                            <div class="col-12 col-md-6 align-self-center" *ngIf="proposta.desconsideradoPreco">
+                              <button class="btn btn-block btn-danger" data-toggle="tooltip" data-placement="bottom"
+                                title="Desconsiderada"><i class="fas fa-dollar-sign"></i> Desconsiderada</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12 col-md-2 border">
+                          <label>Marca:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.marca }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label>Preço por Unidade:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.precoUnidade | customCurrency : item.moeda : "1.2-4" }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label data-toggle="tooltip" data-placement="bottom" title="Quantidade Disponível">Quantidade
+                            Disp.:</label>
+                          <p class="font-weight-bold mb-0"
+                            *ngIf="!item?.produto?.unidadeMedida?.permiteQuantidadeFracionada; else decimal">
+                            {{ proposta.quantidadeDisponivel }}
+                          </p>
+                          <ng-template #decimal>
+                            <p class="font-weight-bold mb-0">
+                              {{ proposta.quantidadeDisponivel | number : "1.0-10" : "pt-BR" }}
+                            </p>
+                          </ng-template>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label
+                            [ngClass]="{
+                              'text-success': proposta.classificacaoPreco == ClassificacaoPreco.Bom,
+                              'text-warning': proposta.classificacaoPreco == ClassificacaoPreco.Suspeito,
+                              'text-danger': proposta.classificacaoPreco == ClassificacaoPreco.Pessimo
+                            }">Preço Bruto:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.precoBruto | customCurrency : item.moeda }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label>Emb. Embarque:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.embalagemEmbarque }}
+                            {{ proposta.unidadeMedidaEmbalagemEmbarque?.sigla }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label>Dif. Preço:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.diferencaPrecoUltimaCompra| customCurrency : item.moeda }}
+                          </p>
+                        </div>
+
+                        <div class="col-6 col-md-2 border">
+                          <label>Tipo Frete:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ TipoFrete[proposta.incoterms] }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label>Valor do Frete:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.valorFrete | customCurrency : item.moeda }}
+                          </p>
+                        </div>
+                        <div class="col-12 col-md-2 border">
+                          <label data-toggle="tooltip" data-placement="bottom" title="Condição de Pagamento">Condição de
+                            Pgto.:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.condicaoPagamento?.descricao }}
+                          </p>
+                        </div>
+                        <div class="col-12 col-md-2 border">
+                          <label>Faturamento Mínimo:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.faturamentoMinimo | customCurrency : item.moeda }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label>Data Entrega Solic.:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.dataEntregaDisponivel | date : "dd/MM/yyyy" }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label>Prazo de Entrega:</label>
+                          <p class="font-weight-bold mb-0">{{ proposta.prazoEntrega }} dia(s)</p>
+                        </div>
+
+                        <div class="col-6 col-md-2 border">
+                          <label for="ipiAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="IPI Alíquota (%)"> IPI Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.ipiAliquota }}</p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label for="pisAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="PIS Alíquota (%)"> PIS Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.pisAliquota }}</p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label for="confinsAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="COFINS Alíquota (%)"> COFINS Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.confinsAliquota }}</p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label for="icmsAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="ICMS Alíquota (%)"> ICMS Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.icmsAliquota }}</p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label for="difalAliquota" data-toggle="tooltip" data-placement="bottom"
+                            title="DIFAL Alíquota (%)"> DIFAL Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.difalAliquota }}</p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label for="stAliquota" data-toggle="tooltip" data-placement="bottom" title="ST Alíquota (%)">
+                            ST Alíq. (%): </label>
+                          <p class="font-weight-bold mb-0">{{ proposta.stAliquota }}</p>
+                        </div>
+
+                        <div class="col-12 col-md-2 border">
+                          <label>NCM:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.ncm }}
+                          </p>
+                        </div>
+                        <div class="col-12 col-md-2 border">
+                          <label>CA:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.ca }}
+                          </p>
+                        </div>
+                        <div class="col-12 col-md-2 border">
+                          <label>Modelo:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.modelo }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label>Garantia:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.garantia }}
+                            {{ UnidadeMedidaTempo[proposta.unidadeMedidaGarantia] }}
+                          </p>
+                        </div>
+                        <div class="col-6 col-md-2 border">
+                          <label data-toggle="tooltip" data-placement="bottom" title="Valor Liquído">Vl.
+                            Liquído:</label>
+                          <p class="font-weight-bold mb-0">
+                            {{ proposta.precoLiquido | customCurrency : item.moeda }}
+                          </p>
+                        </div>
+                        <div class="col-12 col-md-2 border" *ngIf="mostrarIva(proposta)">
+                          <label>IVA:</label>
+                          <ng-select
+                            id="iva{{ item.idCotacaoItem }}"
+                            class="font-weight-bold full-width mb-2"
+                            [items]="ivas"
+                            bindLabel="descricaoIva"
+                            bindValue="idIva"
+                            loadingText="buscando..."
+                            [hideSelected]="true"
+                            [(ngModel)]="proposta.idIva"
+                            (ngModelChange)="onSelecionarIVA($event, proposta)">
+                          </ng-select>
+                        </div>
+
+                        <div class="col-12 border">
+                          <label data-toggle="tooltip" data-placement="bottom" title="Observações e Anexos">Obs. e
+                            Anexos:</label>
+                          <p class="font-weight-bold mb-0">{{ proposta.observacao }}</p>
+                          <galeria-arquivos [arquivos]="proposta?.anexos" [disabled]="true"></galeria-arquivos>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+                <!-- END REGION Últimos Preços Propostos -->
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </collapse-footer>
+  </div>
+</div>
+
+<ng-template #ultimoPrecoTipContent>
+  <div style="text-align: left;">
+    <span>Quantidade:&nbsp;</span>
+    <strong>
+      {{ item.pedidoRecenteMenorValor.quantidadeCompra + ' ' + item.produto.unidadeMedida.sigla }}
+    </strong>
+    <br>
+    <span>Data:&nbsp;</span>
+    <strong>
+      {{ item.pedidoRecenteMenorValor.dataCompra | date: 'dd/MM/yyyy HH:mm' | noContent}}
+    </strong>
+    <br>
+    <span>Fornecedor:&nbsp;</span>
+    <strong>
+      {{ item.pedidoRecenteMenorValor.razaoSocialFornecedor }}
+    </strong>
+  </div>
+</ng-template>

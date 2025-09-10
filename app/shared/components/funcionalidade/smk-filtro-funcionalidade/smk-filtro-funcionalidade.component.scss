@@ -1,0 +1,65 @@
+@import "src/themes/_smk-base.scss";
+
+.filtro-funcionalidade {
+  .acoes {
+    @media (min-width: $smk-breakpoint-sm) {
+      flex: 0 0 226px;
+      margin-top: 27px;
+    }
+
+    .btn {
+      &:not(:last-of-type) {
+        margin-right: 1.5rem;
+      }
+    }
+
+    .troque-visualizacao-filtro {
+      @include smk-button($smk-primary-color);
+
+      padding-right: 0.75rem;
+
+      &.filtro-informado {
+        padding-right: 0;
+      }
+
+      .badge-indicador-filtro {
+        background-color: $smk-danger-color;
+        min-width: auto;
+        padding: 0.05rem 0.327rem;
+        top: -17px;
+        left: 5px;
+        margin-right: -5px;
+        border-width: 2px !important;
+      }
+    }
+
+    .filtrar {
+      @include smk-button($smk-success-color, lg);
+    }
+
+    .limpar-filtro {
+      @include smk-button-outline($smk-success-color);
+    }
+  }
+}
+
+::ng-deep smk-filtro-funcionalidade .filtro-funcionalidade {
+  smk-card-funcionalidade {
+    .card-funcionalidade {
+      max-height: 77px;
+      overflow: hidden;
+      transition: max-height 0.1s ease-out;
+      padding-top: 1.5rem !important;
+
+      @media (min-width: ($smk-breakpoint-sm)) {
+        max-height: 95px;
+        padding-top: 14px !important;
+      }
+
+      &.expandido {
+        max-height: 1080px;
+        transition: max-height 0.3s ease-in;
+      }
+    }
+  }
+}

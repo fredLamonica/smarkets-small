@@ -1,0 +1,91 @@
+@import "./../../../../styles.scss";
+@import "src/themes/_smk-base.scss";
+
+.user {
+  height: $navbar-height;
+  justify-content: center;
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    i {
+      font-size: 24px;
+    }
+    height: 4rem;
+    line-height: 4rem;
+    color: $white;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  .badge-nav {
+    display: none;
+  }
+
+  &.show {
+    .badge-nav {
+      display: -webkit-inline-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-inline-flex;
+      display: inline-flex;
+      z-index: 1004;
+    }
+  }
+
+  .dropdown-menu {
+    width: 25rem;
+    color: $new-ux-smarkets-gray;
+    z-index: 1003;
+
+    .permissao {
+      &.active {
+        background: rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .user {
+    .nav-link {
+      height: $navbar-height;
+      line-height: $navbar-height;
+    }
+
+    .dropdown-menu {
+      transform: translate3d(-288px, $navbar-height, 0px) !important;
+    }
+  }
+}
+
+.info-usuario {
+  box-sizing: border-box;
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  left: 18px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.info-usuario-icon {
+  position: relative;
+  left: 12px;
+  right: 12px;
+  top: 10px;
+  bottom: 10px;
+  color: #27ade4;
+  font-size: 20px;
+}
+
+.configurar-perfil {
+  @include smk-button-outline($smk-primary-color, lg);
+}
+
+.sair {
+  @include smk-button-outline($smk-danger-color, lg);
+}

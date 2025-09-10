@@ -1,0 +1,85 @@
+<div class="header">
+  <div class="header-search row">
+    <div class="col-12 align-self-center">
+      <h3 class="mb-0 text-primary font-weight-bold"><span class="font-weight-normal">DADOS GERAIS</span> - COTAÇÃO
+        {{ cotacao?.idCotacao }} - Descrição:
+        {{ cotacao?.descricao }}</h3>
+    </div>
+  </div>
+
+  <div class="header-fast-access py-4">
+    <div class="bounds row align-items-center">
+      <div class="col-6 col-md-2">
+        <button class="btn btn-primary btn-block" (click)="voltar()"><i class="fas fa-arrow-left"></i> Voltar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="card card-default">
+    <div class="card-header"></div>
+    <div class="card-body">
+      <div class="bg-lighter border-bottom row py-3">
+        <div class="col-6 col-md-2 pr-0">
+          <label>Data Inicial:</label>
+          <p class="font-weight-bold">{{ cotacao?.dataInicio | date: "dd/MM/yyyy" }}</p>
+        </div>
+        <div class="col-6 col-md-2 pr-0">
+          <label>Data Fim:</label>
+          <p class="font-weight-bold">{{ cotacao?.dataFim | date: "dd/MM/yyyy" }}</p>
+        </div>
+        <div class="col-md-2 pr-0">
+          <label>Moeda:</label>
+          <p class="font-weight-bold">{{ Moeda[cotacao?.moeda] }}</p>
+        </div>
+        <div class="col-md-6 pr-0">
+          <label>Responsável Comprador:</label>
+          <p class="font-weight-bold">{{ cotacao?.usuarioResponsavel?.pessoaFisica?.nome }}</p>
+        </div>
+        <div class="col-md-12 pr-0">
+          <label>Razão Social - CNPJ:</label>
+          <p class="font-weight-bold mb-0">{{ cotacao?.razaoSocial }}</p>
+          <p class="font-weight-bold mb-0">{{ cotacao?.cnpj }}</p>
+        </div>
+      </div>
+      <div class="bg-white row py-3">
+        <form class="col-12" action="">
+          <div class="form-row">
+            <div class="form-group col">
+              <label for="termoConcordancia"> Termo de Concordância: </label>
+              <textarea class="form-control" rows="5" [value]="cotacao?.termoConcordancia" readonly></textarea>
+            </div>
+          </div>
+          <div class="form-row my-4 my-md-0">
+            <div class="form-group col">
+              <div class="custom-control custom-checkbox custom-control-inline">
+                <input type="checkbox" id="concorda" name="concorda" class="custom-control-input" [(ngModel)]="aceite">
+                <label class="custom-control-label" for="concorda">Concordo com os termos e condições</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-row" *ngIf="cotacao?.anexos?.length">
+            <div class="form-group col-12">
+              <label> Arquivos Anexados: </label>
+            </div>
+            <div class="form-group col-12">
+              <galeria-arquivos [arquivos]="cotacao?.anexos" [disabled]="true"></galeria-arquivos>
+            </div>
+          </div>
+        </form>
+        <div class="col-12">
+          <div class="row justify-content-end">
+            <div class="col-md-3 mb-2 mb-md-0">
+              <button class="btn btn-block btn-outline-primary float-right" (click)="voltar()"><i
+                  class="fas fa-ban mr-2"></i> Cancelar</button>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-block btn-primary float-right" (click)="participar()"><i
+                  class="fas fa-sign-in-alt mr-2"></i> Participar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

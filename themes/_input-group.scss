@@ -1,0 +1,128 @@
+.input-group {
+	.custom-file-input:lang(pt-br) ~ .custom-file-label {
+		@include fa-icon;
+		@extend .fas;
+		&:after {
+			background-color: $smarkets-green;
+			font-size: 1rem;
+			color: $white;
+			content: fa-content($fa-var-folder-open);
+		}
+	}
+	.display-file-input {
+		border-top: none;
+		border-left: none;
+		border-right: none;
+		background-color: transparent;
+		border-radius: 0;
+	}
+	.display-file-remove {
+		@include fa-icon;
+		@extend .fas;
+		background-color: transparent;
+		padding: 0;
+		&:after {
+			border: none;
+			color: $smarkets-green;
+			font-size: 1.5rem;
+			content: fa-content($fa-var-trash);
+		}
+	} //ng-select
+	ng-select {
+		position: relative;
+		flex: 1 1 auto;
+		width: 1%;
+		margin-bottom: 0;
+		.ng-select-container {
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+	}
+
+	textarea {
+		border-right: none;
+		&:hover,
+		&:active,
+		&:focus {
+			box-shadow: none;
+		}
+	}
+
+	.input-group-append {
+		.btn {
+			&.btn-icon {
+				&:hover,
+				&:active,
+				&:focus {
+					box-shadow: none;
+					transform: none;
+				}
+				border-left: none;
+				border-right: $input-border-width solid $input-border-color;
+				border-top: $input-border-width solid $input-border-color;
+				border-bottom: $input-border-width solid $input-border-color;
+			}
+		}
+	}
+
+	input-number, input-number-min-value {
+		position: relative;
+		flex: 1 1 auto;
+		width: 1%;
+		margin-bottom: 0;
+
+		border-radius: 0.25rem;
+		border: 1px solid $new-ux-smarkets-gray;
+
+		&:not(:last-child) {
+			@include border-right-radius(0);
+		}
+		&:not(:first-child) {
+			@include border-left-radius(0);
+		}
+	}
+}
+
+input-busca {
+	label {
+		padding-left: 16px;
+		padding-right: 16px;
+	}
+
+	.input-group {
+		border-radius: 0.25rem;
+		border: 1px solid $new-ux-smarkets-gray;
+
+		input {
+			padding-left: 16px;
+			padding-right: 16px;
+
+			border: none;
+
+			&.form-control:focus {
+				box-shadow: none;
+				background-color: $white;
+			}
+		}
+		.input-group-append {
+			button {
+				background-color: $white;
+				border: none !important;
+				min-width: unset;
+				-webkit-box-shadow: none;
+				-moz-box-shadow: none;
+				box-shadow: none;
+				i {
+					color: $new-ux-smarkets-gray;
+				}
+				&:hover {
+					transform: none;
+				}
+				&:focus,
+				&:active {
+					box-shadow: none;
+				}
+			}
+		}
+	}
+}

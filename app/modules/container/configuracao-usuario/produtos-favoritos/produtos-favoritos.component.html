@@ -1,0 +1,78 @@
+<div class="listar-produtos-favoritos">
+  <smk-listar-funcionalidade
+    [titulo]="'Área do Usuário / Favoritos'"
+    [configuracaoFiltrosUsuario]="configuracaoFiltrosUsuario"
+    [filtroInformado]="filtroInformado"
+    [configuracaoDaTable]="configuracaoDaTable"
+    [itensDaTable]="paginacaoPesquisaConfigurada?.itens"
+    [colunasDisponiveis]="colunasDisponiveis"
+    [configuracaoColunasUsuario]="paginacaoPesquisaConfigurada?.configuracaoColunasUsuario"
+    (filtrosChange)="filtre()"
+    (filtrosClear)="limpeFiltro()"
+    (export)="exporte()"
+    (colunasChange)="filtreProdutosFavoritos(true)"
+    (colunasReset)="filtreProdutosFavoritos(true)"
+    (selectedChange)="selecione($event)"
+    (pageChange)="pagine($event)">
+    <ng-container filtros>
+      <form class="filtros" [formGroup]="formFiltro">
+        <div class="row">
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="descricao">Descrição</label>
+              <input
+                id="descricao"
+                class="form-control"
+                type="text"
+                formControlName="descricao"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="marca">Marca</label>
+              <input
+                id="marca"
+                class="form-control"
+                type="text"
+                formControlName="marca"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="fornecedor">Fornecedor</label>
+              <input
+                id="fornecedor"
+                class="form-control"
+                type="text"
+                formControlName="fornecedor"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+    <ng-container acoes-table>
+      <button
+        *ngIf="itemSelecionado"
+        class="btn btn-outline-primary"
+        ngbTooltip="Visualizar"
+        (click)="visualizeItem()">
+        <i class="fas fa-eye"></i>
+      </button>
+      <button
+        *ngIf="itemSelecionado"
+        class="btn btn-outline-primary"
+        ngbTooltip="Excluir"
+        (click)="solicitarExclusao(itemSelecionado.idProdutoFavorito)">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+    </ng-container>
+    <ng-container column-templates>
+      <ng-template customColumn="produto" let-item="item">
+        <div class="coluna produto text-truncate" [title]="item.produto">{{ item.produto }}</div>
+      </ng-template>
+    </ng-container>
+  </smk-listar-funcionalidade>
+</div>

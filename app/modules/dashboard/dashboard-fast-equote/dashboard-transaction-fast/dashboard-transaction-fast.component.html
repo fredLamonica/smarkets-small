@@ -1,0 +1,89 @@
+<div class="row pt-2">
+  <div class="col-3">
+    <div class="col-pers">
+      <div class="card none-box-shadow">
+        <div class="card-body-user">
+          <div class="col-12 px-0 text-center">
+            <div class="col d-flex justify-content-center" *ngIf="IsLoading; else hasIndicadoresTrans">
+              <div class="spinner spinner-secondary"></div>
+            </div>
+            <ng-template #hasIndicadoresTrans>
+              <H1 class="align">{{ IndicadorTransacoesSkuFast?.totalTransacoes }}</H1>
+            </ng-template>
+            <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0">Total de SKU's Transacionados</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-pers">
+      <div class="card none-box-shadow">
+        <div class="card-body-user">
+          <div class="col-12 px-0 text-center">
+            <div class="col d-flex justify-content-center" *ngIf="IsLoading; else hasIndicadoresTransTSC">
+              <div class="spinner spinner-secondary"></div>
+            </div>
+            <ng-template #hasIndicadoresTransTSC>
+              <H1 class="align">{{ IndicadorTransacoesSkuFast?.totalSkuCadastrado }}</H1>
+            </ng-template>
+            <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0">Total SKU's Cadastrados</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="col-pers">
+      <div class="card none-box-shadow">
+        <div class="card-body-user">
+          <div class="col-12 px-0 text-center">
+            <div class="col d-flex justify-content-center" *ngIf="IsLoading; else hasIndicadoresTransSTP">
+              <div class="spinner spinner-secondary"></div>
+            </div>
+            <ng-template #hasIndicadoresTransSTP>
+              <H1 class="align">{{ IndicadorTransacoesSkuFast?.totalTransacoesSkuPeriodo }}</H1>
+            </ng-template>
+            <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0">SKU's Transacionados por período</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-pers">
+      <div class="card none-box-shadow">
+        <div class="card-body-user">
+          <div class="col-12 px-0 text-center">
+            <div class="col d-flex justify-content-center" *ngIf="IsLoading; else hasIndicadoresNSCP">
+              <div class="spinner spinner-secondary"></div>
+            </div>
+            <ng-template #hasIndicadoresNSCP>
+              <H1 class="align">{{ IndicadorTransacoesSkuFast?.totalNovosSkuPeriodo }}</H1>
+            </ng-template>
+            <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0">Novos SKU's Cadastrados por período</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="card-pers">
+      <div class="card-body">
+        <div class="col-12 px-1 text-left">
+          <h4 class="card-title text-uppercase font-weight-bold">Categorias mais Transacionadas</h4>
+          <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0"></span>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="container-fluid no-bounds pt-2">
+              <div class="col d-flex justify-content-center" *ngIf="IsLoadingCategoria; else hasIndicadoresCT">
+                <div class="spinner spinner-secondary"></div>
+              </div>
+              <ng-template #hasIndicadoresCT>
+                <sdk-progressbar *ngFor="let item of IndicadorCategoriasDto" [label]="item.nomeCategoria" [alinharDireita]="false" [value]="item.totalPedidosItens" [maxValue]="item.totalPedidosItens + 200">
+                </sdk-progressbar>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,385 @@
+<ul class="nav bg-gray">
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="salvar()"><i class="fas fa-save"></i> Salvar</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="voltar()"><i class="fas fa-ban"></i> Voltar</a>
+  </li>
+  <li class="nav-item" *ngIf="idContrato">
+    <a class="nav-link" role="button" [routerLink]="['../', 'novo']"><i class="fas fa-plus"></i> Incluir novo</a>
+  </li>
+  <li class="nav-item" *ngIf="ExibeBtnConcluirAprovacao">
+    <a class="nav-link" role="button" (click)="concluirAprovacao()"><i class="fas fa-check-circle"></i> Concluir
+      Aprovação</a>
+  </li>
+  <li class="nav-item" *ngIf="aprovacaoCatalogo">
+    <a class="nav-link" role="button" (click)="analiseAprovacaoCatalogo(analiseCatalogo.aprovado)"><i
+        class="fas fa-check-circle"></i> Aprovar</a>
+  </li>
+  <li class="nav-item" *ngIf="aprovacaoCatalogo">
+    <a class="nav-link" role="button" (click)="recuseAprovacaoCatalogo()"><i class="fas fa-times-circle"></i>
+      Recusar</a>
+  </li>
+  <li class="nav-item" *ngIf="enviarAprovacao">
+    <a class="nav-link" role="button" (click)="enviarAprovacaoContrato()"><i class="fas fa-paper-plane"></i> Enviar para
+      aprovação</a>
+  </li>
+  <li class="nav-item" *ngIf="idContrato">
+    <a class="nav-link" role="button" (click)="exportarContratoCatalago()"><i class="fas fa-download"></i> Baixar</a>
+  </li>
+  <li class="nav-item" *ngIf="idContrato">
+    <a class="nav-link" role="button" (click)="auditar()"><i class="fas fa-history"></i> Auditoria </a>
+  </li>
+</ul>
+<header>
+  <h1 class="title" translate>{{ idContrato ? 'Alterar' : 'Incluir' }} contrato</h1>
+</header>
+<div class="container-fluid no-bounds">
+  <!-- #region Dados Gerais -->
+  <div class="card">
+    <a class="card-header" data-toggle="collapse" href="#collapsedFormDadosGerais">
+      Dados gerais
+    </a>
+    <div class="card-body">
+      <form class="collapse show" id="collapsedFormDadosGerais" [formGroup]="form">
+        <div class="form-row">
+          <div class="form-group col-1">
+            <label for="idContrato" translate> ID Contrato </label>
+            <input class="form-control" type="text" [value]="idContrato" readonly />
+          </div>
+          <div class="form-group col-lg-4 col-xl-3">
+            <label for="codigo" translate> Código </label>
+            <input class="form-control" type="text" name="codigo" formControlName="codigo" />
+          </div>
+          <div class="form-group required col-lg-4 col-xl-3">
+            <label for="situacao" translate> Situação </label>
+            <ng-select
+              [class.invalid]="
+                (form.controls.situacao.dirty && form.controls.situacao.invalid) ||
+                (form.controls.situacao.value == SituacaoContratoCatalogo['Em vigência'] &&
+                  (!form.controls.quantidadeItens.value ||
+                    !form.controls.quantidadeParticipantes.value))
+              "
+              name="situacao"
+              formControlName="situacao">
+              <ng-option [value]="SituacaoContratoCatalogo['Em configuração']">Em configuração</ng-option>
+              <ng-option [value]="SituacaoContratoCatalogo.Ativo">Ativo</ng-option>
+              <ng-option [value]="SituacaoContratoCatalogo.Inativo">Inativo</ng-option>
+              <ng-option *ngIf="!situacaoPendente" [value]="SituacaoContratoCatalogo['Pendente de Aprovação']">Pendente
+                de Aprovação</ng-option>
+              <ng-option *ngIf="!situacaoPendente" [value]="SituacaoContratoCatalogo['Em Revisão']">Em
+                revisão</ng-option>
+            </ng-select>
+            <span
+              class="invalid"
+              *ngIf="form.controls.situacao.invalid && form.controls.situacao.dirty">Preenchimento obrigatório</span>
+            <span
+              class="invalid"
+              *ngIf="
+                form.controls.situacao.value == SituacaoContratoCatalogo['Em vigência'] &&
+                (!form.controls.quantidadeItens.value ||
+                  !form.controls.quantidadeParticipantes.value)
+              ">
+              Só poderá entrar em vigência após inclusão de itens e participantes
+            </span>
+          </div>
+          <div class="form-group required col-lg-2 col-xl-2">
+            <label for="tipoContratoCatalogo" translate> Tipo Contrato </label>
+            <ng-select
+              [class.invalid]="
+                (form.controls.tipoContratoCatalogo.dirty && form.controls.tipoContratoCatalogo.invalid)
+              "
+              name="tipoContratoCatalogo"
+              formControlName="tipoContratoCatalogo">
+              <ng-option [value]="tipoContratoCatalogo['Padrão']">Contrato Padrão</ng-option>
+              <ng-option [value]="tipoContratoCatalogo['Automático']">Contrato Automático</ng-option>
+            </ng-select>
+            <span
+              class="invalid"
+              *ngIf="form.controls.tipoContratoCatalogo.invalid && form.controls.tipoContratoCatalogo.dirty">Preenchimento
+              obrigatório</span>
+          </div>
+          <div class="form-group col-lg-2 col-xl-2">
+            <label for="validadeContrato" translate>
+              Status
+              <i *ngIf="validadeContrato == 'Vencido'" [ngbTooltip]="dataExpirada" tooltipClass="tooltip-light"
+                class="fas fa-info-circle"></i>
+            </label>
+            <div readonly class="form-control" type="text">{{validadeContrato}}</div>
+          </div>
+          <ng-template #dataExpirada>
+            <div style="text-align: left">
+              Data de encerramento expirada
+            </div>
+          </ng-template>
+        </div>
+        <div class="form-row">
+          <div class="form-group required col">
+            <label for="idFornecedor"> Fornecedor </label>
+            <input-fornecedor
+              name="idFornecedor"
+              formControlName="idFornecedor"
+              [class.invalid]="
+                form.controls.idFornecedor.invalid && form.controls.idFornecedor.dirty
+              ">
+            </input-fornecedor>
+            <span
+              class="invalid"
+              *ngIf="form.controls.idFornecedor.invalid && form.controls.idFornecedor.dirty">Preenchimento
+              obrigatório</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group required col-lg-8 col-xl-6">
+            <label for="titulo" translate> Titulo </label>
+            <input
+              class="form-control"
+              [class.invalid]="form.controls.titulo.invalid && form.controls.titulo.dirty"
+              type="text"
+              name="titulo"
+              formControlName="titulo" />
+            <span class="invalid" *ngIf="form.controls.titulo.invalid && form.controls.titulo.dirty">Preenchimento
+              obrigatório</span>
+          </div>
+          <div class="form-group required col-lg-8 col-xl-6">
+            <label for="objeto" translate> Objeto </label>
+            <input
+              class="form-control"
+              [class.invalid]="form.controls.objeto.invalid && form.controls.objeto.dirty"
+              type="text"
+              name="objeto"
+              formControlName="objeto" />
+            <span class="invalid" *ngIf="form.controls.objeto.invalid && form.controls.objeto.dirty">Preenchimento
+              obrigatório</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group required col-lg-8 col-xl-6">
+            <label for="idUsuarioGestor" translate
+              *ngIf="form.controls.tipoContratoCatalogo.value != tipoContratoCatalogo['Automático']"> Gestor </label>
+            <label for="idUsuarioGestor" translate
+              *ngIf="form.controls.tipoContratoCatalogo.value == tipoContratoCatalogo['Automático']"> Aprovador </label>
+            <ng-select
+              class="full-width"
+              [items]="gestores$ | async"
+              bindValue="idUsuario"
+              [loading]="gestoresLoading"
+              [loadingText]="'buscando...'"
+              formControlName="idUsuarioGestor"
+              [searchFn]="usuarioCustomSearchFn">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item?.pessoaFisica?.nome }} - {{ item?.email }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <p class="mb-0">{{ item?.pessoaFisica?.nome }}</p>
+                <span><small>{{ item?.email }}</small></span>
+              </ng-template>
+            </ng-select>
+            <span
+              class="invalid"
+              *ngIf="form.controls.idUsuarioGestor.invalid && form.controls.idUsuarioGestor.dirty">Preenchimento
+              obrigatório</span>
+          </div>
+          <div class="form-group required col-lg-8 col-xl-6">
+            <label for="idUsuarioGestor" translate> Responsável </label>
+            <ng-select
+              class="full-width"
+              [items]="responsaveis$ | async"
+              bindValue="idUsuario"
+              [loading]="responsaveisLoading"
+              [loadingText]="'buscando...'"
+              formControlName="idUsuarioResponsavel"
+              [searchFn]="usuarioCustomSearchFn">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item?.pessoaFisica?.nome }} - {{ item?.email }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <p class="mb-0">{{ item?.pessoaFisica?.nome }}</p>
+                <span><small>{{ item?.email }}</small></span>
+              </ng-template>
+            </ng-select>
+            <span
+              class="invalid"
+              *ngIf="form.controls.idUsuarioResponsavel.invalid && form.controls.idUsuarioResponsavel.dirty">Preenchimento
+              obrigatório</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group required col-lg-4 col-xl-2">
+            <label for="dataInicio" translate> Data de início </label>
+            <input-date
+              [class.invalid]="
+                (form.controls.dataInicio.invalid && form.controls.dataInicio.dirty) ||
+                !dataInicioValida()
+              "
+              formControlName="dataInicio"></input-date>
+            <span
+              class="invalid"
+              *ngIf="form.controls.dataInicio.invalid && form.controls.dataInicio.dirty">Preenchimento
+              obrigatório</span>
+            <span class="invalid" *ngIf="!dataInicioValida()">Data de início deve ser anterior a data de
+              encerramento</span>
+          </div>
+          <div class="form-group required col-lg-4 col-xl-2">
+            <label for="dataFim" translate> Data de encerramento </label>
+            <input-date
+              [class.invalid]="form.controls.dataFim.invalid && form.controls.dataFim.dirty"
+              formControlName="dataFim"></input-date>
+            <span class="invalid" *ngIf="form.controls.dataFim.invalid && form.controls.dataFim.dirty">Preenchimento
+              obrigatório</span>
+            <br *ngIf="form.controls.dataFim.invalid && form.controls.dataFim.dirty && exibeAlteracaoEncerramento">
+            <span *ngIf="exibeAlteracaoEncerramento">
+              **Solicitado alteração para: {{getDataSeller}}
+            </span>
+          </div>
+          <div class="form-group date-aprovacao" *ngIf="exibeAlteracaoEncerramento">
+            <button type="button" class="btn btn-primary btn-aprovacao"
+              (click)="analiseDataEncerramento(analiseCatalogo.aprovado)">
+              <i class="fas fa-check-circle"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-aprovacao"
+              (click)="analiseDataEncerramento(analiseCatalogo.reprovado)">
+              <i class="fas fa-times-circle"></i>
+            </button>
+          </div>
+          <div class='form-group col-lg-4 col-xl-2' *ngIf="saldoDisponivel && contratoAutomatico">
+            <label for="saldoDisponivel"> Saldo Disponível </label>
+            <input
+              class="form-control"
+              type="text"
+              name="saldoDisponivel"
+              [textMask]="{mask: maskValor, guide: false}"
+              formControlName="saldoDisponivel"
+              readonly>
+            <span>Saldo utilizado: {{saldoDiferencial}}</span>
+          </div>
+          <div *ngIf="contratoAutomatico" [class]="form.controls.tipoContratoCatalogo.value == tipoContratoCatalogo['Padrão'] || form.controls.tipoContratoCatalogo.value == null
+              ? 'form-group col-lg-4 col-xl-2' : 'form-group required col-lg-4 col-xl-2'"
+              >
+            <label for="saldoTotal"> Saldo Inicial/Total </label>
+            <input
+              [readOnly]="form.controls.tipoContratoCatalogo.value == tipoContratoCatalogo['Padrão']
+                || form.controls.tipoContratoCatalogo.value == null"
+              class="form-control"
+              type="text"
+              name="saldoTotal"
+              [textMask]="{mask: maskValor, guide: false}"
+              formControlName="saldoTotal">
+          </div>
+        </div>
+        <div class="form-row">
+          <div *ngIf="motivoRecusa && enviarAprovacao" class="form-group col-lg-12">
+            <label>Motivo Recusa: </label>
+            <div class="observacao-padrao p-2">
+              <div class="valor overflow-y-scroll" [innerHTML]="motivoRecusa | safe: 'html'"></div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- #endregion -->
+
+  <!-- #region Faturamento -->
+   <div class="card" *ngIf="idContrato">
+    <a
+      class="card-header collapsed"
+      data-toggle="collapse"
+      href="#collapseFaturamento"
+      (click)="permitirExibirFaturamentoContrato()">
+       <i *ngIf="possuiAprovacaoFaturamento || possuiInclusaoExclusaoFaturamento" class="fa fa-circle point possuiAprovacao" ></i> Faturamento Estado
+    </a>
+    <div class="card-body">
+      <div class="collapse" id="collapseFaturamento">
+        <smk-liste-faturamento-contrato-catalogo
+          [id-contrato]="idContrato"
+          *ngIf="exibirFaturamento"
+          (possuiAprovacao)="possuiAprovacaoFaturamentos($event)"
+          (possuiInclusaoExclusao)="possuiInclusaoExclusaoFaturamentos($event)"
+          ></smk-liste-faturamento-contrato-catalogo>
+      </div>
+    </div>
+  </div>
+  <!-- #endregion -->
+
+  <!-- #region Condicao Pagamento -->
+  <div class="card" *ngIf="idContrato">
+    <a
+      class="card-header collapsed"
+      data-toggle="collapse"
+      href="#collapseCondicaoPagamento"
+      (click)="permitirExibirCondicaoPagamento()">
+      <i *ngIf="possuiAprovacaoCondicaoPagamento" class="fa fa-circle point possuiAprovacao"></i> Condições de pagamento
+    </a>
+    <div class="card-body">
+      <div class="collapse" id="collapseCondicaoPagamento">
+        <listar-condicao-pagamento-contrato-catalogo
+          [id-contrato]="idContrato"
+          (possuiAprovacao)="possuiAprovacaoCondicoesPagamento($event)"
+          *ngIf="exibirCondicaoPagamento"></listar-condicao-pagamento-contrato-catalogo>
+      </div>
+    </div>
+  </div>
+  <!-- #endregion -->
+
+  <!-- #region Itens -->
+  <div class="card" *ngIf="idContrato">
+    <a
+      class="card-header collapsed"
+      data-toggle="collapse"
+      href="#collapseItens"
+      (click)="permitirExibirItens()">
+      <i *ngIf="possuiAprovacaoItem" class="fa fa-circle point possuiAprovacao"></i> Itens
+    </a>
+    <div class="card-body">
+      <div class="collapse" id="collapseItens">
+        <listar-itens-contrato
+          [id-contrato]="idContrato"
+          [id-fornecedor]="idFornecedor"
+          (possuiAprovacao)="possuiAprovacaoItens($event)"
+          (atualizacao)="atualizarItens($event)"
+          *ngIf="exibirItens"></listar-itens-contrato>
+      </div>
+    </div>
+  </div>
+  <!-- #endregion -->
+
+  <!-- #region Participantes -->
+  <div class="card" *ngIf="idContrato">
+    <a
+      class="card-header collapsed"
+      data-toggle="collapse"
+      href="#collapseParticipantes"
+      (click)="permitirExibirParticipantes()">
+      Participantes
+    </a>
+    <div class="card-body">
+      <div class="collapse" id="collapseParticipantes">
+        <listar-participantes-contrato
+          [id-contrato]="idContrato"
+          (atualizacao)="atualizarParticipantes($event)"
+          *ngIf="exibirParticipantes"></listar-participantes-contrato>
+      </div>
+    </div>
+  </div>
+  <!-- #endregion -->
+
+  <!-- #region Anexos -->
+  <div class="card" *ngIf="idContrato">
+    <a
+      class="card-header collapsed"
+      data-toggle="collapse"
+      href="#collapseAnexos"
+      (click)="permitirExibirAnexos()">
+      Anexos
+    </a>
+    <div class="card-body">
+      <div class="collapse" id="collapseAnexos">
+        <listar-anexos-contrato
+          [id-contrato]="idContrato"
+          *ngIf="exibirAnexos"></listar-anexos-contrato>
+      </div>
+    </div>
+  </div>
+  <!-- #endregion -->
+</div>

@@ -1,0 +1,36 @@
+<div class="input-group">
+  <div class="form-control truncate" [class.disabled]="disabledProperty" (click)="this.source && this.source.length ? buscarCategoria(inputTreeModal) : emptyTree()">
+    {{ loading ? 'buscando...' : description }}
+  </div>
+  <div class="input-group-append" [class.disabled]="disabledProperty">
+    <button class="btn btn-secondary" type="button" id="button-addon1" (click)="this.source && this.source.length ? buscarCategoria(inputTreeModal) : emptyTree()"><i
+        class="fas fa-search"></i></button>
+    <button class="btn btn-danger text-lighter" [class.disabled]="!_selected" type="button" id="button-addon2" (click)="clear()"><i
+        class="fas fa-trash-alt"></i></button>
+  </div>
+</div>
+
+<ng-template #inputTreeModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <div class="modal-title" id="modal-basic-title">Selecionar categoria</div>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">    
+    <div class="card">
+      <div class="input-busca-categorias">
+        <input-busca label="O que você procura?" placeholder="Buscar por número da solicitação, produto ou categoria"
+        (buscar)="buscar($event)"></input-busca>
+      </div>
+      <div class="card-body overflow-y-scroll py-2 py-3">
+        <div class="no-content" *ngIf="!nodes?.length" translate>GENERAL.NO_RECORDS_FOUND</div>
+        <tree-root [(state)]="state" [nodes]="nodes" (activate)="onActivate($event)"></tree-root>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="c()">Cancelar</button>
+    <button type="button" class="btn btn-outline-primary" [class.disabled]="!selectedTemp" (click)="select()">Selecionar</button>
+  </div>
+</ng-template>

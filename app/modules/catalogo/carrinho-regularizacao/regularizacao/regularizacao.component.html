@@ -1,0 +1,375 @@
+<div class="card card-default card-collapse">
+  <a
+    class="card-header text-truncate"
+    data-toggle="collapse"
+    href="#collapsedPrePedido{{ indexPai }}">
+    <!-- <div class="d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center"> -->
+    <div class="row align-items-lg-center">
+      <div class="col-lg-7 text-truncate">
+        <span class="empresa">
+          Empresa:
+          <span class="binding-empresa font-weight-bold mr-2" [title]="bindingEmpresa">
+            {{ bindingEmpresa }}
+          </span>
+          <button
+            type="button"
+            class="btn btn-icon btn-sm p-0"
+            [ngbTooltip]="tipEmpresa"
+            container="body"
+            placement="right"
+            tooltipClass="tooltip-light">
+            <i class="fas fa-info-circle"></i>
+          </button>
+          <ng-template #tipEmpresa>
+            <div style="text-align: left">
+              <p><b>CNPJ:</b> {{ regularizacao?.empresaSolicitante?.cnpj }}</p>
+              <p><b>Razão Social:</b> {{ regularizacao?.empresaSolicitante?.razaoSocial }}</p>
+              <p><b>Nome Fantasia:</b> {{ regularizacao?.empresaSolicitante?.nomeFantasia }}</p>
+            </div>
+          </ng-template>
+        </span>
+      </div>
+      <div class="col text-truncate">
+        <div class="ultima-alteracao text-lg-right">
+          <auto-save-label [ultima-alteracao]="regularizacao?.ultimaAlteracao"></auto-save-label>
+        </div>
+      </div>
+    </div>
+  </a>
+  <div class="card-body collapse show" id="collapsedPrePedido{{ indexPai }}">
+    <div class="bg-white row pt-3 pb-2 border-bottom">
+      <div
+        class="form-group required col-lg-6 col-xl-3"
+        [ngbTooltip]="tipFornecedor"
+        #tooltipFornecedor="ngbTooltip"
+        placement="auto"
+        tooltipClass="tooltip-light">
+        <label>Fornecedor:</label>
+        <ng-select
+          class="font-weight-bold"
+          [items]="fornecedores$ | async"
+          [loadingText]="textoNgSelectLoading"
+          [clearAllText]="textoNgSelectLimpar"
+          [placeholder]="textoNgSelectPlaceholder"
+          typeToSearchText="Digite pelo menos 3 caracteres"
+          [typeahead]="fornecedoresInput$"
+          [loading]="fornecedoresLoading"
+          [(ngModel)]="fornecedorSelecionado"
+          (change)="fornecedorChange($event)">
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.cnpj }} - {{ item.nomeFantasia ? item.nomeFantasia : item.razaoSocial }}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <span title="{{ item.cnpj }} - {{ item.razaoSocial }}">
+              {{ item.nomeFantasia ? item.nomeFantasia : item.razaoSocial }}<br />
+              <div>
+                <small>CNPJ: {{ item.cnpj }}</small><br />
+              </div>
+              <div>
+                <small *ngIf="item.nomeFantasia">Razão social: {{ item.razaoSocial }}</small><br />
+              </div>
+            </span>
+          </ng-template>
+        </ng-select>
+        <ng-template #tipFornecedor>
+          <div *ngIf="regularizacao?.fornecedor?.cnpj" style="text-align: left">
+            <p><strong>CNPJ:</strong> {{ regularizacao?.fornecedor?.cnpj }}</p>
+            <p><strong>Razão Social:</strong> {{ regularizacao?.fornecedor?.razaoSocial }}</p>
+            <p><strong>Nome Fantasia:</strong> {{ regularizacao?.fornecedor?.nomeFantasia }}</p>
+          </div>
+          <span *ngIf="!regularizacao?.fornecedor?.cnpj">Selecione um fornecedor...</span>
+        </ng-template>
+      </div>
+      <div class="form-group required col-lg-6">
+        <label>Endereço:</label>
+        <ng-container *ngIf="isListaExtensaEnderecos; then enderecoListaExtensa; else enderecoListaSimples">
+        </ng-container>
+        <ng-template #enderecoListaExtensa>
+          <ng-select
+            class="font-weight-bold"
+            [disabled]="enderecoUnico"
+            [items]="enderecos$ | async"
+            typeToSearchText="Digite pelo menos 3 caracteres"
+            [typeahead]="enderecosInput$"
+            [loadingText]="textoNgSelectLoading"
+            [clearAllText]="textoNgSelectLimpar"
+            [placeholder]="textoNgSelectPlaceholder"
+            [loading]="enderecosLoading"
+            [(ngModel)]="enderecoSelecionado"
+            (change)="enderecoChange($event)">
+            <ng-template ng-label-tmp let-item="item">
+              {{ item?.logradouro }}, {{ item?.numero }} - {{ item?.bairro }},
+              {{ item?.cidade?.nome }} - {{ item?.cidade?.estado?.abreviacao }}, {{ item?.cep }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              {{ TipoEndereco[item?.tipo] }}<br />
+              <div>
+                <small>Logradouro: {{ item?.logradouro }}</small><br />
+              </div>
+              <div>
+                <small>Bairro: {{ item?.bairro }}</small>
+                <small style="margin-left: 10px">Número: {{ item?.numero }}</small>
+              </div>
+              <div>
+                <small>Cidade: {{ item?.cidade?.nome }} - Estado:
+                  {{ item?.cidade?.estado?.abreviacao }}</small>
+              </div>
+              <div>
+                <small>CEP: {{ item?.cep }}</small>
+              </div>
+            </ng-template>
+          </ng-select>
+        </ng-template>
+        <ng-template #enderecoListaSimples>
+          <ng-select
+            class="font-weight-bold"
+            [disabled]="enderecoUnico"
+            [items]="enderecos$ | async"
+            bindValue="idEndereco"
+            [loadingText]="textoNgSelectLoading"
+            [clearAllText]="textoNgSelectLimpar"
+            [placeholder]="textoNgSelectPlaceholder"
+            [loading]="enderecosLoading"
+            [(ngModel)]="regularizacao.idEnderecoEntrega"
+            [searchFn]="enderecoSearchFn"
+            (change)="alterarRegularizacao()">
+            <ng-template ng-label-tmp let-item="item">
+              {{ item?.logradouro }}, {{ item?.numero }} - {{ item?.bairro }},
+              {{ item?.cidade?.nome }} - {{ item?.cidade?.estado?.abreviacao }}, {{ item?.cep }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              {{ TipoEndereco[item?.tipo] }}<br />
+              <div>
+                <small>Logradouro: {{ item?.logradouro }}</small><br />
+              </div>
+              <div>
+                <small>Bairro: {{ item?.bairro }}</small>
+                <small style="margin-left: 10px">Número: {{ item?.numero }}</small>
+              </div>
+              <div>
+                <small>Cidade: {{ item?.cidade?.nome }} - Estado:
+                  {{ item?.cidade?.estado?.abreviacao }}</small>
+              </div>
+              <div>
+                <small>CEP: {{ item?.cep }}</small>
+              </div>
+            </ng-template>
+          </ng-select>
+        </ng-template>
+      </div>
+      <div class="form-group col-lg-6 col-xl-3"
+        [class.required]="tipoAlcadaAprovacao === tipoAlcadaAprovacaoEnum.desmembrada ||
+        usuarioAtual?.permissaoAtual?.pessoaJuridica?.habilitarIntegracaoERP">
+        <label>Centro de Custo:</label>
+        <ng-select
+          class="font-weight-bold"
+          [disabled]="centroDeCustoUnico"
+          [items]="centrosDeCusto"
+          bindLabel="descricao"
+          bindValue="idCentroCusto"
+          [loadingText]="textoNgSelectLoading"
+          [clearAllText]="textoNgSelectLimpar"
+          [placeholder]="textoNgSelectPlaceholder"
+          [loading]="centrosDeCustoLoading"
+          [(ngModel)]="regularizacao.idCentroCusto"
+          (change)="alterarRegularizacao()">
+        </ng-select>
+      </div>
+      <div
+        class="form-group required col-lg-6 col-xl-3">
+        <label>Condição de Pagamento:</label>
+        <ng-select
+          class="font-weight-bold"
+          [items]="condicoesPagamento"
+          [loadingText]="textoNgSelectLoading"
+          [clearAllText]="textoNgSelectLimpar"
+          [placeholder]="textoNgSelectPlaceholder"
+          [loading]="condicoesPagamentoLoading"
+          bindLabel="descricao"
+          bindValue="idCondicaoPagamento"
+          [(ngModel)]="regularizacao.idCondicaoPagamento"
+          (change)="alterarRegularizacao()">
+        </ng-select>
+      </div>
+      <div
+        *ngIf="usuarioAtual?.permissaoAtual?.pessoaJuridica?.habilitarIntegracaoERP"
+        class="form-group required col-lg-6 col-xl-3">
+        <label>Grupo de Compradores:</label>
+        <ng-select
+          class="font-weight-bold"
+          [disabled]="grupoCompradoresUnico"
+          [items]="gruposCompradores"
+          bindLabel="nomeGrupoCompradores"
+          bindValue="idGrupoCompradores"
+          [loadingText]="textoNgSelectLoading"
+          [clearAllText]="textoNgSelectLimpar"
+          [placeholder]="textoNgSelectPlaceholder"
+          [loading]="gruposCompradoresLoading"
+          [(ngModel)]="regularizacao.idGrupoCompradores"
+          (change)="alterarRegularizacao()">
+        </ng-select>
+      </div>
+      <div
+        *ngIf="this.tipoAlcadaAprovacao === this.tipoAlcadaAprovacaoEnum.unificada"
+        class="form-group required col-lg-6 col-xl-3">
+        <label>Alçada de Aprovação:</label>
+        <ng-select
+          class="font-weight-bold"
+          [disabled]="alcadaUnica"
+          [items]="alcadas"
+          bindLabel="descricao"
+          bindValue="idAlcada"
+          [loadingText]="textoNgSelectLoading"
+          [clearAllText]="textoNgSelectLimpar"
+          [placeholder]="textoNgSelectPlaceholder"
+          [loading]="alcadasLoading"
+          [(ngModel)]="regularizacao.idAlcada"
+          (change)="alterarRegularizacao()">
+        </ng-select>
+      </div>
+      <div
+        *ngIf="tipoAlcadaAprovacao === tipoAlcadaAprovacaoEnum.unificada || regularizacao.empresaSolicitante.habilitarIntegracaoERP"
+        class="form-group col-lg-6 col-xl-3"
+        [class.required]="usuarioAtual?.permissaoAtual?.pessoaJuridica?.habilitarIntegracaoERP">
+        <label>Conta Contábil:</label>
+        <ng-select
+          class="font-weight-bold"
+          [disabled]="contaContabilUnica"
+          [items]="contasContabeis$ | async"
+          bindLabel="descricao"
+          typeToSearchText="Digite pelo menos 3 caracteres"
+          [typeahead]="contasContabeisInput$"
+          [loadingText]="textoNgSelectLoading"
+          [clearAllText]="textoNgSelectLimpar"
+          [placeholder]="textoNgSelectPlaceholder"
+          [loading]="contasContabeisLoading"
+          [(ngModel)]="contaContabilSelecionada"
+          (change)="contaContabilChange($event)">
+        </ng-select>
+      </div>
+    </div>
+    <div class="row bg-white border-bottom pt-3 pb-2">
+      <div class="col-lg-6">
+        <div class="form-group">
+          <label>Anexos:</label>
+          <app-manter-anexos
+            [anexos]="regularizacao?.anexos"
+            (anexarArquivos)="inserirAnexos($event)"
+            (excluirAnexo)="excluirAnexo($event)">
+          </app-manter-anexos>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white border-bottom row"
+      *ngIf="regularizacao && regularizacao.itens && regularizacao.itens.length > 0">
+      <div class="form-group required col-lg-3 pt-4 mt-1">
+        <input type="checkbox" class="list-item-check mr-3" (click)="selecionarTodos($event ,regularizacao)"
+          [(ngModel)]="regularizacao.selecionarTodos" name="selecionarItem{{i}}" placeholder="selecionarTodos" />
+        <button class="btn btn-outline-danger" (click)="removerItens(requisicao)"
+          [disabled]="!regularizacao.habilitarBtnRemover">
+          <i class="fas fa-trash"></i>
+          Remover Itens
+        </button>
+      </div>
+    </div>
+
+    <smk-regularizacao-item
+      *ngFor="let regularizacaoItem of regularizacao?.itens; index as i"
+      [index]="indexPai + '-' + i"
+      [regularizacaoItem]="regularizacaoItem"
+      [moeda]="regularizacao?.moeda"
+      [marcas]="marcas"
+      [marcasLoading]="marcasLoading"
+      [textoNgSelectLoading]="textoNgSelectLoading"
+      [textoNgSelectLimpar]="textoNgSelectLimpar"
+      [textoNgSelectPlaceholder]="textoNgSelectPlaceholder"
+      (removerItem)="removerItem($event)"
+      (atualizarCarrinho)="atualizarResumoCarrinho()"
+      (itemAlterado)="atualizarAlteracao($event)"
+      (itemSelecionado)="itemSelecionado($event)">
+    </smk-regularizacao-item>
+    <div class="bg-white row py-3 justify-content-end">
+      <div class="form-group required col-lg-3">
+        <label>Frete</label>
+        <ng-select
+          [loadingText]="textoNgSelectLoading"
+          [clearAllText]="textoNgSelectLimpar"
+          [placeholder]="textoNgSelectPlaceholder"
+          [(ngModel)]="regularizacao.frete"
+          (change)="alterarRegularizacao()">
+          <ng-option [value]="tipoFrete.Cif">CIF</ng-option>
+          <ng-option [value]="tipoFrete.Fob">FOB</ng-option>
+          <ng-option [value]="tipoFrete['FOB Dirigido']">FOB Dirigido</ng-option>
+          <ng-option [value]="tipoFrete['FOB Redespacho']">FOB Redespacho</ng-option>
+        </ng-select>
+      </div>
+      <div class="col-lg-3">
+        <label class="w-100 info-catalogo">Valor total:</label>
+        <h4 class="text-indigo-light font-weight-bold info-catalogo">
+          {{ obtenhaValorTotal() | currency:'BRL':'symbol':'1.2':'pt-BR' }}
+        </h4>
+      </div>
+    </div>
+    <div class="bg-white row pb-4 justify-content-end">
+      <div class="col-md-3 col-lg-3 mb-2 mb-lg-0">
+        <button
+          class="btn btn-outline-primary btn-block"
+          (click)="abrirObservacoes()"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          click-stop-propagation
+          click-prevent-default>
+          <i class="fas fa-comment-dots"></i>
+          OBSERVAÇÕES
+        </button>
+      </div>
+      <div class="col-lg-3">
+        <button
+          class="btn btn-primary btn-block"
+          [class.disabled]="itensEstaoSendoSalvos()"
+          (click)="confirmeRegularizacao()">
+          <i *ngIf="!itensEstaoSendoSalvos()" class="fas fa-check"></i>
+          <i *ngIf="itensEstaoSendoSalvos()" class="fas fa-cog fa-spin"></i>
+          {{
+          usuarioAtual?.permissaoAtual?.pessoaJuridica?.habilitarIntegracaoERP
+          ? 'ENVIAR REQUISIÇÃO ERP'
+          : 'CONFIRMAR REGULARIZAÇÃO'
+          }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #modalObservacoes let-modal>
+  <div class="modal-header">
+    <div class="modal-title">
+      Observações da Regularização
+    </div>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formObservacoes">
+      <div class="row">
+        <div class="form-group col mb-0">
+          <label for="observacao">Observações</label>
+          <textarea class="form-control" id="observacao" formControlName="observacao" rows="5"></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="modal.dismiss('Cross click')">
+      <i class="fas fa-ban"></i> Voltar
+    </button>
+    <button type="button" class="btn btn-primary" (click)="modal.close(true)">
+      <i class="fas fa-save"></i> Salvar
+    </button>
+  </div>
+</ng-template>

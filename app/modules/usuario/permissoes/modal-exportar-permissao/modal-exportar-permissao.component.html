@@ -1,0 +1,48 @@
+<sdk-modal title="Exportar Usuários" [title-button-confirm]="'Confirmar'" [title-button-cancel]="'Cancelar'"
+  (on-confirm)="onConfirm()">
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="form-group col-md-11">
+        <label for="empresa" translate>Empresa</label>
+        <select id="empresa" class="form-control"
+          [class.invalid]="form.controls.empresa.invalid && form.controls.empresa.dirty" name="empresa"
+          formControlName="empresa">
+          <option [value]="null"></option>
+          <option *ngFor="let item of itens" [value]="item.idPessoaJuridica">
+            {{ item.razaoSocial }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group col-md-1" style="padding-top: 19px; text-align: center;">
+        <button type="button" class="btn-adicionar" [disabled]="form.invalid" (click)="add()">
+          <i class="fas fa-plus-circle"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12" style="margin-bottom: 15px;">
+        <input type="checkbox" [(ngModel)]="isChecked" style="margin-right: 5px;" (change)="selectAll(isChecked)"
+          id="adiconartodas" name="adiconartodas" formControlName="adiconartodas">Todas as empresas na lista
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <span>Empresa</span>
+        <hr />
+      </div>
+    </div>
+
+    <div style="overflow-y: auto; overflow-x: hidden; max-height: 300px;">
+      <div class="row" *ngFor="let item of itensExportacao">
+        <div class="form-group col-md-11"><span>{{ item.razaoSocial }}</span></div>
+        <div class="form-group col-md-1" style="text-align: center">
+          <button type="button" class="btn-remover" (click)="remove(item.idPessoaJuridica)">
+            <i class="far fa-trash-alt"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</sdk-modal>

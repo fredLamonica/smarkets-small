@@ -1,0 +1,40 @@
+<div class="row d-flex justify-content-center">
+  <ng-container *ngFor="let tag of orderTags()">
+    <sdk-tag-input
+      [ngClass]="{
+        'selected-tag': tag.selected
+      }"
+      class="px-2 py-2"
+      [tag]="tag"
+      [tagLabel]="label"
+      [tagKey]="key"
+      [shadow]="true"
+      [tagStyle]="{
+        'background-color': '#F2F2F2',
+        color: '#6E6E72',
+        border: 'none',
+        'font-size': '14px',
+        'font-weight': 'bold',
+        'text-transform': 'uppercase'
+      }"
+      [hasRightIcon]="true"
+      [rightIconStyle]="{
+        color: '#6E6E72',
+        'font-size': '12px'
+      }"
+      [rightIconClass]="tag.selected ? 'fas fa-2x fa-check' : 'fas fa-2x fa-plus'"
+      [isClickableTagInput]="true"
+      (taginputClick)="onTagClicked($event)"
+    ></sdk-tag-input>
+  </ng-container>
+</div>
+
+<div class="col py-4">
+  <pager
+    *ngIf="totalPages > 1"
+    [page]="pageIndex"
+    [records-per-page]="pageSize"
+    [total-pages]="totalPages"
+    (pagination)="paginacao($event)"
+  ></pager>
+</div>

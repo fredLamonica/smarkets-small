@@ -1,0 +1,62 @@
+<div class="container-fluid-xl manter-comprador">
+  <div class="w-100" [ngStyle]="{ 'padding-bottom': '64px' }">
+    <div
+      class="col-12 identification-bar-fixed w-100"
+      [ngStyle]="{ top: '80px', background: '#ffffff' }"
+    >
+      <div class="col-1 d-flex" style="height: 100%"></div>
+      <div class="col-11 d-flex align-items-center" style="height: 100%">
+        <span class="identification-font identification-color"> Gestão de Fornecedores </span>
+        <i class="fas fa-greater-than identification-color mx-2"></i>
+        <span class="identification-font identification-color"> Solicitação de Cadastro </span>
+        <i class="fas fa-greater-than identification-color mx-2"></i>
+        <span class="current-page-font"> {{ idPessoaJuridica ? 'Editar' : 'Incluir' }} </span>
+      </div>
+    </div>
+  </div>
+  <sdk-header [heightValue]="'64px'" [topValue]="'144px'">
+    <div
+      *ngIf="idPessoaJuridica"
+      class="col-1 d-flex justify-content-center align-items-center border-right identificacao"
+      style="height: 100%"
+    >
+      <span>
+        ID {{idPessoaJuridica }}
+      </span>
+    </div>
+    <div *ngIf="idPessoaJuridica" class="col-7 d-flex align-items-center razaoSocial">
+      <span>
+        {{ suplierInformation?.razaoSocial }}
+      </span>
+    </div>
+    <div *ngIf="!idPessoaJuridica" class="col-8 d-flex align-items-center razaoSocial">
+      <span> Nova Solicitação Cadastro Fornecedor </span>
+    </div>
+    <div class="col-4 d-flex align-items-center justify-content-end header-action">
+      <div class="pr-2" *ngIf="idPessoaJuridica">
+        <span class="icon-custom" (click)="auditar()">
+          <i
+            class="fas fa-history"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            ngbTooltip="Auditoria"
+          ></i>
+        </span>
+      </div>
+    </div>
+  </sdk-header>
+
+  <sdk-two-columns>
+    <div class="w-100" tc-1>
+      <sdk-menu
+        id="menu"
+        [itens]="itens"
+        [showMenu]="false"        
+      >        
+      </sdk-menu>
+    </div>
+    <div class="scroll-y w-100" tc-2>
+      <router-outlet></router-outlet>
+    </div>
+  </sdk-two-columns>
+</div>

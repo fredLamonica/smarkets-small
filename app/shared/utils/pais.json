@@ -1,0 +1,1436 @@
+[
+  {
+    "idPais": 1,
+    "abreviacao": "AFG",
+    "nome": "Afeganistão",
+    "nomeFormal": "República Islâmica do Afeganistão"
+  },
+  {
+    "idPais": 2,
+    "abreviacao": "ALB",
+    "nome": "Albânia",
+    "nomeFormal": "República da Albânia"
+  },
+  {
+    "idPais": 3,
+    "abreviacao": "DZA",
+    "nome": "Algéria",
+    "nomeFormal": "República Democrática Popular da Algéria"
+  },
+  {
+    "idPais": 4,
+    "abreviacao": "ASM",
+    "nome": "Samoa Americana",
+    "nomeFormal": "Território de Samoa Americana"
+  },
+  {
+    "idPais": 5,
+    "abreviacao": "AND",
+    "nome": "Andorra",
+    "nomeFormal": "Principado Andorra"
+  },
+  {
+    "idPais": 6,
+    "abreviacao": "AGO",
+    "nome": "Angola",
+    "nomeFormal": "República de Angola"
+  },
+  {
+    "idPais": 7,
+    "abreviacao": "AIA",
+    "nome": "Anguilla",
+    "nomeFormal": "Anguilla"
+  },
+  {
+    "idPais": 8,
+    "abreviacao": "ATA",
+    "nome": "Antártida",
+    "nomeFormal": "Antártida"
+  },
+  {
+    "idPais": 9,
+    "abreviacao": "ATG",
+    "nome": "Antigua e Barbuda",
+    "nomeFormal": "Antigua e Barbuda"
+  },
+  {
+    "idPais": 10,
+    "abreviacao": "ARG",
+    "nome": "Argentina",
+    "nomeFormal": "República Argentina"
+  },
+  {
+    "idPais": 11,
+    "abreviacao": "ARM",
+    "nome": "Armênia",
+    "nomeFormal": "República da Armênia"
+  },
+  {
+    "idPais": 12,
+    "abreviacao": "ABW",
+    "nome": "Aruba",
+    "nomeFormal": "Aruba"
+  },
+  {
+    "idPais": 13,
+    "abreviacao": "AUS",
+    "nome": "Austrália",
+    "nomeFormal": "Comunidade da Austrália"
+  },
+  {
+    "idPais": 14,
+    "abreviacao": "AUT",
+    "nome": "Áustria",
+    "nomeFormal": "República da Áustria"
+  },
+  {
+    "idPais": 15,
+    "abreviacao": "AZE",
+    "nome": "Azerbaijão",
+    "nomeFormal": "República do Azerbaijão"
+  },
+  {
+    "idPais": 16,
+    "abreviacao": "BHS",
+    "nome": "Bahamas",
+    "nomeFormal": "Comunidade de Bahamas"
+  },
+  {
+    "idPais": 17,
+    "abreviacao": "BHR",
+    "nome": "Bahrein",
+    "nomeFormal": "Reino do Bahrein"
+  },
+  {
+    "idPais": 18,
+    "abreviacao": "BGD",
+    "nome": "Bangladesh",
+    "nomeFormal": "República Popular de Bangladesh"
+  },
+  {
+    "idPais": 19,
+    "abreviacao": "BRB",
+    "nome": "Barbados",
+    "nomeFormal": "Barbados"
+  },
+  {
+    "idPais": 20,
+    "abreviacao": "BLR",
+    "nome": "Bielorrússia",
+    "nomeFormal": "República da Bielorrússia"
+  },
+  {
+    "idPais": 21,
+    "abreviacao": "BEL",
+    "nome": "Bélgica",
+    "nomeFormal": "Reino da Bélgica"
+  },
+  {
+    "idPais": 22,
+    "abreviacao": "BLZ",
+    "nome": "Belize",
+    "nomeFormal": "Belize"
+  },
+  {
+    "idPais": 23,
+    "abreviacao": "BEN",
+    "nome": "Benin",
+    "nomeFormal": "República do Benin"
+  },
+  {
+    "idPais": 24,
+    "abreviacao": "BMU",
+    "nome": "Bermuda",
+    "nomeFormal": "Bermuda"
+  },
+  {
+    "idPais": 25,
+    "abreviacao": "BTN",
+    "nome": "Butão",
+    "nomeFormal": "Reino do Butão"
+  },
+  {
+    "idPais": 26,
+    "abreviacao": "BOL",
+    "nome": "Bolívia",
+    "nomeFormal": "Estado Plurinacional da Bolívia"
+  },
+  {
+    "idPais": 27,
+    "abreviacao": "BIH",
+    "nome": "Bósnia e Herzegovina",
+    "nomeFormal": "Bósnia e Herzegovina"
+  },
+  {
+    "idPais": 28,
+    "abreviacao": "BWA",
+    "nome": "Botswana",
+    "nomeFormal": "República da Botswana"
+  },
+  {
+    "idPais": 29,
+    "abreviacao": "BVT",
+    "nome": "Ilha Bouvet",
+    "nomeFormal": "Ilha Bouvet"
+  },
+  {
+    "idPais": 30,
+    "abreviacao": "BRA",
+    "nome": "Brasil",
+    "nomeFormal": "República Federativa do Brasil"
+  },
+  {
+    "idPais": 31,
+    "abreviacao": "IOT",
+    "nome": "Território Britânico do Oceano Índico",
+    "nomeFormal": "Território Britânico do Oceano Índico"
+  },
+  {
+    "idPais": 32,
+    "abreviacao": "BRN",
+    "nome": "Brunei",
+    "nomeFormal": "Estado do Brunei Darussalam"
+  },
+  {
+    "idPais": 33,
+    "abreviacao": "BGR",
+    "nome": "Bulgária",
+    "nomeFormal": "República da Bulgária"
+  },
+  {
+    "idPais": 34,
+    "abreviacao": "BFA",
+    "nome": "Burkina Faso",
+    "nomeFormal": "Burkina Faso"
+  },
+  {
+    "idPais": 35,
+    "abreviacao": "BDI",
+    "nome": "Burundi",
+    "nomeFormal": "República do Burundi"
+  },
+  {
+    "idPais": 36,
+    "abreviacao": "KHM",
+    "nome": "Camboja",
+    "nomeFormal": "Reino do Camboja"
+  },
+  {
+    "idPais": 37,
+    "abreviacao": "CMR",
+    "nome": "Camarões",
+    "nomeFormal": "República de Camarões"
+  },
+  {
+    "idPais": 38,
+    "abreviacao": "CAN",
+    "nome": "Canadá",
+    "nomeFormal": "Canadá"
+  },
+  {
+    "idPais": 39,
+    "abreviacao": "CPV",
+    "nome": "Cabo Verde",
+    "nomeFormal": "República do Cabo Verde"
+  },
+  {
+    "idPais": 40,
+    "abreviacao": "CYM",
+    "nome": "Ilhas Cayman",
+    "nomeFormal": "Ilhas Cayman"
+  },
+  {
+    "idPais": 41,
+    "abreviacao": "CAF",
+    "nome": "República Centro-Africana",
+    "nomeFormal": "República Centro-Africana"
+  },
+  {
+    "idPais": 42,
+    "abreviacao": "TCD",
+    "nome": "Chade",
+    "nomeFormal": "República do Chade"
+  },
+  {
+    "idPais": 43,
+    "abreviacao": "CHL",
+    "nome": "Chile",
+    "nomeFormal": "República do Chile"
+  },
+  {
+    "idPais": 44,
+    "abreviacao": "CHN",
+    "nome": "China",
+    "nomeFormal": "República Popular da China"
+  },
+  {
+    "idPais": 45,
+    "abreviacao": "CXR",
+    "nome": "Ilha Christmas",
+    "nomeFormal": "Território da Ilha Christmas"
+  },
+  {
+    "idPais": 46,
+    "abreviacao": "CCK",
+    "nome": "Ilhas Cocos (Keeling)",
+    "nomeFormal": "Território das Ilhas Cocos (Keeling)"
+  },
+  {
+    "idPais": 47,
+    "abreviacao": "COL",
+    "nome": "Colômbia",
+    "nomeFormal": "República da Colômbia"
+  },
+  {
+    "idPais": 48,
+    "abreviacao": "COM",
+    "nome": "Comores",
+    "nomeFormal": "União das Comores"
+  },
+  {
+    "idPais": 49,
+    "abreviacao": "COG",
+    "nome": "Congo",
+    "nomeFormal": "República do Congo"
+  },
+  {
+    "idPais": 50,
+    "abreviacao": "COD",
+    "nome": "Congo (DR)",
+    "nomeFormal": "República Democrática do Congo"
+  },
+  {
+    "idPais": 51,
+    "abreviacao": "COK",
+    "nome": "Ilhas Cook",
+    "nomeFormal": "Ilhas Cook"
+  },
+  {
+    "idPais": 52,
+    "abreviacao": "CRI",
+    "nome": "Costa Rica",
+    "nomeFormal": "República da Costa Rica"
+  },
+  {
+    "idPais": 53,
+    "abreviacao": "CIV",
+    "nome": "Costa do Marfim",
+    "nomeFormal": "República da Costa do Marfim"
+  },
+  {
+    "idPais": 54,
+    "abreviacao": "HRV",
+    "nome": "Croácia",
+    "nomeFormal": "República da Croácia"
+  },
+  {
+    "idPais": 55,
+    "abreviacao": "CUB",
+    "nome": "Cuba",
+    "nomeFormal": "República de Cuba"
+  },
+  {
+    "idPais": 56,
+    "abreviacao": "CYP",
+    "nome": "Chipre",
+    "nomeFormal": "República do Chipre"
+  },
+  {
+    "idPais": 57,
+    "abreviacao": "CZE",
+    "nome": "República Tcheca",
+    "nomeFormal": "República Tcheca"
+  },
+  {
+    "idPais": 58,
+    "abreviacao": "DNK",
+    "nome": "Dinamarca",
+    "nomeFormal": "Reino da Dinamarca"
+  },
+  {
+    "idPais": 59,
+    "abreviacao": "DJI",
+    "nome": "Djibuti",
+    "nomeFormal": "República do Djibuti"
+  },
+  {
+    "idPais": 60,
+    "abreviacao": "DMA",
+    "nome": "Dominica",
+    "nomeFormal": "Comunidade da Dominica"
+  },
+  {
+    "idPais": 61,
+    "abreviacao": "DOM",
+    "nome": "República Dominicana",
+    "nomeFormal": "República Dominicana"
+  },
+  {
+    "idPais": 62,
+    "abreviacao": "ECU",
+    "nome": "Equador",
+    "nomeFormal": "República do Equador"
+  },
+  {
+    "idPais": 63,
+    "abreviacao": "EGY",
+    "nome": "Egito",
+    "nomeFormal": "República Árabe do Egito"
+  },
+  {
+    "idPais": 64,
+    "abreviacao": "SLV",
+    "nome": "El Salvador",
+    "nomeFormal": "República El Salvador"
+  },
+  {
+    "idPais": 65,
+    "abreviacao": "GNQ",
+    "nome": "Guiné Equatorial",
+    "nomeFormal": "República do Guiné Equatorial"
+  },
+  {
+    "idPais": 66,
+    "abreviacao": "ERI",
+    "nome": "Eritreia",
+    "nomeFormal": "Estado da Eritreia"
+  },
+  {
+    "idPais": 67,
+    "abreviacao": "EST",
+    "nome": "Estônia",
+    "nomeFormal": "República da Estônia"
+  },
+  {
+    "idPais": 68,
+    "abreviacao": "ETH",
+    "nome": "Etiópia",
+    "nomeFormal": "República Democrática Federal da Etiópia"
+  },
+  {
+    "idPais": 69,
+    "abreviacao": "FLK",
+    "nome": "Ilhas Malvinas",
+    "nomeFormal": "Ilhas Malvinas"
+  },
+  {
+    "idPais": 70,
+    "abreviacao": "FRO",
+    "nome": "Ilhas Faroe",
+    "nomeFormal": "Ilhas Faroe"
+  },
+  {
+    "idPais": 71,
+    "abreviacao": "FJI",
+    "nome": "Fiji",
+    "nomeFormal": "República do Fiji"
+  },
+  {
+    "idPais": 72,
+    "abreviacao": "FIN",
+    "nome": "Finlândia",
+    "nomeFormal": "República da Finlândia"
+  },
+  {
+    "idPais": 73,
+    "abreviacao": "FRA",
+    "nome": "França",
+    "nomeFormal": "República Francesa"
+  },
+  {
+    "idPais": 74,
+    "abreviacao": "GUF",
+    "nome": "Guiana Francesa",
+    "nomeFormal": "Guiana Francesa"
+  },
+  {
+    "idPais": 75,
+    "abreviacao": "PYF",
+    "nome": "Polinésia Francesa",
+    "nomeFormal": "Polinésia Francesa"
+  },
+  {
+    "idPais": 76,
+    "abreviacao": "ATF",
+    "nome": "Terras Austrais e Antárticas Francesas",
+    "nomeFormal": "Território das Terras Austrais e Antárticas Francesas"
+  },
+  {
+    "idPais": 77,
+    "abreviacao": "GAB",
+    "nome": "Gabão",
+    "nomeFormal": "República Gabonesa"
+  },
+  {
+    "idPais": 78,
+    "abreviacao": "GMB",
+    "nome": "Gâmbia",
+    "nomeFormal": "República da Gâmbia"
+  },
+  {
+    "idPais": 79,
+    "abreviacao": "GEO",
+    "nome": "Geórgia",
+    "nomeFormal": "Geórgia"
+  },
+  {
+    "idPais": 80,
+    "abreviacao": "DEU",
+    "nome": "Alemanha",
+    "nomeFormal": "República Federal da Alemanha"
+  },
+  {
+    "idPais": 81,
+    "abreviacao": "GHA",
+    "nome": "Gana",
+    "nomeFormal": "Repúblia de Gana"
+  },
+  {
+    "idPais": 82,
+    "abreviacao": "GIB",
+    "nome": "Gibraltar",
+    "nomeFormal": "Gibraltar"
+  },
+  {
+    "idPais": 83,
+    "abreviacao": "GRC",
+    "nome": "Grécia",
+    "nomeFormal": "República Helênica"
+  },
+  {
+    "idPais": 84,
+    "abreviacao": "GRL",
+    "nome": "Groelândia",
+    "nomeFormal": "Groelândia"
+  },
+  {
+    "idPais": 85,
+    "abreviacao": "GRD",
+    "nome": "Granada",
+    "nomeFormal": "Granada"
+  },
+  {
+    "idPais": 86,
+    "abreviacao": "GLP",
+    "nome": "Guadalupe",
+    "nomeFormal": "Guadalupe"
+  },
+  {
+    "idPais": 87,
+    "abreviacao": "GUM",
+    "nome": "Guão",
+    "nomeFormal": "Território do Guão"
+  },
+  {
+    "idPais": 88,
+    "abreviacao": "GTM",
+    "nome": "Guatemala",
+    "nomeFormal": "República da Guatemala"
+  },
+  {
+    "idPais": 89,
+    "abreviacao": "GIN",
+    "nome": "Guiné",
+    "nomeFormal": "República do Guiné"
+  },
+  {
+    "idPais": 90,
+    "abreviacao": "GNB",
+    "nome": "Guiné-Bissau",
+    "nomeFormal": "República da Guiné-Bissau"
+  },
+  {
+    "idPais": 91,
+    "abreviacao": "GUY",
+    "nome": "Guiana",
+    "nomeFormal": "República Cooperativa da Guiana"
+  },
+  {
+    "idPais": 92,
+    "abreviacao": "HTI",
+    "nome": "Haiti",
+    "nomeFormal": "República do Haiti"
+  },
+  {
+    "idPais": 93,
+    "abreviacao": "HMD",
+    "nome": "Ilhas Heard e McDonald",
+    "nomeFormal": "Território das Ilhas Heard e McDonald"
+  },
+  {
+    "idPais": 94,
+    "abreviacao": "VAT",
+    "nome": "Vaticano",
+    "nomeFormal": "Estado da Cidade do Vaticano"
+  },
+  {
+    "idPais": 95,
+    "abreviacao": "HND",
+    "nome": "Honduras",
+    "nomeFormal": "República de Honduras"
+  },
+  {
+    "idPais": 96,
+    "abreviacao": "HKG",
+    "nome": "Hong Kong",
+    "nomeFormal": "Região Administrativa Especial de Hong Kong da República Popular da China"
+  },
+  {
+    "idPais": 97,
+    "abreviacao": "HUN",
+    "nome": "Hungria",
+    "nomeFormal": "Hungria"
+  },
+  {
+    "idPais": 98,
+    "abreviacao": "ISL",
+    "nome": "Islândia",
+    "nomeFormal": "Islândia"
+  },
+  {
+    "idPais": 99,
+    "abreviacao": "IND",
+    "nome": "Índia",
+    "nomeFormal": "República da Índia"
+  },
+  {
+    "idPais": 100,
+    "abreviacao": "IDN",
+    "nome": "Indonésia",
+    "nomeFormal": "República da Indonésia"
+  },
+  {
+    "idPais": 101,
+    "abreviacao": "IRN",
+    "nome": "Iran",
+    "nomeFormal": "República Islâmica do Iran"
+  },
+  {
+    "idPais": 102,
+    "abreviacao": "IRQ",
+    "nome": "Iraque",
+    "nomeFormal": "República do Iraque"
+  },
+  {
+    "idPais": 103,
+    "abreviacao": "IRL",
+    "nome": "Irlanda",
+    "nomeFormal": "Irlanda"
+  },
+  {
+    "idPais": 104,
+    "abreviacao": "ISR",
+    "nome": "Israel",
+    "nomeFormal": "Estado de Israel"
+  },
+  {
+    "idPais": 105,
+    "abreviacao": "ITA",
+    "nome": "Italia",
+    "nomeFormal": "República Italiana"
+  },
+  {
+    "idPais": 106,
+    "abreviacao": "JAM",
+    "nome": "Jamaica",
+    "nomeFormal": "Jamaica"
+  },
+  {
+    "idPais": 107,
+    "abreviacao": "JPN",
+    "nome": "Japão",
+    "nomeFormal": "Japão"
+  },
+  {
+    "idPais": 108,
+    "abreviacao": "JOR",
+    "nome": "Jornânia",
+    "nomeFormal": "Reino Hachemita da Jordânia"
+  },
+  {
+    "idPais": 109,
+    "abreviacao": "KAZ",
+    "nome": "Cazaquistão",
+    "nomeFormal": "República do Cazaquistão"
+  },
+  {
+    "idPais": 110,
+    "abreviacao": "KEN",
+    "nome": "Quênia",
+    "nomeFormal": "República do Quênia"
+  },
+  {
+    "idPais": 111,
+    "abreviacao": "KIR",
+    "nome": "Kiribati",
+    "nomeFormal": "República do Kiribati"
+  },
+  {
+    "idPais": 112,
+    "abreviacao": "PRK",
+    "nome": "Coreia do Norte",
+    "nomeFormal": "República Democrática Popular da Coreia"
+  },
+  {
+    "idPais": 113,
+    "abreviacao": "KOR",
+    "nome": "Coreia do Sul",
+    "nomeFormal": "República da Coreia"
+  },
+  {
+    "idPais": 114,
+    "abreviacao": "KWT",
+    "nome": "Kuwait",
+    "nomeFormal": "Estado do Kuwait"
+  },
+  {
+    "idPais": 115,
+    "abreviacao": "KGZ",
+    "nome": "Quirguistão",
+    "nomeFormal": "República Quirguiz"
+  },
+  {
+    "idPais": 116,
+    "abreviacao": "LAO",
+    "nome": "Laos",
+    "nomeFormal": "República Democrática Popular Lau"
+  },
+  {
+    "idPais": 117,
+    "abreviacao": "LVA",
+    "nome": "Letônia",
+    "nomeFormal": "República da Letônia"
+  },
+  {
+    "idPais": 118,
+    "abreviacao": "LBN",
+    "nome": "Líbano",
+    "nomeFormal": "República Libanesa"
+  },
+  {
+    "idPais": 119,
+    "abreviacao": "LSO",
+    "nome": "Lesoto",
+    "nomeFormal": "Reino do Lesoto"
+  },
+  {
+    "idPais": 120,
+    "abreviacao": "LBR",
+    "nome": "Libéria",
+    "nomeFormal": "República da Libéria"
+  },
+  {
+    "idPais": 121,
+    "abreviacao": "LBY",
+    "nome": "Líbia",
+    "nomeFormal": "Líbia"
+  },
+  {
+    "idPais": 122,
+    "abreviacao": "LIE",
+    "nome": "Liechtenstein",
+    "nomeFormal": "Principado de Liechtenstein"
+  },
+  {
+    "idPais": 123,
+    "abreviacao": "LTU",
+    "nome": "Lituânia",
+    "nomeFormal": "República da Lituânia"
+  },
+  {
+    "idPais": 124,
+    "abreviacao": "LUX",
+    "nome": "Luxemburgo",
+    "nomeFormal": "Grão-Ducado do Luxemburgo"
+  },
+  {
+    "idPais": 125,
+    "abreviacao": "MAC",
+    "nome": "Macao",
+    "nomeFormal": "Macao"
+  },
+  {
+    "idPais": 126,
+    "abreviacao": "MKD",
+    "nome": "Macedônia",
+    "nomeFormal": "República da Macedônia"
+  },
+  {
+    "idPais": 127,
+    "abreviacao": "MDG",
+    "nome": "Madagascar",
+    "nomeFormal": "República de Madagascar"
+  },
+  {
+    "idPais": 128,
+    "abreviacao": "MWI",
+    "nome": "Malawi",
+    "nomeFormal": "República de Malawi"
+  },
+  {
+    "idPais": 129,
+    "abreviacao": "MYS",
+    "nome": "Malásia",
+    "nomeFormal": "Malásia"
+  },
+  {
+    "idPais": 130,
+    "abreviacao": "MDV",
+    "nome": "Maldivas",
+    "nomeFormal": "Reública de Maldivas"
+  },
+  {
+    "idPais": 131,
+    "abreviacao": "MLI",
+    "nome": "Mali",
+    "nomeFormal": "República do Mali"
+  },
+  {
+    "idPais": 132,
+    "abreviacao": "MLT",
+    "nome": "Malta",
+    "nomeFormal": "República de Malta"
+  },
+  {
+    "idPais": 133,
+    "abreviacao": "MHL",
+    "nome": "Ilhas Marshall",
+    "nomeFormal": "República das Ilhas Marshall"
+  },
+  {
+    "idPais": 134,
+    "abreviacao": "MTQ",
+    "nome": "Martinica",
+    "nomeFormal": "Martinica"
+  },
+  {
+    "idPais": 135,
+    "abreviacao": "MRT",
+    "nome": "Mauritânia",
+    "nomeFormal": "República Islâmica da Mauritânia"
+  },
+  {
+    "idPais": 136,
+    "abreviacao": "MUS",
+    "nome": "Maurício",
+    "nomeFormal": "República de Maurício"
+  },
+  {
+    "idPais": 137,
+    "abreviacao": "MYT",
+    "nome": "Mayotte",
+    "nomeFormal": "Departamento de Mayotte"
+  },
+  {
+    "idPais": 138,
+    "abreviacao": "MEX",
+    "nome": "México",
+    "nomeFormal": "Estados Unidos Mexicanos"
+  },
+  {
+    "idPais": 139,
+    "abreviacao": "FSM",
+    "nome": "Micronésia",
+    "nomeFormal": "Estados Federados da Micronesia"
+  },
+  {
+    "idPais": 140,
+    "abreviacao": "MDA",
+    "nome": "Moldova",
+    "nomeFormal": "República de Moldova"
+  },
+  {
+    "idPais": 141,
+    "abreviacao": "MCO",
+    "nome": "Mônaco",
+    "nomeFormal": "Principado de Mônaco"
+  },
+  {
+    "idPais": 142,
+    "abreviacao": "MNG",
+    "nome": "Mongólia",
+    "nomeFormal": "Mongólia"
+  },
+  {
+    "idPais": 143,
+    "abreviacao": "MSR",
+    "nome": "Montserrat",
+    "nomeFormal": "Montserrat"
+  },
+  {
+    "idPais": 144,
+    "abreviacao": "MAR",
+    "nome": "Marrocos",
+    "nomeFormal": "Reino de Marrocos"
+  },
+  {
+    "idPais": 145,
+    "abreviacao": "MOZ",
+    "nome": "Moçambique",
+    "nomeFormal": "República de Moçambique"
+  },
+  {
+    "idPais": 146,
+    "abreviacao": "MMR",
+    "nome": "Birmânia",
+    "nomeFormal": "República da União de Myanmar"
+  },
+  {
+    "idPais": 147,
+    "abreviacao": "NAM",
+    "nome": "Namíbia",
+    "nomeFormal": "República da Namíbia"
+  },
+  {
+    "idPais": 148,
+    "abreviacao": "NRU",
+    "nome": "Nauru",
+    "nomeFormal": "República de Nauru"
+  },
+  {
+    "idPais": 149,
+    "abreviacao": "NPL",
+    "nome": "Nepal",
+    "nomeFormal": "República Democrática Federativa do Nepal"
+  },
+  {
+    "idPais": 150,
+    "abreviacao": "NLD",
+    "nome": "Holanda",
+    "nomeFormal": "Holanda"
+  },
+  {
+    "idPais": 151,
+    "abreviacao": "ANT",
+    "nome": "Antilhas Holandesas",
+    "nomeFormal": "Antilhas Holandesas"
+  },
+  {
+    "idPais": 152,
+    "abreviacao": "NCL",
+    "nome": "Nova Caledônia",
+    "nomeFormal": "Nova Caledônia"
+  },
+  {
+    "idPais": 153,
+    "abreviacao": "NZL",
+    "nome": "Nova Zelândia",
+    "nomeFormal": "Nova Zelândia"
+  },
+  {
+    "idPais": 154,
+    "abreviacao": "NIC",
+    "nome": "Nicarágua",
+    "nomeFormal": "República da Nicarágua"
+  },
+  {
+    "idPais": 155,
+    "abreviacao": "NER",
+    "nome": "Niger",
+    "nomeFormal": "República do Niger"
+  },
+  {
+    "idPais": 156,
+    "abreviacao": "NGA",
+    "nome": "Nigéria",
+    "nomeFormal": "República Federativa da Nigéria"
+  },
+  {
+    "idPais": 157,
+    "abreviacao": "NIU",
+    "nome": "Niue",
+    "nomeFormal": "Niue"
+  },
+  {
+    "idPais": 158,
+    "abreviacao": "NFK",
+    "nome": "Ilha Norfolk",
+    "nomeFormal": "Território da Ilha Norfolk"
+  },
+  {
+    "idPais": 159,
+    "abreviacao": "MNP",
+    "nome": "Ilhas Marianas do Norte",
+    "nomeFormal": "Comunidade das Ilhas Marianas do Norte"
+  },
+  {
+    "idPais": 160,
+    "abreviacao": "NOR",
+    "nome": "Noruega",
+    "nomeFormal": "Reino da Noruega"
+  },
+  {
+    "idPais": 161,
+    "abreviacao": "OMN",
+    "nome": "Omã",
+    "nomeFormal": "Sultanato de Omã"
+  },
+  {
+    "idPais": 162,
+    "abreviacao": "PAK",
+    "nome": "Paquistão",
+    "nomeFormal": "República Islâmica do Paquistão"
+  },
+  {
+    "idPais": 163,
+    "abreviacao": "PLW",
+    "nome": "Palau",
+    "nomeFormal": "República de Palau"
+  },
+  {
+    "idPais": 164,
+    "abreviacao": "PSE",
+    "nome": "Palestina",
+    "nomeFormal": "Estado da Palestina"
+  },
+  {
+    "idPais": 165,
+    "abreviacao": "PAN",
+    "nome": "Panamá",
+    "nomeFormal": "República do Panamá"
+  },
+  {
+    "idPais": 166,
+    "abreviacao": "PNG",
+    "nome": "Papua-Nova Guiné",
+    "nomeFormal": "Estado Independente da Papua-Nova Guiné"
+  },
+  {
+    "idPais": 167,
+    "abreviacao": "PRY",
+    "nome": "Paraguai",
+    "nomeFormal": "República do Paraguai"
+  },
+  {
+    "idPais": 168,
+    "abreviacao": "PER",
+    "nome": "Peru",
+    "nomeFormal": "República do Peru"
+  },
+  {
+    "idPais": 169,
+    "abreviacao": "PHL",
+    "nome": "Filipinas",
+    "nomeFormal": "República das Filipinas"
+  },
+  {
+    "idPais": 170,
+    "abreviacao": "PCN",
+    "nome": "Ilhas Picárnia",
+    "nomeFormal": "Ilhas Picárnia"
+  },
+  {
+    "idPais": 171,
+    "abreviacao": "POL",
+    "nome": "Polônia",
+    "nomeFormal": "República da Polônia"
+  },
+  {
+    "idPais": 172,
+    "abreviacao": "PRT",
+    "nome": "Portugal",
+    "nomeFormal": "República Portuguesa"
+  },
+  {
+    "idPais": 173,
+    "abreviacao": "PRI",
+    "nome": "Porto Rico",
+    "nomeFormal": "Comunidade do Porto Rico"
+  },
+  {
+    "idPais": 174,
+    "abreviacao": "QAT",
+    "nome": "Catar",
+    "nomeFormal": "Estado do Catar"
+  },
+  {
+    "idPais": 175,
+    "abreviacao": "REU",
+    "nome": "Reunião",
+    "nomeFormal": "Polônia"
+  },
+  {
+    "idPais": 176,
+    "abreviacao": "ROM",
+    "nome": "Romênia",
+    "nomeFormal": "Romênia"
+  },
+  {
+    "idPais": 177,
+    "abreviacao": "RUS",
+    "nome": "Rússia",
+    "nomeFormal": "Federação Russa"
+  },
+  {
+    "idPais": 178,
+    "abreviacao": "RWA",
+    "nome": "Ruanda",
+    "nomeFormal": "República da Ruanda"
+  },
+  {
+    "idPais": 179,
+    "abreviacao": "SHN",
+    "nome": "Santa Helena",
+    "nomeFormal": "Saint Helena"
+  },
+  {
+    "idPais": 180,
+    "abreviacao": "KNA",
+    "nome": "São Cristóvão",
+    "nomeFormal": "São Cristóvão"
+  },
+  {
+    "idPais": 181,
+    "abreviacao": "LCA",
+    "nome": "Santa Lúcia",
+    "nomeFormal": "Santa Lúcia"
+  },
+  {
+    "idPais": 182,
+    "abreviacao": "SPM",
+    "nome": "São Pedro e Miquelon",
+    "nomeFormal": "Coletividade Territorial de São Pedro e Miquelon"
+  },
+  {
+    "idPais": 183,
+    "abreviacao": "VCT",
+    "nome": "São Vicente e Granadinas",
+    "nomeFormal": "São Vicente e Granadinas"
+  },
+  {
+    "idPais": 184,
+    "abreviacao": "WSM",
+    "nome": "Samoa",
+    "nomeFormal": "Estado Independente de Samoa"
+  },
+  {
+    "idPais": 185,
+    "abreviacao": "SMR",
+    "nome": "São Marino",
+    "nomeFormal": "República de São Marino"
+  },
+  {
+    "idPais": 186,
+    "abreviacao": "STP",
+    "nome": "Sao Tomé e Príncipe",
+    "nomeFormal": "República Democrática de Sao Tomé e Príncipe"
+  },
+  {
+    "idPais": 187,
+    "abreviacao": "SAU",
+    "nome": "Arábia Saudita",
+    "nomeFormal": "Reino da Arábia Saudita"
+  },
+  {
+    "idPais": 188,
+    "abreviacao": "SEN",
+    "nome": "Senegal",
+    "nomeFormal": "República do Senegal"
+  },
+  {
+    "idPais": 189,
+    "abreviacao": "SRB",
+    "nome": "Sérvia e Montenegro",
+    "nomeFormal": "União Estatal de Sérvia e Montenegro"
+  },
+  {
+    "idPais": 190,
+    "abreviacao": "SYC",
+    "nome": "Seicheles",
+    "nomeFormal": "República das Seicheles"
+  },
+  {
+    "idPais": 191,
+    "abreviacao": "SLE",
+    "nome": "República da Serra Leoa",
+    "nomeFormal": "República da Serra Leoa"
+  },
+  {
+    "idPais": 192,
+    "abreviacao": "SGP",
+    "nome": "Singapura",
+    "nomeFormal": "República da Singapura"
+  },
+  {
+    "idPais": 193,
+    "abreviacao": "SVK",
+    "nome": "Eslováquia",
+    "nomeFormal": "República Eslovaca"
+  },
+  {
+    "idPais": 194,
+    "abreviacao": "SVN",
+    "nome": "Eslovênia",
+    "nomeFormal": "República da Eslovênia"
+  },
+  {
+    "idPais": 195,
+    "abreviacao": "SLB",
+    "nome": "Ilhas Salomão",
+    "nomeFormal": "Ilhas Salomão"
+  },
+  {
+    "idPais": 196,
+    "abreviacao": "SOM",
+    "nome": "Somália",
+    "nomeFormal": "República da Somália"
+  },
+  {
+    "idPais": 197,
+    "abreviacao": "ZAF",
+    "nome": "África do Sul",
+    "nomeFormal": "República da África do Sul"
+  },
+  {
+    "idPais": 198,
+    "abreviacao": "SGS",
+    "nome": "Ilhas Geórgia do Sul e Sandwich do Sul",
+    "nomeFormal": "Ilhas Geórgia do Sul e Sandwich do Sul"
+  },
+  {
+    "idPais": 199,
+    "abreviacao": "ESP",
+    "nome": "Espanha",
+    "nomeFormal": "Reino da Espanha"
+  },
+  {
+    "idPais": 200,
+    "abreviacao": "LKA",
+    "nome": "Sri Lanka",
+    "nomeFormal": "República Democrática Socialista do Sri Lanka"
+  },
+  {
+    "idPais": 201,
+    "abreviacao": "SDN",
+    "nome": "Sudão",
+    "nomeFormal": "República do Sudão"
+  },
+  {
+    "idPais": 202,
+    "abreviacao": "SUR",
+    "nome": "Suriname",
+    "nomeFormal": "República do Suriname"
+  },
+  {
+    "idPais": 203,
+    "abreviacao": "SJM",
+    "nome": "Esvalbarde",
+    "nomeFormal": "Esvalbarde"
+  },
+  {
+    "idPais": 204,
+    "abreviacao": "SWZ",
+    "nome": "Suazilândia",
+    "nomeFormal": "Reino da Suazilândia"
+  },
+  {
+    "idPais": 205,
+    "abreviacao": "SWE",
+    "nome": "Suécia",
+    "nomeFormal": "Reino da Suécia"
+  },
+  {
+    "idPais": 206,
+    "abreviacao": "CHE",
+    "nome": "Suiça",
+    "nomeFormal": "Confederação Suiça"
+  },
+  {
+    "idPais": 207,
+    "abreviacao": "SYR",
+    "nome": "Síria",
+    "nomeFormal": "República Árabe Síria"
+  },
+  {
+    "idPais": 208,
+    "abreviacao": "TWN",
+    "nome": "Taiwan",
+    "nomeFormal": "Taiwan"
+  },
+  {
+    "idPais": 209,
+    "abreviacao": "TJK",
+    "nome": "Tajiquistão",
+    "nomeFormal": "República do Tajiquistão"
+  },
+  {
+    "idPais": 210,
+    "abreviacao": "TZA",
+    "nome": "Tanzânia",
+    "nomeFormal": "República Unida da Tanzânia"
+  },
+  {
+    "idPais": 211,
+    "abreviacao": "THA",
+    "nome": "Tailândia",
+    "nomeFormal": "Reino da Tailândia"
+  },
+  {
+    "idPais": 212,
+    "abreviacao": "TLS",
+    "nome": "Timor-Leste",
+    "nomeFormal": "República Democrática de Timor-Leste"
+  },
+  {
+    "idPais": 213,
+    "abreviacao": "TGO",
+    "nome": "Togo",
+    "nomeFormal": "República Togolesa"
+  },
+  {
+    "idPais": 214,
+    "abreviacao": "TKL",
+    "nome": "Toquelau",
+    "nomeFormal": "Toquelau"
+  },
+  {
+    "idPais": 215,
+    "abreviacao": "TON",
+    "nome": "Tonga",
+    "nomeFormal": "Reino de Tonga"
+  },
+  {
+    "idPais": 216,
+    "abreviacao": "TTO",
+    "nome": "Trinidad e Tobago",
+    "nomeFormal": "República da Trinidad e Tobago"
+  },
+  {
+    "idPais": 217,
+    "abreviacao": "TUN",
+    "nome": "Tunísia",
+    "nomeFormal": "República da Tunísia"
+  },
+  {
+    "idPais": 218,
+    "abreviacao": "TUR",
+    "nome": "Turquia",
+    "nomeFormal": "República da Turquia"
+  },
+  {
+    "idPais": 219,
+    "abreviacao": "TKM",
+    "nome": "Turcomenistão",
+    "nomeFormal": "Turcomenistão"
+  },
+  {
+    "idPais": 220,
+    "abreviacao": "TCA",
+    "nome": "Ilhas Turks e Caicos",
+    "nomeFormal": "Ilhas Turks e Caicos"
+  },
+  {
+    "idPais": 221,
+    "abreviacao": "TUV",
+    "nome": "Tuvalu",
+    "nomeFormal": "Tuvalu"
+  },
+  {
+    "idPais": 222,
+    "abreviacao": "UGA",
+    "nome": "Uganda",
+    "nomeFormal": "República de Uganda"
+  },
+  {
+    "idPais": 223,
+    "abreviacao": "UKR",
+    "nome": "Ucrânia",
+    "nomeFormal": "Ucrânia"
+  },
+  {
+    "idPais": 224,
+    "abreviacao": "ARE",
+    "nome": "Emirados Árabes",
+    "nomeFormal": "Emirados Árabes Unidos"
+  },
+  {
+    "idPais": 225,
+    "abreviacao": "GBR",
+    "nome": "Reino Unido",
+    "nomeFormal": "Reino Unido da Grã-Bretanha e Irlanda do Norte"
+  },
+  {
+    "idPais": 226,
+    "abreviacao": "USA",
+    "nome": "Estados Unidos",
+    "nomeFormal": "Estados Unidos da América"
+  },
+  {
+    "idPais": 227,
+    "abreviacao": "UMI",
+    "nome": "Ilhas Menores Distantes dos Estados Unidos",
+    "nomeFormal": "Ilhas Menores Distantes dos Estados Unidos"
+  },
+  {
+    "idPais": 228,
+    "abreviacao": "URY",
+    "nome": "Uruguai",
+    "nomeFormal": "República Oriental do Uruguai"
+  },
+  {
+    "idPais": 229,
+    "abreviacao": "UZB",
+    "nome": "Uzbequistão",
+    "nomeFormal": "República do Uzbequistão"
+  },
+  {
+    "idPais": 230,
+    "abreviacao": "VUT",
+    "nome": "Vanuatu",
+    "nomeFormal": "República de Vanuatu"
+  },
+  {
+    "idPais": 231,
+    "abreviacao": "VEN",
+    "nome": "Venezuela",
+    "nomeFormal": "República Bolivariana da Venezuela"
+  },
+  {
+    "idPais": 232,
+    "abreviacao": "VNM",
+    "nome": "Vietnam",
+    "nomeFormal": "República Socialista do Vietnam"
+  },
+  {
+    "idPais": 233,
+    "abreviacao": "VGB",
+    "nome": "Ilhas Virgens Inglesas",
+    "nomeFormal": "Ilhas Virgens"
+  },
+  {
+    "idPais": 234,
+    "abreviacao": "VIR",
+    "nome": "Ilhas Virgens (USA)",
+    "nomeFormal": "Ilhas Virgens dos Estados Unidos"
+  },
+  {
+    "idPais": 235,
+    "abreviacao": "WLF",
+    "nome": "Wallis e Futuna",
+    "nomeFormal": "Wallis e Futuna"
+  },
+  {
+    "idPais": 236,
+    "abreviacao": "ESH",
+    "nome": "Saara Ocidental",
+    "nomeFormal": "Saara Ocidental"
+  },
+  {
+    "idPais": 237,
+    "abreviacao": "YEM",
+    "nome": "Iêmen",
+    "nomeFormal": "República do Iêmen"
+  },
+  {
+    "idPais": 238,
+    "abreviacao": "ZMB",
+    "nome": "Zâmbia",
+    "nomeFormal": "República do Zâmbia"
+  },
+  {
+    "idPais": 239,
+    "abreviacao": "ZWE",
+    "nome": "Zimbábue",
+    "nomeFormal": "República do Zimbábue"
+  }
+]

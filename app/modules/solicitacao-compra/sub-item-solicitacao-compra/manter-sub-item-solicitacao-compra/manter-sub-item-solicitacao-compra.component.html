@@ -1,0 +1,79 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Dados Gerais do Produto</div>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form" *ngIf="form">
+    <div class="form-row">
+      <div class="col-md-4 align-self-center">
+        <div class="row justify-content-md-center">
+          <div class="col-7">
+            <img class="img-fluid" src="./../../../../../assets/img/produtos/default.png"
+              [alt]="form.controls.nomeServico.value">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label>ID SubItem:</label>
+            <input type="text" class="form-control" formControlName="idSubItemSolicitacaoCompra">
+          </div>
+          <div class="form-group col-md-6">
+            <label>ID ERP:</label>
+            <input type="text" class="form-control" formControlName="idSubItemSap">
+          </div>
+          <div class="form-group col">
+            <label>Descrição:</label>
+            <textarea class="form-control" formControlName="nomeServico" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label>Quantidade:</label>
+        <input type="text" class="form-control" formControlName="quantidade">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Sigla Und. Medida:</label>
+        <input type="text" class="form-control" formControlName="siglaUnidadeMedida">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Cod. Tarifa Fiscal:</label>
+        <input type="text" class="form-control" formControlName="codigoTarifaFiscal">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label>Preço Bruto:</label>
+        <input type="text" class="form-control" formControlName="precoBruto">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Preço Líquido:</label>
+        <input type="text" class="form-control" formControlName="precoLiquido">
+      </div>
+      <div class="form-group col-md-4">
+        <label>Valor Referência:</label>
+        <input type="text" class="form-control" formControlName="valorReferencia">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-12">
+        <label class="pr-2"> Anexar Arquivo: </label>
+        <input-file [multiple]="true"
+          accept=".csv,.tiff,.txt,.pdf,.xlsx,.xls,.pptx,.ppt,.docx,.doc,.odt,.ods,.odp,.png,.jpeg,.jpg"
+          (select)="incluirArquivos($event)"></input-file>
+      </div>
+      <div class="form-group col-12">
+        <galeria-arquivos [arquivos]="form.controls.anexos.value" size="sm" (excluir)="excluirArquivo($event)">
+        </galeria-arquivos>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="fechar()">Fechar</button>
+</div>

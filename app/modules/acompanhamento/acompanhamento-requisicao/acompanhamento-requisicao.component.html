@@ -1,0 +1,2 @@
+<div class="no-content mt-5" *ngIf="!requisicaoItens?.length" translate>GENERAL.NO_RECORDS_FOUND</div>
+<requisicao-item [requisicao-item]="item" *ngFor="let item of requisicaoItens"></requisicao-item>

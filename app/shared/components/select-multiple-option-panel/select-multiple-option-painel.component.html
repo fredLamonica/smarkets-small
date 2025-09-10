@@ -1,0 +1,42 @@
+<div
+  id="container"
+  class="select-dropdown-container"
+>
+  <div
+    class="select-dropdown"
+    id="dropdown"
+  >
+    <div class="select-options-wrapper">
+      <div class="select-options-list">
+        <div
+          *ngIf="!itens?.length"
+          class="select-option"
+        >
+          <span class="select-option-text">
+            Sem Registros
+          </span>
+        </div>
+        <div
+          *ngIf="itensPreCarregados && itens?.length"
+          (click)="selecioneTodos()"
+          class="select-option"
+          [ngClass]="{ 'selected': todosSelecionados }"
+        >
+          <span class="select-option-text">
+            Selecionar Todos
+          </span>
+        </div>
+        <div
+          (click)="selecioneOpcao(item.valor)"
+          *ngFor="let item of itens"
+          class="select-option"
+          [ngClass]="{ 'selected': item.selecionado }"
+        >
+          <span class="select-option-text">
+            {{item.descricao}}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

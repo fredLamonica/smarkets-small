@@ -1,0 +1,45 @@
+<div class="container-fluid-xl manter-campanha-franquia">
+  <div class="w-100" [ngStyle]="{ 'padding-bottom': '64px' }">
+    <div
+      class="col-12 identification-bar-fixed w-100"
+      [ngStyle]="{ top: '80px', background: '#ffffff' }"
+    >
+      <div class="col-1 d-flex" style="height: 100%"></div>
+      <div class="col-11 d-flex align-items-center" style="height: 100%">
+        <span class="identification-font identification-color"> Campanhas </span>
+        <i class="fas fa-greater-than identification-color mx-2"></i>
+        <span class="current-page-font"> {{ isCreate ? 'Incluir' : 'Editar' }} </span>
+      </div>
+    </div>
+  </div>
+  <sdk-header [heightValue]="'64px'" [topValue]="'144px'">
+    <div class="col-8 d-flex align-items-center titulo">
+      <span> {{ isCreate ? 'Nova Campanha' : campanhaFranquia?.titulo }} </span>
+    </div>
+    <div class="col-4 d-flex align-items-center justify-content-end header-action">
+      <div class="pr-4" *ngIf="!isCreate">
+        <span class="icon-custom" (click)="auditar()">
+          <i
+            class="fas fa-history"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            ngbTooltip="Auditoria"
+          ></i>
+        </span>
+      </div>
+    </div>
+  </sdk-header>
+
+  <sdk-two-columns>
+    <div class="w-100" tc-1>
+      <sdk-menu
+        id="menu"
+        [itens]="itens"
+        [showMenu]="false">
+      </sdk-menu>
+    </div>
+    <div class="scroll-y w-100" tc-2>
+      <router-outlet></router-outlet>
+    </div>
+  </sdk-two-columns>
+</div>

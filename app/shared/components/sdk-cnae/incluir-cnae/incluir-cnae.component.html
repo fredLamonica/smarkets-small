@@ -1,0 +1,39 @@
+<sdk-modal
+  class="text-transform-title modal-border-radius cnaes-border-radius"
+  title="INCLUIR CNAEs"
+>
+  <div class="container py-4">
+    <div class="row d-flex align-items-end">
+      <div class="col-9">
+        <label class="font-weight-bold">CNAEs</label>
+        <label class="fa fa-exclamation-circle icon-color"></label>
+        <ng-select
+          class=""
+          [clearable]="false"
+          [searchable]="true"
+          [hideSelected]="true"
+          [(ngModel)]="selecionado"
+          [loading]="cnaesLoading"
+          [loadingText]="'buscando...'"
+        >
+          <ng-option
+            *ngFor="let cnae of cnaes"
+            [value]="cnae"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ cnae.identificador }} - {{ cnae.descricao }}"
+            >{{ cnae.identificador }} - {{ cnae.descricao }}
+          </ng-option>
+        </ng-select>
+      </div>
+      <div class="col-3">
+        <button
+          class="btn btn-primary text-center btn-block button-border-radius"
+          (click)="incluirCnae()"
+        >
+          Incluir
+        </button>
+      </div>
+    </div>
+  </div>
+</sdk-modal>

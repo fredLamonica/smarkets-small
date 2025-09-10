@@ -1,0 +1,42 @@
+<div class="row mb-3">
+  <div class="col-md-6">
+    <div class="row justify-content-start">
+      <div class="col-md-4 col-xl-3">
+        <button role=button class="btn btn-block btn-primary" (click)="incluirNivel()">
+          <i class="fas fa-plus"></i> Incluir
+        </button>
+      </div>
+      <div class="col-md-4 col-xl-3">
+        <button role=button class="btn btn-block btn-secondary" [class.disabled]="niveisSelecionados?.length != 1"
+          (click)="alterarNivel()">
+          <i class="fas fa-pencil-alt"></i> Editar
+        </button>
+      </div>
+      <div class="col-md-4 col-xl-3">
+        <button role=button class="btn btn-block btn-danger" [class.disabled]="!niveisSelecionados?.length" (click)="solicitarExclusao()">
+          <i class="fas fa-trash-alt"></i> Remover
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="col-md-6">
+    <div class="row justify-content-end">
+      <div class="col-md-4 col-xl-3">
+        <button role=button class="btn btn-block btn-success" [class.disabled]="!niveisSelecionados?.length" (click)="alterarSituacao(Situacao.Ativo)">
+          <i class="fas fa-check"></i> Ativar
+        </button>
+      </div>
+      <div class="col-md-4 col-xl-3">
+        <button role=button class="btn btn-block btn-danger" [class.disabled]="!niveisSelecionados?.length" (click)="alterarSituacao(Situacao.Inativo)">
+          <i class="fas fa-times"></i> Desativar
+        </button>
+      </div>
+    </div>
+  </div> -->
+</div>
+<div class="row">
+  <div class="col">
+    <custom-table classes="table-striped table-sm" [settings]="settings" [source]="niveis" (select)="selecao($event)"></custom-table>
+    <pager [page]="pagina" [total-pages]="totalPaginas" [records-per-page]="itensPorPagina" (pagination)="paginacao($event)"></pager>
+  </div>
+</div>

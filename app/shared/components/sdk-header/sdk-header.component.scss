@@ -1,0 +1,25 @@
+.bar-fixed {
+  position: fixed;
+  z-index: 101;
+  display: flex;
+  height: 64px;
+  align-items: center;
+}
+
+.back-button {
+  padding: 0px 0px 0px 41px;
+  margin: 0px 0px 3.5px 0px;
+}
+
+// :host nav {
+//   position: fixed;
+//   background: #ffffff;
+//   width: 100%;
+//   z-index: 2;
+// }
+
+// .navbar {
+//   height: 80px;
+//   margin-bottom: 20px;
+//   margin: 0 3em;
+// }

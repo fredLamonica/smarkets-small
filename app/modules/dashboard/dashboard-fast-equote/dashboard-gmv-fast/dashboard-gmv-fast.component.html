@@ -1,0 +1,68 @@
+<div class="card-gmv">
+  <div class="card-body">
+    <h4 class="card-title text-uppercase font-weight-bold"></h4>
+    <div class="col my-5 d-flex justify-content-center" *ngIf="IsLoading; else hasIndicadoresGmvFast">
+      <div class="spinner spinner-secondary"></div>
+    </div>
+    <ng-template #hasIndicadoresGmvFast>
+      <div class="d-flex justify-content-around">
+        <div class="row text-center">
+          <div class="col-4">
+            <div class="col-12 px-0">
+              <sdk-circleprogressbar
+                [progressColor]="'#0081BF'"
+                [value]="IndicadorGmvFast?.totalPedidosEmCarrinho"
+                [maxValue]="IndicadorGmvFast?.totalPedidos"
+                [subtitle]="'Pedidos'"
+                [titleFontWeight]="600">
+              </sdk-circleprogressbar>
+            </div>
+            <i class="col-12 fa fa-caret-down fa-lg seta px-0"></i>
+            <span>
+              <strong style='color: #0081BF'> {{ IndicadorGmvFast?.valorTotalPedidosCarrinho | currency: 'BRL':'symbol':'1.2':'pt-BR'}} </strong> <br />
+              <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0">
+                Carrinho</span
+                >
+            </span>
+          </div>
+          <div class="col-4">
+            <div class="col-12 px-0">
+              <sdk-circleprogressbar
+                [progressColor]="'#2297A0'"
+                [value]="IndicadorGmvFast?.totalPedidosConcluidos"
+                [maxValue]="IndicadorGmvFast?.totalPedidos"
+                [subtitle]="'Pedidos'"
+                [titleFontWeight]="600"
+              ></sdk-circleprogressbar>
+            </div>
+            <i class="col-12 fa fa-caret-down fa-lg seta px-0"></i>
+            <span>
+              <strong style='color: #2297A0'>{{ IndicadorGmvFast?.valorTotalPedidosConcluidos | currency: 'BRL':'symbol':'1.2':'pt-BR' }} </strong><br />
+              <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0">
+                Transacionados</span
+                >
+              </span>
+          </div>
+          <div class="col-4">
+            <div class="col-12 px-0">
+              <sdk-circleprogressbar
+                [progressColor]="'#B55332'"
+                [value]="IndicadorGmvFast?.totalPedidosCancelados"
+                [maxValue]="IndicadorGmvFast?.totalPedidos"
+                [subtitle]="'Pedidos'"
+                [titleFontWeight]="600"
+              ></sdk-circleprogressbar>
+            </div>
+            <i class="col-12 fa fa-caret-down fa-lg seta px-0"></i>
+            <span>
+              <strong style='color: #B55332'>{{ IndicadorGmvFast?.valorTotalPedidosCancelados | currency: 'BRL':'symbol':'1.2':'pt-BR' }} </strong><br />
+              <span class="col-12 text-uppercase text-small-calculate font-weight-bold label px-0">
+                Cancelados</span
+              >
+            </span>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

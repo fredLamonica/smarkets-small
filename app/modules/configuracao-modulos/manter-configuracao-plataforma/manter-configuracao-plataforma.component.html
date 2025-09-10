@@ -1,0 +1,323 @@
+<smk-funcionalidade
+  *ngIf="configuracoes"
+  [titulo]="'Configurar Módulos / ' + configuracoes?.razaoSocial + ' /'"
+  tituloComplementar="Plataforma">
+
+  <ng-container acoes-barra>
+    <button
+      class="salvar btn btn-primary"
+      ngbTooltip="Salvar"
+      container="body"
+      (click)="salvar()">
+      <i class="fas fa-save"></i>
+    </button>
+  </ng-container>
+
+  <form [formGroup]="form">
+    <smk-card-funcionalidade class="mb-4" titulo="Geral" paddingBottom="0.5rem">
+      <label class="sub-title">Produto</label>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="codigoNcmObrigatorio"
+          formControlName="codigoNcmObrigatorio" />
+        <label class="form-check-label" for="codigoNcmObrigatorio">
+          Código NCM obrigatório no cadastro de produto.
+        </label>
+      </div>
+
+      <label class="sub-title">Fornecedores</label>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarModuloFornecedores"
+          formControlName="habilitarModuloFornecedores" />
+        <label class="form-check-label" for="habilitarModuloFornecedores">
+          Habilitar Módulo de Fornecedores.
+        </label>
+      </div>
+
+      <div class="form-group form-check" *ngIf="configuracoes?.holding">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="centralizaHomologacao"
+          formControlName="centralizaHomologacao" />
+        <label class="form-check-label" for="centralizaHomologacao">
+          Centralizar Homologação de Fornecedores na Holding Empresarial
+        </label>
+      </div>
+
+      <label *ngIf="configuracoes.tipoIntegracao != tipoIntegracao.ERP" class="sub-title">Requisição</label>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="aprovarRequisicoesAutomatico"
+          formControlName="aprovarRequisicoesAutomatico" />
+        <label class="form-check-label" for="aprovarRequisicoesAutomatico">
+          Aprovar Requisição Automaticamente.
+        </label>
+      </div>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarDesvinculoItemSolicitacaoCompra"
+          formControlName="habilitarDesvinculoItemSolicitacaoCompra" />
+        <label class="form-check-label" for="habilitarDesvinculoItemSolicitacaoCompra">
+          Habilitar Desvínculo Item Solicitação Compra
+        </label>
+      </div>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarDepartamentoRequisicao"
+          formControlName="habilitarDepartamentoRequisicao" />
+        <label class="form-check-label" for="habilitarDepartamentoRequisicao">
+          Habilitar Departamento.
+        </label>
+      </div>
+
+      <label class="sub-title">Cotação</label>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarModuloCotacao"
+          formControlName="habilitarModuloCotacao" />
+        <label class="form-check-label" for="habilitarModuloCotacao">
+          Habilitar Módulo de Cotação.
+        </label>
+      </div>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarEnvelopeFechado"
+          formControlName="habilitarEnvelopeFechado" />
+        <label class="form-check-label" for="habilitarEnvelopeFechado">
+          Habilitar Envelope Fechado.
+        </label>
+      </div>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarimpostoNcmCotacao"
+          formControlName="habilitarimpostoNcmCotacao" />
+        <label class="form-check-label" for="habilitarimpostoNcmCotacao">
+          Cotação com Imposto e NCM.
+        </label>
+      </div>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="permiteCompraAcimaQuantidade"
+          formControlName="permiteCompraAcimaQuantidade" />
+        <label class="form-check-label" for="permiteCompraAcimaQuantidade">
+          Permitir Gerar Pedido de Compra com qualquer quantidade.
+        </label>
+      </div>
+
+      <ng-container *ngIf="!isSmarkets">
+        <label class="sub-title">SLA</label>
+        <div class="form-group form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="usarSLAPadraoSmarkets"
+            formControlName="usarSLAPadraoSmarkets" />
+          <label class="form-check-label" for="usarSLAPadraoSmarkets">
+            SLA Padrão Smarkets
+          </label>
+        </div>
+      </ng-container>
+
+      <label class="sub-title">Pedido</label>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarRegularizacao"
+          formControlName="habilitarRegularizacao" />
+        <label class="form-check-label" for="habilitarRegularizacao">
+          Habilitar Regularização
+        </label>
+      </div>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarImobilizado"
+          formControlName="habilitarImobilizado" />
+        <label class="form-check-label" for="habilitarImobilizado">
+          Habilitar Imobilizado
+        </label>
+      </div>
+      <div class="row">
+        <div class="form-group col-sm-5 col-md-4 col-xxl-2">
+          <label for="tipoAprovacao"> Habilitar Alçada de Aprovação </label>
+          <ng-select
+            name="tipoAlcadaAprovacao"
+            formControlName="tipoAlcadaAprovacao"
+            (change)="changeTipoAlcadaAprovacao($event)">
+            <ng-option [value]="tipoAlcadaAprovacao.desmembrada">Alçada Desmembrada</ng-option>
+            <ng-option [value]="tipoAlcadaAprovacao.unificada">Alçada Unificada</ng-option>
+          </ng-select>
+        </div>
+      </div>
+      <div class="row">
+        <div *ngIf="form.controls.tipoAlcadaAprovacao.value === this.tipoAlcadaAprovacao.desmembrada"
+          class="form-group col-sm-5 col-md-4 col-xxl-2">
+          <label for="tipoAprovacao"> Habilitar Aprovação de Pedido por: </label>
+          <ng-select
+            name="tipoAprovacao"
+            formControlName="tipoAprovacao"
+            (change)="changeTipoAprovacao($event)">
+            <ng-option [value]="tipoAprovacao.Departamento">Departamento</ng-option>
+            <ng-option [value]="tipoAprovacao.CentroCusto">Centro de Custo</ng-option>
+            <ng-option [value]="tipoAprovacao.Integracao">Integração (API)</ng-option>
+          </ng-select>
+        </div>
+      </div>
+      <ng-container *ngIf="form.controls.tipoAprovacao.value === tipoAprovacao.Departamento">
+        <div class="form-check form-check-inline mb-4 mr-5" *ngFor="let item of modoAprovacaoValues; index as i">
+          <input
+            class="form-check-input"
+            type="radio"
+            [id]="'modoAprovacao_' + i"
+            [value]="item"
+            formControlName="modoAprovacao" />
+          <label class="form-check-label mr-2" [for]="'modoAprovacao_' + i">
+            {{ modoAprovacaoLabels.get(item) }}
+          </label>
+          <ng-template #tipContent>
+            <div style="text-align: left">
+              <p>{{ modoAprovacaoTooltip.get(item) }}</p>
+            </div>
+          </ng-template>
+          <i class="fas fa-info-circle" [ngbTooltip]="tipContent"
+            placement="top"
+            tooltipClass="tooltip-dark tip"></i>
+        </div>
+      </ng-container>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="usarCondicoesPagamentoPadraoSmarkets"
+          formControlName="usarCondicoesPagamentoPadraoSmarkets" />
+        <label class="form-check-label" for="usarCondicoesPagamentoPadraoSmarkets">
+          Usar Condições de Pagamento Padrão Smarkets.
+        </label>
+      </div>
+
+      <label class="sub-title">Matriz de Responsabilidade</label>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarRestricaoAlcadasMatrizResp"
+          formControlName="habilitarRestricaoAlcadasMatrizResp" />
+        <label class="form-check-label" for="habilitarRestricaoAlcadasMatrizResp">
+          Habilitar Restrição de Intersecção de Alçadas na Matriz de Responsabilidade
+        </label>
+      </div>
+
+      <label class="sub-title">Usuários</label>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarMFA"
+          formControlName="habilitarMFA" />
+        <label class="form-check-label" for="habilitarMFA">
+          Habilitar autenticação em dois fatores
+        </label>
+      </div>
+
+      <label class="sub-title">Compra Automatizada</label>
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarCompraAutomatizada"
+          formControlName="habilitarCompraAutomatizada" />
+        <label class="form-check-label" for="habilitarCompraAutomatizada">
+          Habilitar compra automatizada
+        </label>
+      </div>
+
+      <label class="sub-title">Track</label>
+      <div class="form-group form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="habilitarTrack"
+            formControlName="habilitarTrack" />
+          <label class="form-check-label" for="habilitarTrack">
+            Habilitar Pedido Track.
+          </label>
+      </div>
+      <div class="form-group form-check ml-4">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarFup"
+          formControlName="habilitarFup" />
+        <label class="form-check-label" for="habilitarFup">
+          Habilitar FUP.
+        </label>
+      </div>
+      <div class="form-group form-check ml-4">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarParadaManutencao"
+          formControlName="habilitarParadaManutencao" />
+        <label class="form-check-label" for="habilitarParadaManutencao">
+          Habilitar Parada Manutenção.
+        </label>
+      </div>
+      <div class="form-group form-check ml-4">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarQm"
+          formControlName="habilitarQm" />
+        <label class="form-check-label" for="habilitarQm">
+          Habilitar QM.
+        </label>
+      </div>
+      <div class="form-group form-check ml-4">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="habilitarZ1pz"
+          formControlName="habilitarZ1pz" />
+        <label class="form-check-label" for="habilitarZ1pz">
+          Habilitar Z1Pz.
+        </label>
+      </div>
+
+    </smk-card-funcionalidade>
+    <smk-card-funcionalidade titulo="Dashboard">
+      <div class="form-check form-check-inline mr-5" *ngFor="let item of configuracaoDashValues; index as i">
+        <input
+          class="form-check-input"
+          type="radio"
+          [id]="'configuracaoDash_' + i"
+          [value]="item"
+          formControlName="configuracaoDash" />
+        <label class="form-check-label" [for]="'configuracaoDash_' + i">
+          {{ configuracaoDashLabel.get(item).valueOf() }}
+        </label>
+      </div>
+    </smk-card-funcionalidade>
+  </form>
+</smk-funcionalidade>

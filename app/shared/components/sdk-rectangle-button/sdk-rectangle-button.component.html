@@ -1,0 +1,17 @@
+<button
+  [ngClass]="{
+    primary: type === 'primary',
+    secondary: type === 'secondary',
+    success: type === 'success',
+    warning: type === 'warning',
+    danger: type === 'danger',
+    'danger-blocked': type === 'danger-blocked',
+    info: type === 'info',
+    light: type === 'light',
+    dark: type === 'dark'
+  }"
+  (click)="buttonClick.emit($event)"
+  *ngIf="label"
+>
+  <i *ngIf="leftIconClass" class="{{ leftIconClass }} left-icon"></i>{{ label }}
+</button>

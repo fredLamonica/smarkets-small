@@ -1,0 +1,127 @@
+<sdk-header-default [showShadow]="true" [ngStyle]="{ 'z-index': '102' }" heightValue="64px">
+  <div class="col-md-6 pl-4">
+    <span class="page-title text-large">Gestão de Empresas &nbsp;&nbsp;<i class="fas fa-chevron-right"></i>
+      <span class="subtitle">&nbsp;&nbsp; Solicitação de Cadastro</span></span>
+  </div>
+</sdk-header-default>
+
+<sdk-header-default heightValue="64px" topValue="10.2em">
+
+  <sdk-select
+    name="classificacaoOptions"
+    style="margin: 10px"
+    [class]="'select-sm'"
+    [placeHolder]="'Classificação'"
+    [items]="classificacaoOptions"
+    (event)="solicitacaoCadastroSlaFilter._classificacao = $event"></sdk-select>
+
+  <sdk-select
+    name="statusOptions"
+    style="margin: 10px"
+    [class]="'select-sm'"
+    [placeHolder]="'Situação'"
+    [items]="statusOptions"
+    (event)="solicitacaoCadastroSlaFilter._status = $event"></sdk-select>
+
+  <sdk-select
+    name="tipoOptions"
+    style="margin: 10px"
+    [class]="'select-sm'"
+    [placeHolder]="'Tipo'"
+    [items]="tipoOptions"
+    (event)="solicitacaoCadastroSlaFilter._tipo = $event"></sdk-select>
+
+  <div class="col-1">
+    <sdk-rectangle-button
+      class="custom-rectangule-button"
+      [leftIconClass]="'fas fa-search'"
+      [leftIconColor]="'#FFFFFF'"
+      [label]="'Buscar'"
+      (buttonClick)="getSlaSolicitacao()">
+    </sdk-rectangle-button>
+  </div>
+
+</sdk-header-default>
+
+<div class="div-buttons-sla">
+  <div class="col-2 card">
+    <div class="circle">
+      <i class="fas fa-box icone"></i>
+    </div>
+    <button
+      [disabled]="usarSLAPadraoSmarkets"
+      type="button"
+      class="btn btn-primary btn-sm button-include"
+      (click)="openModal('Produtos e Serviços')">
+      <i class="fas fa-plus"></i>&nbsp;&nbsp;&nbsp;Incluir Produto / Serviço</button>
+  </div>
+
+  <div class="col-2 card">
+    <div class="circle">
+      <i class="fas fa-truck-loading icone"></i>
+    </div>
+    <button
+      [disabled]="usarSLAPadraoSmarkets"
+      type="button"
+      class="btn btn-primary btn-sm button-include"
+      (click)="openModal('Fornecedores')">
+      <i class="fas fa-plus"></i>&nbsp;&nbsp;&nbsp;Incluir Fornecedor</button>
+  </div>
+</div>
+
+<p
+  class="semListagem d-flex text-truncate w-100"
+  *ngIf="!itens?.length; else SlaSolicitacaoList"
+  data-toggle="tooltip"
+  data-placement="bottom"
+  title="Nenhum fornecedor encontrado">
+  <a class="text-center font-weight-bold text-primary">Nenhuma solicitação foi encontrada</a>
+</p>
+
+<div class="col-12">
+  <div class="w-100">
+    <ng-template #SlaSolicitacaoList>
+      <div class="listagem">
+        <div class="row col-12 justify-content-right" *ngIf="usarSLAPadraoSmarkets">
+          <p class="col-1 col-id">ID</p>
+          <p class="col-1 ml-5">Classificação</p>
+          <p class="col-1 col-origem">Origem</p>
+          <p class="col-1 ml-5 pl-4 text-center">Tempo</p>
+          <p class="col-1 text-center col-tipo">Tipo</p>
+          <p class="col-1 text-center col-status">Status</p>
+          <p class="col-1 col-acoes">Ações</p>
+        </div>
+
+        <div class="row col-12 justify-content-right" *ngIf="!usarSLAPadraoSmarkets">
+          <p class="col-1 col-id-sem-origem">ID</p>
+          <p class="col-1 pl-5 ml-5">Classificação</p>
+          <p class="col-1 text-center col-tempo-sem-origem">Tempo</p>
+          <p class="col-1 text-center col-tipo-sem-origem">Tipo</p>
+          <p class="col-1 text-center col-status-sem-origem">Status</p>
+          <p class="col-1 col-acoes-sem-origem">Ações</p>
+        </div>
+
+        <sdk-list-view [items]="itens">
+          <ng-template sdkListViewItem let-item>
+            <item-sla-solicitacao
+              [slaSolicitacao]="item"
+              (reloadList)="getSlaSolicitacao($event)"
+              (click)="editar(item)">
+            </item-sla-solicitacao>
+          </ng-template>
+        </sdk-list-view>
+      </div>
+
+    </ng-template>
+
+    <div class="row" *ngIf="itens?.length">
+      <div class="col-12">
+        <div class="paging">
+          <pager
+            [page]="solicitacaoCadastroSlaFilter.pagina"
+            [total-pages]="solicitacaoCadastroSlaFilter.totalPaginas"
+            [records-per-page]="solicitacaoCadastroSlaFilter.itensPorPagina"
+            (pagination)="page($event)"></pager>
+        </div>
+      </div>
+    </div>

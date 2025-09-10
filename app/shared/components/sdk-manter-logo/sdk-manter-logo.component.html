@@ -1,0 +1,54 @@
+<sdk-modal
+  [title]="(isUpdate? 'Editar ' : 'Inserir ') + 'Logo'"
+  [show-footer]="true"
+  [show-button-cancel]="true"
+  [show-button-confirm]="true"
+  title-button-cancel="Fechar"
+  (on-confirm)="saveLogo()">
+  <p class="description-text m-4 pl-2 pb-3">Insira o arquivo</p>
+  <div class="col-12 d-flex justify-content-center" *ngIf="isUpdate && oldLogo">
+    <div class="rectangle">
+      <img
+        class="image"
+        [src]="oldLogo" />
+    </div>
+  </div>
+
+  <div class="row mt-4 upload-area mx-4 my-2 pb-3" draggable="true" (drop)="selectDroppedFile($event)">
+    <div class="form-group col-12 d-flex justify-content-center mt-4 mb-0" *ngIf="!newLogo">
+      <button
+        class="btn btn-icon">
+        <i class="fas fa-upload text-primary"></i>
+      </button>
+    </div>
+    <div class="form-group col-12 d-flex justify-content-center mb-4" *ngIf="isUpdate && !newLogo">
+      <a>Inserir um novo arquivo</a>
+      <a (click)="onTryUploadFile()" class="text-primary cursor-pointer pl-1">{{"clique aqui"}}</a>
+    </div>
+    <div class="form-group col-12 d-flex justify-content-center" *ngIf="!isUpdate && !newLogo">
+      <a>Arraste os arquivos ou adicione</a>
+      <a (click)="onTryUploadFile()" class="text-primary cursor-pointer pl-1">{{"aqui"}}</a>
+    </div>
+    <input-file
+      class="d-none"
+      [accept]="acceptedExtensions"
+      (select)="selectFile($event)"
+      id="inputFile">
+    </input-file>
+    <div class="col-12 d-flex justify-content-center my-3" *ngIf="newLogo">
+      <div class="rectangle">
+        <img
+          class="image"
+          [src]="newLogo" />
+      </div>
+    </div>
+  </div>
+
+  <div class="row col-12 d-flex justify-content-center my-3">
+    <div class="col-12 description-text"><span>Tamanho máximo: <b>2 MB</b></span></div>
+    <div class="col-12 description-text"><span>Arquivo em: <b>PNG</b></span></div>
+    <div class="col-12 description-text"><span>Dimensões recomendadas: <b>256 (Pixeis) largura x 100 (pixeis)
+          altura</b></span>
+    </div>
+  </div>
+</sdk-modal>

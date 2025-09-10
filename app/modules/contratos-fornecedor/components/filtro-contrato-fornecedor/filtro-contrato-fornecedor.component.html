@@ -1,0 +1,52 @@
+<div class="container-limpar-filtros">
+  <div
+    class="limpar-filtros align-items-center"
+    [ngClass]="{ 'd-none': filtroVazio, 'd-flex': !filtroVazio }"
+    title="Limpa todos os filtros"
+    (click)="limparTodosFiltros()">
+    <span class="label">Limpar filtros</span><i class="far fa-trash-alt icone"></i>
+  </div>
+</div>
+<div class="filters">
+  <div class="filter">
+    <smk-list-container
+      [config]="configListaDeEstados"
+      [items]="estados"
+      [listLoading]="estadosLoading"
+      [clearSelectionObserver]="clearFiltersMessenger.asObservable()"
+      [selectItemsObserver]="selectItemsMessenger.asObservable()"
+      (selectedChange)="filtrarPorEstado($event)"
+      (selectedSynchronizer)="sincronizarFiltroDeEstados($event)">
+    </smk-list-container>
+  </div>
+  <div class="filter">
+    <smk-list-container
+      [config]="configListaDeCategorias"
+      [items]="categorias"
+      [listLoading]="categoriasLoading"
+      [clearSelectionObserver]="clearFiltersMessenger.asObservable()"
+      (selectedChange)="filtrarPorCategoria($event)"
+      (selectedSynchronizer)="sincronizarFiltroDeCategorias($event)">
+    </smk-list-container>
+  </div>
+  <div class="filter">
+    <smk-list-container
+      [config]="configListaDeMarcas"
+      [items]="marcas"
+      [listLoading]="marcasLoading"
+      [clearSelectionObserver]="clearFiltersMessenger.asObservable()"
+      (selectedChange)="filtrarPorMarca($event)"
+      (selectedSynchronizer)="sincronizarFiltroDeMarcas($event)">
+    </smk-list-container>
+  </div>
+  <div class="filter">
+    <smk-list-container
+      [config]="configListaDeClientes"
+      [items]="clientes"
+      [listLoading]="clientesLoading"
+      [clearSelectionObserver]="clearFiltersMessenger.asObservable()"
+      (selectedChange)="filtrarPorClientes($event)"
+      (selectedSynchronizer)="sincronizarFiltroDeClientes($event)">
+    </smk-list-container>
+  </div>
+</div>

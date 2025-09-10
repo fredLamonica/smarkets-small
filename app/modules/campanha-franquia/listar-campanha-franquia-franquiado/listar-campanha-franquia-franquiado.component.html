@@ -1,0 +1,88 @@
+<sdk-header-default [showShadow]="true" [ngStyle]="{ 'z-index': '102' }" heightValue="64px">
+  <div class="col-md-6 pl-4">
+    <span class="page-title text-large">Gestão de Contratos &nbsp;&nbsp;<i class="fas fa-chevron-right"></i>
+      <span class="subtitle">&nbsp;&nbsp; {{ 'Campanha Franquia' }}</span></span>
+  </div>
+</sdk-header-default>
+
+<sdk-header-default heightValue="64px" topValue="10.2em">
+  <sdk-input-icon
+    name="campanha"
+    style="margin-right: 10px"
+    [placeHolder]="'ID'"
+    [icon]="'fas fa-search'"
+    [inputClass]="'input-icon-right-lg'"
+    ngDefaultControl
+    [(ngModel)]="franchiseCampaignFilter.idCampanhaFranquia"
+    (keyup.enter)="search()">
+  </sdk-input-icon>
+
+  <sdk-input-icon
+    name="nomeCampanha"
+    style="margin: 10px"
+    [placeHolder]="'Campanha'"
+    [icon]="'fas fa-search'"
+    [inputClass]="'input-icon-right-md'"
+    ngDefaultControl
+    [(ngModel)]="franchiseCampaignFilter.titulo"
+    (keyup.enter)="search()">
+  </sdk-input-icon>
+
+  <sdk-rectangle-button-custom
+    [label]="'Buscar'"
+    [leftIconClass]="'fas fa-search'"
+    [leftIconColor]="'#FFFFFF'"
+    (click)="search()"
+    class="pl-4">
+  </sdk-rectangle-button-custom>
+</sdk-header-default>
+
+<p
+  class="semListagem d-flex text-truncate w-100"
+  *ngIf="!itens?.length; else franchiseCampaignsList"
+  data-toggle="tooltip"
+  data-placement="bottom"
+  title="Nenhum fornecedor encontrado">
+  <a class="text-center font-weight-bold text-primary">Nenhuma campanha encontrada</a>
+</p>
+
+<div class="col-12">
+  <div class="w-100">
+    <ng-template #franchiseCampaignsList>
+      <div class="listagem">
+        <div class="row header">
+          <div class="col-12">
+            <div class="row mr-0">
+              <p class="col-1">Id</p>
+              <p class="col-3">Campanha</p>
+              <p class="col-2">Data Início</p>
+              <p class="col-2">Data Fim</p>
+              <p class="col-2">Data Limite</p>
+              <p class="col-1">Status</p>
+            </div>
+          </div>
+        </div>
+
+        <sdk-list-view [items]="itens">
+          <ng-template sdkListViewItem let-item>
+            <item-campanha-franquia-franqueado
+              (itemChange)="search()"
+              [franchiseCampaign]="item"></item-campanha-franquia-franqueado>
+          </ng-template>
+        </sdk-list-view>
+      </div>
+    </ng-template>
+
+    <div class="row" *ngIf="itens?.length">
+      <div class="col-12">
+        <div class="paging">
+          <pager
+            [page]="franchiseCampaignFilter.pagina"
+            [total-pages]="franchiseCampaignFilter.totalPaginas"
+            [records-per-page]="franchiseCampaignFilter.itensPorPagina"
+            (pagination)="page($event)"></pager>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

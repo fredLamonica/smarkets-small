@@ -1,0 +1,66 @@
+@import "src/themes/_smk-base.scss";
+
+.area-usuario {
+  .card-configuracao {
+    .header {
+      display: inline-block;
+      padding: 0;
+      margin: 0;
+      text-align: right;
+      font-size: 24px;
+
+      .logo {
+        border: 1px solid $smk-border-color;
+        border-radius: 5px;
+        text-align: center;
+        color: $smk-primary-color;
+        height: 42px;
+        width: 42px;
+
+        .icone {
+          &.icone-smarkets {
+            width: 30px;
+            padding: 5px;
+          }
+        }
+      }
+
+      .title {
+        color: $smk-dark-green-color;
+        font-weight: bold;
+        margin-top: 5px;
+        white-space: nowrap;
+        font-size: 18px;
+      }
+    }
+
+    hr {
+      width: 100%;
+    }
+
+    .footer {
+      display: inline-block;
+      width: 100%;
+
+      .link-configuracoes {
+        float: right;
+        color: $smk-primary-color;
+        cursor: pointer;
+        font-weight: 600;
+        text-align: right;
+        font-size: 16px;
+        text-decoration: none;
+      }
+
+      .link-configuracoes-button {
+        color: $smk-primary-color;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 16px;
+        border: 1px solid #27ade4;
+        box-shadow: none;
+        border-radius: 8px;
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+ <sdk-modal   
+    title="LISTA DE DOCUMENTOS:"   
+    subtitle="{{fornecedor.razaoSocial}}" 
+  >  
+  <div *ngIf="solicitacaoDocumentosFornecedorArquivos?.length == 0 || !fornecedor?.idPessoaJuridicaFornecedor " class="d-flex justify-content-center">
+    <a class="font-weight-bold">Não possui documentos</a>
+  </div> 
+
+  <div *ngIf="solicitacaoDocumentosFornecedorArquivos?.length > 0">
+    <div class="d-flex pb-3">
+        <div class="col-9"></div>
+        <div class="d-flex justify-content-end col-3">
+          <sdk-button (buttonClick)="baixarZip($event)" [label]="'Baixar todos'" [type]="'dark'" [icon]="'fas fa-download'"></sdk-button>
+        </div>
+    </div> 
+    <div>
+      <sdk-list-view
+      [items]="solicitacaoDocumentosFornecedorArquivos"
+      >
+      <ng-template sdkListViewItem let-item>
+        <item-documento-modal 
+          [documento]="item"    
+          [fornecedor]="fornecedor"
+        ></item-documento-modal>
+        
+      </ng-template>
+      </sdk-list-view>
+    </div> 
+  </div>   
+  </sdk-modal>
+

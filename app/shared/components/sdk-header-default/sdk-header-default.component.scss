@@ -1,0 +1,19 @@
+.bar-fixed {
+  position: fixed;
+  z-index: 101;
+  display: flex;
+  align-items: center;
+
+  &.height-auto {
+    height: auto !important;
+  }
+}
+
+.back-button {
+  padding: 0px 0px 0px 41px;
+  margin: 0px 0px 3.5px 0px;
+}
+
+.shadow {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1) !important;
+}

@@ -1,0 +1,11 @@
+<div class="w-100" [ngStyle]="{ 'padding-bottom': heightValue }">
+  <div
+    class="bar-fixed w-100"
+    [class.height-auto]="heightAuto"
+    [ngStyle]="{ top: topValue, background: colorBackground, padding: padding, height: heightValue }"
+    [ngClass]="{ shadow: showShadow }">
+    <div class="d-flex flex-wrap align-items-center col-12">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

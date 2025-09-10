@@ -1,0 +1,51 @@
+$colorIconDefault: #588394;
+$widthSmSelect-date: 173px;
+$widthMdSelect-date: 230px;
+$widthLgSelect-date: 285px;
+
+::placeholder {
+  color: $colorIconDefault !important;
+  font-weight: bold;
+}
+
+i {
+  position: absolute;
+  align-self: center;
+  color: $colorIconDefault;
+  z-index: -999;
+}
+
+input {
+  border: none;
+  border-bottom: 1px solid $colorIconDefault;
+  padding: 2px 2px;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.select-date-sm {
+  i {
+    margin-left: 11rem;
+  }
+  input {
+    width: $widthSmSelect-date;
+  }
+}
+
+.select-date-md {
+  i {
+    margin-left: 15rem;
+  }
+  input {
+    width: $widthMdSelect-date;
+  }
+}
+
+.select-date-lg {
+  i {
+    margin-left: 19rem;
+  }
+  input {
+    width: $widthLgSelect-date;
+  }
+}

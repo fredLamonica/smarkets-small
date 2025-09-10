@@ -1,0 +1,62 @@
+@import "src/themes/_smk-base.scss";
+
+.listar-contratos {
+  .filtros {
+    .campo-data {
+      padding-right: 10.5px;
+    }
+  }
+
+  .coluna {
+
+    &.origem-clone {
+      color: #fbfbfb;
+      padding: 2px 15px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 600;
+
+      &.info {
+        background-color: $smk-info-color;
+      }
+
+      &.danger {
+        background-color: $smk-red-color;
+      }
+
+      &.warning {
+        background-color: $smk-warning-color;
+        color: #222222;
+      }
+
+      &.success {
+        background-color: $smk-green-color;
+      }
+
+      &.secondary {
+        background-color: $smk-secondary-color;
+      }
+    }
+
+    &.possui-alteracao {
+      color: #fbfbfb;
+      padding: 2px 15px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 600;
+
+      &.success {
+        background-color: orange;
+      }
+    }
+
+    &.entrega-programada {
+      color: $smk-primary-color;
+
+      .icone {
+        font-size: 18px;
+        margin-left: 10px;
+      }
+    }
+  }
+}

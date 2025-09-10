@@ -1,0 +1,118 @@
+<div class="listar">
+  <smk-listar-funcionalidade
+    titulo="Pedidos Track"
+    tooltipExportar="Exportar um período de 30 dias"
+    [configuracaoFiltrosUsuario]="configuracaoFiltrosUsuario"
+    [filtroInformado]="filtroInformado"
+    [configuracaoDaTable]="configuracaoDaTable"
+    [itensDaTable]="paginacaoPesquisaConfigurada?.itens"
+    [colunasDisponiveis]="colunasDisponiveis"
+    [configuracaoColunasUsuario]="paginacaoPesquisaConfigurada?.configuracaoColunasUsuario"
+    (filtrosChange)="filtreResetePagina()"
+    [ferramentas]="ferramentas"
+    (export)="exportar(false)"
+    (filtrosClear)="limpeFiltro()"
+    (colunasChange)="filtreItens(true)"
+    (colunasReset)="filtreItens(true)"
+    (selectedChange)="selecione($any($event))"
+    (pageChange)="pagine($any($event))">
+    <ng-container filtros>
+      <form class="filtros" [formGroup]="formFiltro">
+        <div class="row">
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="numerosPedidos">Número do Pedido</label>
+              <select-multiple
+                [itensPreCarregados]="false"
+                formControlName="numerosPedidos"
+                [apenasNumeros]="true"
+                [multiplasLinhasPorInput]="true"
+              ></select-multiple>
+            </div>
+          </div>
+           <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="linhaItem">Linha/Item</label>
+              <input
+                id="linhaItem"
+                class="form-control"
+                placeholder="Linha/Item"
+                type="text"
+                formControlName="linhaItem"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+              <div class="form-group">
+                <label >Situação</label>
+                <select-multiple
+                  descricao="name"
+                  valor="index"
+                  [itens]="opcoesSituacao"
+                  formControlName="situacoes"
+                ></select-multiple>
+              </div>
+          </div>
+          <div class="col-md-6 col-lg-8 col-xxxl-4">
+            <div class="form-group">
+              <label for="descricaoPedido">Descrição</label>
+              <input
+                id="descricaoPedido"
+                class="form-control"
+                placeholder="Descrição"
+                type="text"
+                formControlName="descricaoPedido"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+           <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="requisitante">Requisitante</label>
+              <input
+                id="requisitante"
+                class="form-control"
+                placeholder="Requisitante"
+                type="text"
+                formControlName="requisitante"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="dataRemessaInicio">Data Remessa Inicio <i [ngbTooltip]="DataRemessa" tooltipClass="tooltip-light"  class="fas fa-info-circle"></i></label>
+              <input
+                id="dataRemessaInicio"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataRemessaInicio"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 col-xxxl-2">
+            <div class="form-group">
+              <label for="dataRemessaFim">Data Remessa Fim <i [ngbTooltip]="DataRemessa" tooltipClass="tooltip-light"  class="fas fa-info-circle"></i></label>
+              <input
+                id="dataRemessaFim"
+                class="campo-data form-control"
+                type="date"
+                formControlName="dataRemessaFim"
+                (keyup.enter)="filtreResetePagina()">
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+    <ng-template #DataRemessa>
+      <div style="text-align: left">
+        <p>Caso o campo data remessa 2 esteja vazio, será utilizado o campo data remessa</p>
+      </div>
+    </ng-template>
+    <ng-container column-templates>
+      <ng-template customColumn="situacaoPedido" let-item="item">
+        <span>
+          {{ situacaoPedidoEnum[item.situacaoPedido] }}
+        </span>
+      </ng-template>
+    </ng-container>
+  </smk-listar-funcionalidade>
+</div>

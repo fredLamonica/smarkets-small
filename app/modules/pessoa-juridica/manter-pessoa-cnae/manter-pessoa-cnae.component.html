@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col-md-10">
+    <ng-select [hideSelected]="true" [(ngModel)]="selecionado">
+      <ng-option *ngFor="let cnae of cnaes" [value]="cnae">{{cnae.identificador}} - {{cnae.descricao}}</ng-option>
+    </ng-select>
+  </div>
+  <div class="col-md-2">
+    <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Adicionar" (click)="adicionar()">
+      <i class="fas fa-plus-circle text-primary"></i>
+    </button>
+  </div>
+</div>
+<div class="row py-3" [class.bg-lighter]="isOdd" *ngFor="let cnae of cnaesSelecionados; let isOdd = odd">
+  <div class="col-md-10 pt-2">
+    <p class="mb-0">{{ cnae.identificador }} - {{ cnae.descricao }}</p>
+  </div>
+  <div class="col-md-2">
+    <button class="btn btn-icon" data-toggle="tooltip" data-placement="bottom" title="Remover" (click)="deletar(cnae)">
+      <i class="far fa-trash-alt text-danger"></i>
+    </button>
+  </div>
+</div>

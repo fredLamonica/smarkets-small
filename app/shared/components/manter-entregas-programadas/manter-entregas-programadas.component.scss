@@ -1,0 +1,92 @@
+.manter-entregas-programadas {
+  ::ng-deep .quantidade input {
+    height: 32px;
+  }
+
+  ::ng-deep custom-table:not(.collapse-mode) {
+    .table-responsive {
+      min-height: 220px;
+    }
+
+    & > * {
+      cursor: default;
+    }
+  }
+
+  ::ng-deep block-ui-content {
+    [class*="component-body"] {
+      background: #0000002e;
+      border-radius: 7px;
+    }
+  }
+
+  .card {
+    .card-header {
+      background-color: #f5f5f5;
+
+      &::after {
+        color: #6d6e71;
+      }
+    }
+
+    .separador {
+      margin-top: 3px;
+    }
+
+    .card-body {
+      background-color: #fff;
+
+      &.readonly {
+        border-radius: 7px;
+      }
+
+      button {
+        border-radius: 8px;
+
+        &.btn-editar {
+          background-color: #588394;
+          border-color: #588394;
+          color: #fff;
+        }
+
+        &.cancelar-acao {
+          min-width: 36px;
+          width: 36px;
+        }
+      }
+
+      .container-quantidade-total {
+        cursor: default;
+
+        .quantidade-total {
+          font-weight: bold;
+          color: #4293de;
+          font-size: 19px;
+
+          &.abaixo-do-lote {
+            color: #e7482c;
+          }
+        }
+      }
+
+      ::ng-deep .tooltip-cancelar-acao {
+        .tooltip-inner {
+          width: 120px;
+        }
+      }
+
+      ::ng-deep .tooltip-quantidade-minima {
+        .tooltip-inner {
+          width: 180px;
+        }
+      }
+    }
+  }
+
+  .modal-footer {
+    button {
+      width: 120px;
+      border-radius: 7px;
+    }
+  }
+}

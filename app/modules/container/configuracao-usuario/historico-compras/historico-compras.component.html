@@ -1,0 +1,86 @@
+<div class="listar-historico-compras">
+  <smk-listar-funcionalidade
+    [titulo]="'Área do Usuário / Histórico de Compras'"
+    [configuracaoDaTable]="configuracaoDaTable"
+    [itensDaTable]="paginacaoPesquisaConfigurada?.itens"
+    [colunasDisponiveis]="colunasDisponiveis"
+    [filtroInformado]="filtroInformado"
+    [configuracaoFerramentasDaTable]="configuracaoFerramentasDaTable"
+    [configuracaoColunasUsuario]="paginacaoPesquisaConfigurada?.configuracaoColunasUsuario"
+    (filtrosChange)="filtre()"
+    (export)="exporte()"
+    (filtrosClear)="limpeFiltro()"
+    (colunasChange)="obterHistorico(true)"
+    (colunasReset)="obterHistorico(true)"
+    (selectedChange)="selecione($event)"
+    (pageChange)="pagine($event)">
+    <ng-container acoes-table>
+      <button
+        *ngIf="pedidoHistoricoSelecionado"
+        class="btn btn-outline-primary"
+        ngbTooltip="Visualizar"
+        (click)="visualize()">
+        <i class="fas fa-eye"></i>
+      </button>
+    </ng-container>
+    <ng-container filtros>
+      <form class="filtros" [formGroup]="formFiltro">
+        <div class="row">
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="descricaoProduto">Produto</label>
+              <input
+                id="descricaoProduto"
+                class="form-control"
+                type="text"
+                formControlName="descricaoProduto"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="marca">Marca</label>
+              <input
+                id="marca"
+                class="form-control"
+                type="text"
+                formControlName="marca"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="razaoSocial">Fornecedor</label>
+              <input
+                id="razaoSocial"
+                class="form-control"
+                type="text"
+                formControlName="razaoSocial"
+                (keyup.enter)="filtre()">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-xl-4 col-xxxl-3 col-xxxxl-2">
+            <div class="form-group">
+              <label for="origem">Origem</label>
+              <ng-select
+                labelForId="origem"
+                bindValue="index"
+                bindLabel="name"
+                appendTo="body"
+                formControlName="origem"
+                [clearAllText]="textoLimpar"
+                [items]="opcoesOrigem"
+                [searchFn]="origensSearchFn"
+                (keyup.enter)="filtre()">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+
+  </smk-listar-funcionalidade>
+</div>

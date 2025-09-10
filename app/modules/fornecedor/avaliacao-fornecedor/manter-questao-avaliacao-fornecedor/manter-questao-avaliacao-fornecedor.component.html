@@ -1,0 +1,165 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    {{ form.controls.idQuestaoAvaliacaoFornecedor.value ? 'Alterar ' : 'Incluir ' }} Questão de
+    Avaliação de Fornecedor
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="form-group required col-lg-12">
+        <label>Descrição:</label>
+        <textarea class="form-control" rows="3" formControlName="descricao" autofocus> </textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group required col-lg-12">
+        <label>Nota Explicativa:</label>
+        <textarea class="form-control" rows="1" formControlName="notaExplicativa" autofocus>
+        </textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group required col-lg-6">
+        <label>Tipo:</label>
+        <ng-select id="tipo" [hideSelected]="false" formControlName="tipo">
+          <ng-option [value]="TipoQuestao['Discursiva']">Discursiva</ng-option>
+          <ng-option [value]="TipoQuestao['Multipla Escolha']">Múltipla Escolha</ng-option>
+        </ng-select>
+      </div>
+      <div class="form-group required col-lg-6">
+        <label>Peso:</label>
+        <input-number
+          id="peso"
+          formControlName="peso"
+          [integer-limit]="1"
+          [min]="0"
+          [max]="9"
+          [class.invalid]="form.controls.peso.invalid && form.controls.peso.dirty"
+        >
+        </input-number>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group required col-lg-6">
+        <div class="custom-control custom-checkbox custom-control-inline">
+          <input
+            type="checkbox"
+            id="permiteComentario"
+            name="permiteComentario"
+            formControlName="permiteComentario"
+            class="custom-control-input"
+          />
+          <label class="custom-control-label" for="permiteComentario">Permite Comentário</label>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div *ngIf="form.controls.tipo.value == 2">
+    <form [formGroup]="formResposta">
+      <div class="form-group required mb-0">
+        <label>Respostas:</label>
+      </div>
+      <div class="row">
+        <div class="form-group required col-lg-8">
+          <button class="btn btn-icon p-0" (click)="incluirRespostaMultiplaEscolha()">
+            <i class="fas fa-plus-circle text-primary"></i>
+            <p class="d-inline-block mb-0 ml-2 align-top">
+              {{ indexEditando != null ? 'Alterar' : 'Incluir' }}
+            </p>
+          </button>
+          <textarea
+            class="form-control"
+            rows="1"
+            name="resposta"
+            formControlName="descricao"
+          ></textarea>
+        </div>
+        <div class="form-group required col-lg-4">
+          <label>Valor:</label>
+          <input-number
+            formControlName="valor"
+            [integer-limit]="1"
+            [min]="0"
+            [max]="9"
+          ></input-number>
+        </div>
+      </div>
+      <div class="container-fluid no-bounds">
+        <div class="bg-lighter border-bottom row py-2 d-none d-md-flex">
+          <div class="col-md-8">
+            <label class="font-weight-bold">Resposta:</label>
+          </div>
+          <div class="col-md-2">
+            <label class="font-weight-bold">Valor:</label>
+          </div>
+          <div class="col-md-2">
+            <label class="font-weight-bold">Ações:</label>
+          </div>
+        </div>
+        <div class="bg-white border-bottom row py-4" *ngIf="!form.controls.respostas.value?.length">
+          <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+        </div>
+        <div
+          class="row border-bottom py-2"
+          *ngFor="let resposta of form.controls.respostas.value; let i = index"
+        >
+          <div class="col-md-8 col-sm-8 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Resposta:</label>
+            <p
+              class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{ resposta.descricao }}"
+            >
+              {{ resposta.descricao }}
+            </p>
+          </div>
+          <div class="col-md-2 col-sm-2 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Valor:</label>
+            <p
+              class="mb-3 mb-lg-0 line-clamp line-clamp-1"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{ resposta.valor }}"
+            >
+              {{ resposta.valor }}
+            </p>
+          </div>
+          <div class="col-md-2 d-flex justify-content-between align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Ações:</label>
+            <button
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Editar"
+              (click)="editarResposta(resposta, i)"
+            >
+              <i class="far fa-edit"></i>
+            </button>
+            <button
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Excluir"
+              (click)="solicitarExclusaoResposta(i)"
+            >
+              <i class="far fa-trash-alt text-danger"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+    <i class="fas fa-ban"></i> Cancelar
+  </button>
+  <button type="button" id="btnSalvar" (click)="salvar()" class="btn btn-primary">
+    <i class="fas fa-save"></i> Salvar
+  </button>
+</div>

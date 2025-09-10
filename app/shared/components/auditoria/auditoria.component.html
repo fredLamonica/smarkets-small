@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Auditoria</div>
+  <button type="button" class="close" aria-label="Close" (click)="fechar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body scroll" id="auditoria">
+  <div class="container-fluid">
+    <div class="row border-bottom py-3 d-none d-md-flex">
+      <div class="col-lg-3">
+        <label class="font-weight-bold mb-3 mb-lg-0">Data</label>
+      </div>
+      <div class="col-lg-6">
+        <label class="font-weight-bold mb-3 mb-lg-0">Descrição</label>
+      </div>
+      <div class="col-lg-3">
+        <label class="font-weight-bold mb-3 mb-lg-0">Usuário</label>
+      </div>
+    </div>
+    <ng-container *ngIf="logs?.length; noContent">
+      <div class="row border-bottom text-small" *ngFor="let log of logs">
+        <div class="col-lg-3 align-self-center">
+          <label for="" class="font-weight-bold d-block d-md-none">Data</label>
+          <p class="mb-3 mb-lg-0">{{ log.dataInclusao | date: 'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+        <div class="col-lg-6 py-3 align-self-center">
+          <label for="" class="font-weight-bold d-block d-md-none">Descrição</label>
+          <p class="mb-3 mb-lg-0">{{ log.descricao }}</p>
+        </div>
+        <div class="col-lg-3 py-3 align-self-center">
+          <label for="" class="font-weight-bold d-block d-md-none">Usuário</label>
+          <p class="mb-3 mb-lg-0">{{ log.usuario?.pessoaFisica?.nome }}</p>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="fechar()">Fechar</button>
+</div>
+
+<ng-template #noContent>
+  <div class="bg-white border-bottom row py-3">
+    <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+  </div>
+</ng-template>

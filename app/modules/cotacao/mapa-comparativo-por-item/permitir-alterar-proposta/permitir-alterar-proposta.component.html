@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Selecionar Fornecedor</div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="bg-white border-bottom">
+    <div class="border-top">
+      <div class="form-group">
+        <select-list-picker-fornecedor
+          [label-origem]="'FORNECEDORES PARTICIPANTES'"
+          [label-destino]="'FORNECEDORES SELECIONADOS PARA REENVIAR PROPOSTA'"
+          [readonly]="readonly"
+          [origem]="listaParticipantes"
+          [destino]="listaFornecedorSelecionado"
+        ></select-list-picker-fornecedor>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="enviar()">
+    Enviar Permissão
+  </button>
+  <button type="button" class="btn btn-outline-primary" (click)="cancelar()">Fechar</button>
+</div>

@@ -1,0 +1,46 @@
+<manter-cotacao-proposta-item
+  [cotacaoItemHeaderEvent]="cotacaoItemHeaderEvent"
+  [cotacao-item]="item"
+  [cotacao-rodada]="rodada"
+  [reenviarProposta]="reenviarProposta"
+  *ngFor="let item of rodada?.itens; let i = index"
+  [index]="i"
+  [readonly]="readonly"
+  [habilitar-imposto-ncm-cotacao]="habilitarimpostoNcmCotacao"
+  (inativarAtivarProduto)="habilitarDesabilitarForm()"
+  (itensSalvos)="onItensSalvos($event)"
+  (itensAlterados)="onItensAlterados($event)"
+  [formPropostaItemHeader]="formPropostaItemHeader"
+  [permitirEditarPropostaEvent]="permitirEditarPropostaEvent"
+>
+</manter-cotacao-proposta-item>
+<div class="row justify-content-end py-3">
+  <div class="col-md-3 mb-2 mb-md-0">
+    <button class="btn btn-block btn-outline-primary float-right" (click)="voltar()">
+      <i class="fas fa-ban mr-2"></i> Cancelar
+    </button>
+  </div>
+  <div class="col-md-3" *ngIf="!readonly">
+    <button class="btn btn-block btn-primary float-right" (click)="solicitarSalvarProposta()">
+      <i class="fas fa-save mr-2"></i> Salvar Todos
+    </button>
+  </div>
+  <div class="col-md-3" *ngIf="permiteEditarProposta() && readonly">
+    <button class="btn btn-block btn-primary float-right" (click)="permitirEditarProposta()">
+      <i class="fas fa-edit mr-2"></i> Editar Proposta
+    </button>
+  </div>
+  <div class="col-md-3" *ngIf="!readonly">
+    <button
+    [class]="todasPropostasPreenchidas() ? 'btn btn-block btn-primary float-right' : 'btn btn-block btn-secondary float-right'"
+    [disabled]="!todasPropostasPreenchidas()"
+    [ngbTooltip]="!todasPropostasPreenchidas() ? 'Para enviar a cotação, todos os itens precisam ser salvos.' : '' "
+    (click)="solitarEnviarProposta()"> <i class="fas fa-sign-in-alt mr-2"></i> Enviar Proposta
+    </button>
+  </div>
+  <div class="col-md-3" *ngIf="reenviarProposta">
+    <button class="btn btn-block btn-primary float-right" (click)="solitarReenviarPropostas()">
+      <i class="fas fa-sign-in-alt mr-2"></i> Reenviar Proposta
+    </button>
+  </div>
+</div>

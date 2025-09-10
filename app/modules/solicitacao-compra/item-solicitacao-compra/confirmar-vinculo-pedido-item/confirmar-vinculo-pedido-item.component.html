@@ -1,0 +1,378 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Associar a um Produto Existente</div>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body" *ngFor="let pedidoItem of pedido?.itens; let indexPedidoItem = index">
+  <div class="row">
+    <div class="col-12 col-md-4 mb-3">
+      <div class="card p-0 mb-1 flex-fill">
+        <div class="card-body bg-white p-0 my-2">
+          <div
+            class="d-flex justify-content-center px-3 py-2 d-flex justify-content-center"
+            style="height: 150px"
+          >
+            <img
+              class="img-fluid mh-100"
+              [src]="
+                pedidoItem?.produto?.imagens?.length
+                  ? pedidoItem?.produto?.imagens[0].url
+                  : './../../../../assets/img/produtos/default.png'
+              "
+              alt="{{ pedidoItem?.produto?.descricao }}"
+            />
+          </div>
+          <div class="bg-lighter-dark px-3 py-1">
+            <p
+              class="mb-0 line-clamp line-clamp-2"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{ pedidoItem?.produto?.descricao }}"
+            >
+              {{ pedidoItem?.produto?.descricao }}
+            </p>
+          </div>
+          <div class="bg-white px-3 py-1">
+            <p class="mb-0">
+              {{ pedidoItem?.produto?.unidadeMedida?.sigla }}.:
+              <span class="font-weight-bold text-indigo-light">{{
+                pedidoItem?.valor
+                  | customCurrency: pedidoItem.moeda:null:'symbol'
+              }}</span>
+            </p>
+            <p class="mb-0 text-truncate">
+              Por:
+              <span class="font-weight-bold">{{
+                pedidoItem?.contratoCatalogoItem?.fornecedor?.nomeFantasia
+                  ? pedidoItem?.contratoCatalogoItem?.fornecedor?.nomeFantasia
+                  : pedidoItem?.contratoCatalogoItem?.fornecedor?.razaoSocial
+              }}</span>
+            </p>
+            <p class="mb-0">
+              Prazo:
+              <span class="font-weight-bold">{{
+                pedidoItem?.contratoCatalogoItem?.prazoEntrega != 1
+                  ? pedidoItem?.contratoCatalogoItem?.prazoEntrega + ' dias úteis'
+                  : pedidoItem?.contratoCatalogoItem?.prazoEntrega + ' dia útil'
+              }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group" class="border-0 with-shadow">
+        <input-number
+          class="border-0 with-shadow"
+          [class.invalid]="
+            !pedidoItem?.quantidade ||
+            pedidoItem?.quantidade > maxQuant ||
+            pedidoItem?.quantidade < pedidoItem?.contratoCatalogoItem?.loteMinimo
+          "
+          [(ngModel)]="pedidoItem.quantidade"
+          [min]="pedidoItem?.contratoCatalogoItem?.loteMinimo"
+          [max]="maxQuant"
+          [allowDecimal]="
+            pedidoItem?.contratoCatalogoItem?.produto?.unidadeMedida?.permiteQuantidadeFracionada
+          "
+          (ngModelChange)="OnQuantidadeChange($event, indexPedidoItem)"
+        >
+        </input-number>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-8">
+      <div class="row">
+        <div class="form-group col-12 col-md-6">
+          <label>Marca:</label>
+          <p class="py-2 my-0 font-weight-bold">
+            {{ pedidoItem.marca ? pedidoItem.marca.nome : 'Sem preferência' }}
+          </p>
+        </div>
+        <div class="form-group required col-12 col-md-6">
+          <label>Centro custo:</label>
+          <ng-select
+            id="centroCusto"
+            class="font-weight-bold full-width"
+            [items]="centrosCusto$ | async"
+            bindLabel="descricao"
+            bindValue="idCentroCusto"
+            loadingText="buscando..."
+            [hideSelected]="true"
+            [(ngModel)]="pedidoItem.idCentroCusto"
+          >
+          </ng-select>
+        </div>
+
+        <div class="form-group required col-12 col-md-6">
+          <label for="dataEntrega"> Data de entrega: </label>
+          <input
+            type="date"
+            class="form-control font-weight-bold"
+            [(ngModel)]="pedidoItem.dataEntrega"
+            [min]="pedidoItem.minDataEntrega"
+          />
+        </div>
+
+        <div class="form-group required col-12 col-md-6" *ngIf="parametrosIntegracaoSapHabilitado">
+          <label>IVA: </label>
+          <ng-select
+            id="iva"
+            class="font-weight-bold full-width"
+            [items]="ivas"
+            bindLabel="descricaoIva"
+            bindValue="idIva"
+            loadingText="buscando..."
+            [hideSelected]="true"
+            [(ngModel)]="pedidoItem.idIva"
+          >
+          </ng-select>
+        </div>
+
+        <div class="form-group required col-12">
+          <label>Endereço:</label>
+          <ng-select
+            name="enderecoCobranca full-width"
+            class="font-weight-bold"
+            [(ngModel)]="pedidoItem.idEnderecoEntrega"
+            [items]="enderecos"
+            bindValue="idEndereco"
+            placeholder="Selecionar endereço"
+          >
+            <ng-template ng-label-tmp let-item="item">
+              {{ item?.logradouro }}, {{ item?.numero }} - {{ item?.bairro }},
+              {{ item?.cidade?.nome }} - {{ item?.cidade?.estado?.abreviacao }}, {{ item?.cep }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+              {{ TipoEndereco[item?.tipo] }}<br />
+              <div>
+                <small>Logradouro: {{ item?.logradouro }}</small
+                ><br />
+              </div>
+              <div>
+                <small>Bairro: {{ item?.bairro }}</small>
+                <small style="margin-left: 10px">Número: {{ item?.numero }}</small>
+              </div>
+              <div>
+                <small
+                  >Cidade: {{ item?.cidade?.nome }} - Estado:
+                  {{ item?.cidade?.estado?.abreviacao }}</small
+                >
+              </div>
+              <div>
+                <small>CEP: {{ item?.cep }}</small>
+              </div>
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="row py-1">
+        <div
+          class="form-group required col d-flex justify-content-md-between align-self-center mt-2"
+        >
+          <div
+            class="custom-control custom-checkbox d-md-inline-block mr-3"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Entrada de Mercadoria"
+            *ngIf="exibirFlagSapEm"
+          >
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="sapEm"
+              [(ngModel)]="pedidoItem.sapEm"
+            />
+            <label class="custom-control-label font-weight-bold" for="sapEm">EM</label>
+          </div>
+
+          <div
+            class="custom-control custom-checkbox d-md-inline-block mr-3"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Entrada de Mercadoria Não Avaliada"
+            *ngIf="exibirFlagSapEmNaoAvaliada"
+          >
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="sapEmNaoAvaliada"
+              [(ngModel)]="pedidoItem.sapEmNaoAvaliada"
+            />
+            <label class="custom-control-label font-weight-bold" for="sapEmNaoAvaliada"
+              >EM n/avaliada</label
+            >
+          </div>
+
+          <div
+            class="custom-control custom-checkbox d-md-inline-block mr-3"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Entrada de Faturas"
+            *ngIf="exibirFlagSapEntrFaturas"
+          >
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="sapEntrFaturas"
+              [(ngModel)]="pedidoItem.sapEntrFaturas"
+            />
+            <label class="custom-control-label font-weight-bold" for="sapEntrFaturas"
+              >Entr.faturas</label
+            >
+          </div>
+
+          <div
+            class="custom-control custom-checkbox d-md-inline-block"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Revisão de Faturas Baseada na Entrada de Mercadorias"
+            *ngIf="exibirFlagSapRevFatEm"
+          >
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="sapRevFatEm"
+              [(ngModel)]="pedidoItem.sapRevFatEm"
+            />
+            <label class="custom-control-label font-weight-bold" for="sapRevFatEm">Rev.FatEm</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row py-1">
+    <div class="form-group required mb-2 col-12 col-lg-4" *ngIf="parametrosIntegracaoSapHabilitado">
+      <label
+        class="required"
+        for="grupoCompradores"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Grupo de Compradores"
+        >Grp. de Compradores:
+      </label>
+      <ng-select
+        id="grupoCompradores"
+        class="font-weight-bold full-width"
+        [items]="gruposCompradores"
+        bindLabel="nomeGrupoCompradores"
+        bindValue="idGrupoCompradores"
+        loadingText="buscando..."
+        [hideSelected]="true"
+        [(ngModel)]="pedido.idGrupoCompradores"
+      >
+      </ng-select>
+    </div>
+    <div class="form-group required mb-2 col-12 col-lg-4" *ngIf="parametrosIntegracaoSapHabilitado">
+      <label
+        class="required"
+        for="organizacoesCompras"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Organização de Compras"
+        >Org. de Compras:
+      </label>
+      <ng-select
+        id="organizacoesCompras"
+        class="font-weight-bold full-width"
+        [items]="organizacoesCompras"
+        bindLabel="descricaoOrganizacaoCompra"
+        bindValue="idOrganizacaoCompra"
+        loadingText="buscando..."
+        [hideSelected]="true"
+        [(ngModel)]="pedido.idOrganizacaoCompra"
+      >
+      </ng-select>
+    </div>
+    <div class="form-group required mb-2 col-12 col-lg-4">
+      <label for="tipoPedido">Tipo de Pedido: </label>
+      <ng-select
+        id="tipoPedido"
+        class="font-weight-bold full-width"
+        [items]="tiposPedido"
+        bindLabel="nomeTipoPedido"
+        bindValue="idTipoPedido"
+        loadingText="buscando..."
+        [hideSelected]="true"
+        [(ngModel)]="pedido.idTipoPedido"
+      >
+      </ng-select>
+    </div>
+  </div>
+
+  <div class="row py-1">
+    <div class="form-group required mb-2 col-lg-6">
+      <label class="required" for="filiais">Empresa:</label>
+      <ng-select
+        name="filial"
+        class="font-weight-bold full-width"
+        id="filiais"
+        placeholder="Selecionar compradora"
+        [hideSelected]="true"
+        [(ngModel)]="pedido.idComprador"
+      >
+        <ng-option [value]="filial.idPessoaJuridica" *ngFor="let filial of filiais"
+          >{{ filial.cnpj }} -
+          {{ filial.nomeFantasia }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <div class="form-group required mb-2 col-6 col-lg-6">
+      <label
+        for="condicaoPagamento"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Condição de Pagamento"
+        >Condição de Pgto.:
+      </label>
+      <ng-select
+        id="condicaoPagamento"
+        class="font-weight-bold full-width"
+        [items]="condicoesPagamento"
+        bindLabel="descricao"
+        bindValue="idCondicaoPagamento"
+        loadingText="buscando..."
+        [hideSelected]="true"
+        [(ngModel)]="pedido.idCondicaoPagamento"
+      >
+      </ng-select>
+    </div>
+  </div>
+
+  <div class="row py-1">
+    <div class="form-group required mb-2 col-6 col-lg-6">
+      <label for="moeda">Moeda:</label>
+      <select-moeda [(moeda)]="pedidoItem.moeda" read-only="true"></select-moeda>
+    </div>
+
+    <div class="form-group mb-2 col-6 col-lg-6 coluna-info">
+      <div class="mb-2 col-6 col-lg-6">
+        <label class="w-100 text-right">Frete:</label>
+        <h5 class="text-right">{{ Frete[pedido.frete] }}</h5>
+      </div>
+      <div class="mb-2 col-6 col-lg-6">
+        <label class="w-100 text-right">Valor total:</label>
+        <h4 class="text-indigo-light font-weight-bold text-right">
+          {{ pedidoItem.valor * pedidoItem.quantidade | customCurrency: pedidoItem.moeda:null:'symbol' }}
+        </h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer px-0">
+    <button type="button" class="btn btn-outline-primary" (click)="fechar()">
+      <i class="fas fa-ban"></i> Fechar
+    </button>
+    <button type="button" class="btn btn-primary" (click)="confirmar()">
+      <i class="fas fa-cart-arrow-down"></i> Confirmar
+    </button>
+  </div>
+</div>

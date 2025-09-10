@@ -1,0 +1,92 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    {{ solicitacaoDocumentoFornecedor ? 'Alterar ' : 'Inserir' }}
+    solicitação de documento
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="cancelar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="form-group required col-lg-12">
+        <label>Documento:</label>
+        <ng-select
+          name="idDocumentoFornecedor"
+          formControlName="idDocumentoFornecedor"
+          [multiple]="false"
+          [class.invalid]="
+            form.controls.idDocumentoFornecedor.invalid && form.controls.idDocumentoFornecedor.dirty
+          "
+        >
+          <ng-option
+            *ngFor="let documentoFornecedor of documentosFornecedor"
+            [value]="documentoFornecedor.idDocumentoFornecedor"
+          >
+            {{ documentoFornecedor.descricaoDocumento }}
+          </ng-option>
+        </ng-select>
+        <span
+          class="invalid"
+          *ngIf="
+            form.controls.idDocumentoFornecedor.invalid && form.controls.idDocumentoFornecedor.dirty
+          "
+        >
+          Preenchimento obrigatório
+        </span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group required col-12">
+        <label>Categorias:</label>
+        <ng-select
+          [hideSelected]="true"
+          [items]="categorias"
+          bindLabel="descricao"
+          name="categoriasFornecimento"
+          formControlName="categoriasFornecimento"
+          [multiple]="true"
+          [class.invalid]="
+            form.controls.categoriasFornecimento.invalid &&
+            form.controls.categoriasFornecimento.dirty
+          "
+          [compareWith]="compareFn"
+        >
+          <ng-template *ngIf="categorias?.length" ng-header-tmp>
+            <div>
+              <button class="btn btn-link" (click)="onSelectAll()">Selecionar todas</button>
+            </div>
+          </ng-template>
+        </ng-select>
+        <span
+          class="invalid"
+          *ngIf="
+            form.controls.categoriasFornecimento.invalid &&
+            form.controls.categoriasFornecimento.dirty
+          "
+        >
+          Preenchimento obrigatório
+        </span>
+      </div>
+    </div>
+
+    <div
+      class="alert alert-primary"
+      role="alert"
+      *ngIf="!documentosFornecedor && usuarioAtual.permissaoAtual.idTenant != idTenantSmarkets"
+    >
+      Não é necessário solicitar documentos que já solicitamos como padrão da plataforma, se desejar
+      que eles sejam obrigatórios, assim você poderá incluí-los.
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" (click)="cancelar()" class="btn btn-outline-primary">
+    <i class="fas fa-ban"></i> Cancelar
+  </button>
+  <button type="button" (click)="salvar()" class="btn btn-primary">
+    <i class="fas fa-save"></i> Salvar
+  </button>
+</div>

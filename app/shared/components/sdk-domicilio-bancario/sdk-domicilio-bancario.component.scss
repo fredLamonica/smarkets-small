@@ -1,0 +1,166 @@
+sdk-rectangle-button ::ng-deep {
+  width: auto;
+
+  button {
+    padding: 0 30px !important;
+    height: 32px !important;
+    font-family: Open Sans !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 12px !important;
+    line-height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    color: #ffffff !important;
+    flex: none !important;
+
+    border-radius: 8px !important;
+
+    background: #588394 !important;
+    &:hover {
+      background-color: #407083 !important;
+      color: #ffffff;
+    }
+  }
+}
+
+// ::ng-deep sdk-item-card {
+//   div.sdk-item-card {
+//     border: 1px solid #52bde9;
+//   }
+// }
+
+.icon-custom {
+  i {
+    background: #d4effa;
+
+    color: #588394;
+
+    padding: 0.8rem;
+
+    border-radius: 49%;
+  }
+  i:hover {
+    background: #b8e9fc;
+    color: #407083;
+  }
+}
+
+.header {
+  display: flex;
+  color: #417185;
+  font-weight: bold;
+  padding-left: 10%;
+  margin-bottom: 0.5px;
+  p {
+    position: relative;
+  }
+
+  p:nth-child(2) {
+    left: 35%;
+  }
+  p:nth-child(3) {
+    left: 56.5%;
+  }
+
+  p:nth-child(4) {
+    left: 80%;
+  }
+}
+
+@media (max-width: 1280px) {
+  .btn-trash {
+    span {
+      position: relative;
+      top: 11px;
+    }
+
+    i {
+      top: -15px;
+      left: 8px;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .header {
+    p:nth-child(1) {
+      left: 3%;
+    }
+
+    p:nth-child(3) {
+      left: 51%;
+    }
+
+    p:nth-child(4) {
+      left: 65%;
+    }
+  }
+}
+
+@media (min-width: 1140px) {
+  .header {
+    p:nth-child(1) {
+      left: 3%;
+    }
+
+    p:nth-child(3) {
+      left: 52%;
+    }
+
+    p:nth-child(4) {
+      left: 69%;
+    }
+  }
+}
+
+@media (min-width: 1280px) {
+  .header {
+    p:nth-child(3) {
+      left: 53.5%;
+    }
+
+    p:nth-child(4) {
+      left: 71%;
+    }
+  }
+}
+
+@media (min-width: 1366px) {
+  .header {
+    p:nth-child(3) {
+      left: 54%;
+    }
+
+    p:nth-child(4) {
+      left: 72.5%;
+    }
+  }
+}
+
+@media (min-width: 1400px) {
+  .header {
+    p:nth-child(3) {
+      left: 54%;
+    }
+
+    p:nth-child(4) {
+      left: 75%;
+    }
+  }
+}
+
+@media (min-width: 1920px) {
+  .header {
+    p:nth-child(2) {
+      left: 35%;
+    }
+    p:nth-child(3) {
+      left: 56.5%;
+    }
+
+    p:nth-child(4) {
+      left: 80%;
+    }
+  }
+}

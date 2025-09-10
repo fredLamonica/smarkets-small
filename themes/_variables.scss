@@ -1,0 +1,146 @@
+// bootstrap 4
+// variaveis seguidas de // foram modificadas
+$gray-100: #f5f5fa !default; //
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #484848 !default; //
+$gray-900: #212529 !default;
+$black: #000 !default;
+
+// SMAKETS COLORS
+$smarkets-blue: #00b0f0 !default;
+$smarkets-blue-light: #00bbf1 !default;
+$smarkets-blue-dark: #0a5274 !default;
+$smarkets-indigo: #5a58a4 !default;
+$smarkets-purple: #922c88 !default;
+$smarkets-pink: #ef62a3 !default;
+$smarkets-red: #ef5036 !default;
+$smarkets-red-dark: #b40014 !default;
+$smarkets-orange: #f57f17 !default;
+$smarkets-yellow: #faa831 !default;
+$smarkets-green-light: #91ebd7 !default;
+$smarkets-green: #01b38f !default;
+$smarkets-green-dark: #54854f !default;
+$smarkets-teal: #afe6f5 !default;
+$smarkets-cyan: #2382af !default;
+$smarkets-white: #ffffff !default;
+$smarkets-gray: #727376 !default;
+$smarkets-gray-dark: #404040 !default;
+$smarkets-gray-light: #f5f5fa !default;
+$smarkets-light: #ebebeb !default;
+$smarkets-lighter: #f5f5f5 !default;
+$smarkets-brown: #665047 !default;
+
+$smarkets-gray-300: #afafb9 !default;
+
+$new-ux-smarkets-blue-light: #00bbf3 !default;
+$new-ux-smarkets-blue: #00a1d7 !default;
+$new-ux-smarkets-blue-indigo-light: #4293de !default;
+$new-ux-smarkets-blue-indigo: #1d4ea2 !default;
+$new-ux-smarkets-purple: #787ab9 !default;
+$new-ux-smarkets-purple-dark: #404285 !default;
+$new-ux-smarkets-gray: #6d6e71 !default;
+$new-ux-smarkets-orange: #f59f2b !default;
+$new-ux-smarkets-orange-dark: #e7482c !default;
+
+$blue: $smarkets-blue-light !default; //
+$indigo: $smarkets-indigo !default; //
+$purple: $smarkets-purple !default; //
+$pink: $smarkets-pink !default; //
+$red: $smarkets-red !default; //
+$orange: $smarkets-orange !default; //
+$yellow: $smarkets-yellow !default; //
+$green: $smarkets-green !default; //
+$teal: $smarkets-teal !default; //
+$cyan: $smarkets-cyan !default; //
+$white: $smarkets-white !default; //
+$gray: $smarkets-gray !default; //
+$gray-dark: $smarkets-gray-dark !default; //
+$lighter: $smarkets-lighter !default; //
+$darker: $black !default; //
+$brown: $smarkets-brown !default; //
+$light-green: $smarkets-green-light !default; //
+
+$primary: $new-ux-smarkets-blue !default; //
+$primary-dark: $new-ux-smarkets-blue-indigo !default; //
+$primary-light: $cyan !default; //
+$secondary: $smarkets-gray-300 !default; //
+$success: $smarkets-green !default; //
+$info: $smarkets-blue !default; //
+$warning: $yellow !default; //
+$danger: $new-ux-smarkets-orange-dark !default; //
+$light: $white !default; //
+$dark: $gray-900 !default; //
+
+$theme-colors: () !default;
+// stylelint-disable-next-line scss/dollar-variable-default
+$theme-colors: map-merge(
+  (
+    "primary": $primary,
+    "secondary": $secondary,
+    "success": $success,
+    "info": $info,
+    "warning": $warning,
+    "danger": $danger,
+    "light": $light,
+    "dark": $dark,
+    "indigo": $new-ux-smarkets-blue-indigo,
+    "indigo-light": $new-ux-smarkets-blue-indigo-light,
+    "lighter": $lighter,
+    "lighter-dark": $smarkets-light,
+    "purple": $new-ux-smarkets-purple,
+    "purple-dark": $new-ux-smarkets-purple-dark,
+    "input": $new-ux-smarkets-gray,
+  ),
+  $theme-colors
+);
+
+$font-family-sans-serif: $open-sans, sans-serif;
+$body-color: $new-ux-smarkets-gray !default;
+
+$border-radius: 0.25rem !default;
+$border-radius-lg: 0.3rem !default;
+$border-radius-sm: 0.2rem !default;
+
+$input-color: $new-ux-smarkets-gray;
+$input-border-color: $new-ux-smarkets-gray;
+
+$input-btn-focus-width: 0.2rem !default;
+$input-focus-box-shadow: 0 0 0 $input-btn-focus-width rgba($input-border-color, 0.25) !default;
+
+$card-cap-bg: $white;
+
+$card-border-radius: 0.5rem !default;
+
+$btn-hover-box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+
+$pagination-active-box-shadow: $btn-hover-box-shadow !default;
+//new ux variables
+$navbar-height: 5.7rem !default;
+$page-max-width: 1140px;
+
+/* breakpoints para media queries
+xs	0
+sm	544px
+md	768px
+lg	992px
+xl	1200px
+
+*Exemplos:
+    #sidebar {
+        @include media-breakpoint-up(sm) {
+            width: 80px;
+            left: 0;
+        }
+    }
+    element { @include media-breakpoint-down(lg) { //Styles// } }
+    element { @include media-breakpoint-between(sm, md) { //Styles// } }
+*
+*/
+
+// Custom breakpoints
+@import "src/themes/_breakpoints.scss";

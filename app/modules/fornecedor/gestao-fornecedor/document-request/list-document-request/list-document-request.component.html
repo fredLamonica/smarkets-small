@@ -1,0 +1,123 @@
+<div class="card card-tab-content">
+  <div class="card-header">
+    <a (click)="inserir()" class="btn btn-icon d-flex align-items-center text-primary p-0">
+      <i class="fas fa-plus-circle"></i>
+      <p class="d-inline-block mb-0 ml-2">Inserir nova solicitação de documento</p>
+    </a>
+  </div>
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+        <div class="col-md-2">
+          <label class="font-weight-bold">ID:</label>
+        </div>
+        <div class="col-md-4">
+          <label class="font-weight-bold">Documento:</label>
+        </div>
+        <div class="col-md-4">
+          <label class="font-weight-bold">Categorias:</label>
+        </div>
+        <div class="col-md-2">
+          <label class="font-weight-bold">Ações:</label>
+        </div>
+      </div>
+
+      <div
+        class="bg-white border-bottom row py-4"
+        *ngIf="!solicitacaoDocumentosFornecedor?.length; else hasValue"
+      >
+        <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+      </div>
+
+      <!-- begin-list no-content mt-5-->
+      <ng-template #hasValue>
+        <div
+          class="bg-white border-bottom row py-4"
+          *ngFor="
+            let solicitacaoDocumentoFornecedor of solicitacaoDocumentosFornecedor;
+            let i = index
+          "
+        >
+          <!-- begin-fields-->
+          <div class="col-md-2 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">ID:</label>
+            <p class="mb-3 mb-md-0">
+              {{ solicitacaoDocumentoFornecedor?.idSolicitacaoDocumentoFornecedor }}
+            </p>
+          </div>
+
+          <div class="col-md-4 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Documento:</label>
+            <p class="mb-3 mb-md-0">
+              {{ solicitacaoDocumentoFornecedor?.documentoFornecedor.descricaoDocumento }}
+            </p>
+          </div>
+
+          <div class="col-md-4 col-sm-3 align-self-center">
+            <label for="" class="font-weight-bold d-block d-md-none">Categorias:</label>
+            <p
+              class="mb-3 mb-md-0 line-clamp line-clamp-3"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{ categoriasList(solicitacaoDocumentoFornecedor) }}"
+            >
+              <span
+                *ngFor="
+                  let categoria of solicitacaoDocumentoFornecedor.categoriasFornecimento;
+                  let categoriaIndex = index
+                "
+              >
+                {{
+                  categoria.descricao +
+                    (categoriaIndex !=
+                    solicitacaoDocumentoFornecedor.categoriasFornecimento.length - 1
+                      ? ','
+                      : '')
+                }}
+              </span>
+            </p>
+          </div>
+
+          <div
+            class="col-md-2 d-flex justify-content-between align-self-center"
+            *ngIf="solicitacaoDocumentoFornecedor?.idTenant == usuarioAtual.permissaoAtual.idTenant"
+          >
+            <button
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Auditoria"
+              (click)="
+                onAuditoriaClick(solicitacaoDocumentoFornecedor.idSolicitacaoDocumentoFornecedor)
+              "
+            >
+              <i class="fas fa-history"></i>
+            </button>
+            <button
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Editar"
+              (click)="editarItem(solicitacaoDocumentoFornecedor)"
+            >
+              <i class="far fa-edit"></i>
+            </button>
+            <button
+              class="btn btn-icon"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Excluir"
+              (click)="
+                onExcluirClick(solicitacaoDocumentoFornecedor.idSolicitacaoDocumentoFornecedor)
+              "
+            >
+              <i class="far fa-trash-alt text-danger"></i>
+            </button>
+          </div>
+          <!-- end-list -->
+        </div>
+      </ng-template>
+      <!-- end-list -->
+    </div>
+  </div>
+</div>

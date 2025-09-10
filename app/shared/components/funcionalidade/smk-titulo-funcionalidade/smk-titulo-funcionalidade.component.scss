@@ -1,0 +1,22 @@
+@import "src/themes/_smk-base.scss";
+
+$height: 22px;
+
+.titulo-funcionalidade {
+  .titulo {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: $height;
+    color: $smk-dark-green-color;
+    min-height: $height;
+
+    .titulo-com-complemento {
+      font-weight: 400;
+    }
+
+    .separador {
+      @include smk-separador;
+    }
+  }
+}

@@ -1,0 +1,83 @@
+@import "src/themes/_smk-base.scss";
+
+$font-color: #424242;
+$selection-width: 3.5rem;
+
+.table-component {
+  table {
+    &.table-sm {
+      thead {
+        &.thead-light {
+          tr {
+            th {
+              padding-top: 0.55rem;
+              padding-bottom: 0.55rem;
+            }
+          }
+        }
+      }
+    }
+
+    .selection {
+      width: $selection-width;
+      min-width: $selection-width;
+      accent-color: $smk-accent-color;
+    }
+
+    th {
+      color: $font-color;
+      white-space: nowrap;
+    }
+
+    td {
+      color: $font-color;
+
+      ::ng-deep smk-column span {
+        white-space: nowrap;
+      }
+    }
+
+    thead {
+      &.thead-light {
+        tr {
+          th {
+            background-color: $smk-header-background-color;
+          }
+        }
+      }
+
+      tr {
+        th {
+          font-weight: bold;
+          text-transform: none;
+          font-size: 15px;
+          border-top: none;
+          border-left: none;
+          border-right: none;
+        }
+      }
+    }
+
+    tbody {
+      &.highlight-selected {
+        tr {
+          &.selected {
+            background-color: rgba(177, 226, 245, 0.4);
+          }
+        }
+      }
+    }
+
+    &.table-bordered {
+      thead {
+        &.thead-light {
+          tr {
+            th {
+              border: 1px solid darken(#dee2e6, 10%);
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,105 @@
+@media (min-width: 768px) {
+  :host div {
+    border: none;
+    outline: olive;
+    border-radius: 6px;
+    font-size: 09px;
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    opacity: 1;
+    min-width: 3rem;
+    box-shadow: none !important;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    margin: 4px 0px 4px 0px;
+    align-items: center;
+
+    &.primary {
+      background: transparent 0% 0% no-repeat padding-box;
+      color: #00bbf3;
+      border: 1px solid #00bbf3;
+    }
+    &.primary:hover {
+      background: #00bbf3 0% 0% no-repeat padding-box;
+      color: #ffffff;
+      text-decoration: none;
+    }
+    &.danger {
+      background: transparent 0% 0% no-repeat padding-box;
+      color: #e74b37;
+      border: 1px solid #e74b37;
+    }
+    &.danger:hover {
+      background: #e74b37 0% 0% no-repeat padding-box;
+      color: #ffffff;
+      text-decoration: none;
+    }
+    &.danger-fixed {
+      background: #e74b37 0% 0% no-repeat padding-box;
+      color: #ffffff;
+      text-decoration: none;
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  :host div {
+    border: none;
+    outline: olive;
+    border-radius: 8px;
+    font-size: 12px;
+    padding: 0.4rem 0.5rem 0.4rem 0.5rem;
+    opacity: 1;
+    min-width: 4rem;
+    box-shadow: none !important;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    margin: 8px 0px 8px 0px;
+    align-items: center;
+
+    &.primary {
+      background: transparent 0% 0% no-repeat padding-box;
+      color: #00bbf3;
+      border: 2px solid #00bbf3;
+    }
+    &.primary:hover {
+      background: #00bbf3 0% 0% no-repeat padding-box;
+      color: #ffffff;
+      text-decoration: none;
+    }
+    &.danger {
+      background: transparent 0% 0% no-repeat padding-box;
+      color: #e74b37;
+      border: 2px solid #e74b37;
+    }
+    &.danger:hover {
+      background: #e74b37 0% 0% no-repeat padding-box;
+      color: #ffffff;
+      text-decoration: none;
+    }
+    &.danger-fixed {
+      background: #e74b37 0% 0% no-repeat padding-box;
+      color: #ffffff;
+      text-decoration: none;
+    }
+  }
+}
+
+.tag-input-clickable {
+  cursor: pointer;
+}
+
+.left-icon,
+.right-icon {
+  bottom: 3px;
+  left: 5px;
+  font-size: 1.2em;
+}
+a .left-icon {
+  padding: 1px 5px 5px 8px;
+}
+
+.right-icon {
+  padding: 1px 2px 1px 5px;
+}

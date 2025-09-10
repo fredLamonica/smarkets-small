@@ -1,0 +1,62 @@
+<div class="col-12">
+  <div class="row">
+    <div class="sidebar d-flex align-items-center pl-2" *ngIf="selectionEnabled">
+      <input [checked]="supplier.selected" (change)="checkedChanged()" type="checkbox" />
+    </div>
+
+    <sdk-item-card
+      (clickEmitter)="!disabled && cardClicked()"
+      [iconClass]="'fas fa-people-carry'"
+      [showStatusBar]="false"
+      [hasMarginBottom]="true"
+      [borderColor]="'none'"
+      [borderWidth]="'1px'"
+      [ngStyle]="{ width: selectionEnabled ? '97%' : '100%' }"
+      [ngClass]="{
+        selected: supplier.selected,
+        'status-active': supplier.status == statusFornecedor.Ativo,
+        'status-active-pending': supplier.status == statusFornecedor.AtivoComPendencias,
+        'status-blocked': supplier.status == statusFornecedor.Bloqueado,
+        'status-analyze': supplier.status == statusFornecedor.EmAnalise,
+        'status-inactive': supplier.status == statusFornecedor.Inativo
+      }"
+    >
+      <div class="d-flex w-100 justify-content-around align-items-center">
+        <div class="col-2 pl-4">
+          <a>{{ supplier.documento }}</a>
+        </div>
+
+        <div class="col-3 pl-4 crop-text-2">
+          <a data-toggle="tooltip" data-placement="bottom" title="{{ supplier.razaoSocial }}">{{
+            supplier.razaoSocial
+          }}</a>
+        </div>
+
+        <div class="col-3 pl-5 crop-text-2">
+          <a
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ supplier.pessoaJuridicaOrigem }}"
+            >{{ supplier.pessoaJuridicaOrigem }}</a
+          >
+        </div>
+
+        <div class="col-2 pl-5">
+          <a class="status-text">{{ statusFornecedorLabel.get(supplier.status) }}</a>
+        </div>
+
+        <div class="col-1 pl-4" *ngIf="!selectionEnabled">
+          <span
+            class="icon-custom-download w-100"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Baixar documentos"
+            (click)="downloadFile()"
+          >
+            <i class="fas fa-download"></i>
+          </span>
+        </div>
+      </div>
+    </sdk-item-card>
+  </div>
+</div>

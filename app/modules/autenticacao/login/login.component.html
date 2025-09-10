@@ -1,0 +1,56 @@
+<meta http-equiv="pragma" content="no-cache" />
+<div class="top-bar"></div>
+<div class="py-4 logo-container">
+  <img src="./../../../assets/img/logo-cinza.png" alt="Smarkets" class="mx-autod-block logo" />
+</div>
+<div class="d-flex justify-content-center login-bar">
+  <h4>LOGIN DO USUÁRIO:</h4>
+</div>
+<div class="container mt-4">
+  <div class="justify-content-md-center">
+    <form name="form" [formGroup]="form" novalidate>
+      <div class="form-group">
+        <label translate> PAGES.USER.EMAIL </label>
+        <div class="input-group">
+          <input
+            type="text"
+            name="identificador"
+            class="form-control"
+            autofocus
+            formControlName="identificador" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label translate> PAGES.USER.PASSWORD </label>
+        <div class="input-group">
+          <input
+            [type]="passwordInputType"
+            name="senha"
+            class="form-control input-password"
+            formControlName="senha" />
+          <div class="input-group-append">
+            <span
+              class="input-group-text transparent-append"
+              (click)="modificarVisibilidadeSenha()">
+              <i
+                class="far"
+                [class.fa-eye]="passwordInputType == 'text'"
+                [class.fa-eye-slash]="passwordInputType == 'password'">
+              </i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block py-2" type="submit" (click)="login()" translate>
+        PAGES.AUTH.SIGN_IN
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-block"
+        translate
+        [routerLink]="['/auth', 'recuperar-senha']">
+        PAGES.AUTH.FORGOT_PASSWORD
+      </button>
+    </form>
+  </div>
+</div>

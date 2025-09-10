@@ -1,0 +1,145 @@
+<ul class="nav bg-gray">
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="salvar()"><i class="fas fa-save"></i> Salvar</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" role="button" (click)="cancelar()"><i class="fas fa-ban"></i> Cancelar</a>
+  </li>
+  <li class="nav-item" *ngIf="idCategoria">
+    <a class="nav-link" role="button" [routerLink]="['../', 'novo']"><i class="fas fa-plus"></i> Incluir novo</a>
+  </li>
+</ul>
+<header>
+  <h1 class="title" translate>{{ idCategoria?'Alterar':'Incluir' }} categoria de produto</h1>
+</header>
+<div class="container-fluid no-bounds">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <form [formGroup]="form">
+            <div class="form-row" *ngIf="idCategoria">
+              <div class="form-group col-lg-1">
+                <label for="idCategoriaProduto" translate> Id </label>
+                <input class="form-control" type="text" readonly name="idCategoriaProduto"
+                  formControlName="idCategoriaProduto">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <label for="idCategoriaProdutoPai"> Categoria pai </label>
+                <input-tree [source]="categorias" value-property="nome" key-property="idCategoriaProduto"
+                  children-property="filhos" name="idCategoriaProdutoPai" formControlName="idCategoriaProdutoPai"
+                  (empty-tree)="naoExistemCategoriasDisponiveis($event)"></input-tree>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-lg-2">
+                <label for="codigo" translate> Código </label>
+                <input class="form-control" type="text" name="codigo" formControlName="codigo">
+              </div>
+              <div class="form-group required col-lg-7">
+                <label for="nome" translate> Descrição </label>
+                <input class="form-control" [class.invalid]="form.controls.nome.invalid && form.controls.nome.dirty"
+                  type="text" name="nome" formControlName="nome">
+                <span class="invalid" *ngIf="form.controls.nome.invalid && form.controls.nome.dirty">Preenchimento
+                  obrigatório</span>
+              </div>
+              <div class="form-group col-lg-3">
+                <label class="required pl-0"> É Categoria de Regulamentação? </label>
+                <div>
+                  <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="regulamentacao-sim" name="regulamentacao" formControlName="regulamentacao"
+                      class="custom-control-input" [value]="true">
+                    <label class="custom-control-label" for="regulamentacao-sim">Sim</label>
+                  </div>
+                  <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="regulamentacao-nao" name="regulamentacao" formControlName="regulamentacao"
+                      class="custom-control-input" [value]="false">
+                    <label class="custom-control-label" for="regulamentacao-nao">Não</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-lg-8">
+                <label for="nome" translate> Cnae </label>
+                <ng-select name="idCnae" formControlName="idCnae">
+                  <ng-option *ngFor="let cnae of cnaes" [value]="cnae.idCnae">
+                    {{cnae.identificador + ' - ' + cnae.descricao}}</ng-option>
+                </ng-select>
+              </div>
+              <div class="form-group required col-lg-2">
+                <label for="situacao" translate> Situação </label>
+                <select id="situacao" class="form-control" name="situacao" formControlName="situacao">
+                  <option [ngValue]="null"></option>
+                  <option [ngValue]="true">Ativo</option>
+                  <option [ngValue]="false">Inativo</option>
+                </select>
+                <span class="invalid"
+                  *ngIf="form.controls.situacao.invalid && form.controls.situacao.dirty">Preenchimento
+                  obrigatório</span>
+              </div>
+              <div class="form-group col-lg-2">
+                <label for="classificacao" translate> Classificação </label>
+                <select id="classificacao" class="form-control" name="classificacao" formControlName="classificacao">
+                  <option [ngValue]="null"></option>
+                  <option [ngValue]="ClassificacaoCategoriaProduto.BemDeConsumo">Bem de consumo</option>
+                  <option [ngValue]="ClassificacaoCategoriaProduto.BemPermanente">Bem permanente</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-lg-2">
+                <label> Ícone </label>
+                <div class="input-group">
+                  <div class="form-control truncate" (click)="selecionarIcone()">
+                  </div>
+                  <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" id="button-addon2" (click)="selecionarIcone()"><i
+                        class="fas fa-search"></i></button>
+                  </div>
+                </div>
+                <a class="btn btn-icon btn-lg disabled" role="button">
+                  <i class="{{form.value.classeIcone}}"></i>
+                </a>
+                <a class="btn btn-sm btn-link text-danger" role="button" (click)="limparIcone()" *ngIf="form.value.classeIcone">
+                  <i class="fas fa-trash-alt"></i> Remover
+                </a>
+              </div>
+            </div>
+            <!-- <div class="form-row">
+              <div class="form-group required col-lg-2">
+                <label for="situacao" translate> Situação </label>
+                <select id="situacao" class="form-control" name="situacao" formControlName="situacao">
+                  <option [ngValue]="null"></option>
+                  <option [ngValue]="true">Ativo</option>
+                  <option [ngValue]="false">Inativo</option>
+                </select>
+                <span class="invalid" *ngIf="form.controls.situacao.invalid && form.controls.situacao.dirty">Preenchimento
+                  obrigatório</span>
+              </div>
+              <div class="form-group col-lg-2">
+                <label for="classificacao" translate> Classificação </label>
+                <select id="classificacao" class="form-control" name="classificacao" formControlName="classificacao">
+                  <option [ngValue]="null"></option>
+                  <option [ngValue]="ClassificacaoCategoriaProduto.BemDeConsumo">Bem de consumo</option>
+                  <option [ngValue]="ClassificacaoCategoriaProduto.BemPermanente">Bem permanente</option>
+                </select>
+              </div>
+              <div class="form-group col-4">
+                <label for="tipo" translate> Tipo </label>
+                <select id="tipo" class="form-control" name="tipo" formControlName="tipo">
+                  <option [ngValue]="null"></option>
+                  <option [ngValue]="TipoCategoriaProduto.Categoria">Categoria</option>
+                  <option [ngValue]="TipoCategoriaProduto.Saneantes">Saneantes</option>
+                  <option [ngValue]="TipoCategoriaProduto.Solventes">Solventes</option>
+                </select>
+              </div>
+            </div> -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+@import "src/themes/_smk-base.scss";
+
+.barra-acoes-funcionalidade {
+  .voltar {
+    @include smk-button-outline($smk-primary-color);
+    margin-left: 6px;
+  }
+
+  .separador {
+    @include smk-separador;
+  }
+}
+
+::ng-deep smk-barra-acoes-funcionalidade .barra-acoes-funcionalidade {
+  .acoes {
+    @include smk-button-styles;
+  }
+}

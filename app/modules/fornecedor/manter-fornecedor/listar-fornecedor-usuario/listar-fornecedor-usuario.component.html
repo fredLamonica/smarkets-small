@@ -1,0 +1,137 @@
+<div class="card card-tab-content">
+  <div class="card-header">
+    <a class="btn btn-icon d-flex align-items-center text-primary p-0" (click)="incluirUsuario()">
+      <i class="fas fa-plus-circle"></i>
+      <p class="d-inline-block mb-0 ml-2">Incluir Novo Usuário</p>
+    </a>
+  </div>
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="bg-lighter border-bottom row py-4 d-none d-md-flex">
+        <div class="col-md-3">
+          <label class="font-weight-bold">Nome:</label>
+        </div>
+        <div class="col-md-3">
+          <label class="font-weight-bold">Email:</label>
+        </div>
+        <div
+          [ngClass]="{
+            'col-md-2': flagPermitirEdicaoUsuario || flagPermitirRemocaoVinculo,
+            'col-md-3': !(flagPermitirEdicaoUsuario || flagPermitirRemocaoVinculo)
+          }"
+        >
+          <label class="font-weight-bold">Perfil:</label>
+        </div>
+        <div
+          [ngClass]="{
+            'col-md-2': flagPermitirEdicaoUsuario || flagPermitirRemocaoVinculo,
+            'col-md-3': !(flagPermitirEdicaoUsuario || flagPermitirRemocaoVinculo)
+          }"
+        >
+          <label class="font-weight-bold">Situação:</label>
+        </div>
+        <div class="col-md-2" *ngIf="flagPermitirEdicaoUsuario || flagPermitirRemocaoVinculo">
+          <label class="font-weight-bold">Ações:</label>
+        </div>
+      </div>
+      <div class="bg-white border-bottom row py-4" *ngIf="!usuarios?.length">
+        <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+      </div>
+
+      <div class="bg-white border-bottom row py-4" *ngFor="let usuario of usuarios">
+        <div class="col-md-3 align-self-center">
+          <label for="" class="font-weight-bold d-block d-md-none">Nome:</label>
+          <p
+            class="mb-3 mb-lg-0 line-clamp line-clamp-2"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ usuario.pessoaFisica?.nome }}"
+          >
+            {{ usuario.pessoaFisica?.nome }}
+          </p>
+        </div>
+        <div class="col-md-3 align-self-center">
+          <label for="" class="font-weight-bold d-block d-md-none">Email:</label>
+          <p
+            class="mb-3 mb-lg-0 line-clamp line-clamp-1"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ usuario.email }}"
+          >
+            {{ usuario.email }}
+          </p>
+        </div>
+        <div
+          class="align-self-center"
+          [ngClass]="{
+            'col-md-2': flagPermitirEdicaoUsuario || flagPermitirRemocaoVinculo,
+            'col-md-3': !(flagPermitirEdicaoUsuario || flagPermitirRemocaoVinculo)
+          }"
+        >
+          <label for="" class="font-weight-bold d-block d-md-none">Perfil:</label>
+          <p
+            class="mb-3 mb-lg-0 line-clamp line-clamp-1"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ PerfilUsuario[usuario.permissoes[0]?.perfil] }}"
+          >
+            {{ PerfilUsuario[usuario.permissoes[0]?.perfil] }}
+          </p>
+        </div>
+        <div
+          class="align-self-center"
+          [ngClass]="{
+            'col-md-2': flagPermitirEdicaoUsuario || flagPermitirRemocaoVinculo,
+            'col-md-3': !(flagPermitirEdicaoUsuario || flagPermitirRemocaoVinculo)
+          }"
+        >
+          <label for="" class="font-weight-bold d-block d-md-none">Situação:</label>
+          <p
+            class="mb-3 mb-lg-0 line-clamp line-clamp-1"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="{{ SituacaoUsuario[usuario.situacao] }}"
+          >
+            {{ SituacaoUsuario[usuario.situacao] }}
+          </p>
+        </div>
+        <div
+          class="col-md-2 d-flex justify-content-between align-self-center"
+          *ngIf="flagPermitirEdicaoUsuario || flagPermitirRemocaoVinculo"
+        >
+          <button
+            *ngIf="flagPermitirEdicaoUsuario"
+            class="btn btn-icon"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Editar"
+            (click)="editar(usuario)"
+          >
+            <i class="far fa-edit"></i>
+          </button>
+          <button
+            *ngIf="flagPermitirRemocaoVinculo"
+            class="btn btn-icon"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Remover"
+            (click)="solicitarRemocaoVinculo(usuario)"
+          >
+            <i class="fas fa-unlink text-warning"></i>
+          </button>
+        </div>
+      </div>
+      <div class="bg-white row py-4">
+        <div class="col-12">
+          <pager
+            size="sm"
+            [page]="pagina"
+            [total-pages]="totalPaginas"
+            [records-per-page]="registrosPorPagina"
+            (pagination)="paginacao($event)"
+          ></pager>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

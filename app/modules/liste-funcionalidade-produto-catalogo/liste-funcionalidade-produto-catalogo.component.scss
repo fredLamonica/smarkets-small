@@ -1,0 +1,55 @@
+::ng-deep smk-liste-funcionalidade-produto-catalogo {
+  .tabs-wrapper {
+    border-bottom: 1px solid #e7edf0 !important;
+
+    .nav-tabs {
+      padding-left: unset !important;
+
+      .nav-item {
+        margin: 0 5px -1px;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        .nav-link {
+          padding-bottom: 4px;
+          font-size: 15.5px;
+          color: #616161;
+          border-bottom: 4px solid #616161 !important;
+          font-weight: 400 !important;
+          padding: 11px 0;
+
+            &.active {
+              box-shadow: none !important;
+              font-weight: 400 !important;
+              color: #27ade4;
+              border-bottom: 4px solid #27ade4 !important;
+            }
+        }
+
+        .nav-link-icons{
+          padding-bottom: 4px;
+          font-size: 18px;
+          color: #616161;
+          border-bottom: 4px solid #616161 !important;
+          font-weight: 400 !important;
+          padding: 10px 10px 10px;
+
+            &.active {
+              box-shadow: none !important;
+              font-weight: 400 !important;
+              color: #27ade4;
+              border-bottom: 4px solid #27ade4 !important;
+            }
+        }
+      }
+    }
+  }
+}
+
+

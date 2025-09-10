@@ -1,0 +1,32 @@
+<div class="filtro-funcionalidade" [ngClass]="class">
+  <smk-card-funcionalidade paddingBottom="0.5rem" [class]="filtroExpandido ? 'expandido' : null">
+    <div class="d-flex flex-column flex-sm-row-reverse justify-content-between align-items-center align-items-sm-start">
+      <div class="acoes d-flex mb-4 mb-sm-0">
+        <button
+          class="troque-visualizacao-filtro btn btn-primary"
+          ngbTooltip="Trocar visualização dos filtros"
+          [class.filtro-informado]="filtroInformado"
+          (click)="troqueVisualizacaoFiltro()">
+          <i class="fas fa-chevron-down" [class.fa-chevron-up]="filtroExpandido"></i>
+          <span
+            *ngIf="filtroInformado"
+            class="badge-indicador-filtro badge border border-light rounded-circle">
+            &nbsp;
+          </span>
+        </button>
+        <button class="filtrar btn btn-success" ngbTooltip="Aplicar filtro" (click)="dispareFiltre()">
+          <i class="fas fa-filter mr-1"></i> Filtrar
+        </button>
+        <button
+          class="limpar-filtro btn btn-outline-success"
+          ngbTooltip="Limpar filtros"
+          (click)="dispareLimpeFiltro()">
+          <i class="fas fa-eraser"></i>
+        </button>
+      </div>
+      <div class="campos mr-sm-5 flex-fill">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </smk-card-funcionalidade>
+</div>

@@ -1,0 +1,225 @@
+<div class="card-header">
+  <div class="row">
+    <div class="col-12 col-md-6 pl-0 font-weight-bold" [class.col-12]="readonly">
+      {{ labelOrigem }}
+    </div>
+    <div class="col-12 col-md-6 font-weight-bold" *ngIf="!readonly">
+      {{ labelDestino }}
+    </div>
+  </div>
+</div>
+
+<div class="row bg-white py-3">
+  <div class="col-12 col-md-6 border-right" [class.border-right]="!readonly">
+    <div class="row">
+      <div class="col">
+        <input-busca
+          placeholder="Buscar ..."
+          (buscar)="buscarParticipantesIncluidos($event)"
+        ></input-busca>
+      </div>
+    </div>
+
+    <div class="row px-3 mt-3 mb-1">
+      <div class="col">
+        <div class="row" *ngIf="!readonly">
+          <div class="col-1">
+            <div class="custom-control custom-checkbox" (click)="selecionarTodosIncluidos()">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="selectAllIncluidos"
+                [checked]="todosParticipantesIncluidosSelecionados"
+              />
+              <label
+                class="custom-control-label"
+                style="position: absolute; pointer-events: none;"
+                for="selectAllIncluidos"
+              ></label>
+            </div>
+          </div>
+          <div class="col-11 align-self-center">
+            <p class="mb-0">Selecionar todas</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row px-3 mb-3">
+      <div class="col border rounded" style="height: 250px; overflow-y: auto;">
+        <div class="row py-1 bg-lighter-dark">
+          <div class="col-1" *ngIf="!readonly"></div>
+          <div class="col-11" [class.col-12]="readonly">
+            <p class="font-weight-bold mb-0">Fornecedores</p>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="!participantesIncluidos?.length">
+          <p class="col no-content text-align-center" translate>GENERAL.NO_RECORDS_FOUND</p>
+        </div>
+        <ng-container
+          *ngFor="let participante of participantesIncluidos; let indexIncluidos = index"
+        >
+          <div
+            class="row pt-1 border-bottom"
+            [class.bg-lighter]="indexIncluidos % 2 != 0"
+            *ngIf="exibirParticipanteIncluido(participante)"
+          >
+            <div class="col-1" *ngIf="!readonly">
+              <div
+                class="custom-control custom-checkbox"
+                (click)="selecionarParticipanteIncluido(participante)"
+              >
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="select{{ indexIncluidos }}"
+                  [checked]="participanteIncluidoSelecionado(participante)"
+                />
+                <label
+                  class="custom-control-label"
+                  style="position: absolute; pointer-events: none;"
+                  for="select{{ indexIncluidos }}"
+                ></label>
+              </div>
+            </div>
+            <div class="col-11 align-self-center" [class.col-12]="readonly">
+              <p class="mb-0">{{ participante.pessoaJuridica.razaoSocial }}</p>
+            </div>
+            <div class="col-12 mt-4">
+              <collapse-footer>
+                <div class="row bg-lighter-dark border-bottom border-top py-1">
+                  <div class="col-11 align-self-center" [class.col-12]="readonly">
+                    <label data-toggle="tooltip" data-placement="bottom" title="Cnpj">Cnpj:</label>
+                    <p
+                      class="font-weight-bold mb-1"
+                      title="{{ participante.pessoaJuridica?.cnpj }}"
+                    >
+                      {{ participante.pessoaJuridica?.cnpj }}
+                    </p>
+                  </div>
+                </div>
+              </collapse-footer>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="row" *ngIf="!readonly">
+      <div class="col">
+        <button class="btn btn-light float-right" (click)="remover()">
+          <i class="fas fa-arrow-right text-primary"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6" *ngIf="!readonly">
+    <div class="row">
+      <div class="col">
+        <input-busca
+          placeholder="Buscar ..."
+          (buscar)="buscarparticipantesRemovidos($event)"
+        ></input-busca>
+      </div>
+    </div>
+
+    <div class="row px-3 mt-3 mb-1">
+      <div class="col">
+        <div class="row">
+          <div class="col-1">
+            <div class="custom-control custom-checkbox" (click)="selecionarTodosDisponiveis()">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="selectAllDisponiveis"
+                [checked]="todosparticipantesRemovidosSelecionados"
+              />
+              <label
+                class="custom-control-label"
+                style="position: absolute; pointer-events: none;"
+                for="selectAllDisponiveis"
+              ></label>
+            </div>
+          </div>
+          <div class="col-11 align-self-center">
+            <p class="mb-0">Selecionar todas</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row px-3 mb-3">
+      <div class="col border rounded" style="height: 250px; overflow-y: auto;">
+        <div class="row py-1 bg-lighter-dark">
+          <div class="col-1"></div>
+          <div class="col-11">
+            <p class="font-weight-bold mb-0">Fornecedores</p>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="!listaFornecedorSelecionado?.length">
+          <p class="col no-content text-align-center" translate>GENERAL.NO_RECORDS_FOUND</p>
+        </div>
+        <ng-container
+          *ngFor="let participante of listaFornecedorSelecionado; let indexSelecionado = index"
+        >
+          <div
+            class="row pt-1 border-bottom"
+            [class.bg-lighter]="indexSelecionado % 2 != 0"
+            *ngIf="exibirParticipanteDisponivel(participante)"
+          >
+            <div class="col-1">
+              <div
+                class="custom-control custom-checkbox"
+                (click)="selecionarParticipanteDisponivel(participante)"
+              >
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="select{{ indexSelecionado }}"
+                  [checked]="participanteDisponivelSelecionado(participante)"
+                />
+                <label
+                  class="custom-control-label"
+                  style="position: absolute; pointer-events: none;"
+                  for="select{{ indexSelecionado }}"
+                ></label>
+              </div>
+            </div>
+            <div
+              class="col-11 align-self-center"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="{{ participante.pessoaJuridica?.razaoSocial }}"
+            >
+              <p class="mb-0 text-truncate">{{ participante.pessoaJuridica?.razaoSocial }}</p>
+            </div>
+            <div class="col-12 mt-4">
+              <collapse-footer>
+                <div class="row bg-lighter-dark border-bottom border-top py-1">
+                  <div class="col-11 align-self-center" [class.col-12]="readonly">
+                    <label data-toggle="tooltip" data-placement="bottom" title="Cnpj">Cnpj:</label>
+                    <p
+                      class="font-weight-bold mb-1"
+                      title="{{ participante.pessoaJuridica?.cnpj }}"
+                    >
+                      {{ participante.pessoaJuridica?.cnpj }}
+                    </p>
+                  </div>
+                </div>
+              </collapse-footer>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="row" *ngIf="!readonly">
+      <div class="col">
+        <button class="btn btn-light float-left" (click)="adicionar()">
+          <i class="fas fa-arrow-left text-danger"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

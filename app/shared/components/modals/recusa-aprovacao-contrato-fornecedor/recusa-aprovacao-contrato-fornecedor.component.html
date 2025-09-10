@@ -1,0 +1,30 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Informe o motivo da recusa</div>
+  <button type="button" class="close" aria-label="Close" (click)="fechar(false)">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="formRecusaContrato">
+    <div class="row">
+      <div class="form-group col">
+        <label for="motivoRecusa">Motivo: (Limitado a 100 caracteres)</label>
+        <textarea
+          class="form-control"
+          id="motivoRecusa"
+          formControlName="motivoRecusa"
+          row="3"
+          maxlength="100"
+          ></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="fechar(false)">
+    <i class="fas fa-ban"></i> Voltar
+  </button>
+  <button type="button" class="btn btn-primary" (click)="salvar()">
+    <i class="fas fa-save"></i> Salvar
+  </button>
+</div>

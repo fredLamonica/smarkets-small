@@ -1,0 +1,47 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">
+    {{ idUnidade ? 'Alterar ' : 'Incluir ' }} Unidade de Medida
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="voltar()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group col-lg-6">
+        <label for="codigo" translate> Código </label>
+        <input class="form-control" type="text" name="codigo" formControlName="codigo">
+      </div>
+      <div class="form-group required col-lg-6">
+        <label for="descricao" translate> Sigla </label>
+        <input class="form-control" [class.invalid]="form.controls.sigla.invalid && form.controls.sigla.dirty"
+          type="text" name="sigla" formControlName="sigla">
+        <span class="invalid" *ngIf="form.controls.sigla.invalid && form.controls.sigla.dirty">Preenchimento
+          obrigatório</span>
+      </div>
+      <div class="form-group required col-12">
+        <label for="descricao" translate> Descrição </label>
+        <input class="form-control" [class.invalid]="form.controls.descricao.invalid && form.controls.descricao.dirty"
+          type="text" name="descricao" formControlName="descricao">
+        <span class="invalid" *ngIf="form.controls.descricao.invalid && form.controls.descricao.dirty">Preenchimento
+          obrigatório</span>
+      </div>
+      <div class="form-group required col-12">
+        <div class="custom-control custom-checkbox custom-control-inline">
+          <input type="checkbox" id="permiteQuantidadeFracionada" name="permiteQuantidadeFracionada"
+            class="custom-control-input" formControlName="permiteQuantidadeFracionada">
+          <label class="custom-control-label" for="permiteQuantidadeFracionada">Permite Quantidade Fracionada</label>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" (click)="voltar()" class="btn btn-outline-primary">
+    <i class="fas fa-ban"></i> Voltar
+  </button>
+  <button type="button" (click)="salvar()" class="btn btn-primary">
+    <i class="fas fa-save"></i> Salvar
+  </button>
+</div>

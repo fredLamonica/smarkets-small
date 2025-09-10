@@ -1,0 +1,11 @@
+<div class="col-12">
+  <div class="container-fluid no-bounds pt-2">
+    <sdk-progressbar
+      *ngFor="let item of indicadorFornecedorHomologadoCategoria"
+      [value]="item.quantidadeFornecedores"
+      [maxValue]="totalFornecedoresHomologadosComCategoria"
+      [label]="item.categoria"
+    >
+    </sdk-progressbar>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<div>
+  <div class="container-fluid no-bounds py-2">
+    <div class="row">
+      <div class="col tabs-wrapper">
+        <ul class="nav nav-tabs row " role="tablist">
+          <div class="col-12 px-4 d-flex">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                id="catalogo-tab"
+                [class.active]="true"
+                data-toggle="tab"
+                role="tab"
+                aria-controls="catalogo"
+                aria-selected="false">
+                <span class="d-none d-xs-none d-sm-block">
+                  Edição de Produtos em <span class="font-weight-bold">Catálogo</span>
+                </span>
+                <span
+                  class="d-block d-xs-block d-sm-none"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Produtos em Catálogo">
+                  Catálogo
+                </span>
+              </a>
+            </li>
+            <li class="nav-item ml-auto">
+              <a
+                class="nav-link-icons"
+                [class.active]="false"
+                href="#contratos-fornecedor"
+                id="catalogo-tab"
+                data-toggle="tab"
+                role="tab"
+                aria-selected="false"
+                (click)="navegueTelaProdutos()">
+                <span class="d-none d-xs-none d-sm-block">
+                  <i class="fas fa-th-large"></i>
+                </span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link-icons"
+                id="catalogo-tab"
+                [class.active]="true"
+                data-toggle="tab"
+                role="tab"
+                aria-selected="false">
+                <span class="d-none d-xs-none d-sm-block">
+                  <i class="fas fa-tools"></i>
+                </span>
+              </a>
+            </li>
+          </div>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="py-4 px-4">
+    <smk-filtro-funcionalidade
+      class="mb-4"
+      [configuracaoFiltrosUsuario]="configuracaoFiltrosUsuario"
+      [filtroInformado]="filtroInformado"
+      (filtrosChange)="filtrosChange.emit()"
+      (filtrosClear)="filtrosClear.emit()">
+      <ng-content select="[filtros]"></ng-content>
+    </smk-filtro-funcionalidade>
+    <smk-table-funcionalidade
+      [configuracaoDaTable]="configuracaoDaTable"
+      [itensDaTable]="itensDaTable"
+      [configuracaoFerramentasDaTable]="configuracaoFerramentasDaTable"
+      [ferramentas]="ferramentas"
+      [colunasDisponiveis]="colunasDisponiveis"
+      [configuracaoColunasUsuario]="configuracaoColunasUsuario"
+      [tooltipExportar]="tooltipExportar"
+      (export)="export.emit()"
+      (colunasChange)="colunasChange.emit($event)"
+      (colunasReset)="colunasReset.emit()"
+      (selectedChange)="selectedChange.emit($event)"
+      (pageChange)="pageChange.emit($event)">
+      <ng-content select="[acoes-table]"></ng-content>
+    </smk-table-funcionalidade>
+  </div>
+</div>

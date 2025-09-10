@@ -1,0 +1,66 @@
+<div class="dual-list-wrapper">
+  <div class="source">
+    <div class="header">
+      <div class="title">{{ sourceTitle }}</div>
+      <div class="subtitle">{{ name | titlecase }} totais {{ source?.length }}</div>
+      <div class="input-wrapper">
+        <input #sourceSearchInput type="text" class="form-control" placeholder="Filtrar por">
+        <button class="btn btn-link" (click)="clearSourceSearch()" [disabled]="!sourceSearch">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
+    </div>
+    <div class="list-wrapper">
+      <div class="actions">
+        <button class="btn btn-link" (click)="addAll()" [disabled]="!source?.length">
+          <i class="fas fa-arrow-right"></i>
+          <i class="fas fa-arrow-right"></i>
+          Adicionar Todos
+        </button>
+        <button class="btn btn-link" (click)="add()" [disabled]="!selectedSource?.length">
+          <i class="fas fa-arrow-right"></i>
+          Adicionar Selecionados
+        </button>
+      </div>
+      <div class="table-wrapper">
+        <smk-table
+          [config]="tableConfig"
+          [items]="source | search : sourceSearch : searchCompareTo"
+          (selectedChange)="selectedSourceChange($event)"
+        ></smk-table>
+      </div>
+    </div>
+  </div>
+  <div class="destination">
+    <div class="header">
+      <div class="title">{{ destinationTitle }}</div>
+      <div class="subtitle">{{ name | titlecase }} totais {{ destination?.length }}</div>
+      <div class="input-wrapper">
+        <input #destinationSearchInput type="text" class="form-control" placeholder="Filtrar por">
+        <button class="btn btn-link" (click)="clearDestinationSearch()" [disabled]="!destinationSearch">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
+    </div>
+    <div class="list-wrapper">
+      <div class="actions">
+        <button class="btn btn-link" (click)="removeAll()" [disabled]="!destination?.length">
+          <i class="fas fa-arrow-left"></i>
+          <i class="fas fa-arrow-left"></i>
+          Remover Todos
+        </button>
+        <button class="btn btn-link" (click)="remove()" [disabled]="!selectedDestination?.length">
+          <i class="fas fa-arrow-left"></i>
+          Remover Selecionados
+        </button>
+      </div>
+      <div class="table-wrapper">
+        <smk-table
+          [config]="tableConfig"
+          [items]="destination | search : destinationSearch : searchCompareTo"
+          (selectedChange)="selectedDestinationChange($event)"
+        ></smk-table>
+      </div>
+    </div>
+  </div>
+</div>

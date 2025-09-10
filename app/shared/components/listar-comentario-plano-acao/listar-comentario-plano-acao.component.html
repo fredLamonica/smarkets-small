@@ -1,0 +1,228 @@
+<div class="row-12-col">
+  <div class="row">
+    <!-- barra collapse -->
+    <div class="col-12 bg-lighter d-flex justify-content-between">
+      <p class="my-2">
+        <span class="font-weight-bold">Comentários</span>
+        {{
+          acao.comentarios?.length > 0
+            ? 'Último comentário ' +
+              (acao.comentarios[0]?.dataCriacao | date: 'dd/MM/yyyy HH:mm:ss')
+            : ''
+        }}
+      </p>
+      <div class="form-group col-1 d-flex justify-content-end p-0 my-auto d-none">
+        <a
+          type="button"
+          id="btnComentarios-{{ indexAcao }}"
+          data-toggle="collapse"
+          href="#comentarios-{{ indexAcao }}"
+          role="button"
+          aria-expanded="false"
+          aria-controls="comentarios"
+          class="btn btn-icon pl-0 pr-2"
+          data-placement="bottom"
+          title="{{ acao.dataFinalizacao ? 'Comentários' : 'Comentar' }}"
+          [ngClass]="{ 'float-right': acao.dataFinalizacao }"
+        >
+          <i class="far fa-comment-dots"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 collapse" id="comentarios-{{ indexAcao }}">
+    <!-- inserção comentario -->
+    <div class="form-group row-12-col">
+      <form [formGroup]="comentarioForm">
+        <div class="row my-3" *ngIf="acao.dataFinalizacao == null">
+          <div class="d-none d-lg-block col-lg-1 col-xl-1 pr-0 align-self-center">
+            <div class="initials-container current-user">
+              <div class="initials">
+                {{ getInitials(usuarioLogado?.pessoaFisica?.nome) }}
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-11 col-xl-11">
+            <div class="input-group">
+              <textarea
+                class="form-control resize-none"
+                rows="5"
+                [placeholder]="placeholder"
+                formControlName="comentario"
+              ></textarea>
+              <div class="input-group-append">
+                <button class="btn btn-icon px-5" type="button" (click)="enviarComentario()">
+                  <i class="far fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-md-11 ml-auto p-0" *ngIf="true">
+          <label class="pr-2" *ngIf="!acao.dataFinalizacao"> Anexar Arquivo: </label>
+          <input-file
+            [multiple]="true"
+            accept=".csv,.tiff,.txt,.pdf,.xlsx,.xls,.pptx,.ppt,.docx,.doc,.odt,.ods,.odp,.png,.jpeg,.jpg"
+            (select)="incluirArquivos($event)"
+            *ngIf="!acao.dataFinalizacao"
+          ></input-file>
+        </div>
+        <div class="form-group col-md-11 ml-auto p-0" *ngIf="comentarioForm.controls.anexos.value">
+          <galeria-arquivos
+            [arquivos]="comentarioForm.controls.anexos.value"
+            (excluir)="excluirArquivo($event)"
+            [disabled]="acao.dataFinalizacao != null"
+          >
+          </galeria-arquivos>
+        </div>
+      </form>
+    </div>
+
+    <div class="row my-3" *ngFor="let comentario of acao?.comentarios; let indexCom = index">
+      <div class="d-none d-lg-block col-lg-1 col-xl-1 pr-0 align-self-center">
+        <div
+          class="initials-container"
+          [ngClass]="{
+            'other-user': comentario.idUsuarioAutor == usuarioLogado.idUsuario,
+            'current-user': comentario.idUsuarioAutor != usuarioLogado.idUsuario
+          }"
+        >
+          <div class="initials">
+            {{ getInitials(comentario.usuarioAutor?.pessoaFisica?.nome) }}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8 col-xl-8">
+        <div class="container-fluid">
+          <div class="comment row">
+            <div
+              class="col-12 pl-0"
+              [ngClass]="{
+                'col-md-10':
+                  acao.dataFinalizacao == null &&
+                  usuarioLogado.idUsuario == comentario.usuarioAutor.idUsuario
+              }"
+            >
+              <p>
+                <span class="font-weight-bold text-uppercase">{{
+                  comentario.usuarioAutor?.pessoaFisica?.nome
+                }}</span>
+                comentado em
+                {{ comentario.dataCriacao | date: 'dd/MM/yyyy HH:mm:ss' }}
+              </p>
+              <p *ngIf="indexEdicaoComentario != indexAcao + '-' + indexCom">
+                {{ comentario.comentario }}
+              </p>
+              <textarea
+                rows="3"
+                class="form-control shadow-none box-shadow-none py-0 pl-0 border-0"
+                [(ngModel)]="comentarioEditado"
+                [ngModelOptions]="{ standalone: true }"
+                *ngIf="indexEdicaoComentario == indexAcao + '-' + indexCom"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- botoes -->
+      <div class="col-lg-3 col-xl-3 d-flex justify-content-around align-items-center">
+        <galeria-arquivos
+          [arquivos]="comentario.anexos"
+          [fileClasses]="'col-6 col-lg-12 mx-1'"
+          [disabled]="true"
+        >
+        </galeria-arquivos>
+        <!-- BOTAO EDITAR COMENTARIO -->
+        <div
+          class="my-auto"
+          *ngIf="
+            indexEdicaoComentario != indexAcao + '-' + indexCom &&
+            acao.dataFinalizacao == null &&
+            usuarioLogado.idUsuario == comentario.usuarioAutor.idUsuario
+          "
+        >
+          <button
+            class="btn btn-icon"
+            type="button"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Editar"
+            (click)="editarComentario(indexAcao + '-' + indexCom, comentario.comentario)"
+          >
+            <i class="far fa-edit text-primary"></i>
+          </button>
+        </div>
+        <!-- BOTÃO DELETE COMENTARIO -->
+        <div
+          class="my-auto"
+          *ngIf="
+            indexEdicaoComentario != indexAcao + '-' + indexCom &&
+            acao.dataFinalizacao == null &&
+            usuarioLogado.idUsuario == comentario.usuarioAutor.idUsuario
+          "
+        >
+          <button
+            class="btn btn-icon"
+            type="button"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Apagar"
+            (click)="solicitarExclusaoComentario(indexCom)"
+          >
+            <i class="far fa-trash-alt text-danger"></i>
+          </button>
+        </div>
+        <!-- BOTÃO SALVAR EDICAO COMENTARIO -->
+        <div class="my-auto" *ngIf="indexEdicaoComentario == indexAcao + '-' + indexCom">
+          <button
+            class="btn btn-icon"
+            type="button"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Salvar"
+            (click)="salvarEdicaoComentario(comentario.idAcaoFornecedorComentario)"
+          >
+            <i class="fas fa-save text-primary"></i>
+          </button>
+        </div>
+        <!-- CANCELA EDICAO COMENTARIO -->
+        <div class="my-auto" *ngIf="indexEdicaoComentario == indexAcao + '-' + indexCom">
+          <button
+            class="btn btn-icon"
+            type="button"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Cancelar"
+            (click)="cancelarEdicaoComentario()"
+          >
+            <i class="fas fa-ban text-danger"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer bg-white" *ngIf="!ladoGestor">
+      <button type="button" (click)="voltar()" class="btn btn-outline-primary">
+        <i class="fas fa-ban"></i> Voltar
+      </button>
+      <button
+        type="button"
+        (click)="solicitarFinalizacao()"
+        class="btn btn-primary"
+        *ngIf="acao.dataFinalizacao == null"
+      >
+        <i class="fas fa-check"></i> Finalizar
+      </button>
+      <button
+        type="button"
+        (click)="salvar()"
+        class="btn btn-primary"
+        *ngIf="acao.dataFinalizacao == null"
+      >
+        <i class="fas fa-save"></i> Salvar
+      </button>
+    </div>
+  </div>
+</div>

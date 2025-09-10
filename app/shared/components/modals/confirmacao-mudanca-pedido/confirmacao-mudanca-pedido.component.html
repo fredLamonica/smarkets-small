@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">{{titulo}}</div>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <p>{{ confirmacao }}</p>
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group col">
+        <label for="observacao"> Observação </label>
+        <textarea class="form-control" name="observacao" formControlName="observacao" rows="4"></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss('Cross click')">Cancelar</button>
+  <button type="button" class="btn btn-outline-primary" (click)="confirmar()">Confirmar</button>
+</div>

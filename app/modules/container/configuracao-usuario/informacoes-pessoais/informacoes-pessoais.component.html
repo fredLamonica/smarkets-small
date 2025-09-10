@@ -1,0 +1,242 @@
+<div *ngIf="form" class="usuario-info-pessoais">
+  <smk-funcionalidade titulo="Área do Usuário /" tituloComplementar="Informações Pessoais">
+    <ng-container acoes-barra>
+      <button
+        class="btn btn-primary"
+        ngbTooltip="Salvar"
+        container="body"
+        (click)="salvar()">
+        <i class="fas fa-save"></i>
+      </button>
+    </ng-container>
+    <ng-container [formGroup]="form">
+      <smk-card-funcionalidade titulo="Contato" class="mb-4 pb-2">
+        <div class="row">
+          <div class="form-group col-lg-8 col-xxxl-4 required">
+            <label for="nome">Nome</label>
+            <input id="nome" class="form-control" type="text" formControlName="nome">
+            <span
+              *ngIf="(form.get('nome').dirty || form.get('nome').touched) && form.get('nome').invalid && form.get('nome').errors.required"
+              class="error-message">
+              Campo obrigatório
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-lg-8 col-xxxl-4 required">
+            <label for="email">Email</label>
+            <div class="input-group">
+              <input id="email" class="form-control" type="text" formControlName="email">
+              <div class="input-group-append">
+                <button class="btn-alterar btn btn-outline-danger" type="button" (click)="alterarEmail()">
+                  <i class="fas fa-redo-alt mr-2"></i>
+                  Alterar Email
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-lg-4">
+            <label for="telefone">Telefone</label>
+            <input
+              id="telefone"
+              class="form-control"
+              type="text"
+              formControlName="telefone"
+              [textMask]="{ mask: maskTelefone, guide: false }">
+          </div>
+          <div class="form-group col-lg-4">
+            <label for="ramal">Ramal</label>
+            <input id="ramal" class="form-control" type="text" maxlength="30" formControlName="ramal">
+          </div>
+          <div class="form-group col-lg-4">
+            <label for="celular">Celular</label>
+            <input
+              id="celular"
+              class="form-control"
+              type="text"
+              formControlName="celular"
+              [textMask]="{ mask: maskCelular, guide: false }">
+          </div>
+        </div>
+      </smk-card-funcionalidade>
+      <smk-card-funcionalidade titulo="Segurança" class="mb-4 pb-2">
+        <div class="row">
+          <div class="form-group col-lg-4 required">
+            <label for="senha">Senha</label>
+            <div class="input-group">
+              <input id="senha" class="form-control" type="password" formControlName="senha">
+              <div class="input-group-append">
+                <button class="btn-alterar btn btn-outline-danger" type="button" (click)="alterarSenha()">
+                  <i class="fas fa-redo-alt mr-2"></i>
+                  Alterar Senha
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </smk-card-funcionalidade>
+    </ng-container>
+  </smk-funcionalidade>
+</div>
+
+<ng-template #modalAlteracaoDeEmailTmp let-modal>
+  <div class="modal-alteracao alteracao-de-email">
+    <div class="modal-header">
+      <div class="modal-title">Alteração de Email</div>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <ng-container [formGroup]="formAlteracaoDeEmail">
+        <smk-card-funcionalidade padding="0" border="none">
+          <div class="row">
+            <div class="form-group col-12 required">
+              <label for="novoEmail">Novo Email</label>
+              <input
+                #novoEmail
+                id="novoEmail"
+                class="form-control"
+                type="text"
+                formControlName="novoEmail"
+                ngbAutofocus>
+              <span
+                *ngIf="(formAlteracaoDeEmail.get('novoEmail').dirty || formAlteracaoDeEmail.get('novoEmail').touched) && formAlteracaoDeEmail.get('novoEmail').invalid && formAlteracaoDeEmail.get('novoEmail').errors.required"
+                class="error-message">
+                Campo obrigatório
+              </span>
+            </div>
+            <div class="form-group col-12 required">
+              <label for="novoEmailConfirm">Confirmar Novo Email</label>
+              <input
+                id="novoEmailConfirm"
+                class="form-control"
+                type="text"
+                formControlName="novoEmailConfirm"
+                (keyup.enter)="formAlteracaoDeEmail.valid && confirmarAlteracaoDeEmail(modal)">
+              <div
+                *ngIf="(formAlteracaoDeEmail.get('novoEmailConfirm').dirty || formAlteracaoDeEmail.get('novoEmailConfirm').touched) && formAlteracaoDeEmail.get('novoEmailConfirm').invalid && formAlteracaoDeEmail.get('novoEmailConfirm').errors.required"
+                class="error-message">
+                Campo obrigatório
+              </div>
+              <div
+                *ngIf="formAlteracaoDeEmail.dirty && formAlteracaoDeEmail.invalid && formAlteracaoDeEmail.errors?.notSame"
+                class="error-message">
+                {{ formAlteracaoDeEmail.errors?.notSame.message }}
+              </div>
+            </div>
+          </div>
+        </smk-card-funcionalidade>
+      </ng-container>
+    </div>
+    <div class="modal-footer pt-3">
+      <button type="button" class="cancelar btn btn-outline-primary mr-3" (click)="modal.dismiss()">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="confirmar btn btn-primary"
+        [class.disabled]="formAlteracaoDeEmail.invalid"
+        (click)="confirmarAlteracaoDeEmail(modal)">
+        Confirmar
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalAlteracaoDeSenhaTmp let-modal>
+  <div class="modal-alteracao alteracao-de-senha">
+    <div class="modal-header">
+      <div class="modal-title">Alteração de Senha</div>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <ng-container [formGroup]="formAlteracaoDeSenha">
+        <smk-card-funcionalidade padding="0" border="none">
+          <div class="row">
+            <div class="form-group col-12 required">
+              <label for="novaSenha">Nova Senha</label>
+              <div class="input-group">
+                <input
+                  #novaSenha
+                  id="novaSenha"
+                  class="form-control"
+                  formControlName="novaSenha"
+                  ngbAutofocus
+                  [type]="novaSenhaInputType">
+                <div class="input-group-append">
+                  <span
+                    class="input-group-text"
+                    (click)="modifiqueVisibilidadeSenha()">
+                    <i
+                      class="far fa-fw"
+                      [class.fa-eye]="novaSenhaInputType === 'text'"
+                      [class.fa-eye-slash]="novaSenhaInputType === 'password'">
+                    </i>
+                  </span>
+                </div>
+              </div>
+              <ng-container
+                *ngIf="(formAlteracaoDeSenha.get('novaSenha').dirty || formAlteracaoDeSenha.get('novaSenha').touched) && formAlteracaoDeSenha.get('novaSenha').invalid && formAlteracaoDeSenha.get('novaSenha').errors.passwordRules">
+                <div
+                  *ngFor="let message of formAlteracaoDeSenha.get('novaSenha').errors.passwordRules.messages"
+                  class="error-message">
+                  {{ message }}
+                </div>
+              </ng-container>
+            </div>
+            <div class="form-group col-12 required">
+              <label for="novaSenhaConfirm">Confirmar Nova Senha</label>
+              <div class="input-group">
+                <input
+                  id="novaSenhaConfirm"
+                  class="form-control"
+                  type="text"
+                  formControlName="novaSenhaConfirm"
+                  [type]="novaSenhaInputType"
+                  (keyup.enter)="formAlteracaoDeSenha.valid && confirmarAlteracaoDeSenha(modal)">
+                <div class="input-group-append">
+                  <span
+                    class="input-group-text"
+                    (click)="modifiqueVisibilidadeSenha()">
+                    <i
+                      class="far fa-fw"
+                      [class.fa-eye]="novaSenhaInputType === 'text'"
+                      [class.fa-eye-slash]="novaSenhaInputType === 'password'">
+                    </i>
+                  </span>
+                </div>
+              </div>
+              <div
+                *ngIf="(formAlteracaoDeSenha.get('novaSenhaConfirm').dirty || formAlteracaoDeSenha.get('novaSenhaConfirm').touched) && formAlteracaoDeSenha.get('novaSenhaConfirm').invalid && formAlteracaoDeSenha.get('novaSenhaConfirm').errors.required"
+                class="error-message">
+                Campo obrigatório
+              </div>
+              <div
+                *ngIf="formAlteracaoDeSenha.dirty && formAlteracaoDeSenha.invalid && formAlteracaoDeSenha.errors?.notSame"
+                class="error-message">
+                {{ formAlteracaoDeSenha.errors?.notSame.message }}
+              </div>
+            </div>
+          </div>
+        </smk-card-funcionalidade>
+      </ng-container>
+    </div>
+    <div class="modal-footer pt-3">
+      <button type="button" class="cancelar btn btn-outline-primary mr-3" (click)="modal.dismiss()">
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="confirmar btn btn-primary"
+        [class.disabled]="formAlteracaoDeSenha.invalid"
+        (click)="confirmarAlteracaoDeSenha(modal)">
+        Confirmar
+      </button>
+    </div>
+  </div>
+</ng-template>

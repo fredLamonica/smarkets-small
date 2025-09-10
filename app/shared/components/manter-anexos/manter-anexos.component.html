@@ -1,0 +1,51 @@
+<div class="anexos">
+  <div *ngIf="!readOnly" class="mb-3">
+    <input-file
+      [multiple]="quantidadeMaxima > 1"
+      [accept]="accept"
+      (select)="enviarArquivosParaInsercao($event)">
+    </input-file>
+    <span class="rules">
+      Arquivos permitidos:
+      <span class="destaque">
+        {{ extensoesPermitidas.slice(0, extensoesPermitidas.length - 1).join(', ') | uppercase }}
+      </span>
+      e
+      <span class="destaque">{{ extensoesPermitidas[extensoesPermitidas.length - 1] | uppercase }}</span>
+      (limite de
+      <span class="destaque">{{ tamanhoMaximo }}</span> e <span class="destaque">{{ quantidadeMaxima }}</span>
+      arquivo{{ quantidadeMaxima > 1 ? 's' : '' }}).
+    </span>
+  </div>
+  <div *ngIf="anexos && anexos.length > 0">
+    <ul class="lista-de-anexo list-unstyled text-justify">
+      <li *ngFor="let anexo of anexos" class="anexo">
+        <input
+          class="dados-arquivo form-control mr-3"
+          type="text"
+          disabled
+          [title]="anexo?.arquivo?.nomeTamanho"
+          [ngModel]="anexo?.arquivo?.nomeTamanho">
+        <button
+          *ngIf="podeBaixar"
+          class="download btn btn-outline-primary mr-2"
+          role=button
+          ngbTooltip="Baixar"
+          (click)="download(anexo.arquivo)">
+          <i class="fas fa-download"></i>
+        </button>
+        <button
+          *ngIf="!readOnly && anexo.permiteExcluir"
+          class="exclusao btn btn-outline-primary"
+          role=button
+          ngbTooltip="Excluir"
+          (click)="solicitarExclusaoDeAnexo(anexo)">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="!anexos || anexos.length === 0" class="texto-sem-anexo" [class.read-only]="readOnly">
+    Não há arquivos em anexo.
+  </div>
+</div>

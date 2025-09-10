@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <div class="modal-title" id="modal-basic-title">Incluir/Atualizar Observação</div>
+  <button type="button" class="close" aria-label="Close" (click)="fechar(false)">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="formObsevacaoPedido">
+    <div class="row">
+      <div class="form-group col">
+        <label for="observacao">Observação</label>
+        <textarea
+          class="form-control"
+          id="observacao"
+          formControlName="observacao"
+          row="3"
+          [attr.disabled]="readonly ? 'disabled' : null"></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+<div *ngIf="!readonly" class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="fechar(false)">
+    <i class="fas fa-ban"></i> Voltar
+  </button>
+  <button type="button" class="btn btn-primary" (click)="salvar()">
+    <i class="fas fa-save"></i> Salvar
+  </button>
+</div>

@@ -1,0 +1,264 @@
+<div class="header">
+  <div class="header-search row">
+    <div class="col-12 align-self-center">
+      <h3 class="mb-0 text-uppercase text-primary font-weight-bold">Solicitação de compra</h3>
+    </div>
+  </div>
+
+  <div class="header-navigation py-4">
+    <div class="bounds d-flex bd-highlight col-12">
+      <div class="col-lg-2 mr-auto p-2 bd-highlight">
+        <button class="btn btn-primary btn-block" (click)="voltar()">
+          <i class="fas fa-arrow-left"></i> Voltar
+        </button>
+      </div>
+
+      <div class="col-lg-2 p-2 bd-highlight" *ngIf="emSelecao && btnDesbloquear()">
+        <button
+          class="btn btn-success btn-block"
+          [disabled]="disabledBtnDesbloquear() || itensSelecionados.length == 0"
+          (click)="desbloquear()">
+          <i class="fas fa-undo"></i> Desbloquear
+        </button>
+      </div>
+      <div class="col-lg-2 p-2 bd-highlight" *ngIf="emSelecao && btnBloquear()">
+        <button
+          class="btn btn-warning btn-block"
+          [disabled]="disabledBtnBloquear() || itensSelecionados.length == 0"
+          (click)="bloquear()">
+          <i class="fas fa-redo"></i> Bloquear
+        </button>
+      </div>
+      <div class="col-lg-2 p-2 bd-highlight" *ngIf="itensDisponiveisNovos() && emSelecao">
+        <button
+          class="btn btn-danger btn-block"
+          [disabled]="disabledBtnCancelar() || itensSelecionados.length == 0"
+          (click)="cancelar()">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+      </div>
+      <div class="col-lg-2 p-2 bd-highlight">
+        <button
+          *ngIf="emSelecao && !usuarioRequisitante"
+          class="btn btn-success btn-block"
+          [disabled]="disabledBtnVincular() || itensSelecionados.length === 0"
+          (click)="vinculeProduto()">
+          Vincular Produto
+        </button>
+      </div>
+      <div class="col-lg-2 p-2 bd-highlight">
+        <button
+          class="btn btn-success btn-block"
+          *ngIf="!emSelecao && btnSelecionarItens(); else botaoRemoverSelecao"
+          (click)="selecionarItens()">
+          Selecionar Itens
+        </button>
+
+        <ng-template #botaoRemoverSelecao>
+          <button
+            class="btn btn-outline-success btn-block"
+            *ngIf="btnSelecionarItens()"
+            (click)="removerselecaoItens()">
+            Remover Selecão Itens
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid text-small">
+  <div class="row">
+    <div class="col px-0">
+      <div class="card card-tab-content">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <!-- #region Dados da empresa -->
+            <div class="row bg-lighter border-bottom py-3">
+              <div class="col-lg-12">
+                <h5 class="text-uppercase font-weight-bold">Empresa:</h5>
+              </div>
+              <div class="col-12 col-lg-3 align-self-center">
+                <label>CNPJ:</label>
+                <p
+                  class="font-weight-bold text-truncate"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="{{ solicitacao?.itens[0]?.pessoaJuridica?.cnpj }}">
+                  {{ solicitacao?.itens[0]?.pessoaJuridica?.cnpj }}
+                </p>
+              </div>
+              <div class="col-12 col-lg-6 align-self-center">
+                <label>Razão Social:</label>
+                <p
+                  class="font-weight-bold"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="{{ solicitacao?.itens[0]?.pessoaJuridica?.razaoSocial }}">
+                  {{ solicitacao?.itens[0]?.pessoaJuridica?.razaoSocial }}
+                </p>
+              </div>
+              <div class="col-12 col-lg-3 align-self-center">
+                <label>Nome Fantasia:</label>
+                <p
+                  class="font-weight-bold"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="{{ solicitacao?.itens[0]?.pessoaJuridica?.nomeFantasia }}">
+                  {{ solicitacao?.itens[0]?.pessoaJuridica?.nomeFantasia }}
+                </p>
+              </div>
+            </div>
+            <!-- #endregion -->
+            <div class="bg-lighter border-bottom row py-3">
+              <div class="col-6 col-lg-2">
+                <label>Solicitação</label>
+                <p class="font-weight-bold">{{ solicitacao?.idSolicitacaoCompra }}</p>
+              </div>
+              <div class="col-6 col-lg-2">
+                <label>RC</label>
+                <p class="font-weight-bold">{{ solicitacao?.codigo }}</p>
+              </div>
+
+              <div class="col-6 col-lg-3">
+                <label>Tipo RC</label>
+                <p class="font-weight-bold">
+                  {{ solicitacao?.tipoRequisicao?.sigla }} -
+                  {{ solicitacao?.tipoRequisicao?.nome }}
+                </p>
+              </div>
+              <div class="col-6 col-lg-2">
+                <label>Dt Solicitação</label>
+                <p class="font-weight-bold">
+                  {{ solicitacao?.dataCriacao | date: 'dd/MM/yyyy HH:mm' }}
+                </p>
+              </div>
+              <div class="col-6 col-lg-2">
+                <label>Tipo de Documento</label>
+                <p class="font-weight-bold">
+                  {{ solicitacao?.tpDoc ? solicitacao?.tpDoc : solicitacao?.tipoDocumento }}
+                </p>
+              </div>
+              <div
+                class="col-6 col-lg-1 d-flex justify-content-center justify-content-md-end align-self-center"
+                [ngClass]="{
+                  'px-lg-2': flagBotaoAlterarResponsavelVisivel
+                }">
+                <button
+                  *ngIf="flagBotaoAlterarResponsavelVisivel"
+                  class="btn btn-icon px-lg-2"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Alterar Responsavel"
+                  (click)="alterarResponsavel()">
+                  <i class="fas fa-user-edit"></i>
+                </button>
+                <button
+                  class="btn btn-icon"
+                  [ngClass]="{
+                    'px-lg-2': flagBotaoAlterarResponsavelVisivel
+                  }"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Auditoria"
+                  (click)="auditar(solicitacao?.idSolicitacaoCompra)">
+                  <i class="fas fa-history"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-lighter border-bottom row py-3">
+              <div class="col-6 col-lg-3">
+                <label>Solicitante</label>
+                <p
+                  class="font-weight-bold"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="{{ solicitacao?.nomeRequisitante }}">
+                  {{ solicitacao?.nomeRequisitante }}
+                </p>
+              </div>
+
+              <div class="col-6 col-lg-4">
+                <label>E-mail</label>
+                <p
+                  class="font-weight-bold"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="{{ solicitacao?.emailRequisitante }}">
+                  {{ solicitacao?.emailRequisitante }}
+                </p>
+              </div>
+
+              <div class="col-6 col-lg-2 pr-lg-0">
+                <label>Ramal</label>
+                <p
+                  class="font-weight-bold"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="{{ solicitacao?.emailRequisitante }}">
+                  {{ solicitacao?.ramalRequisitante }}
+                </p>
+              </div>
+              <div class="col-6 col-lg-3 pr-lg-0">
+                <label>Depto</label>
+                <p
+                  class="font-weight-bold"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="{{ solicitacao?.departamento }}">
+                  {{ solicitacao?.departamento }}
+                </p>
+              </div>
+            </div>
+            <div class="bg-lighter border-bottom row py-3">
+              <div class="col-lg-12 align-self-center">
+                <label>Descrição Completa:</label>
+                <p class="font-weight-bold">{{ solicitacao?.descricao }}</p>
+              </div>
+            </div>
+            <div
+              class="custom-control custom-checkbox"
+              (click)="selecionarTodosDisponiveis()"
+              *ngIf="emSelecao">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="selectAllDisponiveis"
+                [checked]="todosItensDisponiveisSelecionados" />
+              <label
+                class="custom-control-label pl-2"
+                style="position: absolute; pointer-events: none"
+                for="selectAllDisponiveis">
+                Selecionar todos</label>
+            </div>
+            <item-solicitacao-compra
+              [solicitacao]="solicitacao"
+              [item]="item"
+              [tipo-documento]="solicitacao?.tipoDocumento"
+              [em-selecao]="emSelecao"
+              (selecao)="selecionarItem($event, itemIndex)"
+              [selecionado]="itemSelecionado(itemIndex)"
+              *ngFor="let item of solicitacao?.itens; let itemIndex = index">
+            </item-solicitacao-compra>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-md-center mb-5">
+        <div class="col-md-6 text-center">
+          Não haverá outra negociação de uma ou mais requisições dessa solicitação. Será gerado um
+          pedido manualmente a um fornecedor.
+        </div>
+        <div class="col-md-5" *ngIf="emSelecao && itensDisponiveisNovos()">
+          <button
+            class="btn btn-success text-white"
+            [disabled]="disabledBtnGerarPedidoRegularizacao() || itensSelecionados.length == 0"
+            (click)="gerarPedidoRegularizacao()">
+            Gerar Pedido de Regularização
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

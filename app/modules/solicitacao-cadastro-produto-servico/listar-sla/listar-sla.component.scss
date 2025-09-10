@@ -1,0 +1,280 @@
+:host {
+    display: flex;
+    align-self: stretch;
+    background: #e7edf0;
+    flex-direction: column;
+    position: relative;
+    min-height: 95vh;
+
+    .col-id{
+      margin-left: 5.5%;
+    }
+    .col-id-sem-origem{
+      margin-left: 6.8%;
+    }
+    .col-origem{
+      margin-left: 6.2%;
+    }
+    .col-tipo{
+      margin-left: 5.0%;
+    }
+    .col-status{
+      margin-left: 12%;
+    }
+    .col-status-sem-origem{
+      margin-left: 14%;
+    }
+    .col-acoes{
+      margin-left: 6.3%;
+    }
+    .col-acoes-sem-origem{
+      margin-left: 7%;
+    }
+    .col-tempo-sem-origem{
+      margin-left: 9%;
+    }
+    .col-tipo-sem-origem{
+      margin-left: 7.5%;
+    }
+
+    .semListagem {
+      height: 54vh;
+      a {
+        margin: 5% auto;
+      }
+    }
+
+    .paging {
+      padding: 3em;
+    }
+
+    .filter {
+      margin-top: 5.8em;
+      padding: 5px;
+      background: #ffffff;
+    }
+
+    .listagem {
+      margin-top: 3em;
+      padding: 0 2em;
+
+      .row {
+        padding: 0 0.3em !important;
+
+        p,
+        i {
+          font-size: 1.1em;
+          color: #417185;
+          font-weight: bold;
+        }
+
+        .menu-icon {
+          color: #114e66 !important;
+
+          &:hover,
+          &.ativo {
+            color: #27ade4 !important;
+          }
+        }
+      }
+
+      .clickable {
+        cursor: pointer;
+      }
+
+      input[type='checkbox']:before {
+        content: '' !important;
+        position: absolute !important;
+        width: 16px !important;
+        height: 16px !important;
+        border-radius: 4px !important;
+        top: 0 !important;
+        left: 0px !important;
+        background: #ffffff;
+        border: 1px solid #cfdce0;
+        box-sizing: border-box;
+        border-radius: 4px;
+      }
+
+      input[type='checkbox'] {
+        position: relative !important;
+        cursor: pointer !important;
+        height: 16px !important;
+        opacity: 1 !important;
+      }
+
+      input[type='checkbox']:checked:before {
+        background-color: #00a1d7 !important;
+        border: none !important;
+        border-radius: 4px !important;
+      }
+
+      input[type='checkbox']:checked:after {
+        content: '' !important;
+        border-radius: 4px !important;
+        display: block !important;
+        width: 5px !important;
+        height: 10px !important;
+        border-radius: 4px !important;
+        border: solid #ffffff !important;
+        border-width: 0 2px 2px 0 !important;
+        -webkit-transform: rotate(45deg) !important;
+        -ms-transform: rotate(45deg) !important;
+        transform: rotate(45deg) !important;
+        position: absolute !important;
+        top: 2px !important;
+        left: 6px !important;
+      }
+    }
+
+    .navbar {
+      height: 80px;
+      margin-bottom: 20px;
+      margin: 0 3em;
+    }
+
+    .page-title {
+      font-size: 1.1em !important;
+      font-family: Open Sans !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      color: #88a6b2 !important;
+
+      .subtitle {
+        font-size: 1.2em !important;
+        color: #27ade4;
+        font-weight: bold;
+      }
+
+      i {
+        font-size: 0.9em;
+      }
+    }
+  }
+
+::ng-deep {
+    .arrow::before {
+      border-bottom-color: #d4effa !important;
+    }
+
+    .tooltip-inner {
+      background-color: #d4effa;
+      color: #417185;
+      font-weight: 600;
+      font-size: 12px;
+      width: auto;
+    }
+
+    sdk-rectangle-button.custom-rectangule-button {
+      width: auto;
+
+      button {
+        padding: 0 30px !important;
+        height: 32px !important;
+        font-family: Open Sans !important;
+        font-style: normal !important;
+        font-weight: bold !important;
+        font-size: 13px !important;
+        line-height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        flex: none !important;
+        width: auto !important;
+        color: #ffffff !important;
+        border-radius: 8px !important;
+        background: #cfd8dc !important;
+
+        &:hover{
+          background: #114e66!important
+        }
+      }
+
+    }
+
+    .div-buttons-sla{
+      display: flex;
+      margin-top: 3%;
+      margin-left: 2%;
+
+      .circle{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #93d6f1;
+        text-align: center;
+        margin-left: 40%;
+        margin-top: 20px;
+        margin-bottom: 5%;
+      }
+
+
+    .icone{
+      text-align: center;
+      padding: 17px 0px 15px 0px;
+      color: #ffffff;
+    }
+
+    .card {
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      border: 2.5px ;
+      width: 50px;
+      height: 120px;
+      margin-right: 20px;
+    }
+
+    label {
+      font-weight: bold !important;
+      color: #296075 !important;
+      font-family: Open Sans !important;
+      font-style: normal !important;
+      font-weight: bold !important;
+      font-size: 12px !important;
+    }
+
+    .button-include{
+      font-family: Open Sans !important;
+      font-style: normal !important;
+      font-weight: bold !important;
+      font-size: 11px !important;
+    }
+
+    sdk-rectangle-button-custom.rectangle-button-custom {
+      width: auto;
+
+        button {
+          padding: 0 30px !important;
+          height: 32px !important;
+          font-family: Open Sans !important;
+          font-style: normal !important;
+          font-weight: bold !important;
+          font-size: 13px !important;
+          line-height: 100% !important;
+          display: flex !important;
+          align-items: center !important;
+          flex: none !important;
+          width: auto !important;
+          color: #ffffff !important;
+          border-radius: 8px !important;
+          background: #27ADE4 !important;
+        }
+
+        &.disabled button {
+          cursor: none;
+          background: #cfd8dc !important;
+        }
+
+        &.enabled button {
+          cursor: pointer;
+          background: #27ade4 !important;
+
+        }
+
+        &:hover {
+          background-color: #27ade4 !important;
+          color: #ffffff;
+        }
+      }
+    }
+  }

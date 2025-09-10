@@ -1,0 +1,21 @@
+<div class="bg-white border-bottom row py-4 w-100" style="margin: 0;" *ngIf="!solicitacaoDocumentosFornecedorArquivos?.length; else hasValue">
+      <div class="col no-content" translate>GENERAL.NO_RECORDS_FOUND</div>
+</div>
+
+<!-- begin-list-->
+<ng-template #hasValue>     
+  <sdk-list-view
+  class="w-100"
+  [items]="solicitacaoDocumentosFornecedorArquivos"
+  >
+  <ng-template sdkListViewItem let-item>
+    <item-documento-fornecedor-cliente
+      [documento]="item" 
+      (recarregaDocumentos)="recarregaDocumentosFornecedor()"         
+    ></item-documento-fornecedor-cliente>
+    
+  </ng-template>
+  </sdk-list-view>
+</ng-template>
+<!-- end-list -->
+

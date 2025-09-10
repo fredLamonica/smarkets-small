@@ -1,0 +1,247 @@
+.header {
+  width: 100%;
+
+  label {
+    font-size: 14px;
+    font-weight: bold;
+    color: $new-ux-smarkets-gray;
+  }
+
+  .header-title {
+    max-width: $page-max-width;
+    margin: 0 auto;
+    min-height: 130px;
+  }
+  
+  .header-search {
+    max-width: $page-max-width;
+    margin: 0 auto;
+    min-height: 130px;
+
+    
+    input-busca {
+      .input-group {
+        -webkit-box-shadow: 2px 2px 10px rgba(0,0,0,.25);
+        -moz-box-shadow: 2px 2px 10px rgba(0,0,0,.25);
+        box-shadow: 2px 2px 10px rgba(0,0,0,.25);
+        border-radius: 0.25rem;
+        border: none !important;
+      }
+    }
+  }
+
+  .header-navigation {
+    min-height: $navbar-height;
+    background-color: $smarkets-lighter;
+
+    .title {
+      padding: 16px;
+      &:after {
+        border: none;
+        @include fa-icon;
+        @extend .fas;
+        font-size: 20px;
+        font-weight: 900;
+        content: fa-content($fa-var-chevron-right);
+        color: $new-ux-smarkets-blue-indigo-light;
+        position: absolute;
+        top: 30px;
+        right: 0;
+      }
+    }
+
+    p {
+      margin-bottom: 0;
+      text-align: right;
+    }
+
+    .first-line, .second-line {
+      color: $new-ux-smarkets-gray;
+      text-transform: uppercase;
+      margin-bottom: 0;
+    }    
+
+    .first-line {
+      font-size: 19px;
+      line-height: 19px;
+    }
+
+    .second-line {
+      font-size: 27px;
+      line-height: 27px;
+      &:last-of-type {
+        font-weight: bold;
+      }
+    }
+
+    &.header-fast-access {
+
+      overflow-x: auto;
+  
+      .row {
+        min-width: 1024px;
+      }
+  
+      .btn-group {
+        -webkit-box-shadow: 2px 2px 10px rgba(0,0,0,.25);
+        -moz-box-shadow: 2px 2px 10px rgba(0,0,0,.25);
+        box-shadow: 2px 2px 10px rgba(0,0,0,.25);
+        border-radius: 0.25rem;
+        background-color: $white;
+        padding: 0.25rem !important;
+        
+        &:hover, &:active {
+          @include box-shadow($btn-hover-box-shadow);
+          transform: translateY(-1px);
+        }
+  
+        button {
+          font-size: 18px;
+          text-transform: uppercase;
+          color: $new-ux-smarkets-gray;
+          -webkit-box-shadow: none;
+          -moz-box-shadow: none;
+          box-shadow: none;
+          border: none;
+          border-radius: 0.25rem;
+  
+          i {
+            color: white;
+            font-size: 28px;
+          }
+  
+          &:hover, &:active, &:focus {
+            border: none;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+            transform: none;
+          }
+  
+          &:first-child {
+            z-index: 1;
+            min-width: 3.5rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            display: -webkit-inline-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-inline-flex;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $new-ux-smarkets-blue-light;
+            &:hover, &:active, &:focus {
+              background-color: $new-ux-smarkets-blue-light;
+            }
+          }
+  
+          &:last-child {
+            z-index: 0;
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            background-color: $white;
+            &:hover, &:active, &:focus {
+              background-color: $white;
+            }
+          }
+        }
+      } 
+    }
+  
+    &.header-recommended-categories {
+      overflow-x: auto;
+  
+      .row {
+        min-width: 1024px;
+      }
+  
+      .btn-group {
+        -webkit-box-shadow: 2px 2px 10px rgba(0,0,0,.25);
+        -moz-box-shadow: 2px 2px 10px rgba(0,0,0,.25);
+        box-shadow: 2px 2px 10px rgba(0,0,0,.25);
+        border-radius: 0.25rem;
+        background-color: $white;
+        padding: 0.25rem !important;
+        
+        &:hover, &:active {
+          @include box-shadow($btn-hover-box-shadow);
+          transform: translateY(-1px);
+        }
+  
+        button {
+          font-size: 18px;
+          text-transform: uppercase;
+          color: $new-ux-smarkets-gray;
+          -webkit-box-shadow: none;
+          -moz-box-shadow: none;
+          box-shadow: none;
+          border: none;
+          border-radius: 0.25rem;
+  
+          i {
+            color: white;
+            font-size: 28px;
+          }
+  
+          &:hover, &:active, &:focus {
+            border: none;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+            transform: none;
+          }
+  
+          &:first-child {
+            z-index: 1;
+            min-width: 3.5rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            display: -webkit-inline-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-inline-flex;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $new-ux-smarkets-blue-light;
+            &:hover, &:active, &:focus {
+              background-color: $new-ux-smarkets-blue-light;
+            }
+          }
+  
+          &:last-child {
+            z-index: 0;
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            background-color: $white;
+            &:hover, &:active, &:focus {
+              background-color: $white;
+            }
+          }
+        }
+      } 
+    }
+  }
+}
+
+@media(min-width: 1024px) {
+  .header {
+    .header-recommended-categories {
+      overflow-x: unset;
+
+      .row {
+        min-width: unset;
+      }
+    }
+
+    .header-fast-access {
+      overflow-x: unset;
+
+      .row {
+        min-width: unset;
+      }
+    }
+  }
+}

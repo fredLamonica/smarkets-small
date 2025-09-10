@@ -1,0 +1,24 @@
+<div
+  (click)="callback()"
+  [ngClass]="{
+    'sdk-chip': true,
+    'sdk-chip-disabled': disabled,
+    'sdk-chip-raised': shadow,
+    'sdk-chip-clickable': isButton && !disabled,
+    'sdk-chip-hover': isButton && !disabled
+  }"
+  [ngStyle]="{ background: contentColor, color: contentTextColor }"
+>
+  <div
+    class="sdk-chip-icon"
+    [innerHTML]="icon"    
+    [ngStyle]="{ background: iconColor, color: iconTextColor }"
+  ></div>
+  <span [ngStyle]="{ color: contentTextColor }" [innerHTML]="content"></span>
+  <button
+    *ngIf="removable && !disabled"
+    type="button"
+    class="sdk-chip-remove"
+    (click)="remove()"
+  ></button>
+</div>
