@@ -10,7 +10,20 @@
     "e2e": "ng e2e"
   },
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "@angular/animations": "^7.2.14",
+    "@angular/common": "^7.2.14",
+    "@angular/compiler": "^7.2.14",
+    "@angular/core": "^7.2.14",
+    "@angular/forms": "^7.2.14",
+    "@angular/platform-browser": "^7.2.14",
+    "@angular/platform-browser-dynamic": "^7.2.14",
+    "@angular/router": "^7.2.14",
+    "rxjs": "^6.3.3",
+    "zone.js": "^0.8.29",
+    "core-js": "^2.5.4",
+    "tslib": "^1.9.0"
+  },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.13.0",
     "@angular/cli": "~7.3.8",
